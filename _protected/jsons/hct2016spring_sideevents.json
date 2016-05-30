@@ -1,0 +1,38 @@
+[
+  {
+    "name":"Hearthstone Archon Turnier",
+    "enname":"Hearthstone Archon Tournament",
+    "type":"Turnier",
+    "entype":"Tournament",
+    "starttime":"1463144400000",
+    "endtime":"1463158800000",
+    "sponsors":"-",
+    "link":"",
+    "linktext":"",
+    "enlinktext":""
+  },
+  {
+    "name":"Gecko-Cup I (Season 3 Cup 4)",
+    "enname":"Gecko-Cup I (Season 3 Cup 4)",
+    "type":"Turnier",
+    "entype":"Tournament",
+    "starttime":"1463227200000",
+    "endtime":"1463256000000",
+    "sponsors":"Heimrat-HL, Jasper Schwinghammer",
+    "link":"http://barcraft-hl.de/#/geckoCupXVII",
+    "linktext":"Turnierseite (noch nicht)",
+    "enlinktext":"Tournament page (not yet)"
+  },
+  {
+    "name":"StarCraft Risiko (Ganze Zeit)",
+    "enname":"StarCraft Risk (Whole Time)",
+    "type":"Brettspiel",
+    "entype":"Boardgame",
+    "starttime":"",
+    "endtime":"",
+    "sponsors":"Raphael Allner, Jasper Schwinghammer",
+    "link":"http://gear.blizzard.com/index.php/default/starcraft/risk-starcraft-collector-s-edition-b61178.html",
+    "linktext":"Store",
+    "enlinktext":"Store"
+  }
+]

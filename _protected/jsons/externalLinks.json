@@ -1,0 +1,50 @@
+[
+  {
+    "name": "Facebook",
+    "icon": "fa-facebook",
+    "direction": "bottom",
+    "link": "http://www.facebook.com/barcrafthl",
+    "isFa": true,
+    "class": "facebook"
+  },
+  {
+    "name": "Twitter",
+    "icon": "fa-twitter",
+    "direction": "bottom",
+    "link": "https://twitter.com/BarCraftHL",
+    "isFa": true,
+    "class": "twitter"
+  },
+  {
+    "name": "Youtube",
+    "icon": "fa-youtube",
+    "direction": "bottom",
+    "link": "https://www.youtube.com/channel/UC6Hb-1s-cjpVVgBLvgijoRQ",
+    "isFa": true,
+    "class": "youtube"
+  },
+  {
+    "name": "Twitch",
+    "icon": "fa-twitch",
+    "direction": "bottom",
+    "link": "http://www.twitch.tv/barcrafthl",
+    "isFa": true,
+    "class": "twitch"
+  },
+  {
+    "name": "Challonge",
+    "icon": "./img/icons/challonge.svg",
+    "direction": "bottom",
+    "link": "http://bchl.challonge.com/",
+    "isFa": false,
+    "class": "challonge"
+  },
+  {
+    "name": "Liquidpedia",
+    "icon": "./img/icons/liquidpedias.svg",
+    "direction": "bottom",
+    "link": "http://wiki.teamliquid.net/hearthstone/Dorfkrug_Cup",
+    "isFa": false,
+    "class": "liquidpedia"
+  }
+]

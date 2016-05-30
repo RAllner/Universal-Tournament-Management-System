@@ -1,0 +1,34 @@
+[
+  {
+    "id": "1",
+    "author":"Jodder",
+    "title": "Neues Turnier: StarCup",
+    "date":"1445508180000",
+    "type": "announcement",
+    "gamelogo":"./img/news/lotvlogo.png",
+    "img":"./img/news/starcraft-ii-legacy-of-the-void.jpg",
+    "content":"Zum Launch von <em>Starcraft 2: Legacy of the Void (LotV)</em> wollen wir unser Turnier-Portfolio erweitern. Daher freuen wir uns euch den <em>Barcraft HL StarCup</em> ank&uuml;ndigen zu d&uuml;rfen. </p><p>LotV wird am 10. November ver&ouml;ffentlicht. Um allen Teilnehmern einige Tage Zeit zu geben, sich in das Spiel einzufinden, wird der StarCup am 16.11.2015 starten. Das Turnier findet online &uuml;ber einen Zeitraum von drei Wochen statt. Das Finale wird, wenn f&uuml;r die Spieler m&ouml;glich, am 05.12.2015 offline im Dorfkrug ausgetragen und &uuml;bertragen. Alle Matches werden entweder live oder als Replay gecastet und gestreamt / auf youtube ver&ouml;ffentlicht."
+  },
+
+  {
+    "id": "2",
+    "author":"Jodder",
+    "title": "DKCup IX - Die Season 2 beginnt",
+    "date":"1445508180000",
+    "type": "announcement",
+    "gamelogo":"./img/news/hearthstonelogo.png",
+    "img":"./img/news/dkcupIXwinners.jpg",
+    "content":"Alle sch&ouml;nen Dinge haben auch mal ein Ende. Der Dorfkrug Cup IX endete mit einem &uuml;berragenden Sieg von TyphoonHawk &uuml;ber Haruc mit 3 zu 1."
+  },
+
+  {
+    "id": "3",
+    "author":"Jodder",
+    "title": "Dorfkrug Cup X - The Winner is...",
+    "date":"1445875000181",
+    "type": "announcement",
+    "gamelogo":"./img/news/hearthstonelogo.png",
+    "img":"./img/news/dkcupX_couch_xs.jpg",
+    "content":"<p>Der Dorfkrug Cup X (10) an diesem Samstag, den 24.10.2015 war ein voller Erfolg. 18 Teilnehmer haben an einem Tag unter sich ausgefochten wer der Champion ist und wer einen der begehrten Pl&uuml;tze in den Season-Finals im Dezember ergattern kann.</p> Nachdem in der Gruppenphase bereits favourisierte Spieler wie Harlequin und Syco eliminiert wurden standen sich im Halbfinale Endivie und Zentro sowie Omedus und der Titelverteidiger TyphoonHawk gegen&uuml;ber. Zentro bezwang Endivie 3 zu 1, mit dem einzigen Match das Zentro in der Final Stage verloren hat. TyphoonHawk wurde von Omedus ebenfalls 3 zu 1 bezwungen, somit sicherte sich Omedus seinen Platz im Finale des Abends gegen zentro.</p><p> Im Finale unterlag das Magierdeck von Omedus allen Decks von <strong>Zentro</strong>, der nach &uuml;ber acht Stunden Turnier immer noch durch eine relativ konzentrierte und sichere Spielweise zu &uuml;berzeugen wusste.</p><p> Da sich TyphoonHawk bereits beim DKCup X f&uuml; das Seasonfinal qualifiziert hat wurde unter den 5 bis 8. Platzierten in einem Tie-Breaker der letzte Seed verteilt. Hier konnte Skojare seine kontrahenten besiegen und zieht als vierter Spieler in das Season Final ein."
+  }
+]

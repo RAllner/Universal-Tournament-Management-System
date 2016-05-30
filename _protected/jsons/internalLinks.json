@@ -1,0 +1,67 @@
+[
+  {
+    "name": "Home",
+    "icon": "fa-home",
+    "direction": "bottom",
+    "link": "#/",
+    "isFa": true,
+    "highlight": false
+  },
+  {
+    "name": "News",
+    "icon": "fa-newspaper-o",
+    "direction": "bottom",
+    "link": "#/news",
+    "isFa": true,
+    "highlight": false
+  },
+  {
+  "name": "Tournaments",
+  "icon": "fa-gamepad",
+  "direction": "bottom",
+  "link": "#/tournaments",
+  "isFa": true,
+  "highlight": true
+  },
+  {
+    "name": "Hall Of Fame",
+    "icon": "fa-star",
+    "direction": "bottom",
+    "link": "#/halloffame",
+    "isFa": true,
+    "highlight": false
+
+  },
+  {
+    "name": "Galerie",
+    "icon": "fa-camera",
+    "direction": "bottom",
+    "link": "#/gallery",
+    "isFa": true,
+    "highlight": false
+  },
+  {
+    "name": "Videos",
+    "icon": "fa-youtube-play",
+    "direction": "bottom",
+    "link": "#/video",
+    "isFa": true,
+    "highlight": false
+  },
+  {
+    "name": "Das Team",
+    "icon": "fa-info-circle",
+    "direction": "bottom",
+    "link": "#/about",
+    "isFa": true,
+    "highlight": false
+  },
+  {
+    "name": "Anfahrt",
+    "icon": "fa-road",
+    "direction": "bottom",
+    "link": "#/anfahrt",
+    "isFa": true,
+    "highlight": false
+  }
+]

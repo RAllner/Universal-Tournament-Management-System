@@ -1,0 +1,72 @@
+[
+  {
+    "name": "Drist",
+    "winnerOf": "DK Cup I",
+    "image": "./img/hallOfFame/drist.jpg",
+    "text": "Leider war Drist nur einmal da und wir haben kein Bild von ihm gemacht."
+  },
+  {
+    "name": "Kira",
+    "winnerOf": "DK Cup II",
+    "image": "./img/hallOfFame/kira.jpg",
+    "text": "-"
+  },
+  {
+    "name": "TyphoonHawk",
+    "winnerOf": "DK Cup III, DK Cup IX, StarCup I",
+    "image": "./img/hallOfFame/typhoonHawk.JPG",
+    "text": "-"
+  },
+  {
+    "name": "Bleizer",
+    "winnerOf": "DK Cup Cup IV, DK Cup Season 1 Champion",
+    "image": "./img/hallOfFame/bleizer.jpg",
+    "text": "-"
+  },
+  {
+    "name": "Zentro",
+    "winnerOf": "DK Cup V, DK Cup X",
+    "image": "./img/hallOfFame/zentro.JPG",
+    "text": "-"
+  },
+  {
+    "name": "MafiaChef",
+    "winnerOf": "DK Cup VI",
+    "image": "./img/hallOfFame/mafia.jpg",
+    "text": "-"
+  },
+  {
+    "name": "Syco",
+    "winnerOf": "DK Cup VII",
+    "image": "./img/hallOfFame/syco.jpg",
+    "text": "-"
+  },
+  {
+    "name": "Nico",
+    "winnerOf": "DK Cup XI",
+    "image": "./img/hallOfFame/nico.jpg",
+    "text": "Ich grüße alle Hearthstonespieler, gebt niemals eure Träume auf!"
+  },
+
+  {
+    "name": "StaN",
+    "winnerOf": "StarCup II, StarCup III",
+    "image": "./img/hallOfFame/StaN.jpg",
+    "text": "-"
+  },  {
+  "name": "Harlequin",
+  "winnerOf": "DK Cup Season 2 Champion, DK Cup XIII",
+  "image": "./img/hallOfFame/harlequin.jpg",
+  "text": "Unsere Quin"
+},  {
+  "name": "Ch0pP33r",
+  "winnerOf": "DK Cup XIV",
+  "image": "./img/hallOfFame/ch0pp33r.jpg",
+  "text": "-"
+},  {
+  "name": "Locar",
+  "winnerOf": "DK Cup XV",
+  "image": "./img/hallOfFame/Locar.jpeg",
+  "text": "-"
+}
+]
