@@ -5,6 +5,8 @@ use frontend\models\Article;
 use frontend\models\ArticleSearch;
 use yii\web\NotFoundHttpException;
 use yii\web\MethodNotAllowedHttpException;
+use yii\web\UploadedFile;
+use yii\helpers\Url;
 use Yii;
 
 /**
@@ -23,7 +25,7 @@ class ArticleController extends FrontendController
          * How many articles we want to display per page.
          * @var integer
          */
-        $pageSize = 2;
+        $pageSize = 5;
 
         /**
          * Articles have to be published.
@@ -64,8 +66,9 @@ class ArticleController extends FrontendController
         $model = new Article();
 
         $model->user_id = Yii::$app->user->id;
+        $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) 
+        if ($model->load(Yii::$app->request->post()) && $model->save())
         {
             return $this->redirect(['view', 'id' => $model->id]);
         } 
@@ -92,9 +95,14 @@ class ArticleController extends FrontendController
 
         if (Yii::$app->user->can('updateArticle', ['model' => $model])) 
         {
-            if ($model->load(Yii::$app->request->post()) && $model->save()) 
+            if ($model->load(Yii::$app->request->post()))
             {
-                return $this->redirect(['view', 'id' => $model->id]);
+                $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+                if($model->save()) 
+                {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
+
             } 
             else 
             {
@@ -174,4 +182,5 @@ class ArticleController extends FrontendController
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
 }

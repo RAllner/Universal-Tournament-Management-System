@@ -59,6 +59,7 @@ return [
     // set allias for our uploads folder so it can be shared by both frontend and backend applications
     // @appRoot alias is definded in common/config/bootstrap.php file
     'aliases' => [
-        '@uploads' => '@appRoot/uploads'
+        '@uploads' => '@appRoot/uploads',
+        '@images' => '@appRoot/images'
     ],
 ];

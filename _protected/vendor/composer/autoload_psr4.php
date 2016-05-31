@@ -18,6 +18,7 @@ return array(
     'nenad\\passwordStrength\\' => array($vendorDir . '/nenad/yii2-password-strength'),
     'nenad\\' => array($vendorDir . '/nenad/yii2-widgets-base', $vendorDir . '/nenad/yii2-strength-meter'),
     'mihaildev\\ckeditor\\' => array($vendorDir . '/mihaildev/yii2-ckeditor'),
+    'hiqdev\\assets\\lightbox2\\' => array($vendorDir . '/hiqdev/yii2-asset-lightbox2/src'),
     'cebe\\markdown\\' => array($vendorDir . '/cebe/markdown'),
     'Faker\\' => array($vendorDir . '/fzaninotto/faker/src/Faker'),
     'DeepCopy\\' => array($vendorDir . '/myclabs/deep-copy/src/DeepCopy'),

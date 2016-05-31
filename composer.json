@@ -15,7 +15,8 @@
         "yiisoft/yii2-bootstrap": "*",
         "yiisoft/yii2-swiftmailer": "*",
         "nenad/yii2-password-strength": "*",
-        "mihaildev/yii2-ckeditor": "*"
+        "mihaildev/yii2-ckeditor": "*",
+        "hiqdev/yii2-asset-lightbox2": "2.8.2.1"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

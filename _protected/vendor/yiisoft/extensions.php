@@ -93,4 +93,13 @@ return array (
       '@romdim/bootstrap/material' => $vendorDir . '/romdim/yii2-bootstrap-material',
     ),
   ),
+  'hiqdev/yii2-asset-lightbox2' => 
+  array (
+    'name' => 'hiqdev/yii2-asset-lightbox2',
+    'version' => '2.8.2.1',
+    'alias' => 
+    array (
+      '@hiqdev/assets/lightbox2' => $vendorDir . '/hiqdev/yii2-asset-lightbox2/src',
+    ),
+  ),
 );

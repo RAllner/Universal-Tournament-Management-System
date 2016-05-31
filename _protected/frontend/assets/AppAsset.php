@@ -36,7 +36,8 @@ class AppAsset extends AssetBundle
     public $depends = [
         'yii\web\YiiAsset',
         'frontend\assets\MaterialCSSAsset',
-        'frontend\assets\MaterialJSAsset'
+        'frontend\assets\MaterialJSAsset',
+        'hiqdev\assets\lightbox2\LightboxAsset'
     ];
 }
 

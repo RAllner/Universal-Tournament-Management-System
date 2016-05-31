@@ -5,6 +5,7 @@ use common\models\User;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\UploadedFile;
+use yii\helpers\Url;
 use Yii;
 
 /**
@@ -57,7 +58,7 @@ class Article extends ActiveRecord
         return [
             [['user_id', 'title', 'summary', 'content', 'status'], 'required'],
             [['user_id', 'status', 'category'], 'integer'],
-            [['imageFile'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg'],
+            [['imageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg'],
             [['summary', 'content'], 'string'],
             [['title'], 'string', 'max' => 255]
         ];
@@ -65,8 +66,11 @@ class Article extends ActiveRecord
 
     public function upload()
     {
-        if ($this->validate()) {
-            $this->imageFile->saveAs('uploads/news/' . $this->imageFile->baseName . '.' . $this->imageFile->extension);
+
+        if ($this->imageFile) {
+            $path = Url::to('@webroot/images/news/');
+            $filename = strtolower($this->title).$this->created_at.'.jpg';
+            $this->imageFile->saveAs($path . $filename);
             return true;
         } else {
             return false;
@@ -209,5 +213,34 @@ class Article extends ActiveRecord
         ];
 
         return $statusArray;
+    }
+
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            $this->upload();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    public function getPhotoInfo()
+    {
+        $path = Url::to('@webroot/images/news/');
+        $url = Url::to('@web/images/news/');
+        $filename = strtolower($this->title).$this->created_at.'.jpg';
+        $alt = $this->title;
+
+        $imageInfo = ['alt'=> $alt];
+
+        if (file_exists($path . $filename)) {
+            $imageInfo['url'] = $url.$filename;
+        } else {
+            $imageInfo['url'] = $url.'default.jpg';
+        }
+
+        return $imageInfo;
     }
 }
