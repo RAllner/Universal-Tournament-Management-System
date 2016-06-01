@@ -102,4 +102,13 @@ return array (
       '@hiqdev/assets/lightbox2' => $vendorDir . '/hiqdev/yii2-asset-lightbox2/src',
     ),
   ),
+  'metalguardian/yii2-fotorama-widget' => 
+  array (
+    'name' => 'metalguardian/yii2-fotorama-widget',
+    'version' => '1.0.0.0',
+    'alias' => 
+    array (
+      '@metalguardian/fotorama' => $vendorDir . '/metalguardian/yii2-fotorama-widget/src',
+    ),
+  ),
 );

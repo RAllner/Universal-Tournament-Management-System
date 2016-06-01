@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f5e0609be494050d9adc40a9e35db8d2",
-    "content-hash": "988858ae70e1d2c44129bde170f3ed32",
+    "hash": "423c1cc58d56f17d64dc096642702ac5",
+    "content-hash": "dacd8d2d9ec3de9cad6b739fc92f8232",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -54,6 +54,55 @@
                 "mobile-first",
                 "responsive",
                 "web"
+            ]
+        },
+        {
+            "name": "bower-asset/fotorama",
+            "version": "4.6.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/artpolikarpov/fotorama-bower.git",
+                "reference": "bc05ef11b5cd307fd46d50e269abf8c8808fa4e5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/artpolikarpov/fotorama-bower/zipball/bc05ef11b5cd307fd46d50e269abf8c8808fa4e5",
+                "reference": "bc05ef11b5cd307fd46d50e269abf8c8808fa4e5",
+                "shasum": ""
+            },
+            "require": {
+                "bower-asset/jquery": ">=1.8"
+            },
+            "type": "bower-asset-library",
+            "extra": {
+                "bower-asset-main": [
+                    "fotorama.css",
+                    "fotorama.js"
+                ],
+                "bower-asset-ignore": [
+                    "**/.*",
+                    "node_modules",
+                    "bower_components",
+                    "test",
+                    "tests"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "A simple, stunning, powerful jQuery gallery.",
+            "keywords": [
+                "carousel",
+                "content",
+                "fotorama",
+                "gallery",
+                "image",
+                "photo",
+                "responsive",
+                "slider",
+                "slideshow",
+                "ui",
+                "video"
             ]
         },
         {
@@ -414,6 +463,55 @@
                 "yii2"
             ],
             "time": "2016-03-28 12:57:31"
+        },
+        {
+            "name": "metalguardian/yii2-fotorama-widget",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/MetalGuardian/yii2-fotorama-widget.git",
+                "reference": "d1f3b7f120126a848aa2a78efd2783170f2edc33"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/MetalGuardian/yii2-fotorama-widget/zipball/d1f3b7f120126a848aa2a78efd2783170f2edc33",
+                "reference": "d1f3b7f120126a848aa2a78efd2783170f2edc33",
+                "shasum": ""
+            },
+            "require": {
+                "bower-asset/fotorama": "4.*",
+                "yiisoft/yii2": "*"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "asset-installer-paths": {
+                    "bower-asset-library": "vendor/bower"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "metalguardian\\fotorama\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ivan Pushkin",
+                    "email": "imetalguardi+yii2@gmail.com"
+                }
+            ],
+            "description": "fotorama image gallery yii2 widget",
+            "homepage": "https://github.com/MetalGuardian/yii2-fotorama-widget",
+            "keywords": [
+                "extension",
+                "fotorama",
+                "widget",
+                "yii2"
+            ],
+            "time": "2015-04-19 16:14:51"
         },
         {
             "name": "mihaildev/yii2-ckeditor",
