@@ -43,6 +43,23 @@ class FrontendController extends Controller
                         'allow' => true
                     ],
                     [
+                        'controllers' => ['galleries'],
+                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'admin'],
+                        'allow' => true,
+                        'roles' => ['admin'],
+                    ],
+                    [
+                        'controllers' => ['galleries'],
+                        'actions' => ['create', 'update', 'admin'],
+                        'allow' => true,
+                        'roles' => ['editor'],
+                    ],
+                    [
+                        'controllers' => ['galleries'],
+                        'actions' => ['index', 'view'],
+                        'allow' => true
+                    ],
+                    [
                         // other rules
                     ],
 

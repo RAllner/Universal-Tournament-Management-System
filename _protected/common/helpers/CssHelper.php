@@ -46,7 +46,7 @@ class CssHelper
      * @param  string $status Article status.
      * @return string         Css class.
      */
-    public static function articleStatusCss($status)
+    public static function generalStatusCss($status)
     {
         if ($status === Yii::t('app', 'Published'))
         {
@@ -65,19 +65,55 @@ class CssHelper
      * @param  string $category Article category.
      * @return string           Css class.
      */
-    public static function articleCategoryCss($category)
+    public static function generalCategoryCss($category)
+    {
+        if ($category === Yii::t('app', 'Starcraft'))
+        {
+            return "blue";
+        }
+        elseif ($category === Yii::t('app', 'Warcraft'))
+        {
+            return "green";
+        }
+        elseif ($category === Yii::t('app', 'Hearthstone'))
+        {
+            return "gold";
+        }
+        elseif ($category === Yii::t('app', 'Diablo'))
+        {
+            return "red";
+        }
+        elseif ($category === Yii::t('app', 'Overwatch'))
+        {
+            return "black";
+        }
+        elseif ($category === Yii::t('app', 'ESport'))
+        {
+            return "grey";
+        }
+        elseif ($category === Yii::t('app', 'General'))
+        {
+            return "yellow";
+        }
+        else 
+        {
+            return "white";
+        }      
+    }
+
+    public static function galleriesCategoryCss($category)
     {
         if ($category === Yii::t('app', 'Economy'))
         {
             return "blue";
         }
-        elseif ($category === Yii::t('app', 'Sport')) 
+        elseif ($category === Yii::t('app', 'Sport'))
         {
             return "green";
         }
-        else 
+        else
         {
             return "gold";
-        }      
-    }       
+        }
+    }
 }

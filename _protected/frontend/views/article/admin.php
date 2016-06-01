@@ -46,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $data->getStatusName($data->status);
                 },
                 'contentOptions'=>function($model, $key, $index, $column) {
-                    return ['class'=>CssHelper::articleStatusCss($model->statusName)];
+                    return ['class'=>CssHelper::generalStatusCss($model->statusName)];
                 }
             ],
             [
@@ -56,7 +56,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $data->getCategoryName($data->category);
                 },
                 'contentOptions'=>function($model, $key, $index, $column) {
-                    return ['class'=>CssHelper::articleCategoryCss($model->categoryName)];
+                    return ['class'=>CssHelper::generalCategoryCss($model->categoryName)];
                 }
             ],
 

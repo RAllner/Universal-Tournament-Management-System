@@ -1,33 +1,19 @@
 <?php
 
-namespace app\controllers;
+namespace frontend\controllers;
 
 use Yii;
-use app\models\Galleries;
-use app\models\GalleriesSearch;
-use yii\web\Controller;
+use frontend\models\Galleries;
+use frontend\models\GalleriesSearch;
 use yii\web\NotFoundHttpException;
+use yii\web\UploadedFile;
 use yii\filters\VerbFilter;
 
 /**
  * GalleriesController implements the CRUD actions for Galleries model.
  */
-class GalleriesController extends Controller
+class GalleriesController extends FrontendController
 {
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ];
-    }
 
     /**
      * Lists all Galleries models.
@@ -35,8 +21,20 @@ class GalleriesController extends Controller
      */
     public function actionIndex()
     {
+        /**
+         * How many galleries we want to display per page.
+         * @var integer
+         */
+        $pageSize = 5;
+
+        /**
+         * Galleries have to be published.
+         * @var boolean
+         */
+        $published = true;
+
         $searchModel = new GalleriesSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $pageSize, $published);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -64,14 +62,16 @@ class GalleriesController extends Controller
     public function actionCreate()
     {
         $model = new Galleries();
+        $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
-        }
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            } else {
+                return $this->render('create', [
+                    'model' => $model,
+                ]);
+            }
+
     }
 
     /**
@@ -84,12 +84,22 @@ class GalleriesController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
+        if (Yii::$app->user->can('updateGallery', ['model' => $model])) {
+
+            if ($model->load(Yii::$app->request->post()))
+            {
+                $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
+                if ($model->save()) {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
+            }
+            else
+            {
+                return $this->render('update', [
+                    'model' => $model,
+                ]);
+            }
+
         }
     }
 
@@ -104,6 +114,36 @@ class GalleriesController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+
+    /**
+     * Manage Articles.
+     *
+     * @return mixed
+     */
+    public function actionAdmin()
+    {
+        /**
+         * How many articles we want to display per page.
+         * @var integer
+         */
+        $pageSize = 11;
+
+        /**
+         * Only admin+ roles can see everything.
+         * Editors will be able to see only published articles and their own drafts @see: search().
+         * @var boolean
+         */
+        $published = (Yii::$app->user->can('admin')) ? false : true ;
+
+        $searchModel = new GalleriesSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $pageSize, $published);
+
+        return $this->render('admin', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     /**

@@ -4,6 +4,8 @@ namespace frontend\controllers;
 use common\models\User;
 use common\models\LoginForm;
 use frontend\models\AccountActivation;
+use frontend\models\Article;
+use frontend\models\Galleries;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
@@ -403,20 +405,6 @@ class SiteController extends Controller
 
 
 
-    public function actionUpload()
-    {
-        $model = new UploadForm();
-
-        if (Yii::$app->request->isPost) {
-            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
-            if ($model->upload()) {
-                // file is uploaded successfully
-                return;
-            }
-        }
-
-        return $this->render('upload', ['model' => $model]);
-    }
 
 }
 

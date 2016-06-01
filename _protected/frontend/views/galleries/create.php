@@ -4,9 +4,9 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Galleries */
+/* @var $model frontend\models\Galleries */
 
-$this->title = Yii::t('app', 'Create Galleries');
+$this->title = Yii::t('app', 'Create Gallery');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Galleries'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

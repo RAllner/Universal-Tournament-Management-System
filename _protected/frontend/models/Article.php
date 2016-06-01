@@ -28,9 +28,14 @@ class Article extends ActiveRecord
     const STATUS_DRAFT = 1;
     const STATUS_PUBLISHED = 2;
 
-    const CATEGORY_ECONOMY = 1;
-    const CATEGORY_SOCIETY = 2;
-    const CATEGORY_SPORT = 3;
+    const CATEGORY_ESPORT = 1;
+    const CATEGORY_GENERAL = 2;
+    const CATEGORY_HEARTHSTONE = 3;
+    const CATEGORY_STARCRAFT = 4;
+    const CATEGORY_WARCRAFT = 5;
+    const CATEGORY_OVERWATCH = 6;
+    const CATEGORY_DIABLO = 7;
+    const CATEGORY_OTHER = 8;
 
     /**
      * @var UploadedFile
@@ -64,20 +69,6 @@ class Article extends ActiveRecord
         ];
     }
 
-    public function upload()
-    {
-
-        if ($this->imageFile) {
-            $path = Url::to('@webroot/images/news/');
-            $filename = strtolower($this->title).$this->created_at.'.jpg';
-            $this->imageFile->saveAs($path . $filename);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-
 
     /**
      * Returns a list of behaviors that this component should behave as.
@@ -110,6 +101,21 @@ class Article extends ActiveRecord
             'updated_at' => Yii::t('app', 'Updated At'),
         ];
     }
+
+
+    public function upload()
+    {
+
+        if ($this->imageFile) {
+            $path = Url::to('@webroot/images/news/');
+            $filename = strtolower($this->title).$this->created_at.'.jpg';
+            $this->imageFile->saveAs($path . $filename);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
     /**
      * @return \yii\db\ActiveQuery
@@ -185,17 +191,37 @@ class Article extends ActiveRecord
     {
         $category = (empty($category)) ? $this->category : $category ;
 
-        if ($category === self::CATEGORY_ECONOMY)
+        if ($category === self::CATEGORY_ESPORT)
         {
-            return Yii::t('app', 'Economy');
+            return Yii::t('app', 'ESport');
         }
-        elseif ($category === self::CATEGORY_SOCIETY)
+        elseif ($category === self::CATEGORY_GENERAL)
         {
-            return Yii::t('app', 'Society');
+            return Yii::t('app', 'General');
+        }
+        elseif ($category === self::CATEGORY_HEARTHSTONE)
+        {
+            return Yii::t('app', 'Hearthstone');
+        }
+        elseif ($category === self::CATEGORY_STARCRAFT)
+        {
+            return Yii::t('app', 'Starcraft');
+        }
+        elseif ($category === self::CATEGORY_WARCRAFT)
+        {
+            return Yii::t('app', 'Warcraft');
+        }
+        elseif ($category === self::CATEGORY_OVERWATCH)
+        {
+            return Yii::t('app', 'Overwatch');
+        }
+        elseif ($category === self::CATEGORY_DIABLO)
+        {
+            return Yii::t('app', 'Diablo');
         }
         else
         {
-            return Yii::t('app', 'Sport');
+            return Yii::t('app', 'Other');
         }
     }
 
@@ -207,11 +233,15 @@ class Article extends ActiveRecord
     public function getCategoryList()
     {
         $statusArray = [
-            self::CATEGORY_ECONOMY => Yii::t('app', 'Economy'),
-            self::CATEGORY_SOCIETY => Yii::t('app', 'Society'),
-            self::CATEGORY_SPORT   => Yii::t('app', 'Sport'),
+            self::CATEGORY_ESPORT => Yii::t('app', 'ESport'),
+            self::CATEGORY_GENERAL  => Yii::t('app', 'General'),
+            self::CATEGORY_HEARTHSTONE => Yii::t('app', 'Hearthstone'),
+            self::CATEGORY_STARCRAFT   => Yii::t('app', 'Starcraft'),
+            self::CATEGORY_WARCRAFT   => Yii::t('app', 'Warcraft'),
+            self::CATEGORY_OVERWATCH   => Yii::t('app', 'Overwatch'),
+            self::CATEGORY_DIABLO   => Yii::t('app', 'Diablo'),
+            self::CATEGORY_OTHER  => Yii::t('app', 'Other'),
         ];
-
         return $statusArray;
     }
 

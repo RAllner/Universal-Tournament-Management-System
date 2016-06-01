@@ -6,7 +6,6 @@ use frontend\models\ArticleSearch;
 use yii\web\NotFoundHttpException;
 use yii\web\MethodNotAllowedHttpException;
 use yii\web\UploadedFile;
-use yii\helpers\Url;
 use Yii;
 
 /**
@@ -182,5 +181,4 @@ class ArticleController extends FrontendController
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
-
 }

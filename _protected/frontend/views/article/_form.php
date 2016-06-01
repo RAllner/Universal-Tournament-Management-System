@@ -14,7 +14,8 @@ use yii\widgets\ActiveForm;
 
         <?= $form->field($model, 'title')->textInput(['maxlength' => 255]) ?>
 
-        <?= $form->field($model, 'summary')->textarea(['rows' => 6]) ?>
+        <?= $form->field($model, 'summary')->widget(CKEditor::className(),
+            ['editorOptions' => [ 'preset' => 'full', 'inline' => false]]); ?>
 
         <?= $form->field($model, 'content')->widget(CKEditor::className(),
             ['editorOptions' => [ 'preset' => 'full', 'inline' => false]]); ?>

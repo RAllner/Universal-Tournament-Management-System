@@ -28,19 +28,22 @@ AppAsset::register($this);
             NavBar::begin([
                 'brandLabel' => Yii::t('app', Yii::$app->name),
                 'brandUrl' => Yii::$app->homeUrl,
+
                 'options' => [
                     'class' => 'navbar-default navbar-fixed-top',
+
                 ],
             ]);
 
             // everyone can see Home page
-            $menuItems[] = ['label' => Yii::t('app', 'Home'), 'url' => ['/site/index']];
+            $menuItems[] = ['label' => '<span class="glyphicon glyphicon-home"></span>', 'url' => ['/site/index']];
 
             // we do not need to display Article/index, About and Contact pages to editor+ roles
             if (!Yii::$app->user->can('editor')) 
             {
-                $menuItems[] = ['label' => Yii::t('app', 'Tournaments'), 'url' => ['/site/tournaments']];
+                $menuItems[] = ['label' => '<span class="glyphicon glyphicon-tower"></span> '. Yii::t('app', 'Tournaments'), 'url' => ['/tournaments/index']];
                 $menuItems[] = ['label' => Yii::t('app', 'News'), 'url' => ['/article/index']];
+                $menuItems[] = ['label' => Yii::t('app', 'Gallery'), 'url' => ['/galleries/index']];
                 $menuItems[] = ['label' => Yii::t('app', 'About'), 'url' => ['/site/about']];
                 $menuItems[] = ['label' => Yii::t('app', 'Contact'), 'url' => ['/site/contact']];
             }
@@ -48,11 +51,13 @@ AppAsset::register($this);
             // display Article admin page to editor+ roles
             if (Yii::$app->user->can('editor'))
             {
+                $menuItems[] = ['label' => Yii::t('app', 'Tournaments'), 'url' => ['/tournaments/admin']];
                 $menuItems[] = ['label' => Yii::t('app', 'News'), 'url' => ['/article/admin']];
+                $menuItems[] = ['label' => Yii::t('app', 'Gallery'), 'url' => ['/galleries/admin']];
             }
             if (Yii::$app->user->can('admin'))
             {
-                $menuItems[] = ['label' => Yii::t('app', 'Admin'), 'url' => ['/backend']];
+                $menuItems[] = ['label' => Yii::t('app', 'ADMIN'), 'url' => ['/backend']];
             }
             // display Signup and Login pages to guests of the site
             if (Yii::$app->user->isGuest) 
@@ -73,6 +78,7 @@ AppAsset::register($this);
             echo Nav::widget([
                 'options' => ['class' => 'navbar-nav navbar-right'],
                 'items' => $menuItems,
+                'encodeLabels' => false,
             ]);
             NavBar::end();
         ?>

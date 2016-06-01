@@ -1,11 +1,11 @@
 <?php
 
-namespace app\models;
+namespace frontend\models;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Galleries;
+
 
 /**
  * GalleriesSearch represents the model behind the search form about `app\models\Galleries`.
@@ -39,21 +39,31 @@ class GalleriesSearch extends Galleries
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params,  $pageSize = 3, $published = false)
     {
         $query = Galleries::find();
+
+
+        // this means that editor is trying to see articles
+        // we will allow him to see published ones and drafts made by him
+        if ($published === true)
+        {
+            $query->where(['status' => Article::STATUS_PUBLISHED]);
+            $query->orWhere(['user_id' => Yii::$app->user->id]);
+        }
+
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort'=> ['defaultOrder' => ['id' => SORT_DESC]],
+            'pagination' => [
+                'pageSize' => $pageSize,
+            ]
         ]);
 
-        $this->load($params);
-
-        if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
+        if (!($this->load($params) && $this->validate())) {
             return $dataProvider;
         }
 
@@ -63,8 +73,6 @@ class GalleriesSearch extends Galleries
             'user_id' => $this->user_id,
             'status' => $this->status,
             'category' => $this->category,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
         ]);
 
         $query->andFilterWhere(['like', 'title', $this->title])

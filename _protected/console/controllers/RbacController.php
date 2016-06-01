@@ -17,7 +17,7 @@ use Yii;
  * - premium    : premium member of this site
  * - member     : user of this site who has registered his account and can log in
  *
- * Creates 7 permissions:
+ * Creates 12 permissions:
  *
  * - usePremiumContent  : allows premium members to use premium content
  * - createArticle      : allows editor+ roles to create articles
@@ -25,6 +25,11 @@ use Yii;
  * - updateArticle      : allows admin+ roles to update all articles
  * - deleteArticle      : allows admin+ roles to delete articles
  * - adminArticle       : allows admin+ roles to manage articles
+ * - createGallery      : allows editor+ roles to create articles
+ * - updateOwnGallery   : allows editor+ roles to update own articles
+ * - updateGallery      : allows admin+ roles to update all articles
+ * - deleteGallery      : allows admin+ roles to delete articles
+ * - adminGallery       : allows admin+ roles to manage articles
  * - manageUsers        : allows admin+ roles to manage users (CRUD plus role assignment)
  *
  * Creates 1 rule:
@@ -87,6 +92,37 @@ class RbacController extends Controller
         // "updateOwnArticle" will be used from "updateArticle"
         $auth->addChild($updateOwnArticle, $updateArticle);
 
+        
+        // add "createGallery" permission
+        $createGallery = $auth->createPermission('createGallery');
+        $createGallery->description = 'Allows editor+ roles to create galleries';
+        $auth->add($createGallery);
+
+        // add "deleteGallery" permission
+        $deleteGallery = $auth->createPermission('deleteGallery');
+        $deleteGallery->description = 'Allows admin+ roles to delete galleries';
+        $auth->add($deleteGallery);
+
+        // add "adminGallery" permission
+        $adminGallery = $auth->createPermission('adminGallery');
+        $adminGallery->description = 'Allows admin+ roles to manage galleries';
+        $auth->add($adminGallery);
+
+        // add "updateGallery" permission
+        $updateGallery = $auth->createPermission('updateGallery');
+        $updateGallery->description = 'Allows editor+ roles to update galleries';
+        $auth->add($updateGallery);
+
+        // add the "updateOwnGallery" permission and associate the rule with it.
+        $updateOwnGallery = $auth->createPermission('updateOwnGallery');
+        $updateOwnGallery->description = 'Update own gallery';
+        $updateOwnGallery->ruleName = $rule->name;
+        $auth->add($updateOwnGallery);
+
+        // "updateOwnGallery" will be used from "updateGallery"
+        $auth->addChild($updateOwnGallery, $updateGallery);
+        
+
         //---------- ROLES ----------//
 
         // add "member" role
@@ -117,6 +153,10 @@ class RbacController extends Controller
         $auth->addChild($editor, $createArticle);
         $auth->addChild($editor, $updateOwnArticle);
         $auth->addChild($editor, $adminArticle);
+        $auth->addChild($editor, $createGallery);
+        $auth->addChild($editor, $adminGallery);
+        $auth->addChild($editor, $updateOwnGallery);
+
 
         // add "admin" role and give this role: 
         // manageUsers, updateArticle adn deleteArticle permissions, plus he can do everything that editor role can do.
@@ -127,6 +167,8 @@ class RbacController extends Controller
         $auth->addChild($admin, $manageUsers);
         $auth->addChild($admin, $updateArticle);
         $auth->addChild($admin, $deleteArticle);
+        $auth->addChild($admin, $updateGallery);
+        $auth->addChild($admin, $deleteGallery);
 
         // add "theCreator" role ( this is you :) )
         // You can do everything that admin can do plus more (if You decide so)
