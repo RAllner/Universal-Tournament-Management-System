@@ -7,7 +7,8 @@ use frontend\models\Galleries;
 use frontend\models\GalleriesSearch;
 use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
-use yii\filters\VerbFilter;
+use yii\web\MethodNotAllowedHttpException;
+
 
 /**
  * GalleriesController implements the CRUD actions for Galleries model.
@@ -61,11 +62,23 @@ class GalleriesController extends FrontendController
      */
     public function actionCreate()
     {
-        $model = new Galleries();
-        $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
 
-            if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+        $model = new Galleries();
+
+        $model->user_id = Yii::$app->user->id;
+
+            if ($model->load(Yii::$app->request->post()))
+            {
+                $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
+
+
+                if ($model->save()) {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
+                if ($model->upload()) {
+                    // file is uploaded successfully
+                    return;
+                }
             } else {
                 return $this->render('create', [
                     'model' => $model,
@@ -88,9 +101,15 @@ class GalleriesController extends FrontendController
 
             if ($model->load(Yii::$app->request->post()))
             {
+
+
                 $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
                 if ($model->save()) {
                     return $this->redirect(['view', 'id' => $model->id]);
+                }
+                if ($model->upload()) {
+                    // file is uploaded successfully
+                    return;
                 }
             }
             else
@@ -100,6 +119,10 @@ class GalleriesController extends FrontendController
                 ]);
             }
 
+        }
+        else
+        {
+            throw new MethodNotAllowedHttpException(Yii::t('app', 'You are not allowed to access this page.'));
         }
     }
 
@@ -115,6 +138,9 @@ class GalleriesController extends FrontendController
 
         return $this->redirect(['index']);
     }
+
+
+
 
 
     /**

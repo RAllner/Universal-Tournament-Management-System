@@ -21,16 +21,19 @@ $options = ['data-lightbox'=>'profile-image','data-title'=>$photoInfo['alt']];
         <figcaption>(Click to enlarge)</figcaption>
     </figure>
 
+
+ 
+
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
             //'id',
-            // [
-            //     'label' => Yii::t('app', 'Author'),
-            //     'value' => $model->authorName,
-            // ],
+             [
+                 'label' => Yii::t('app', 'Author'),
+                 'value' => $model->authorName,
+             ],
             'title',
-            'summary:ntext',
+            'summary:html',
             'content:html',
             // [
             //     'label' => Yii::t('app', 'Status'),

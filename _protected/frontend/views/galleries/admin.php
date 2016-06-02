@@ -56,7 +56,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $data->getCategoryName($data->category);
                 },
                 'contentOptions'=>function($model, $key, $index, $column) {
-                    // TODO: Own CSS Helper !!!
                     return ['class'=>CssHelper::generalStatusCss($model->categoryName)];
                 }
             ],

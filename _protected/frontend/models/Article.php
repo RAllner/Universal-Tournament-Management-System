@@ -108,7 +108,8 @@ class Article extends ActiveRecord
 
         if ($this->imageFile) {
             $path = Url::to('@webroot/images/news/');
-            $filename = strtolower($this->title).$this->created_at.'.jpg';
+            $escapedTitle = $this->sanitize($this->title);
+            $filename = $this->created_at.$escapedTitle.'.jpg';
             $this->imageFile->saveAs($path . $filename);
             return true;
         } else {
@@ -255,12 +256,21 @@ class Article extends ActiveRecord
         }
     }
 
+    public function deleteImage(){
+        $path = Url::to('@webroot/images/news/');
+        $escapedTitle = $this->sanitize($this->title);
+        $filename = $this->created_at.$escapedTitle.'.jpg';
+        if(file_exists($path.$filename)){
+            unlink($path.$filename);
+        }
+    }
 
     public function getPhotoInfo()
     {
         $path = Url::to('@webroot/images/news/');
         $url = Url::to('@web/images/news/');
-        $filename = strtolower($this->title).$this->created_at.'.jpg';
+        $escapedTitle = $this->sanitize($this->title);
+        $filename = $this->created_at.$escapedTitle.'.jpg';
         $alt = $this->title;
 
         $imageInfo = ['alt'=> $alt];
@@ -273,4 +283,28 @@ class Article extends ActiveRecord
 
         return $imageInfo;
     }
+
+    /**
+     * Function: sanitize
+     * Returns a sanitized string, typically for URLs.
+     *
+     * Parameters:
+     *     $string - The string to sanitize.
+     *     $force_lowercase - Force the string to lowercase?
+     *     $anal - If set to *true*, will remove all non-alphanumeric characters.
+     */
+    function sanitize($string, $force_lowercase = true, $anal = false) {
+        $strip = array("~", "`", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "=", "+", "[", "{", "]",
+            "}", "\\", "|", ";", ":", "\"", "'", "&#8216;", "&#8217;", "&#8220;", "&#8221;", "&#8211;", "&#8212;",
+            "â€”", "â€“", ",", "<", ".", ">", "/", "?");
+        $clean = trim(str_replace($strip, "", strip_tags($string)));
+        $clean = preg_replace('/\s+/', "-", $clean);
+        $clean = ($anal) ? preg_replace("/[^a-zA-Z0-9]/", "", $clean) : $clean ;
+        return ($force_lowercase) ?
+            (function_exists('mb_strtolower')) ?
+                mb_strtolower($clean, 'UTF-8') :
+                strtolower($clean) :
+            $clean;
+    }
+
 }

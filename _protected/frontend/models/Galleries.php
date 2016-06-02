@@ -61,7 +61,7 @@ class Galleries extends ActiveRecord
         return [
             [['user_id', 'title', 'summary', 'status'], 'required'],
             [['user_id', 'status', 'category'], 'integer'],
-            [['imageFiles'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg', 'maxFiles' => 80],
+            [['imageFiles'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg', 'maxFiles' => 80],
             [['summary'], 'string'],
             [['title'], 'string', 'max' => 255],
         ];
@@ -101,16 +101,96 @@ class Galleries extends ActiveRecord
 
     public function upload()
     {
+
         if ($this->validate()) {
-            foreach ($this->imageFiles as $file) {
-                $file->saveAs('uploads/' . $file->baseName . '.' . $file->extension);
+            $i = 0;
+            $escapedTitle = $this->sanitize($this->title);
+            $path = Url::to('@webroot/images/galleries/'.$this->created_at.$escapedTitle);
+            $pathToImages = $path.'/images';
+            $pathToThumbs = $path.'/thumbs';
+            if (!file_exists($path)) {
+                mkdir($path, 0777);
+                mkdir($pathToImages, 0777);
+                mkdir($pathToThumbs, 0777);
+            }else {
+                $oldImageFiles = scandir($pathToImages);
+                $i = count($oldImageFiles)-1;
             }
+
+            foreach ($this->imageFiles as $file) {
+
+                $filename = $i.'.'.$file->extension;
+                $file->saveAs($pathToImages . '/' . $filename);
+                if($file->extension == 'png') {
+                    $this->png2jpg($pathToImages . '/' , $filename);
+                }
+                $i++;
+            }
+            $this->createThumbs($pathToImages, $pathToThumbs, 64);
+
             return true;
         } else {
             return false;
         }
     }
 
+
+
+    function png2jpg($originalFilePath, $filename) {
+            $info = pathinfo($originalFilePath.$filename);
+            $image = imagecreatefrompng($originalFilePath.$filename);
+            $bg = imagecreatetruecolor(imagesx($image), imagesy($image));
+            imagefill($bg, 0, 0, imagecolorallocate($bg, 255, 255, 255));
+            imagealphablending($bg, TRUE);
+            imagecopy($bg, $image, 0, 0, 0, 0, imagesx($image), imagesy($image));
+            imagedestroy($image);
+            $quality = 50; // 0 = worst / smaller file, 100 = better / bigger file
+            $newFilePath = $originalFilePath. $info['filename'] . '.jpg';
+            imagejpeg($bg, $newFilePath , $quality);
+            imagedestroy($bg);
+            unlink($originalFilePath.$filename);
+            return true;
+    }
+
+
+
+    function createThumbs( $pathToImages, $pathToThumbs, $thumbWidth )
+    {
+        $pathToImages = $pathToImages.'/';
+        $pathToThumbs = $pathToThumbs.'/';
+
+        // open the directory
+        $dir = opendir( $pathToImages );
+
+        // loop through it, looking for any/all JPG files:
+        while (false !== ($fname = readdir( $dir ))) {
+            // parse path for the extension
+            $info = pathinfo($pathToImages . $fname);
+            // continue only if this is a JPEG image
+            if ( strtolower($info['extension']) == 'jpg' )
+            {
+                // load image and get image size
+                $img = imagecreatefromjpeg( "{$pathToImages}{$fname}" );
+                $width = imagesx( $img );
+                $height = imagesy( $img );
+
+                // calculate thumbnail size
+                $new_width = $thumbWidth;
+                $new_height = floor( $height * ( $thumbWidth / $width ) );
+
+                // create a new temporary image
+                $tmp_img = imagecreatetruecolor( $new_width, $new_height );
+
+                // copy and resize old image into new image
+                imagecopyresized( $tmp_img, $img, 0, 0, 0, 0, $new_width, $new_height, $width, $height );
+
+                // save thumbnail into a file
+                imagejpeg( $tmp_img, "{$pathToThumbs}{$fname}" );
+            }
+        }
+        // close the directory
+        closedir( $dir );
+    }
 
     /**
      * @return \yii\db\ActiveQuery
@@ -253,5 +333,78 @@ class Galleries extends ActiveRecord
         }
     }
 
+
+    /**
+     *
+     */
+    public function deleteImage($imageNr){
+        $escapedTitle = $this->sanitize($this->title);
+        $path = Url::to('@webroot/images/galleries/'.$this->created_at.$escapedTitle);
+        $pathToImages = $path.'/images/';
+        $pathToThumbs = $path.'/thumbs/';
+
+        unlink($pathToImages.$imageNr.'.jpg');
+        unlink($pathToThumbs.$imageNr.'.jpg');
+
+        for($i = $imageNr+1; $i<$this->getImageCount()+1; $i++){
+            rename($pathToImages.$i.".jpg", $pathToImages.($i-1).".jpg");
+            rename($pathToThumbs.$i.".jpg", $pathToThumbs.($i-1).".jpg");
+        }
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function getImageCount(){
+        $escapedTitle = $this->sanitize($this->title);
+        $path = Url::to('@webroot/images/galleries/'.$this->created_at.$escapedTitle.'/images');
+        if(file_exists($path))
+        return $countedImages = count(scandir($path));
+        else return 0;
+    }
+
+
+    public function getImageInfos()
+    {
+
+        $escapedTitle = $this->sanitize($this->title);
+        $path = Url::to('@webroot/images/galleries/'.$this->created_at.$escapedTitle);
+        $url = Url::to('@web/images/galleries/'.$this->created_at.$escapedTitle);
+        $pathToImages = $path.'/images';
+
+        $countedImages = count(scandir($pathToImages));
+        for ($i = 0; $i <= $countedImages-1; $i++) {
+            $imageInfos['imageUrls'][$i]= $url.'/images/'.$i.'.jpg';
+            $imageInfos['thumbsUrls'][$i]= $url.'/thumbs/'.$i.'.jpg';
+        }
+
+
+        return $imageInfos;
+    }
+
+
+    /**
+     * Function: sanitize
+     * Returns a sanitized string, typically for URLs.
+     *
+     * Parameters:
+     *     $string - The string to sanitize.
+     *     $force_lowercase - Force the string to lowercase?
+     *     $anal - If set to *true*, will remove all non-alphanumeric characters.
+     */
+    function sanitize($string, $force_lowercase = true, $anal = false) {
+        $strip = array("~", "`", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "=", "+", "[", "{", "]",
+            "}", "\\", "|", ";", ":", "\"", "'", "&#8216;", "&#8217;", "&#8220;", "&#8221;", "&#8211;", "&#8212;",
+            "â€”", "â€“", ",", "<", ".", ">", "/", "?");
+        $clean = trim(str_replace($strip, "", strip_tags($string)));
+        $clean = preg_replace('/\s+/', "-", $clean);
+        $clean = ($anal) ? preg_replace("/[^a-zA-Z0-9]/", "", $clean) : $clean ;
+        return ($force_lowercase) ?
+            (function_exists('mb_strtolower')) ?
+                mb_strtolower($clean, 'UTF-8') :
+                strtolower($clean) :
+            $clean;
+    }
 
 }
