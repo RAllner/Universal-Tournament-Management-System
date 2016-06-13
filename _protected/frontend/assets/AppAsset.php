@@ -37,7 +37,8 @@ class AppAsset extends AssetBundle
         'yii\web\YiiAsset',
         'frontend\assets\MaterialCSSAsset',
         'frontend\assets\MaterialJSAsset',
-        'hiqdev\assets\lightbox2\LightboxAsset'
+        'hiqdev\assets\lightbox2\LightboxAsset',
+        'yii\materialicons\AssetBundle'
     ];
 }
 

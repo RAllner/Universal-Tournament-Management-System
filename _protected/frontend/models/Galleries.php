@@ -61,7 +61,7 @@ class Galleries extends ActiveRecord
         return [
             [['user_id', 'title', 'summary', 'status'], 'required'],
             [['user_id', 'status', 'category'], 'integer'],
-            [['imageFiles'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg', 'maxFiles' => 80],
+            [['imageFiles'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg', 'maxFiles' => 0],
             [['summary'], 'string'],
             [['title'], 'string', 'max' => 255],
         ];
@@ -114,11 +114,9 @@ class Galleries extends ActiveRecord
                 mkdir($pathToThumbs, 0777);
             }else {
                 $oldImageFiles = scandir($pathToImages);
-                $i = count($oldImageFiles)-1;
+                $i = count($oldImageFiles)-2;
             }
-
             foreach ($this->imageFiles as $file) {
-
                 $filename = $i.'.'.$file->extension;
                 $file->saveAs($pathToImages . '/' . $filename);
                 if($file->extension == 'png') {
@@ -360,7 +358,7 @@ class Galleries extends ActiveRecord
         $escapedTitle = $this->sanitize($this->title);
         $path = Url::to('@webroot/images/galleries/'.$this->created_at.$escapedTitle.'/images');
         if(file_exists($path))
-        return $countedImages = count(scandir($path));
+        return $countedImages = count(scandir($path)) - 2;
         else return 0;
     }
 
@@ -373,8 +371,8 @@ class Galleries extends ActiveRecord
         $url = Url::to('@web/images/galleries/'.$this->created_at.$escapedTitle);
         $pathToImages = $path.'/images';
 
-        $countedImages = count(scandir($pathToImages));
-        for ($i = 0; $i <= $countedImages-1; $i++) {
+
+        for ($i = 0; $i <= $this->getImageCount(); $i++) {
             $imageInfos['imageUrls'][$i]= $url.'/images/'.$i.'.jpg';
             $imageInfos['thumbsUrls'][$i]= $url.'/thumbs/'.$i.'.jpg';
         }

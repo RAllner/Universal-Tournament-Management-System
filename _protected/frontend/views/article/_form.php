@@ -21,13 +21,13 @@ use yii\widgets\ActiveForm;
             ['editorOptions' => [ 'preset' => 'full', 'inline' => false]]); ?>
         <?= $form->field($model, 'imageFile')->fileInput() ?>
     <div class="row">
-    <div class="col-lg-6">
-
-        <?= $form->field($model, 'status')->dropDownList($model->statusList) ?>
-
-        <?= $form->field($model, 'category')->dropDownList($model->categoryList) ?>
-
-    </div>
+        <div class="col-lg-6">
+    
+            <?= $form->field($model, 'status')->dropDownList($model->statusList) ?>
+    
+            <?= $form->field($model, 'category')->dropDownList($model->categoryList) ?>
+    
+        </div>
     </div> 
 
     <div class="form-group">

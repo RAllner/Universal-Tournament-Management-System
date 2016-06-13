@@ -71,27 +71,27 @@ class CssHelper
         {
             return "blue";
         }
-        elseif ($category === Yii::t('app', 'Warcraft'))
+        else if ($category === Yii::t('app', 'Warcraft'))
         {
             return "green";
         }
-        elseif ($category === Yii::t('app', 'Hearthstone'))
+        else if ($category === Yii::t('app', 'Hearthstone'))
         {
             return "gold";
         }
-        elseif ($category === Yii::t('app', 'Diablo'))
+        else if ($category === Yii::t('app', 'Diablo'))
         {
             return "red";
         }
-        elseif ($category === Yii::t('app', 'Overwatch'))
+        else if ($category === Yii::t('app', 'Overwatch'))
         {
             return "black";
         }
-        elseif ($category === Yii::t('app', 'ESport'))
+        else if ($category === Yii::t('app', 'ESport'))
         {
             return "grey";
         }
-        elseif ($category === Yii::t('app', 'General'))
+        else if ($category === Yii::t('app', 'General'))
         {
             return "yellow";
         }

@@ -7,7 +7,7 @@ use yii\widgets\ActiveForm;
 /* @var $model frontend\models\GalleriesSearch */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-
+<div class="col-lg-12 well bs-component">
 <div class="galleries-search">
 
     <?php $form = ActiveForm::begin([
@@ -38,4 +38,5 @@ use yii\widgets\ActiveForm;
 
     <?php ActiveForm::end(); ?>
 
+</div>
 </div>

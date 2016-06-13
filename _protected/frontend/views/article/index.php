@@ -9,13 +9,21 @@ use yii\widgets\ListView;
 $this->title = Yii::t('app', Yii::$app->name) .' '. Yii::t('app', 'news');
 $this->params['breadcrumbs'][] = Yii::t('app', 'Articles');
 ?>
+
 <div class="article-index">
 
     <h1><?= Html::encode($this->title) ?> 
-        <span class="small"> - <?= Yii::t('app', 'The best news available') ?></span> 
-    </h1>
+        <span class="small"> - <?= Yii::t('app', 'The best news available') ?></span>
+                <span class="pull-right">
+        <?php if (Yii::$app->user->can('adminArticle')): ?>
 
-    <hr class="top">
+            <?= Html::a(Yii::t('app', 'Admin'), ['admin'], ['class' => 'btn btn-warning']) ?>
+
+        <?php endif ?>
+            </span>
+    </h1>
+    <div class="col-lg-8 well bs-component">
+
 
     <?= ListView::widget([
         'summary' => false,
@@ -28,3 +36,4 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Articles');
     ]) ?>
 
 </div>
+    </div>

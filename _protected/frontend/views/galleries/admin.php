@@ -7,9 +7,11 @@ use yii\grid\GridView;
 /* @var $searchModel frontend\models\GalleriesSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Galleries');
+$this->title = Yii::t('app', 'Galleries Admin');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Galleries'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
 <div class="articles-admin">
 
     <h1>
@@ -17,11 +19,12 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= Html::encode($this->title) ?>
 
     <span class="pull-right">
+        <?= Html::a(Yii::t('app', 'Show Gallery'), ['index'], ['class' => 'btn btn-primary']) ?>
         <?= Html::a(Yii::t('app', 'Create Gallery'), ['create'], ['class' => 'btn btn-success']) ?>
     </span>  
 
     </h1>
-
+    <div class="col-lg-12 well bs-component">
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -56,7 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $data->getCategoryName($data->category);
                 },
                 'contentOptions'=>function($model, $key, $index, $column) {
-                    return ['class'=>CssHelper::generalStatusCss($model->categoryName)];
+                    return ['class'=>CssHelper::generalCategoryCss($model->categoryName)];
                 }
             ],
 
@@ -65,4 +68,5 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 
+</div>
 </div>

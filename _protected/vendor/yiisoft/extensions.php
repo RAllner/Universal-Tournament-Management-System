@@ -84,15 +84,6 @@ return array (
       '@yii/faker' => $vendorDir . '/yiisoft/yii2-faker',
     ),
   ),
-  'romdim/yii2-bootstrap-material' => 
-  array (
-    'name' => 'romdim/yii2-bootstrap-material',
-    'version' => '9999999-dev',
-    'alias' => 
-    array (
-      '@romdim/bootstrap/material' => $vendorDir . '/romdim/yii2-bootstrap-material',
-    ),
-  ),
   'hiqdev/yii2-asset-lightbox2' => 
   array (
     'name' => 'hiqdev/yii2-asset-lightbox2',
@@ -109,6 +100,24 @@ return array (
     'alias' => 
     array (
       '@metalguardian/fotorama' => $vendorDir . '/metalguardian/yii2-fotorama-widget/src',
+    ),
+  ),
+  'mervick/yii2-material-design-icons' => 
+  array (
+    'name' => 'mervick/yii2-material-design-icons',
+    'version' => '1.0.0.0',
+    'alias' => 
+    array (
+      '@yii/materialicons' => $vendorDir . '/mervick/yii2-material-design-icons',
+    ),
+  ),
+  'romdim/yii2-bootstrap-material' => 
+  array (
+    'name' => 'romdim/yii2-bootstrap-material',
+    'version' => '9999999-dev',
+    'alias' => 
+    array (
+      '@romdim/bootstrap/material' => $vendorDir . '/romdim/yii2-bootstrap-material',
     ),
   ),
 );

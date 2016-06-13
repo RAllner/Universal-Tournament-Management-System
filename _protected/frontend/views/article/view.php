@@ -12,17 +12,21 @@ $photoInfo = $model->PhotoInfo;
 $photo = Html::img($photoInfo['url'],['alt' =>$photoInfo['alt']]);
 $options = ['data-lightbox'=>'profile-image','data-title'=>$photoInfo['alt']];
 ?>
+
 <div class="article-view">
 
     <h1><?= Html::encode($this->title) ?>
+
     </h1>
-    <figure>
+
+    <div class="col-lg-8 well bs-component">
+
+    <figure style="text-align: center">
         <?= Html::a($photo, $photoInfo['url'],$options)?>
         <figcaption>(Click to enlarge)</figcaption>
     </figure>
+    </br>
 
-
- 
 
     <?= DetailView::widget([
         'model' => $model,
@@ -73,3 +77,4 @@ $options = ['data-lightbox'=>'profile-image','data-title'=>$photoInfo['alt']];
     <?php endif ?>
     </div>
 </div>
+    </div>

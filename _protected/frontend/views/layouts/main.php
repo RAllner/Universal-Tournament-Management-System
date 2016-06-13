@@ -30,7 +30,7 @@ AppAsset::register($this);
                 'brandUrl' => Yii::$app->homeUrl,
 
                 'options' => [
-                    'class' => 'navbar-default navbar-fixed-top',
+                    'class' => 'navbar-nav navbar-fixed-top',
 
                 ],
             ]);
@@ -43,17 +43,34 @@ AppAsset::register($this);
             {
                 $menuItems[] = ['label' => '<span class="glyphicon glyphicon-tower"></span> '. Yii::t('app', 'Tournaments'), 'url' => ['/tournaments/index']];
                 $menuItems[] = ['label' => Yii::t('app', 'News'), 'url' => ['/article/index']];
-                $menuItems[] = ['label' => Yii::t('app', 'Gallery'), 'url' => ['/galleries/index']];
-                $menuItems[] = ['label' => Yii::t('app', 'About'), 'url' => ['/site/about']];
-                $menuItems[] = ['label' => Yii::t('app', 'Contact'), 'url' => ['/site/contact']];
+                $menuItems[] = ['label' => Yii::t('app', 'Media'),
+                    'items' =>   [
+                        ['label' => Yii::t('app', 'Galleries'), 'url' => ['/galleries/index']],
+                        ['label' => Yii::t('app', 'Videos'), 'url' => ['/videos/index']],
+
+                    ]
+                ];
+                $menuItems[] = ['label' => Yii::t('app', 'Infos'),
+                    'items' =>   [
+                        ['label' => Yii::t('app', 'About'), 'url' => ['/site/about']],
+                        ['label' => Yii::t('app', 'Contact'), 'url' => ['/site/contact']]
+                    ]
+                ];
+
             }
 
             // display Article admin page to editor+ roles
             if (Yii::$app->user->can('editor'))
             {
-                $menuItems[] = ['label' => Yii::t('app', 'Tournaments'), 'url' => ['/tournaments/admin']];
-                $menuItems[] = ['label' => Yii::t('app', 'News'), 'url' => ['/article/admin']];
-                $menuItems[] = ['label' => Yii::t('app', 'Gallery'), 'url' => ['/galleries/admin']];
+                $menuItems[] = ['label' => '<span class="glyphicon glyphicon-tower"></span> '. Yii::t('app', 'Tournaments'), 'url' => ['/tournaments/admin']];
+                $menuItems[] = ['label' => Yii::t('app', 'News'), 'url' => ['/article/index']];
+                $menuItems[] = ['label' => Yii::t('app', 'Media'),
+                    'items' =>   [
+                        ['label' => Yii::t('app', 'Galleries'), 'url' => ['/galleries/index']],
+                        ['label' => Yii::t('app', 'Videos'), 'url' => ['/videos/index']],
+
+                    ]
+                ];
             }
             if (Yii::$app->user->can('admin'))
             {
@@ -62,7 +79,6 @@ AppAsset::register($this);
             // display Signup and Login pages to guests of the site
             if (Yii::$app->user->isGuest) 
             {
-                $menuItems[] = ['label' => Yii::t('app', 'Signup'), 'url' => ['/site/signup']];
                 $menuItems[] = ['label' => Yii::t('app', 'Login'), 'url' => ['/site/login']];
             }
             // display Logout to all logged in users

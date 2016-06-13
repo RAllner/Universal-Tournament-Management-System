@@ -1,23 +1,38 @@
 <?php
 use yii\helpers\Url;
+use yii\helpers\Html;
+use common\helpers\CssHelper;
 
 /* @var $this yii\web\View */
 $this->title = 'Articles';
+$photoInfo = $model->PhotoInfo;
+$photo = Html::img($photoInfo['url'],['alt' =>$photoInfo['alt']]);
+$options = ['data-lightbox'=>'news-image','data-title'=>$photoInfo['alt']];
 ?>
 
-    <h2>
-        <a href=<?= Url::to(['article/view', 'id' => $model->id]) ?>><?= $model->title ?></a>
-    </h2>
 
-    <p class="time"><span class="glyphicon glyphicon-time"></span> 
-        <?= Yii::t('app','Published on').' '.date('F j, Y, g:i a', $model->created_at) ?></p>
+    <h3>
+       <?= $model->title ?>
 
+    </h3>
+    <span class="pull-right">
+       <?php echo "<div class='".CssHelper::generalCategoryCss($model->categoryName)."'>".$model->categoryName."</div>"; ?>
+    </span>
+    <p class="time">
+        <i class="material-icons">account_circle</i> <?= Yii::t('app','Author').' '.$model->authorName ?>
+        <i class="material-icons">schedule</i> <?= Yii::t('app','Published on').' '.date('F j, Y, g:i a', $model->created_at) ?>
+            <a href=<?= Url::to(['article/view', 'id' => $model->id]) ?>>
+                <i class="material-icons">chevron_right</i><?= yii::t('app', 'Details'); ?>
+            </a>
+    </p>
+
+
+
+    <figure style="text-align: center">
+        <?= Html::a($photo, $photoInfo['url'],$options)?>
+    </figure>
     <br>
-
     <p><?= $model->summary ?></p>
+    <p><?= $model->content ?></p>
 
-    <a class="btn btn-primary" href=<?= Url::to(['article/view', 'id' => $model->id]) ?>>
-        <?= yii::t('app','Read more'); ?><span class="glyphicon glyphicon-chevron-right"></span>
-    </a>
 
-    <hr class="article-devider">

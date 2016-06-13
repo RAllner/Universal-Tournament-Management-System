@@ -26,7 +26,7 @@ class GalleriesController extends FrontendController
          * How many galleries we want to display per page.
          * @var integer
          */
-        $pageSize = 5;
+        $pageSize = 3;
 
         /**
          * Galleries have to be published.
@@ -138,7 +138,6 @@ class GalleriesController extends FrontendController
 
         return $this->redirect(['index']);
     }
-
 
 
 

@@ -15,41 +15,48 @@ $imageInfos = $model->ImageInfos;
 ?>
 <div class="galleries-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1><?= Html::encode($this->title);
+            echo " (".$model->ImageCount." Bilder)";
+        ?></h1>
 
+    <div class="col-lg-12 well bs-component">
 
     <?php
-    $fotorama = \metalguardian\fotorama\Fotorama::begin(
-        [
-            'options' => [
-                'loop' => true,
-                'hash' => true,
-                'width' => '100%',
-                'nav' => 'thumbs',
-                'data-ratio'=>'800/600',
-                'allowfullscreen'=>true
-            ],
-            'spinner' => [
-                'lines' => 20,
-            ],
-            'tagName' => 'span',
-            'useHtmlData' => false,
+    if($model->ImageCount != 0) {
+        $fotorama = \metalguardian\fotorama\Fotorama::begin(
+            [
+                'options' => [
+                    'loop' => true,
+                    'hash' => true,
+                    'width' => '100%',
+                    'height' => '75%',
+                    'nav' => 'thumbs',
+                    'data-ratio' => '800/600',
+                    'allowfullscreen' => true
+                ],
+                'spinner' => [
+                    'lines' => 20,
+                ],
+                'tagName' => 'span',
+                'useHtmlData' => false,
 
-            'htmlOptions' => [
-                'class' => 'custom-class',
-                'id' => 'custom-id',
-            ],
-        ]
-    );
+                'htmlOptions' => [
+                    'class' => 'custom-class',
+                    'id' => 'custom-id',
+                ],
+            ]
+        );
 
-    for ($i = 0; $i <= $model->ImageCount-1; $i++) {
-        echo "<a href='".$imageInfos['imageUrls'][$i]."'><img src='".$imageInfos['thumbsUrls'][$i]."'></a>";
+        for ($i = 0; $i <= $model->ImageCount; $i++) {
+            echo "<a href='" . $imageInfos['imageUrls'][$i] . "'><img src='" . $imageInfos['thumbsUrls'][$i] . "'></a>";
+        }
+
+        $fotorama->end();
     }
+
     ?>
 
-    <?php $fotorama->end(); ?>
-
-
+    </br>
 
 
     <?= DetailView::widget([

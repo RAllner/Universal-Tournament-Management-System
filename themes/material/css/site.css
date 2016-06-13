@@ -171,6 +171,26 @@ div.required label:after {
     color: #c4a500;   
 }
 
+.black {
+    font-weight: bold;
+    color: #181818;
+}
+
+.blue {
+    font-weight: bold;
+    color: #0250a0;
+}
+
+.red {
+    font-weight: bold;
+    color: #e62e1a;
+}
+
+.grey {
+    font-weight: bold;
+    color: #505050;
+}
+
 hr.top {
     margin-top: 0px;
     border-width: 1px;

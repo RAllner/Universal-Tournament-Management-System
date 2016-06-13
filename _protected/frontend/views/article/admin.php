@@ -8,6 +8,7 @@ use yii\grid\GridView;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = Yii::t('app', 'Articles');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Article'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="articles-admin">
@@ -17,11 +18,12 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= Html::encode($this->title) ?>
 
     <span class="pull-right">
+        <?= Html::a(Yii::t('app', 'Show News'), ['index'], ['class' => 'btn btn-primary']) ?>
         <?= Html::a(Yii::t('app', 'Create Article'), ['create'], ['class' => 'btn btn-success']) ?>
     </span>  
 
     </h1>
-
+    <div class="col-lg-12 well bs-component">
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -29,8 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            //'id',
-            // author
+
             [
                 'attribute'=>'user_id',
                 'value' => function ($data) {
@@ -38,7 +39,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
             ],
             'title',
-            // status
             [
                 'attribute'=>'status',
                 'filter' => $searchModel->statusList,
@@ -65,4 +65,5 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 
+</div>
 </div>

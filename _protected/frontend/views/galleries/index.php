@@ -10,12 +10,20 @@ use yii\widgets\ListView;
 $this->title = Yii::t('app', 'Galleries');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
 <div class="galleries-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1><?= Html::encode($this->title) ?>
+        <span class="pull-right">
+        <?php if (Yii::$app->user->can('adminArticle')): ?>
+
+            <?= Html::a(Yii::t('app', 'Admin'), ['admin'], ['class' => 'btn btn-warning']) ?>
+
+        <?php endif ?>
+            </span>
+    </h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <hr class="top">
 
     <?= ListView::widget([
         'summary' => false,
@@ -26,4 +34,5 @@ $this->params['breadcrumbs'][] = $this->title;
             return $this->render('_index', ['model' => $model]);
         },
     ]) ?>
+
 </div>
