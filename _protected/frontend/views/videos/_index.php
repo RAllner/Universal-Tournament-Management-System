@@ -7,7 +7,7 @@ use common\helpers\CssHelper;
 $this->title = 'Videos';
 ?>
 
-<div class="col-lg-6 col-md-12 col-sm-12 col-xs-12 well bs-component">
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 well bs-component">
     <h3>
        <?= $model->title ?>
 
@@ -28,7 +28,7 @@ $this->title = 'Videos';
 
     <br>
 <p>
-    <iframe width="100%" height="315" frameborder="0" allowfullscreen="" src="<?= $model->url ?>"></iframe>
+    <iframe class="spot-light-video" height="500px" frameborder="0" allowfullscreen="" src="<?= $model->url ?>"></iframe>
    </p>
 
 </div>

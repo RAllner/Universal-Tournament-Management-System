@@ -102,6 +102,17 @@ class SiteController extends Controller
         return $this->render('about');
     }
 
+    /**
+     * Displays the journey static page.
+     *
+     * @return string
+     */
+    public function actionJourney()
+    {
+        return $this->render('journey');
+    }
+
+
     public function actionTournaments()
     {
         return $this->render('tournaments');

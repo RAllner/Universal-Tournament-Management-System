@@ -41,9 +41,9 @@ AppAsset::register($this);
             // we do not need to display Article/index, About and Contact pages to editor+ roles
             if (!Yii::$app->user->can('editor')) 
             {
-                $menuItems[] = ['label' => '<span class="glyphicon glyphicon-tower"></span> '. Yii::t('app', 'Tournaments'), 'url' => ['/tournaments/index']];
-                $menuItems[] = ['label' => Yii::t('app', 'News'), 'url' => ['/article/index']];
-                $menuItems[] = ['label' => Yii::t('app', 'Media'),
+                $menuItems[] = ['label' => '<i class="material-icons">videogame_asset</i> '. Yii::t('app', 'Tournaments'), 'url' => ['/tournaments/index']];
+                $menuItems[] = ['label' => '<i class="material-icons">chrome_reader_mode</i> '.Yii::t('app', 'News'), 'url' => ['/article/index']];
+                $menuItems[] = ['label' => '<i class="material-icons">perm_media</i> '.Yii::t('app', 'Media'),
                     'items' =>   [
                         ['label' => Yii::t('app', 'Galleries'), 'url' => ['/galleries/index']],
                         ['label' => Yii::t('app', 'Videos'), 'url' => ['/videos/index']],
@@ -53,7 +53,8 @@ AppAsset::register($this);
                 $menuItems[] = ['label' => Yii::t('app', 'Infos'),
                     'items' =>   [
                         ['label' => Yii::t('app', 'About'), 'url' => ['/site/about']],
-                        ['label' => Yii::t('app', 'Contact'), 'url' => ['/site/contact']]
+                        ['label' => Yii::t('app', 'Contact'), 'url' => ['/site/contact']],
+                        ['label' => Yii::t('app', 'Journey'), 'url' => ['/site/journey']]
                     ]
                 ];
 
@@ -62,9 +63,9 @@ AppAsset::register($this);
             // display Article admin page to editor+ roles
             if (Yii::$app->user->can('editor'))
             {
-                $menuItems[] = ['label' => '<span class="glyphicon glyphicon-tower"></span> '. Yii::t('app', 'Tournaments'), 'url' => ['/tournaments/admin']];
-                $menuItems[] = ['label' => Yii::t('app', 'News'), 'url' => ['/article/index']];
-                $menuItems[] = ['label' => Yii::t('app', 'Media'),
+                $menuItems[] = ['label' => '<i class="material-icons">videogame_asset</i> '. Yii::t('app', 'Tournaments'), 'url' => ['/tournaments/admin']];
+                $menuItems[] = ['label' => '<i class="material-icons">chrome_reader_mode</i> '.Yii::t('app', 'News'), 'url' => ['/article/index']];
+                $menuItems[] = ['label' => '<i class="material-icons">perm_media</i> '.Yii::t('app', 'Media'),
                     'items' =>   [
                         ['label' => Yii::t('app', 'Galleries'), 'url' => ['/galleries/index']],
                         ['label' => Yii::t('app', 'Videos'), 'url' => ['/videos/index']],
@@ -74,7 +75,7 @@ AppAsset::register($this);
             }
             if (Yii::$app->user->can('admin'))
             {
-                $menuItems[] = ['label' => Yii::t('app', 'ADMIN'), 'url' => ['/backend']];
+                $menuItems[] = ['label' => '<i class="material-icons">settings</i> '.Yii::t('app', 'ADMIN'), 'url' => ['/backend']];
             }
             // display Signup and Login pages to guests of the site
             if (Yii::$app->user->isGuest) 
@@ -85,7 +86,7 @@ AppAsset::register($this);
             else 
             {
                 $menuItems[] = [
-                    'label' => Yii::t('app', 'Logout'). ' (' . Yii::$app->user->identity->username . ')',
+                    'label' => '<i class="material-icons">account_circle</i> '.Yii::t('app', 'Logout'). ' (' . Yii::$app->user->identity->username . ')',
                     'url' => ['/site/logout'],
                     'linkOptions' => ['data-method' => 'post']
                 ];

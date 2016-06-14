@@ -120,4 +120,13 @@ return array (
       '@romdim/bootstrap/material' => $vendorDir . '/romdim/yii2-bootstrap-material',
     ),
   ),
+  'rmrevin/yii2-fontawesome' => 
+  array (
+    'name' => 'rmrevin/yii2-fontawesome',
+    'version' => '2.15.1.0',
+    'alias' => 
+    array (
+      '@rmrevin/yii/fontawesome' => $vendorDir . '/rmrevin/yii2-fontawesome',
+    ),
+  ),
 );
