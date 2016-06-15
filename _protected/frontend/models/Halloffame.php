@@ -2,6 +2,7 @@
 namespace frontend\models;
 
 use common\models\User;
+use frontend\models\Players;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\UploadedFile;
@@ -12,6 +13,8 @@ use Yii;
  * This is the model class for table "{{%halloffame}}".
  *
  * @property integer $id
+ * @property integer $user_id
+ * @property integer $players_id
  * @property string $playername
  * @property string $achievements
  * @property string $description
@@ -21,8 +24,9 @@ use Yii;
  * @property integer $updated_at
  *
  * @property User $user
+ * @property Players $players
  */
-class Article extends ActiveRecord
+class Halloffame extends ActiveRecord
 {
     const STATUS_DRAFT = 1;
     const STATUS_PUBLISHED = 2;

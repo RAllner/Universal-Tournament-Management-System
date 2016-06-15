@@ -11,7 +11,17 @@ return [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
+    'defaultRoute' => 'article/home',
     'components' => [
+        'urlManager' => [
+            'class' => 'yii\web\UrlManager',
+            'enablePrettyUrl' => true,
+            'showScriptName' => false,
+            'rules' => [
+                'site/index' => 'article/home',
+                '@web' => 'article/home'
+            ],
+        ],
         // here you can set theme used for your frontend application 
         // - template comes with: 'default', 'slate', 'spacelab' and 'cerulean'
         'view' => [

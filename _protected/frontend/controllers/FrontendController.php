@@ -27,19 +27,19 @@ class FrontendController extends Controller
                 'rules' => [
                     [
                         'controllers' => ['article'],
-                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'admin'],
+                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'admin','last-article', 'home'],
                         'allow' => true,
                         'roles' => ['admin'],
                     ],
                     [
                         'controllers' => ['article'],
-                        'actions' => ['create', 'update', 'admin'],
+                        'actions' => ['create', 'update', 'admin','last-article', 'home'],
                         'allow' => true,
                         'roles' => ['editor'],
                     ],
                     [
                         'controllers' => ['article'],
-                        'actions' => ['index', 'view'],
+                        'actions' => ['index', 'view','last-article', 'home'],
                         'allow' => true
                     ],
                     [
@@ -56,6 +56,23 @@ class FrontendController extends Controller
                     ],
                     [
                         'controllers' => ['galleries'],
+                        'actions' => ['index', 'view'],
+                        'allow' => true
+                    ],
+                    [
+                        'controllers' => ['videos'],
+                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'admin'],
+                        'allow' => true,
+                        'roles' => ['admin'],
+                    ],
+                    [
+                        'controllers' => ['videos'],
+                        'actions' => ['create', 'update', 'admin'],
+                        'allow' => true,
+                        'roles' => ['editor'],
+                    ],
+                    [
+                        'controllers' => ['videos'],
                         'actions' => ['index', 'view'],
                         'allow' => true
                     ],

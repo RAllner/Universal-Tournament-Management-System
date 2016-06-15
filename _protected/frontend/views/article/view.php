@@ -9,7 +9,7 @@ $this->title = $model->title;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Articles'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 $photoInfo = $model->PhotoInfo;
-$photo = Html::img($photoInfo['url'],['alt' =>$photoInfo['alt']]);
+$photo = Html::img($photoInfo['url'],['alt' =>$photoInfo['alt'], 'style' => 'width:100%']);
 $options = ['data-lightbox'=>'profile-image','data-title'=>$photoInfo['alt']];
 ?>
 

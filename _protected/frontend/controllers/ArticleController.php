@@ -54,6 +54,16 @@ class ArticleController extends FrontendController
         ]);
     }
 
+
+    public function actionHome()
+    {
+        $lastArticle = Article::find()->orderBy(['id' => SORT_DESC])->one();
+        $model = $this->findModel($lastArticle->id);
+        return $this->render('home', [
+            'model' => $model,
+        ]);
+    }
+
     /**
      * Creates a new Article model.
      * If creation is successful, the browser will be redirected to the 'view' page.
@@ -184,4 +194,14 @@ class ArticleController extends FrontendController
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+    public function actionLastArticle()
+    {
+        $lastArticle = Article::find()->orderBy(['id' => SORT_DESC])->one();
+        $model = $this->findModel($lastArticle->id);
+        
+        return $this->render('lastArticle', ['model' => $model]);
+    }
+
+
 }

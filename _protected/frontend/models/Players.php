@@ -1,36 +1,40 @@
 <?php
 
-namespace app\models;
+namespace frontend\models;
 
 use Yii;
+use common\models\User;
+use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
+use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "players".
  *
- * @property integer $idplayers
+ * @property integer $id
+ * @property integer $user_id
  * @property string $name
  * @property integer $running_nr
  * @property integer $created_at
  * @property integer $updated_at
- * @property integer $user_id
  *
- * @property Matches[] $matches
- * @property Matches[] $matches0
+ * @property Halloffame[] $halloffames
  * @property User $user
- * @property PlayersHasTeams[] $playersHasTeams
- * @property Teams[] $teamsIdteams
- * @property Signups[] $signups
- * @property TournamentsHasPlayers[] $tournamentsHasPlayers
- * @property Tournaments[] $tournamentsIdtournaments
  */
-class Players extends \yii\db\ActiveRecord
+class Players extends ActiveRecord
 {
+
+    /**
+     * @var UploadedFile
+     */
+    public $imageFile;
+
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'players';
+        return '{{%players}}';
     }
 
     /**
@@ -39,12 +43,26 @@ class Players extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['idplayers', 'user_id'], 'required'],
-            [['idplayers', 'running_nr', 'created_at', 'updated_at', 'user_id'], 'integer'],
+            [['user_id', 'name', 'running_nr'], 'required'],
+            [['user_id', 'running_nr'], 'integer'],
+            [['imageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg'],
             [['name'], 'string', 'max' => 255],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
+
+
+    /**
+     * Returns a list of behaviors that this component should behave as.
+     *
+     * @return array
+     */
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::className(),
+        ];
+    }
+
 
     /**
      * @inheritdoc
@@ -52,30 +70,30 @@ class Players extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'idplayers' => Yii::t('app', 'Idplayers'),
+            'id' => Yii::t('app', 'ID'),
+            'user_id' => Yii::t('app', 'Owner'),
             'name' => Yii::t('app', 'Name'),
             'running_nr' => Yii::t('app', 'Running Nr'),
             'created_at' => Yii::t('app', 'Created At'),
             'updated_at' => Yii::t('app', 'Updated At'),
-            'user_id' => Yii::t('app', 'User ID'),
         ];
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getMatches()
+
+    public function upload()
     {
-        return $this->hasMany(Matches::className(), ['players_idplayerA' => 'idplayers']);
+
+        if ($this->imageFile) {
+            $path = Url::to('@webroot/images/players/');
+            $escapedTitle = $this->sanitize($this->title);
+            $filename = $this->created_at.$escapedTitle.'.jpg';
+            $this->imageFile->saveAs($path . $filename);
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getMatches0()
-    {
-        return $this->hasMany(Matches::className(), ['players_idplayerB' => 'idplayers']);
-    }
 
     /**
      * @return \yii\db\ActiveQuery
@@ -86,42 +104,61 @@ class Players extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * Gets the id of the article creator.
+     * NOTE: needed for RBAC Author rule.
+     *
+     * @return integer
      */
-    public function getPlayersHasTeams()
+    public function getCreatedBy()
     {
-        return $this->hasMany(PlayersHasTeams::className(), ['players_idplayers' => 'idplayers']);
+        return $this->user_id;
+    }
+
+    /**
+     * Gets the author name from the related User table.
+     *
+     * @return mixed
+     */
+    public function getAuthorName()
+    {
+        return $this->user->username;
+    }
+
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            $this->upload();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function getPhotoInfo()
+    {
+        $path = Url::to('@webroot/images/players/');
+        $url = Url::to('@web/images/players/');
+        $escapedTitle = $this->sanitize($this->title);
+        $filename = $this->created_at.$escapedTitle.'.jpg';
+        $alt = $this->title;
+
+        $imageInfo = ['alt'=> $alt];
+
+        if (file_exists($path . $filename)) {
+            $imageInfo['url'] = $url.$filename;
+        } else {
+            $imageInfo['url'] = $url.'default.jpg';
+        }
+
+        return $imageInfo;
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getTeamsIdteams()
+    public function getHalloffames()
     {
-        return $this->hasMany(Teams::className(), ['idteams' => 'teams_idteams'])->viaTable('players_has_teams', ['players_idplayers' => 'idplayers']);
+        return $this->hasMany(Halloffame::className(), ['players_id' => 'id']);
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getSignups()
-    {
-        return $this->hasMany(Signups::className(), ['players_idplayers' => 'idplayers']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getTournamentsHasPlayers()
-    {
-        return $this->hasMany(TournamentsHasPlayers::className(), ['players_idplayers' => 'idplayers']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getTournamentsIdtournaments()
-    {
-        return $this->hasMany(Tournaments::className(), ['idtournaments' => 'tournaments_idtournaments', 'user_id' => 'tournaments_user_id'])->viaTable('tournaments_has_players', ['players_idplayers' => 'idplayers']);
-    }
 }

@@ -3,12 +3,13 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Url;
+use frontend\controllers\ArticleController;
 
 /* @var $this yii\web\View */
-
+/* @var $model frontend\models\Article */
 
 $this->title = Yii::t('app', Yii::$app->name);
-
+$this->params['breadcrumbs'][] = $this->title;
 
 ?>
 <div class="site-index">
@@ -18,13 +19,11 @@ $this->title = Yii::t('app', Yii::$app->name);
 
             <h2>Universal Tournament Management System</h2>
 
-            <p class="lead">Wellcome
-                <?php
+            <p class="lead">                <?php echo Yii::t('app', 'Wellcome');
                 if (!Yii::$app->user->isGuest) {
                     echo "<b>" . Yii::$app->user->identity->username . "</b>";
                 }
-                ?>
-                on the new Platform for your Tournament!</p>
+                echo Yii::t('app', 'on the new Platform for your Tournament!')?></p>
             </br>
             <?php
             if (Yii::$app->user->isGuest) {
@@ -33,14 +32,17 @@ $this->title = Yii::t('app', Yii::$app->name);
 
 
                 <div class="btn-group">
-                    <a class="btn btn-primary" href="site/login">Login</a>
-                    <a class="btn btn-default" href="site/signup">Signup</a>
+                    <a class="btn btn-primary" href="site/login"><?php echo Yii::t('app', 'Login');?></a>
+                    <a class="btn btn-default" href="site/signup"><?php echo Yii::t('app', 'Signup');?></a>
                 </div>
                 <?php
             }
             ?>
         </div>
     </div>
+    <div>
+
+        </div>
     <div class="col-md-4">
         <div class="well bs-component no-padding">
             <p style="text-align: center" class="with-padding">

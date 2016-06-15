@@ -8,7 +8,7 @@ use Yii;
 /**
  * ArticleSearch represents the model behind the search form about `app\models\Article`.
  */
-class ArticleSearch extends Article
+class HalloffameSearch extends Article
 {
     /**
      * Returns the validation rules for attributes.

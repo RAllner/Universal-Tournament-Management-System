@@ -1,7 +1,7 @@
 <?php
 return [
     'name' => 'UTMS',
-    //'language' => 'sr',
+    'language' => 'de',
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'components' => [
         'assetManager' => [

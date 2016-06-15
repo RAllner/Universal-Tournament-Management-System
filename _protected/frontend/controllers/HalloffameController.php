@@ -3,8 +3,8 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Halloffame;
-use app\models\HalloffameSearch;
+use frontend\models\Halloffame;
+use frontend\models\HalloffameSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

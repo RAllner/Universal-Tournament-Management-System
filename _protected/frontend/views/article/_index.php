@@ -6,10 +6,11 @@ use common\helpers\CssHelper;
 /* @var $this yii\web\View */
 $this->title = 'Articles';
 $photoInfo = $model->PhotoInfo;
-$photo = Html::img($photoInfo['url'],['alt' =>$photoInfo['alt']]);
+$photo = Html::img($photoInfo['url'],['alt' =>$photoInfo['alt'], 'width' => '100%']);
 $options = ['data-lightbox'=>'news-image','data-title'=>$photoInfo['alt']];
 ?>
 
+<div class="col-lg-12 well bs-component">
 
     <h3>
        <?= $model->title ?>
@@ -34,5 +35,6 @@ $options = ['data-lightbox'=>'news-image','data-title'=>$photoInfo['alt']];
     <br>
     <p><?= $model->summary ?></p>
     <p><?= $model->content ?></p>
+    </div>
 
 

@@ -26,11 +26,20 @@ return [
     'Users'    => 'Nutzer',
     'Articles' => 'Artikel',
     'Register' => 'Registrieren',
+    'Media' => 'Medien',
+    'Galleries' => 'Gallerie',
+    'Journey' => 'Anfahrt',
+    'Tournaments' => 'Turniere',
 
     //-- static pages --//
     'Password' => 'Passwort',
     'Username' => 'Nutzername',
-    
+
+    //-- Index page --//
+    'Wellcome' => 'Willkommen ',
+    'on the new Platform for your Tournament!' => ' auf der neuen Plattform für dein Turnier',
+
+
     // contact
     'Name'    => 'Name',
     'Subject' => 'Betreff',
@@ -64,18 +73,18 @@ return [
     // login
     'Remember me'  => 'Erinnere dich an mich',
         //TODO: Hier weiter
-    'Please fill out the following fields to login:' => 'Per favor, ompli els següent formulari per iniciar sessió:',
-    'You have to activate your account first. Please check your email.' => 'El teu compte ha d\'activarse, per favor, comprova el teu correu.',
+    'Please fill out the following fields to login:' => 'Füllen sie folgende Felder aus, um sich einzuloggen:',
+    'You have to activate your account first. Please check your email.' => 'Sie müssen ihren Account zuerst aktivieren. Bitte überprüfen Sie ihre E-Mails.',
     'To be able to log in, you need to confirm your registration. Please check your email, we have sent you a message.'
-        => 'Per ingresar al sistema necessites confirmar el teu registre. Comprova el teu correu, t\'hem enviat un missatge',
+        => 'Um sich einzuloggen, müssen Sie ihre Registration bestätigen. Bitte überprüfen Sie ihre E-Mails, wir haben Ihnen eine Nachricht geschickt.',
 
     // account activation
-    'We couldn\'t send you account activation email, please contact us.' => 'No hem pogut enviar el correu d\'activació. Per favor, contacta amb nosaltres.',
-    'Success! You can now log in.' => 'Compte activat! Ara pots iniciar la sessió amb el teu nom d\'usuari i contrasenya.',
-    'for joining us!' => 'per unir-te a nosaltres!.',
-    'your account could not be activated, please contact us!' => 'El teu compte no ha pogut ser activat, per favor, contacta amb nosaltres.',
-    'Account activation token cannot be blank.' => 'El token d\'activació del compte no pot ésser buit.',
-    'Wrong account activation token.' => 'Token erroni o invàlid.',
+    'We couldn\'t send you account activation email, please contact us.' => 'Wir konnten Ihnen keine E-Mail zu Account Aktivierung zusenden. Bitte kontaktieren Sie uns.',
+    'Success! You can now log in.' => 'Erfolg! Sie können sich jetzt einloggen',
+    'for joining us!' => ',dass du bei uns bist!.',
+    'your account could not be activated, please contact us!' => 'Ihr Account konnte nicht aktiviert werden. Bitte kontaktieren Sie uns.',
+    'Account activation token cannot be blank.' => 'Account Aktivierungstoken kann nicht leer sein.',
+    'Wrong account activation token.' => 'Aktivierungstoken invalide.',
 
     //-- general db fields --//
     'Created At' => 'Erstellt',
