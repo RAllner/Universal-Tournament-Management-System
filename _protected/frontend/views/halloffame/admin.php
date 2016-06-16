@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\ArticleSearch */
+/* @var $searchModel frontend\models\HalloffameSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = Yii::t('app', 'Hall Of Fame');
@@ -15,14 +15,16 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1>
 
-    <?= Html::encode($this->title) ?>
+    <?= 'Admin '.Html::encode($this->title) ?>
 
-    <span class="pull-right">
-        <?= Html::a(Yii::t('app', 'Show Hall Of Fame'), ['index'], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(Yii::t('app', 'Create HOF Member'), ['create'], ['class' => 'btn btn-success']) ?>
-    </span>  
+        <span class="pull-right">
+        <?= Html::a('<i class="material-icons">create</i> '.Yii::t('app', 'Create HOF Member'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('app', 'Back'), ['index'], ['class' => 'btn btn-warning']) ?>
+
+    </span>
 
     </h1>
+    <div class="clearfix"></div>
     <div class="col-lg-12 well bs-component">
     <?= GridView::widget([
         'dataProvider' => $dataProvider,

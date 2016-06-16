@@ -6,32 +6,23 @@ use common\helpers\CssHelper;
 /* @var $this yii\web\View */
 $this->title = 'Hall Of Fame';
 $photoInfo = $model->PhotoInfo;
-$photo = Html::img($photoInfo['url'],['alt' =>$photoInfo['alt']]);
+$photo = Html::img($photoInfo['url'],['alt' =>$photoInfo['alt'], 'width' => '100%']);
 $options = ['data-lightbox'=>'news-image','data-title'=>$photoInfo['alt']];
 ?>
 
+<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" style="padding-left: 0">
+    <div class="well bs-component">
+        <figure style="text-align: center">
+            <?= Html::a($photo, $photoInfo['url'], $options) ?>
+        </figure>
 
-    <h3>
-       <?= $model->title ?>
+        <h3>
+            <?= $model->playername ?>
 
-    </h3>
-    <span class="pull-right">
-       <?php echo "<div class='".CssHelper::generalCategoryCss($model->categoryName)."'>".$model->categoryName."</div>"; ?>
-    </span>
-    <p class="time">
-        <i class="material-icons">schedule</i> <?= Yii::t('app','Published on').' '.date('F j, Y, g:i a', $model->created_at) ?>
-            <a href=<?= Url::to(['article/view', 'id' => $model->id]) ?>>
-                <i class="material-icons">chevron_right</i><?= yii::t('app', 'Details'); ?>
-            </a>
-    </p>
-
-
-
-    <figure style="text-align: center">
-        <?= Html::a($photo, $photoInfo['url'],$options)?>
-    </figure>
-    <br>
-    <p><?= $model->summary ?></p>
-    <p><?= $model->content ?></p>
-
-
+        </h3>
+        <h4>Achievements:</h4>
+        <p>   <?= $model->achievements ?></p>
+        <h4>Description:</h4>
+        <p>   <?= $model->description ?></p>
+    </div>
+</div>

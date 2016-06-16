@@ -25,20 +25,28 @@ AppAsset::register($this);
     <?php $this->beginBody() ?>
     <div class="wrap">
         <?php
+        if (Yii::$app->user->can('admin')) {
             NavBar::begin([
-                'brandLabel' => Yii::t('app', Yii::$app->name)." Admin",
+                'brandLabel' => Yii::t('app', Yii::$app->name) . " Admin",
                 'brandUrl' => Yii::$app->homeUrl,
                 'options' => [
                     'class' => 'navbar-default navbar-fixed-top',
                 ],
             ]);
-
+        } else {
+            NavBar::begin([
+                'brandLabel' => Yii::t('app', Yii::$app->name) . " Settings",
+                'brandUrl' => '../../site/index',
+                'options' => [
+                    'class' => 'navbar-default navbar-fixed-top',
+                ],
+            ]);
+        }
             // display Account and Users to admin+ roles
             if (Yii::$app->user->can('admin'))
             {
-                $menuItems[] = ['label' => Yii::t('app', 'Home'), 'url' => ['/site/index']];
+                $menuItems[] = ['label' => Yii::t('app', 'Dashboard'), 'url' => ['/site/index']];
                 $menuItems[] = ['label' => Yii::t('app', 'Users'), 'url' => ['/user/index']];
-                $menuItems[] = ['label' => Yii::t('app', 'Frontend'), 'url' => ['../site/index']];
             }
             
             // display Login page to guests of the site
@@ -49,11 +57,8 @@ AppAsset::register($this);
             // display Logout to all logged in users
             else 
             {
-                $menuItems[] = [
-                    'label' => Yii::t('app', 'Logout'). ' (' . Yii::$app->user->identity->username . ')',
-                    'url' => ['/site/logout'],
-                    'linkOptions' => ['data-method' => 'post']
-                ];
+                $menuItems[] = ['label' => Yii::t('app', 'Back'), 'url' => ['../site/index', 'id' => Yii::$app->user->id]];
+
             }
 
             echo Nav::widget([

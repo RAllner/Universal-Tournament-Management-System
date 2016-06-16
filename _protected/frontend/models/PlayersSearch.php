@@ -39,21 +39,26 @@ class PlayersSearch extends Players
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $pageSize = 3, $owned)
     {
         $query = Players::find();
 
+        if ($owned === true){
+            $query->andWhere(['user_id' => Yii::$app->user->id]);
+        }
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort'=> ['defaultOrder' => ['id' => SORT_DESC]],
+            'pagination' => [
+                'pageSize' => $pageSize,
+            ]
         ]);
 
         $this->load($params);
 
-        if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
+        if (!($this->load($params) && $this->validate())) {
             return $dataProvider;
         }
 
@@ -62,8 +67,6 @@ class PlayersSearch extends Players
             'id' => $this->id,
             'user_id' => $this->user_id,
             'running_nr' => $this->running_nr,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name]);

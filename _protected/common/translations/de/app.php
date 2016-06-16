@@ -16,6 +16,8 @@ return [
     //-- CMS buttons --//
     'Create User' => 'Nutzer erstellen',
     'Create Article' => 'Artikel erstellen',
+    'Add Videos' => 'Video hinzufügen',
+    'Create Player' => 'Spieler erstellen',
 
     //-- top menu --//
     'Home'     => 'Home',
@@ -30,6 +32,8 @@ return [
     'Galleries' => 'Gallerie',
     'Journey' => 'Anfahrt',
     'Tournaments' => 'Turniere',
+    'Players' => 'Spieler',
+
 
     //-- static pages --//
     'Password' => 'Passwort',
@@ -96,7 +100,7 @@ return [
     'Thank you' => 'Danke',
     
     //-- users management --//
-    'Role' => 'Rol',
+    'Role' => 'Rolle',
     'Create User' => 'Nutzer erstellen',
     'Update User' => 'Update User',
     'New pwd ( if you want to change it )' => 'Neues Passwort ( Falls Sie es ändern möchten )',
@@ -112,6 +116,9 @@ return [
     'news'     => 'Nachrichten',
     'The best news available' => 'Die besten Nachrichten',
     'We haven\'t created any articles yet.' => 'Wir haben noch keine Artikel veröffentlicht.',
+    'We haven\'t added any player yet.' => 'Es wurden noch keine Spieler erstellt.',
+    'We haven\'t created any galleries yet.' => 'Wir haben noch keine Gallerien veröffentlicht.',
+    'We haven\'t added any videos yet.' => 'Wir haben noch keine Videos veröffentlicht.',
     'Read more'    => 'Lies mehr',
     'Published on' => 'Veröffentlicht',
 	

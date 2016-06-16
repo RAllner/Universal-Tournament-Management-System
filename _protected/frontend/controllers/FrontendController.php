@@ -77,6 +77,40 @@ class FrontendController extends Controller
                         'allow' => true
                     ],
                     [
+                        'controllers' => ['players'],
+                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'admin'],
+                        'allow' => true,
+                        'roles' => ['admin'],
+                    ],
+                    [
+                        'controllers' => ['players'],
+                        'actions' => ['create', 'update', 'admin'],
+                        'allow' => true,
+                        'roles' => ['editor'],
+                    ],
+                    [
+                        'controllers' => ['players'],
+                        'actions' => ['index', 'view'],
+                        'allow' => true
+                    ],
+                    [
+                        'controllers' => ['halloffame'],
+                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'admin'],
+                        'allow' => true,
+                        'roles' => ['admin'],
+                    ],
+                    [
+                        'controllers' => ['halloffame'],
+                        'actions' => ['create', 'update', 'admin'],
+                        'allow' => true,
+                        'roles' => ['editor'],
+                    ],
+                    [
+                        'controllers' => ['halloffame'],
+                        'actions' => ['index', 'view'],
+                        'allow' => true
+                    ],
+                    [
                         // other rules
                     ],
 

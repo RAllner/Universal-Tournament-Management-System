@@ -12,17 +12,24 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="players-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php echo $this->render('_search', ['model' => $searchModel]); ?>
+    <h1><?= Html::encode($this->title) ?>
+        <div class="pull-right">
+            <?php if (Yii::$app->user->can('adminArticle')): ?>
+                <?= Html::a('<i class="material-icons">create</i> '.Yii::t('app', 'Create Player'), ['create'], ['class' => 'btn btn-success']) ?>
+                <?= Html::a(Yii::t('app', 'Admin'), ['admin'], ['class' => 'btn btn-warning']) ?>
+            <?php endif ?>
+        </div>
+    </h1>
+    <div class="clearfix"></div>
+ 
+        <?= ListView::widget([
+            'summary' => false,
+            'dataProvider' => $dataProvider,
+            'emptyText' => Yii::t('app', 'We haven\'t added any player yet.'),
+            'itemOptions' => ['class' => 'item'],
+            'itemView' => function ($model, $key, $index, $widget) {
+                return $this->render('_index', ['model' => $model]);
+            },
+        ]) ?>
 
-    <p>
-        <?= Html::a(Yii::t('app', 'Create Players'), ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-    <?= ListView::widget([
-        'dataProvider' => $dataProvider,
-        'itemOptions' => ['class' => 'item'],
-        'itemView' => function ($model, $key, $index, $widget) {
-            return Html::a(Html::encode($model->name), ['view', 'id' => $model->id]);
-        },
-    ]) ?>
 </div>

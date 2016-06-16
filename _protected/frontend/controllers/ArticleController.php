@@ -95,10 +95,10 @@ class ArticleController extends FrontendController
     /**
      * Updates an existing Article model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * 
+     *
      * @param  integer $id
      * @return mixed
-     *
+     * @throws MethodNotAllowedHttpException
      * @throws NotFoundHttpException
      */
     public function actionUpdate($id)

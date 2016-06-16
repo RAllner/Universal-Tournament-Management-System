@@ -12,7 +12,7 @@ $options = ['data-lightbox' => 'news-image', 'data-title' => $photoInfo['alt']];
 
 <div class="col-md-8" style="padding-left: 0">
     <div class="jumbotron">
-        <h1>UTMS Alpha 0.1</h1>
+        <h1>UTMS Alpha 0.3</h1>
 
         <h2>Universal Tournament Management System</h2>
 
@@ -39,15 +39,13 @@ $options = ['data-lightbox' => 'news-image', 'data-title' => $photoInfo['alt']];
     <h2><?= Yii::t('app', 'news')?></h2>
     <div class="well bs-component">
         <h3>
+            <a href=<?= Url::to(['article/view', 'id' => $model->id]) ?>>
             <?= $model->title ?>
-
+            </a>
         </h3>
         <p class="time">
             <i class="material-icons">account_circle</i> <?= Yii::t('app', 'Author') . ' ' . $model->authorName ?>
             <i class="material-icons">schedule</i> <?= Yii::t('app', 'Published on') . ' ' . date('F j, Y, g:i a', $model->created_at) ?>
-            <a href=<?= Url::to(['article/view', 'id' => $model->id]) ?>>
-                <i class="material-icons">chevron_right</i><?= yii::t('app', 'Details'); ?>
-            </a>
         </p>
 
 
@@ -56,7 +54,12 @@ $options = ['data-lightbox' => 'news-image', 'data-title' => $photoInfo['alt']];
         </figure>
         <br>
         <p><?= $model->summary ?></p>
-        <p><?= $model->content ?></p>
+        <span class="pull-right">
+    <a class="btn btn-primary" href=<?= Url::to(['article/view', 'id' => $model->id]) ?>>
+        <?= yii::t('app', 'Read more'); ?><i class="material-icons">chevron_right</i>
+    </a>
+            </span>
+        <div class="clearfix"></div>
     </div>
 </div>
 <div class="col-md-4">

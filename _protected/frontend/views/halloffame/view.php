@@ -5,8 +5,8 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Article */
 
-$this->title = $model->title;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Articles'), 'url' => ['index']];
+$this->title = $model->playername;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Hall of Fame Member'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 $photoInfo = $model->PhotoInfo;
 $photo = Html::img($photoInfo['url'],['alt' =>$photoInfo['alt']]);
@@ -36,9 +36,9 @@ $options = ['data-lightbox'=>'profile-image','data-title'=>$photoInfo['alt']];
                  'label' => Yii::t('app', 'Author'),
                  'value' => $model->authorName,
              ],
-            'title',
-            'summary:html',
-            'content:html',
+            'playername',
+            'achievements',
+            'description:html',
             // [
             //     'label' => Yii::t('app', 'Status'),
             //     'value' => $model->statusName,

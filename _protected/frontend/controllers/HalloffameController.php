@@ -1,33 +1,20 @@
 <?php
 
-namespace app\controllers;
+namespace frontend\controllers;
 
 use Yii;
 use frontend\models\Halloffame;
 use frontend\models\HalloffameSearch;
-use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
+use yii\web\MethodNotAllowedHttpException;
+use yii\web\UploadedFile;
 
 /**
  * HalloffameController implements the CRUD actions for Halloffame model.
  */
-class HalloffameController extends Controller
+class HalloffameController extends FrontendController
 {
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ];
-    }
+
 
     /**
      * Lists all Halloffame models.
@@ -35,8 +22,20 @@ class HalloffameController extends Controller
      */
     public function actionIndex()
     {
+        /**
+         * How many articles we want to display per page.
+         * @var integer
+         */
+        $pageSize = 5;
+
+        /**
+         * Articles have to be published.
+         * @var boolean
+         */
+        $published = true;
+
         $searchModel = new HalloffameSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $pageSize, $published);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -65,9 +64,18 @@ class HalloffameController extends Controller
     {
         $model = new Halloffame();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
+        $model->user_id = Yii::$app->user->id;
+
+        if ($model->load(Yii::$app->request->post()))
+        {
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+            if($model->save())
+            {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+        }
+        else
+        {
             return $this->render('create', [
                 'model' => $model,
             ]);
@@ -79,17 +87,84 @@ class HalloffameController extends Controller
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
+     * @throws MethodNotAllowedHttpException
+     * @throws NotFoundHttpException
      */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
+        if (Yii::$app->user->can('updateArticle', ['model' => $model]))
+        {
+            if ($model->load(Yii::$app->request->post()))
+            {
+                $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+                if($model->save())
+                {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
+
+            }
+            else
+            {
+                return $this->render('update', [
+                    'model' => $model,
+                ]);
+            }
+        }
+        else
+        {
+            throw new MethodNotAllowedHttpException(Yii::t('app', 'You are not allowed to access this page.'));
+        }
+    }
+
+    /**
+     * Manage Articles.
+     *
+     * @return mixed
+     */
+    public function actionAdmin()
+    {
+        /**
+         * How many articles we want to display per page.
+         * @var integer
+         */
+        $pageSize = 11;
+
+        /**
+         * Only admin+ roles can see everything.
+         * Editors will be able to see only published articles and their own drafts @see: search().
+         * @var boolean
+         */
+        $published = (Yii::$app->user->can('admin')) ? false : true ;
+
+        $searchModel = new HalloffameSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $pageSize, $published);
+
+        return $this->render('admin', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
+     * Finds the Halloffame model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     *
+     * @param integer  $id
+     * @return Halloffame The loaded model.
+     *
+     * @throws NotFoundHttpException if the model cannot be found.
+     */
+    protected function findModel($id)
+    {
+        if (($model = Halloffame::findOne($id)) !== null)
+        {
+            return $model;
+        }
+        else
+        {
+            throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
 
@@ -106,19 +181,5 @@ class HalloffameController extends Controller
         return $this->redirect(['index']);
     }
 
-    /**
-     * Finds the Halloffame model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Halloffame the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($id)
-    {
-        if (($model = Halloffame::findOne($id)) !== null) {
-            return $model;
-        } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
-        }
-    }
+
 }

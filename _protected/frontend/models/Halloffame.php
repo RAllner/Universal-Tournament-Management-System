@@ -53,7 +53,7 @@ class Halloffame extends ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%article}}';
+        return '{{%halloffame}}';
     }
 
     /**
@@ -64,11 +64,11 @@ class Halloffame extends ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'title', 'summary', 'content', 'status'], 'required'],
-            [['user_id', 'status', 'category'], 'integer'],
+            [['user_id', 'playername', 'achievements', 'status'], 'required'],
+            [['user_id', 'players_id', 'status', 'category'], 'integer'],
             [['imageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg'],
-            [['summary', 'content'], 'string'],
-            [['title'], 'string', 'max' => 255]
+            [['description', 'achievements'], 'string'],
+            [['playername'], 'string', 'max' => 255]
         ];
     }
 
@@ -88,16 +88,18 @@ class Halloffame extends ActiveRecord
     /**
      * Returns the attribute labels.
      *
+     *
      * @return array
      */
     public function attributeLabels()
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'user_id' => Yii::t('app', 'Author'),
-            'title' => Yii::t('app', 'Title'),
-            'summary' => Yii::t('app', 'Summary'),
-            'content' => Yii::t('app', 'Content'),
+            'user_id' => Yii::t('app', 'Creator'),
+            'players_id' => Yii::t('app', 'Player'),
+            'playername' => Yii::t('app', 'Name'),
+            'achievements' => Yii::t('app', 'Achievements'),
+            'description' => Yii::t('app', 'Description'),
             'status' => Yii::t('app', 'Status'),
             'category' => Yii::t('app', 'Category'),
             'created_at' => Yii::t('app', 'Created At'),
@@ -110,8 +112,8 @@ class Halloffame extends ActiveRecord
     {
 
         if ($this->imageFile) {
-            $path = Url::to('@webroot/images/news/');
-            $escapedTitle = $this->sanitize($this->title);
+            $path = Url::to('@webroot/images/halloffame/');
+            $escapedTitle = $this->sanitize($this->playername);
             $filename = $this->created_at.$escapedTitle.'.jpg';
             $this->imageFile->saveAs($path . $filename);
             return true;
@@ -229,6 +231,19 @@ class Halloffame extends ActiveRecord
         }
     }
 
+    public function getPlayersList()
+    {
+        $playerArray = null;
+        $players = Players::find()->all();
+        $playerArray =  [];
+            foreach($players as $k => $v) {
+                $playerArray = [$v['id'] => $v['name']];
+            }
+
+        return $playerArray;
+    }
+
+
     /**
      * Returns the array of possible article category values.
      *
@@ -260,8 +275,8 @@ class Halloffame extends ActiveRecord
     }
 
     public function deleteImage(){
-        $path = Url::to('@webroot/images/news/');
-        $escapedTitle = $this->sanitize($this->title);
+        $path = Url::to('@webroot/images/halloffame/');
+        $escapedTitle = $this->sanitize($this->playername);
         $filename = $this->created_at.$escapedTitle.'.jpg';
         if(file_exists($path.$filename)){
             unlink($path.$filename);
@@ -270,11 +285,11 @@ class Halloffame extends ActiveRecord
 
     public function getPhotoInfo()
     {
-        $path = Url::to('@webroot/images/news/');
-        $url = Url::to('@web/images/news/');
-        $escapedTitle = $this->sanitize($this->title);
+        $path = Url::to('@webroot/images/halloffame/');
+        $url = Url::to('@web/images/halloffame/');
+        $escapedTitle = $this->sanitize($this->playername);
         $filename = $this->created_at.$escapedTitle.'.jpg';
-        $alt = $this->title;
+        $alt = $this->playername;
 
         $imageInfo = ['alt'=> $alt];
 

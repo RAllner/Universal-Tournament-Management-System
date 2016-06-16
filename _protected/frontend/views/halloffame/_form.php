@@ -2,6 +2,8 @@
 use mihaildev\ckeditor\CKEditor;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use frontend\models\Players;
+use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Halloffame */
@@ -13,14 +15,20 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
     <?= $form->field($model, 'playername')->textInput(['maxlength' => 255]) ?>
-
-    <?= $form->field($model, 'imageFile')->fileInput() ?>
+    <div class="row">
+        <div class="col-lg-6">
+            <?= $form->field($model, "players_id")->dropDownList(ArrayHelper::map(Players::find()->all(), 'id', 'name')); ?>
+        </div>
+        <div class="col-lg-6">
+        <?= $form->field($model, 'imageFile')->fileInput() ?>
+            </div>
+    </div>
 
     <?= $form->field($model, 'achievements')->textInput(['maxlength' => 255]) ?>
 
     <?= $form->field($model, 'description')->widget(CKEditor::className(),
-        ['editorOptions' => [ 'preset' => 'full', 'inline' => false]]); ?>
-    
+        ['editorOptions' => ['preset' => 'full', 'inline' => false]]); ?>
+
     <div class="row">
         <div class="col-lg-6">
 

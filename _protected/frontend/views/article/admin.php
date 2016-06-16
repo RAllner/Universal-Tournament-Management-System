@@ -15,14 +15,16 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1>
 
-    <?= Html::encode($this->title) ?>
+    <?= 'Admin '.Html::encode($this->title) ?>
 
     <span class="pull-right">
-        <?= Html::a(Yii::t('app', 'Show News'), ['index'], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(Yii::t('app', 'Create Article'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('<i class="material-icons">create</i> '.Yii::t('app', 'Create Article'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('app', 'Back'), ['index'], ['class' => 'btn btn-warning']) ?>
+
     </span>  
 
     </h1>
+    <div class="clearfix"></div>
     <div class="col-lg-12 well bs-component">
     <?= GridView::widget([
         'dataProvider' => $dataProvider,

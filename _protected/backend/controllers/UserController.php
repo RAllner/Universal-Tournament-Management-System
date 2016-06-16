@@ -147,7 +147,13 @@ class UserController extends BackendController
      */
     public function actionDelete($id)
     {
+        if(Yii::$app->user->id == $id){
+            Yii::$app->user->logout();
+        }
+
         $this->findModel($id)->delete();
+
+
 
         // delete this user's role from auth_assignment table
         if ($role = Role::find()->where(['user_id'=>$id])->one()) 
@@ -155,7 +161,7 @@ class UserController extends BackendController
             $role->delete();
         }
 
-        return $this->redirect(['index']);
+        return $this->goHome();
     }
 
     /**

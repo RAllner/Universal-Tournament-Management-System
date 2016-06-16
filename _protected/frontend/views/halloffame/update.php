@@ -2,11 +2,11 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model frontend\models\Article */
+/* @var $model frontend\models\Halloffame */
 
-$this->title = Yii::t('app', 'Update Article') . ': ' . $model->title;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Articles'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->title, 'url' => ['view', 'id' => $model->id]];
+$this->title = Yii::t('app', 'Update Hall Of Fame') . ': ' . $model->playername;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Hall Of Fame'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => $model->playername, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 ?>
 <div class="article-update">

@@ -8,26 +8,14 @@ use frontend\models\PlayersSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\MethodNotAllowedHttpException;
+use yii\web\UploadedFile;
 
 /**
  * PlayersController implements the CRUD actions for Players model.
  */
 class PlayersController extends Controller
 {
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ];
-    }
 
     /**
      * Lists all Players models.
@@ -35,8 +23,27 @@ class PlayersController extends Controller
      */
     public function actionIndex()
     {
+        /**
+         * How many articles we want to display per page.
+         * @var integer
+         */
+        $pageSize = 20;
+
         $searchModel = new PlayersSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $pageSize, false);
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionOwnIndex(){
+
+        $pageSize = 20;
+
+        $searchModel = new PlayersSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $pageSize, true);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -65,9 +72,19 @@ class PlayersController extends Controller
     {
         $model = new Players();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
+        $model->user_id = Yii::$app->user->id;
+        $model->running_nr = 1;
+
+        if ($model->load(Yii::$app->request->post()))
+        {
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+            if($model->save())
+            {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+        }
+        else
+        {
             return $this->render('create', [
                 'model' => $model,
             ]);
@@ -84,12 +101,27 @@ class PlayersController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
+        if (Yii::$app->user->can('updateArticle', ['model' => $model]))
+        {
+            if ($model->load(Yii::$app->request->post()))
+            {
+                $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+                if($model->save())
+                {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
+
+            }
+            else
+            {
+                return $this->render('update', [
+                    'model' => $model,
+                ]);
+            }
+        }
+        else
+        {
+            throw new MethodNotAllowedHttpException(Yii::t('app', 'You are not allowed to access this page.'));
         }
     }
 
@@ -102,8 +134,32 @@ class PlayersController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
+        $this->findModel($id)->deleteImage();
+        return $this->redirect(['admin']);
+    }
 
-        return $this->redirect(['index']);
+
+    /**
+     * Manage Players.
+     *
+     * @return mixed
+     */
+    public function actionAdmin()
+    {
+        /**
+         * How many players we want to display per page.
+         * @var integer
+         */
+        $pageSize = 11;
+
+
+        $searchModel = new PlayersSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $pageSize, false);
+
+        return $this->render('admin', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     /**

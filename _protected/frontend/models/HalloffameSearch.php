@@ -6,9 +6,9 @@ use yii\data\ActiveDataProvider;
 use Yii;
 
 /**
- * ArticleSearch represents the model behind the search form about `app\models\Article`.
+ * HalloffameSearch represents the model behind the search form about `app\models\Halloffame`.
  */
-class HalloffameSearch extends Article
+class HalloffameSearch extends Halloffame
 {
     /**
      * Returns the validation rules for attributes.
@@ -18,8 +18,8 @@ class HalloffameSearch extends Article
     public function rules()
     {
         return [
-            [['id', 'user_id', 'status', 'category', 'created_at', 'updated_at'], 'integer'],
-            [['title', 'summary', 'content'], 'safe'],
+            [['id', 'user_id', 'players_id', 'playername', 'achievements','description', 'created_at', 'updated_at'], 'integer'],
+            [['playername', 'achievements','description'], 'safe'],
         ];
     }
 
@@ -45,13 +45,13 @@ class HalloffameSearch extends Article
      */
     public function search($params, $pageSize = 3, $published = false)
     {
-        $query = Article::find();
+        $query = Halloffame::find();
 
         // this means that editor is trying to see articles
         // we will allow him to see published ones and drafts made by him
         if ($published === true) 
         {
-            $query->where(['status' => Article::STATUS_PUBLISHED]);
+            $query->where(['status' => Halloffame::STATUS_PUBLISHED]);
             $query->orWhere(['user_id' => Yii::$app->user->id]);
         }
 

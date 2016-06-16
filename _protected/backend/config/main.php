@@ -13,8 +13,6 @@ return [
     'bootstrap' => ['log'],
     'modules' => [],
     'components' => [
-        // here you can set theme used for your backend application 
-        // - template comes with: 'default', 'slate', 'spacelab' and 'cerulean'
         'view' => [
             'theme' => [
                 'pathMap' => ['@app/views' => '@webroot/themes/material/views'],

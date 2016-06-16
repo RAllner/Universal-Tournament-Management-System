@@ -5,16 +5,16 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model common\models\User */
 
-$this->title = $model->username;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Users'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
-?>
+$this->title = $model->username;?>
+
 <div class="user-view">
 
     <h1><?= Html::encode($this->title) ?>
 
     <div class="pull-right">
-        <?= Html::a(Yii::t('app', 'Back'), ['index'], ['class' => 'btn btn-warning']) ?>
+        <?php if (Yii::$app->user->can('admin')): ?>
+            <?= Html::a(Yii::t('app', 'Back'), ['index'], ['class' => 'btn btn-warning']) ?>
+        <?php endif ?>
         <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], [
             'class' => 'btn btn-primary']) ?>
         <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
@@ -25,9 +25,9 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]) ?>
     </div>
-
     </h1>
-
+    <div class="clearfix"></div>
+    
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [

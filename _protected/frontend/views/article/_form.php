@@ -19,7 +19,9 @@ use yii\widgets\ActiveForm;
 
         <?= $form->field($model, 'content')->widget(CKEditor::className(),
             ['editorOptions' => [ 'preset' => 'full', 'inline' => false]]); ?>
+    
         <?= $form->field($model, 'imageFile')->fileInput() ?>
+
     <div class="row">
         <div class="col-lg-6">
     
