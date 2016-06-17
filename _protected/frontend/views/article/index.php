@@ -14,17 +14,18 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Articles');
 <div class="article-index">
 
     <h1><?= Html::encode($this->title) ?>
-                <span class="pull-right">
+        <span class="pull-right">
         <?php if (Yii::$app->user->can('createArticle')): ?>
-            <?= Html::a('<i class="material-icons">create</i> '.Yii::t('app', 'Create Article'), ['create'], ['class' => 'btn btn-success']) ?>
+            <?= Html::a('<i class="material-icons">create</i> ' . Yii::t('app', 'Create Article'), ['create'], ['class' => 'btn btn-success']) ?>
         <?php endif ?>
         <?php if (Yii::$app->user->can('adminArticle')): ?>
             <?= Html::a(Yii::t('app', 'Admin'), ['admin'], ['class' => 'btn btn-warning']) ?>
         <?php endif ?>
             </span>
     </h1>
+
     <div class="clearfix"></div>
-    <div class="col-lg-8" style="padding-left: 0">
+    <div class="col-lg-8 no-padding-left " style="padding-left: 0">
 
 
         <?= ListView::widget([
@@ -38,7 +39,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Articles');
         ]) ?>
 
     </div>
-    <div class="col-md-4">
+    <div class="col-md-4 no-padding-left no-padding-right">
         <div class="well bs-component no-padding" style="margin: 0">
             <p style="text-align: center" class="with-padding">
                 <a href="https://www.facebook.com/BarCraftHL/" class="external-link"><i

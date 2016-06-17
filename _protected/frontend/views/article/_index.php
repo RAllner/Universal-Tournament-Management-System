@@ -10,35 +10,37 @@ $photo = Html::img($photoInfo['url'], ['alt' => $photoInfo['alt'], 'width' => '1
 $options = ['data-title' => $photoInfo['alt']];
 ?>
 
-<div class="col-lg-12 well bs-component">
+<div class="col-lg-12 no-padding-left no-padding-right">
 
-    <h3>
-        <a href=<?= Url::to(['article/view', 'id' => $model->id]) ?>>
-            <?= $model->title ?>
-        </a>
+    <div class="article-image-wrap" style="background-image: url('<?= $photoInfo['url'] ?>')">
+        <div class="intro-Text-wrap">
+                <span class="article-Category">
+                <?php echo "<div class='" . CssHelper::generalCategoryCss($model->categoryName) . "'>" . $model->categoryName . "</div>"; ?>
+                </span>
 
+            <h1 class="articleTitle" itemprop="headline"><a href=<?= Url::to(['article/view', 'id' => $model->id]) ?>>
+                    <?= $model->title ?>
+                </a></h1>
 
-    </h3>
-    <span class="pull-right">
-       <?php echo "<div class='" . CssHelper::generalCategoryCss($model->categoryName) . "'>" . $model->categoryName . "</div>"; ?>
-    </span>
-    <p class="time">
-        <i class="material-icons">account_circle</i> <?= Yii::t('app', 'Author') . ' ' . $model->authorName ?>
-        <i class="material-icons">schedule</i> <?= Yii::t('app', 'Published on') . ' ' . date('F j, Y, g:i a', $model->created_at) ?>
-    </p>
+            <p class="introText" itemprop="description">
+                <i class="material-icons">account_circle</i> <?= Yii::t('app', 'Author') . ' ' . $model->authorName ?>
+                <i class="material-icons">schedule</i> <?= Yii::t('app', 'Published on') . ' ' . date('F j, Y, g:i a', $model->created_at) ?>
+            </p>
+        </div>
+    </div>
+    <div class="well bs-component">
 
-
-    <figure style="text-align: center">
-        <?= Html::a($photo, Url::to(['article/view', 'id' => $model->id]), $options) ?>
-    </figure>
-
-    <p><?= $model->summary ?></p>
+        <p><?= $model->summary ?></p>
         <span class="pull-right">
     <a class="btn btn-primary" href=<?= Url::to(['article/view', 'id' => $model->id]) ?>>
         <?= yii::t('app', 'Read more'); ?><i class="material-icons">chevron_right</i>
     </a>
             </span>
-    <div class="clearfix"></div>
+        <div class="clearfix"></div>
+
+
+    </div>
+
 </div>
 
 

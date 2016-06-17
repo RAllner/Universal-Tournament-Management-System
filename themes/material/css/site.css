@@ -242,6 +242,14 @@ option:hover, option:focus {
     padding: 0!important;
     margin: 0.5em;
 }
+.no-padding-left {
+    padding-left: 0;
+}
+.no-padding-right {
+    padding-right: 0;
+}
+
+
 .with-padding-sm {
     padding: 0.5em;
 }
@@ -501,4 +509,54 @@ hr.article-devider {
 /* hide strength meter so we can fade it in nicely with jQuery */
 .nz-meter-container {
     display: none;
+}
+
+
+
+
+/* --- Article ----*/
+
+.article-image-wrap{
+    width: 100%;
+    display: block;
+    height: 350px;
+    position: relative;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.article-image-wrap-detail{
+    width: 100%;
+    display: block;
+    height: 500px;
+    position: relative;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.intro-Text-wrap {
+    background-color: rgba(0,0,0,0.7);
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    padding: 0 40px;
+    width: 100%;
+}
+
+.article-Category {
+    float: right;
+    margin: -26px -40px 0 0;
+    position: initial;
+    padding: 6px;
+    background-color: rgba(0,0,0,0.7);
+}
+
+.articleTitle {
+    margin: 30px 0;
+    font-weight: 700;
+}
+
+.introText {
+    margin-bottom: 30px;
+    font-weight: 700;
 }

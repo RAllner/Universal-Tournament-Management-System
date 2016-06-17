@@ -9,7 +9,7 @@ $this->title = $model->playername;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Hall of Fame Member'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 $photoInfo = $model->PhotoInfo;
-$photo = Html::img($photoInfo['url'],['alt' =>$photoInfo['alt']]);
+$photo = Html::img($photoInfo['url'],['alt' =>$photoInfo['alt'], 'width'=>'100%', 'object-fit' => 'cover']);
 $options = ['data-lightbox'=>'profile-image','data-title'=>$photoInfo['alt']];
 ?>
 
