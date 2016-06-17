@@ -56,6 +56,22 @@ AppAsset::register($this);
             // display Signup and Login pages to guests of the site
             if (Yii::$app->user->isGuest) 
             {
+                $menuItems[] = ['label' => '<i class="material-icons">chrome_reader_mode</i> '.Yii::t('app', 'News'), 'url' => ['/article/index']];
+                $menuItems[] = ['label' => '<i class="material-icons">play_arrow</i> '.Yii::t('app', 'Media'),
+                    'items' =>   [
+                        ['label' => '<i class="material-icons">photo_library</i> '.Yii::t('app', 'Galleries'), 'url' => ['/galleries/index']],
+                        ['label' => '<i class="material-icons">videocam</i> '.Yii::t('app', 'Videos'), 'url' => ['/videos/index']],
+                        ['label' => '<i class="material-icons">star_rate</i> '.Yii::t('app', 'Hall Of Fame'), 'url' => ['/halloffame/index']],
+
+                    ]
+                ];
+                $menuItems[] = ['label' => '<i class="material-icons">info</i> '.Yii::t('app', 'Infos'),
+                    'items' =>   [
+                        ['label' => Yii::t('app', 'About'), 'url' => ['/site/about']],
+                        ['label' => Yii::t('app', 'Contact'), 'url' => ['/site/contact']],
+                        ['label' => Yii::t('app', 'Journey'), 'url' => ['/site/journey']]
+                    ]
+                ];
                 $menuItems[] = ['label' => Yii::t('app', 'Login'), 'url' => ['/site/login']];
             }
             // display Logout to all logged in users

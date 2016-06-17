@@ -18,15 +18,8 @@ $this->title = 'Videos';
     <p class="time">
         <i class="material-icons">account_circle</i> <?= Yii::t('app','Author').' '.$model->authorName ?>
         <i class="material-icons">schedule</i> <?= Yii::t('app','Published on').' '.date('F j, Y, g:i a', $model->created_at) ?>
-            <a href=<?= Url::to(['videos/view', 'id' => $model->id]) ?>>
-                <i class="material-icons">chevron_right</i><?= yii::t('app', 'Details'); ?>
-            </a>
     </p>
-
-
-
-
-    <br>
+    <div class="clearfix"></div>
 <p>
     <iframe class="spot-light-video" height="500px" frameborder="0" allowfullscreen="" src="<?= $model->url ?>"></iframe>
    </p>

@@ -15,38 +15,41 @@ $options = ['data-lightbox' => 'profile-image', 'data-title' => $photoInfo['alt'
 ?>
 
 <div class="article-view">
-    <div class="pull-right">
 
+    <h2>
+        <?= $model->title ?>
+        <div class="pull-right">
 
-        <?php if (Yii::$app->user->can('updateArticle', ['model' => $model])): ?>
+            <?= Html::a(Yii::t('app', 'Back'), ['index', 'id' => $model->id], ['class' => 'btn btn-warning']) ?>
+            <?php if (Yii::$app->user->can('updateArticle', ['model' => $model])): ?>
 
-            <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+                <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
 
-        <?php endif ?>
+            <?php endif ?>
 
-        <?php if (Yii::$app->user->can('deleteArticle')): ?>
+            <?php if (Yii::$app->user->can('deleteArticle')): ?>
 
-            <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
-                'class' => 'btn btn-danger',
-                'data' => [
-                    'confirm' => Yii::t('app', 'Are you sure you want to delete this article?'),
-                    'method' => 'post',
-                ],
-            ]) ?>
+                <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
+                    'class' => 'btn btn-danger',
+                    'data' => [
+                        'confirm' => Yii::t('app', 'Are you sure you want to delete this article?'),
+                        'method' => 'post',
+                    ],
+                ]) ?>
 
-        <?php endif ?>
-        <?php if (Yii::$app->user->can('adminArticle')): ?>
+            <?php endif ?>
+            <?php if (Yii::$app->user->can('adminArticle')): ?>
 
-            <?= Html::a(Yii::t('app', 'Back'), ['index'], ['class' => 'btn btn-warning']) ?>
+                <?= Html::a(Yii::t('app', 'Back'), ['index'], ['class' => 'btn btn-warning']) ?>
 
-        <?php endif ?>
-    </div>
+            <?php endif ?>
+        </div>
+    </h2>
+
 
     <div class="clearfix"></div>
     <div class="col-lg-8 well bs-component">
 
-        <h3>
-            <?= $model->title ?></h3>
 
     <span class="pull-right">
        <?php echo "<div class='" . CssHelper::generalCategoryCss($model->categoryName) . "'>" . $model->categoryName . "</div>"; ?>
@@ -54,9 +57,6 @@ $options = ['data-lightbox' => 'profile-image', 'data-title' => $photoInfo['alt'
         <p class="time">
             <i class="material-icons">account_circle</i> <?= Yii::t('app', 'Author') . ' ' . $model->authorName ?>
             <i class="material-icons">schedule</i> <?= Yii::t('app', 'Published on') . ' ' . date('F j, Y, g:i a', $model->created_at) ?>
-            <a href=<?= Url::to(['article/view', 'id' => $model->id]) ?>>
-                <i class="material-icons">chevron_right</i><?= yii::t('app', 'Details'); ?>
-            </a>
         </p>
 
 
