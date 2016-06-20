@@ -1,6 +1,6 @@
 <?php
 return [
-    'name' => 'UTMS',
+    'name' => 'BarCraft HL',
     'language' => 'de',
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'components' => [

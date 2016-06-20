@@ -33,7 +33,7 @@ $options = ['data-lightbox' => 'profile-image', 'data-title' => $photoInfo['alt'
             </div>
         </div>
         <div class="col-lg-12 well bs-component">
-            <div class="col-lg-8 col-lg-offset-4">
+            <div class="col-lg-10 col-lg-offset-2">
 
                 <p><?= $model->summary ?></p>
 

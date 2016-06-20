@@ -91,7 +91,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="clearfix"></div>
     <div class="col-lg-4 with-padding-sm">
         <div class="well bs-component no-padding">
-            <img src="<?= Url::to("@web/images/constant/team/Niwo.jpg") ?>" class="md-card-img" alt="Jodder">
+            <img src="<?= Url::to("@web/images/constant/team/NiWo.jpg") ?>" class="md-card-img" alt="Jodder">
             <div class="with-padding">
                 <h3>NiWo aka Nicklas</h3>
                 <p>
@@ -116,7 +116,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
     <div class="col-lg-4 with-padding-sm">
         <div class="well bs-component no-padding">
-            <img src="<?= Url::to("@web/images/constant/team/typhoonhawk.jpg") ?>" class="md-card-img" alt="Jodder">
+            <img src="<?= Url::to("@web/images/constant/team/TyphoonHawk.jpg") ?>" class="md-card-img" alt="Jodder">
             <div class="with-padding">
                 <h3>TyphoonHawk aka Jonas</h3>
                 <p>
@@ -135,7 +135,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
     <div class="col-lg-4 with-padding-sm">
         <div class="well bs-component no-padding">
-            <img src="<?= Url::to("@web/images/constant/team/haruc.jpg") ?>" class="md-card-img" alt="Jodder">
+            <img src="<?= Url::to("@web/images/constant/team/Haruc.jpg") ?>" class="md-card-img" alt="Jodder">
             <div class="with-padding">
                 <h3>Haruc aka Gregor</h3>
                 <p>

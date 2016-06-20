@@ -23,6 +23,15 @@ body {
 
 
 /* ----------------------MEINE ÄNDERUNGEN */
+.navbar-brand>img {
+    height: 150%;
+    margin-top: -5px;
+    display: inline;
+
+}
+
+
+
 .jumbotron {
     text-align: center;
     background-color: #181818 ;
@@ -60,17 +69,7 @@ a:hover {
     cursor: pointer;
 }
 
-.navbar .navbar-nav>li>a:focus, .navbar .navbar-nav>li>a:hover {
-    color: rgba(41, 41, 41, 1);
-    background-color: rgba(255, 173, 36, 1);
-}
-
-.navbar .navbar-nav>.active>a, .navbar .navbar-nav>.active>a:focus, .navbar .navbar-nav>.active>a:hover{
-    color: rgba(41, 41, 41, 1);
-    background-color: rgba(255, 173, 36, 1);
-}
 .footer {
-    height: 60px;
     background-color: #181818;
     border-top: 1px solid #292929;
     padding-top: 20px;
@@ -257,14 +256,50 @@ option:hover, option:focus {
     padding: 19px;
 }
 
+.external-link-bar {
+    margin: 0 !important;
+    padding-right: 0px !important;
+}
+
 .external-link {
+    border-top: solid #292929 4px;
     color: white;
-    margin: 0.5em;
     font-size: 22px;
     line-height: 22px;
-    max-width: 25px !important;
-    min-width: 25px !important;
+    padding: 1em;
 }
+
+.external-link img, .external-link i {
+    margin-left: -0.3em;
+    width: 22px;
+}
+
+
+.external-link:hover, .external-link:focus {
+    border-top: solid #ffad24 4px;
+    background-color: rgba(158,158,158,0.2);
+    color: #FFF;
+}
+
+.navbar .navbar-nav>li>a:focus, .navbar .navbar-nav>li>a:hover {
+    background-color: rgba(158,158,158,0.2);
+}
+
+.navbar .navbar-nav>.active>a, .navbar .navbar-nav>.active>a:focus, .navbar .navbar-nav>.active>a:hover{
+    background-color: rgba(158,158,158,0.2);
+}
+
+.navbar .navbar-nav>.active {
+    border-bottom: solid #ffad24 4px;
+}
+
+.navbar-nav>li {
+    border-bottom: solid #292929 4px;
+}
+.navbar-nav>li:hover , .navbar-nav>li:focus {
+    border-bottom: solid #ffad24 4px;
+}
+
 
 /* ------------------------ Ende meine Änderungen */
 
@@ -519,10 +554,11 @@ hr.article-devider {
 .article-image-wrap{
     width: 100%;
     display: block;
-    height: 350px;
+    height: 400px;
     position: relative;
     background-repeat: no-repeat;
     background-size: cover;
+    background-position: center;
 }
 
 .article-image-wrap-detail{
@@ -545,14 +581,14 @@ hr.article-devider {
 
 .article-Category {
     float: right;
-    margin: -26px -40px 0 0;
+    margin: -32px -40px 0 0;
     position: initial;
     padding: 6px;
     background-color: rgba(0,0,0,0.7);
 }
 
 .articleTitle {
-    margin: 30px 0;
+    margin: 15px 0;
     font-weight: 700;
 }
 

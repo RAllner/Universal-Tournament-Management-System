@@ -40,46 +40,49 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Articles');
 
     </div>
     <div class="col-md-4 no-padding-left no-padding-right">
-        <div class="well bs-component no-padding" style="margin: 0">
-            <p style="text-align: center" class="with-padding">
-                <a href="https://www.facebook.com/BarCraftHL/" class="external-link"><i
-                        class="fa fa-facebook-official" aria-hidden="true"></i></a>
-                <a href="https://twitter.com/BarCraftHL" class="external-link"><i
-                        class="fa fa-twitter-square" aria-hidden="true"></i></a>
-                <a href="https://www.youtube.com/channel/UC6Hb-1s-cjpVVgBLvgijoRQ" class="external-link"><i
-                        class="fa fa-youtube-square" aria-hidden="true"></i></a>
-                <a href="https://www.twitch.tv/barcrafthl" class="external-link"><i
-                        class="fa fa-twitch" aria-hidden="true"></i></a>
-                <a href="http://bchl.challonge.com/" class="external-link">
-                    <object href="http://bchl.challonge.com/" type="image/svg+xml" style="height: 1em"
-                            data="<?= Url::to('@web/images/constant/icons/challonge.svg') ?>">Your browser does not
-                        support SVGs
-                    </object>
-                </a>
-                <a href="http://wiki.teamliquid.net/hearthstone/Dorfkrug_Cup" class="external-link">
-                    <object type="image/svg+xml" style="height: 1em"
-                            data="<?= Url::to('@web/images/constant/icons/liquidpedias.svg') ?>">Your browser does not
-                        support SVGs
-                    </object>
-                </a>
-            </p>
+        <div class="well bs-component no-padding external-link-bar">
+            <a href="https://www.facebook.com/BarCraftHL/" class="external-link col-lg-2"><i
+                    class="fa fa-facebook-official" aria-hidden="true"></i></a>
+            <a href="https://twitter.com/BarCraftHL" class="external-link col-lg-2"><i
+                    class="fa fa-twitter-square" aria-hidden="true"></i></a>
+            <a href="https://www.youtube.com/channel/UC6Hb-1s-cjpVVgBLvgijoRQ" class="external-link col-lg-2"><i
+                    class="fa fa-youtube-square" aria-hidden="true"></i></a>
+            <a href="https://www.twitch.tv/barcrafthl" class="external-link col-lg-2"><i
+                    class="fa fa-twitch" aria-hidden="true"></i></a>
+            <a href="http://bchl.challonge.com/" class="external-link col-lg-2">
+                <img src="<?= Url::to('@web/images/constant/icons/challonge.png') ?>">
+                </img>
+            </a>
+            <a href="http://wiki.teamliquid.net/hearthstone/Dorfkrug_Cup" class="external-link col-lg-2">
+                <img  src="<?= Url::to('@web/images/constant/icons/liquidpedias.png') ?>">
+                </img>
+                </object>
+            </a>
+
         </div>
 
-        <a class="twitter-timeline"
-           data-widget-id="643309100416278528"
-           href="https://twitter.com/BarCraftHL"
-           data-screen-name="BarCraftHL">
-            Tweets by @BarCraftHL
+        <div class="well bs-component no-padding" style="margin: 0">
+            <a class="twitter-timeline"
+               data-widget-id="643309100416278528"
+               href="https://twitter.com/BarCraftHL"
+               data-screen-name="BarCraftHL"
+               data-theme="dark"
+               data-tweet-limit="4"
+               data-link-color="#ffad24"
+               data-chrome="transparent noheader nofooter"
+            >
+                Tweets by @BarCraftHL
 
-        </a>
-        <script>!function (d, s, id) {
-                var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https';
-                if (!d.getElementById(id)) {
-                    js = d.createElement(s);
-                    js.id = id;
-                    js.src = p + "://platform.twitter.com/widgets.js";
-                    fjs.parentNode.insertBefore(js, fjs);
-                }
-            }(document, "script", "twitter-wjs");</script>
+            </a>
+            <script>!function (d, s, id) {
+                    var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https';
+                    if (!d.getElementById(id)) {
+                        js = d.createElement(s);
+                        js.id = id;
+                        js.src = p + "://platform.twitter.com/widgets.js";
+                        fjs.parentNode.insertBefore(js, fjs);
+                    }
+                }(document, "script", "twitter-wjs");</script>
+        </div>
     </div>
 </div>

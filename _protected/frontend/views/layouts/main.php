@@ -2,6 +2,7 @@
 use frontend\assets\AppAsset;
 use frontend\widgets\Alert;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
@@ -26,7 +27,7 @@ AppAsset::register($this);
     <div class="wrap">
         <?php
             NavBar::begin([
-                'brandLabel' => Yii::t('app', Yii::$app->name),
+                'brandLabel' => '<img src="'.Url::to("@web/images/constant/logo-golds.png").'" class="logo"/>',
                 'brandUrl' => Yii::$app->homeUrl,
 
                 'options' => [
@@ -36,7 +37,7 @@ AppAsset::register($this);
             ]);
 
             // everyone can see Home page
-            $menuItems[] = ['label' => '<span class="glyphicon glyphicon-home"></span>', 'url' => ['/site/index']];
+            //$menuItems[] = ['label' => '<span class="glyphicon glyphicon-home"></span>', 'url' => ['/site/index']];
 
 
             if (!Yii::$app->user->can('editor')) 
@@ -49,10 +50,7 @@ AppAsset::register($this);
             {
 
             }
-            if (Yii::$app->user->can('admin'))
-            {
-                $menuItems[] = ['label' => '<i class="material-icons">settings</i> '.Yii::t('app', 'ADMIN'), 'url' => ['/backend']];
-            }
+
             // display Signup and Login pages to guests of the site
             if (Yii::$app->user->isGuest) 
             {
@@ -97,7 +95,6 @@ AppAsset::register($this);
                 $menuItems[] = [
                     'label' => '<i class="material-icons">account_circle</i> ' . Yii::$app->user->identity->username,
                     'items' =>   [
-
                         ['label' => Yii::t('app', 'Settings'), 'url' => ['/backend/user/view', 'id'=> Yii::$app->user->id]],
                         ['label' => Yii::t('app', 'Players'), 'url' => ['/players/own-index']],
                         '<li class="divider"></li>',
@@ -107,6 +104,10 @@ AppAsset::register($this);
 
 
                 ];
+            }
+            if (Yii::$app->user->can('admin'))
+            {
+                $menuItems[] = ['label' => '<i class="material-icons">settings</i>', 'url' => ['/backend']];
             }
            
             echo Nav::widget([
@@ -128,7 +129,24 @@ AppAsset::register($this);
 
     <footer class="footer">
         <div class="container">
-        <p class="pull-left">&copy; <?= Yii::t('app', Yii::$app->name) ?> <?= date('Y') ?></p>
+            <div class="row">
+                <div class="col-md-2">
+                    <a href="#/">        <img style="height: 8em" src="<?= Url::to("@web/images/constant/logo-gold.png")?>"/></a>
+
+
+                </div>
+                <div class="col-md-10" style="vertical-align: middle">
+                    BarCraft HL
+                    <p>ist eine studentische und ehrenamtliche Organisation<br/>
+                        die sich dem E-Sport verschrieben hat.<br/>
+                        Veranstaltet werden Turniere und Liveübertragungsevents.</p>
+                </div>
+        <p class="pull-left">
+
+
+
+        </div>
+            &copy; <?= Yii::t('app', Yii::$app->name) ?> <?= date('Y') ?></p>
         <p class="pull-right"><?= Yii::powered() ?></p>
         </div>
     </footer>
