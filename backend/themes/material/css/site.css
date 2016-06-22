@@ -18,10 +18,20 @@ body {
 
 .wrap > .container {
     padding: 70px 15px 20px;
+    transition: all 0.3s ease-in;
 }
 
 
 /* ----------------------MEINE ÄNDERUNGEN */
+.navbar-brand>img {
+    height: 150%;
+    margin-top: -5px;
+    display: inline;
+
+}
+
+
+
 .jumbotron {
     text-align: center;
     background-color: #181818 ;
@@ -59,17 +69,7 @@ a:hover {
     cursor: pointer;
 }
 
-.navbar .navbar-nav>li>a:focus, .navbar .navbar-nav>li>a:hover {
-    color: rgba(41, 41, 41, 1);
-    background-color: rgba(255, 173, 36, 1);
-}
-
-.navbar .navbar-nav>.active>a, .navbar .navbar-nav>.active>a:focus, .navbar .navbar-nav>.active>a:hover{
-    color: rgba(41, 41, 41, 1);
-    background-color: rgba(255, 173, 36, 1);
-}
 .footer {
-    height: 60px;
     background-color: #181818;
     border-top: 1px solid #292929;
     padding-top: 20px;
@@ -82,16 +82,32 @@ a:hover {
     background-color: #181818;
 }
 
+
+.navbar-nav>li>.dropdown-menu>li:not(.active):hover, .navbar-nav>li>.dropdown-menu>li:not(.active):focus{
+    background-color: #292929;
+    border-left: solid 4px #ffad24;
+}
+
 .dropdown-menu>li>a {
     color: white;
 }
 
 .dropdown-menu li a:hover, .dropdown-menu-default li a:hover, .dropdown-menu-primary li a:hover {
-    color: #ffad24;
+    color: white;
 }
+
+.dropdown-menu>li>a.active {
+    background-color: #292929;
+}
+
 .dropdown-menu>.active>a, .dropdown-menu>.active>a:focus, .dropdown-menu>.active>a:hover {
-    background-color: #ffad24;
-    color: #181818;
+    background-color: #292929;
+}
+.dropdown-menu>.active {
+    border-left: solid 4px #ffad24;
+}
+.navbar-nav>li>.dropdown-menu>li:not(.active) {
+    border-left: solid 4px #292929;
 }
 
 
@@ -187,6 +203,7 @@ option:hover, option:focus {
 
 .navbar-nav {
    margin: 0;
+    transition: all 0.3s ease-in;
 }
 
 .material-icons {
@@ -238,8 +255,16 @@ option:hover, option:focus {
 
 .no-padding {
     padding: 0!important;
-    margin: 0.5em;
+
 }
+.no-padding-left {
+    padding-left: 0;
+}
+.no-padding-right {
+    padding-right: 0;
+}
+
+
 .with-padding-sm {
     padding: 0.5em;
 }
@@ -247,16 +272,70 @@ option:hover, option:focus {
     padding: 19px;
 }
 
-.external-link {
-    color: white;
-    margin: 0.5em;
-    font-size: 22px;
-    line-height: 22px;
-    max-width: 25px !important;
-    min-width: 25px !important;
+.external-link-bar {
+    margin: 0 !important;
+    padding-right: 0px !important;
 }
 
+.external-link {
+    border-top: solid #292929 4px;
+    color: white;
+    font-size: 22px;
+    line-height: 22px;
+    padding: 1em;
+}
+
+.external-link img, .external-link i {
+    width: 22px;
+}
+
+
+.external-link:hover, .external-link:focus {
+    border-top: solid #ffad24 4px;
+    background-color: rgba(158,158,158,0.2);
+    color: #FFF;
+}
+
+.navbar .navbar-nav>li>a:focus, .navbar .navbar-nav>li>a:hover {
+    background-color: rgba(158,158,158,0.2);
+}
+
+.navbar .navbar-nav>.active>a, .navbar .navbar-nav>.active>a:focus, .navbar .navbar-nav>.active>a:hover{
+    background-color: rgba(158,158,158,0.2);
+}
+
+.navbar .navbar-nav>.active {
+    border-bottom: solid #ffad24 4px;
+}
+
+.navbar-nav>li {
+    border-bottom: solid #292929 4px;
+}
+.navbar-nav>li:hover , .navbar-nav>li:focus {
+    border-bottom: solid #ffad24 4px;
+}
+
+
 /* ------------------------ Ende meine Änderungen */
+
+body::-webkit-scrollbar {
+    width: 0.7em;
+    background-color: #181818;
+}
+
+body::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color: #ff8f26;
+    outline: 1px solid slategrey;
+}
+
+
+
+
+
 
 /* ------------------------- Video CSS */
 
@@ -482,7 +561,53 @@ hr.article-devider {
     display: none;
 }
 
-.article-view figure img {
-    max-width: 300px;
-    margin-top: 1em;
+
+
+
+/* --- Article ----*/
+
+.article-image-wrap{
+    width: 100%;
+    display: block;
+    height: 400px;
+    position: relative;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+.article-image-wrap-detail{
+    width: 100%;
+    display: block;
+    height: 500px;
+    position: relative;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.intro-Text-wrap {
+    background-color: rgba(0,0,0,0.7);
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    padding: 0 40px;
+    width: 100%;
+}
+
+.article-Category {
+    float: right;
+    margin: -32px -40px 0 0;
+    position: initial;
+    padding: 6px;
+    background-color: rgba(0,0,0,0.7);
+}
+
+.articleTitle {
+    margin: 15px 0;
+    font-weight: 700;
+}
+
+.introText {
+    margin-bottom: 30px;
+    font-weight: 700;
 }

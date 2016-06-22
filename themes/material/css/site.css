@@ -72,14 +72,24 @@ a:hover {
 .footer {
     background-color: #181818;
     border-top: 1px solid #292929;
-    padding-top: 20px;
+}
+.footer > .container {
+    min-height: 70px;
 }
 
-
+.cke_source {
+    background-color: #181818 !important;
+}
 
 
 .navbar-nav>li>.dropdown-menu {
     background-color: #181818;
+}
+
+
+.navbar-nav>li>.dropdown-menu>li:not(.active):hover, .navbar-nav>li>.dropdown-menu>li:not(.active):focus{
+    background-color: #292929;
+    border-left: solid 4px #ffad24;
 }
 
 .dropdown-menu>li>a {
@@ -87,11 +97,21 @@ a:hover {
 }
 
 .dropdown-menu li a:hover, .dropdown-menu-default li a:hover, .dropdown-menu-primary li a:hover {
-    color: #ffad24;
+    color: white;
 }
+
+.dropdown-menu>li>a.active {
+    background-color: #292929;
+}
+
 .dropdown-menu>.active>a, .dropdown-menu>.active>a:focus, .dropdown-menu>.active>a:hover {
-    background-color: #ffad24;
-    color: #181818;
+    background-color: #292929;
+}
+.dropdown-menu>.active {
+    border-left: solid 4px #ffad24;
+}
+.navbar-nav>li>.dropdown-menu>li:not(.active) {
+    border-left: solid 4px #292929;
 }
 
 
@@ -239,13 +259,13 @@ option:hover, option:focus {
 
 .no-padding {
     padding: 0!important;
-    margin: 0.5em;
+
 }
 .no-padding-left {
-    padding-left: 0;
+    padding-left: 0!important;
 }
 .no-padding-right {
-    padding-right: 0;
+    padding-right: 0!important;
 }
 
 
@@ -256,22 +276,53 @@ option:hover, option:focus {
     padding: 19px;
 }
 
+.btn-group.btn-group-justified.external {
+    margin-top: 0;
+}
+
+.btn-group.btn-group-justified.external>a {
+    font-size: 22px;
+    background-color: #181818;
+    border-bottom: solid 2px #181818;
+}
+.btn-group.btn-group-justified.external>a:hover, .btn-group.btn-group-justified.external>a:focus {
+    color: white;
+    background-color: rgba(158,158,158,0.2);
+    border-bottom: solid 2px #ffad24;
+}
+
+.btn-group.btn-group-justified.external>a>img {
+    width: 22px;
+    margin: -22px;
+}.btn-group.btn-group-justified.external>a>i {
+    width: 22px;
+    margin: -22px;
+}
+
 .external-link-bar {
+    display: block;
     margin: 0 !important;
-    padding-right: 0px !important;
+
+    border-bottom: hidden;
+    min-height: 70px;
+    background-color: #181818;
+}
+
+.external-link-bar>li {
+border-bottom: hidden !important;
 }
 
 .external-link {
     border-top: solid #292929 4px;
+    padding: 0 !important;
     color: white;
     font-size: 22px;
-    line-height: 22px;
-    padding: 1em;
+
 }
 
 .external-link img, .external-link i {
-    margin-left: -0.3em;
     width: 22px;
+    margin: 1em;
 }
 
 

@@ -13,6 +13,16 @@ use Yii;
  */
 class ArticleController extends FrontendController
 {
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => 'yii\filters\PageCache',
+                'only' => ['index'],
+                'duration' => 60,
+            ]
+        ];
+    }
     /**
      * Lists all Article models.
      *
@@ -103,12 +113,16 @@ class ArticleController extends FrontendController
      */
     public function actionUpdate($id)
     {
+        $currentModel = $this->findModel($id);
         $model = $this->findModel($id);
 
         if (Yii::$app->user->can('updateArticle', ['model' => $model])) 
         {
             if ($model->load(Yii::$app->request->post()))
             {
+                if($currentModel->title != $model->title){
+                    //TODO: Name des Bildes ändern.
+                }
                 $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
                 if($model->save()) 
                 {

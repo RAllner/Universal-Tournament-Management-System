@@ -10,7 +10,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-about">
     <h1><?= Html::encode($this->title) ?></h1>
-        <div class="col-lg-6 with-padding-sm">
+        <div class="col-lg-6 no-padding-left">
             <div class="well bs-component no-padding">
                 <img src="<?= Url::to("@web/images/constant/anfahrt/dk.jpg") ?>" class="md-card-img" alt="Jodder">
                 <div class="with-padding">
@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
     </div>
-    <div class="col-lg-6 with-padding-sm">
+    <div class="col-lg-6 no-padding-left no-padding-right">
         <div class="well bs-component no-padding">
             <img src="<?= Url::to("@web/images/constant/anfahrt/gecko.jpg") ?>" class="md-card-img" alt="Jodder">
             <div class="with-padding">

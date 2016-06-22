@@ -13,7 +13,8 @@ $this->title = 'Videos';
 
     </h3>
     <span class="pull-right">
-       <?php echo "<div class='".CssHelper::generalCategoryCss($model->categoryName)."'>".$model->categoryName."</div>"; ?>
+       <span class="label label-default <?= CssHelper::generalCategoryCss($model->categoryName)?>"><?php echo $model->categoryName ?></span>
+
     </span>
     <p class="time">
         <i class="material-icons">account_circle</i> <?= Yii::t('app','Author').' '.$model->authorName ?>
@@ -21,7 +22,9 @@ $this->title = 'Videos';
     </p>
     <div class="clearfix"></div>
 <p>
-    <iframe class="spot-light-video" height="500px" frameborder="0" allowfullscreen="" src="<?= $model->url ?>"></iframe>
+    <div class="embed-responsive embed-responsive-16by9">
+    <iframe class="embed-responsive-item" src="<?= $model->url ?>"></iframe>
+    </div>
    </p>
 
 </div>
