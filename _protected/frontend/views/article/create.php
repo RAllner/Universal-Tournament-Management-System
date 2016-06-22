@@ -15,7 +15,6 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= Html::a(Yii::t('app', 'Back'), ['index'], ['class' => 'btn btn-warning']) ?>
 
         </span>
-
     </h1>
     <div class="clearfix"></div>
 

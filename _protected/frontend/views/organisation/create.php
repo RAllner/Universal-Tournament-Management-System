@@ -12,10 +12,17 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="organisation-create">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1><?= Html::encode($this->title) ?>
+        <span class="pull-right">
+            <?= Html::a(Yii::t('app', 'Back'), ['index'], ['class' => 'btn btn-warning']) ?>
 
-    <?= $this->render('_form', [
-        'model' => $model,
-    ]) ?>
+        </span>
+    </h1>
+    <div class="clearfix"></div>
+    <div class="col-lg-8 well bs-component">
+
+        <?= $this->render('_form', ['model' => $model]) ?>
+
+    </div>
 
 </div>

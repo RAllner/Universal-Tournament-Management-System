@@ -111,6 +111,29 @@ class FrontendController extends Controller
                         'allow' => true
                     ],
                     [
+                        'controllers' => ['organisation'],
+                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'admin'],
+                        'allow' => true,
+                        'roles' => ['admin'],
+                    ],
+                    [
+                        'controllers' => ['organisation'],
+                        'actions' => ['create', 'update', 'admin'],
+                        'allow' => true,
+                        'roles' => ['editor'],
+                    ],
+                    [
+                        'controllers' => ['organisation'],
+                        'actions' => ['create', 'update'],
+                        'allow' => true,
+                        'roles' => ['member'],
+                    ],
+                    [
+                        'controllers' => ['organisation'],
+                        'actions' => ['index', 'view'],
+                        'allow' => true,
+                    ],
+                    [
                         // other rules
                     ],
 

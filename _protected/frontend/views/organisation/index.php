@@ -12,17 +12,29 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="organisation-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1><?= Html::encode($this->title) ?>
+        <span class="pull-right">
+        <?php if (!Yii::$app->user->isGuest): ?>
+            <?= Html::a('<i class="material-icons">create</i> ' . Yii::t('app', 'Create Organisation'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?php endif ?>
+        <?php if (Yii::$app->user->can('adminArticle')): ?>
+            <?= Html::a(Yii::t('app', 'Admin'), ['admin'], ['class' => 'btn btn-warning']) ?>
+        <?php endif ?>
+            </span>
+    </h1>
+    <div class="clearfix"></div>
+    <div class="col-lg-12 well bs-component">
     <?php echo $this->render('_search', ['model' => $searchModel]); ?>
+    </div>
 
-    <p>
-        <?= Html::a(Yii::t('app', 'Create Organisation'), ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-    <?= ListView::widget([
-        'dataProvider' => $dataProvider,
-        'itemOptions' => ['class' => 'item'],
-        'itemView' => function ($model, $key, $index, $widget) {
-            return Html::a(Html::encode($model->name), ['view', 'id' => $model->id]);
-        },
-    ]) ?>
+        <?= ListView::widget([
+            'summary' => false,
+            'dataProvider' => $dataProvider,
+            'emptyText' => Yii::t('app', 'We haven\'t created any articles yet.'),
+            'itemOptions' => ['class' => 'item'],
+            'itemView' => function ($model, $key, $index, $widget) {
+                return $this->render('_index', ['model' => $model]);
+            },
+        ]) ?>
+
 </div>

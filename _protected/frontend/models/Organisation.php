@@ -45,8 +45,8 @@ class Organisation extends ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'name', 'created_at', 'updated_at'], 'required'],
-            [['user_id', 'created_at', 'updated_at'], 'integer'],
+            [['user_id', 'name'], 'required'],
+            [['user_id'], 'integer'],
             [['imageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg'],
             [['description'], 'string'],
             [['name'], 'string', 'max' => 255],
@@ -90,7 +90,7 @@ class Organisation extends ActiveRecord
 
         if ($this->imageFile) {
             $path = Url::to('@webroot/images/organisations/');
-            $escapedTitle = $this->sanitize($this->title);
+            $escapedTitle = $this->sanitize($this->name);
             $filename = $this->created_at.$escapedTitle.'.jpg';
             $this->imageFile->saveAs($path . $filename);
             return true;
@@ -159,7 +159,7 @@ class Organisation extends ActiveRecord
 
     public function deleteImage(){
         $path = Url::to('@webroot/images/organisations/');
-        $escapedTitle = $this->sanitize($this->title);
+        $escapedTitle = $this->sanitize($this->name);
         $filename = $this->created_at.$escapedTitle.'.jpg';
         if(file_exists($path.$filename)){
             unlink($path.$filename);
@@ -171,9 +171,9 @@ class Organisation extends ActiveRecord
     {
         $path = Url::to('@webroot/images/organisations/');
         $url = Url::to('@web/images/organisations/');
-        $escapedTitle = $this->sanitize($this->title);
+        $escapedTitle = $this->sanitize($this->name);
         $filename = $this->created_at.$escapedTitle.'.jpg';
-        $alt = $this->title;
+        $alt = $this->name;
 
         $imageInfo = ['alt'=> $alt];
 
