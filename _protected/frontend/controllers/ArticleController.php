@@ -13,16 +13,7 @@ use Yii;
  */
 class ArticleController extends FrontendController
 {
-    public function behaviors()
-    {
-        return [
-            [
-                'class' => 'yii\filters\PageCache',
-                'only' => ['index'],
-                'duration' => 60,
-            ]
-        ];
-    }
+
     /**
      * Lists all Article models.
      *

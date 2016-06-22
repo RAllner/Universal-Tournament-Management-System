@@ -2,6 +2,11 @@
 namespace common\models;
 
 use common\rbac\models\Role;
+use frontend\models\Galleries;
+use frontend\models\Halloffame;
+use frontend\models\Article;
+use frontend\models\Videos;
+use frontend\models\Players;
 use nenad\passwordStrength\StrengthValidator;
 use yii\behaviors\TimestampBehavior;
 use Yii;
@@ -119,7 +124,47 @@ class User extends UserIdentity
     public function getArticles()
     {
         return $this->hasMany(Article::className(), ['user_id' => 'id']);
-    }    
+    }
+
+    /**
+     * Relation with Galleries model.
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getGalleries()
+    {
+        return $this->hasMany(Galleries::className(), ['user_id' => 'id']);
+    }
+
+    /**
+     * Relation with Halloffame model.
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getHalloffame()
+    {
+        return $this->hasMany(Halloffame::className(), ['user_id' => 'id']);
+    }
+
+    /**
+     * Relation with Videos model.
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getVideos()
+    {
+        return $this->hasMany(Videos::className(), ['user_id' => 'id']);
+    }
+
+    /**
+     * Relation with Players model.
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPlayers()
+    {
+        return $this->hasMany(Players::className(), ['user_id' => 'id']);
+    }
 
 //------------------------------------------------------------------------------------------------//
 // USER FINDERS

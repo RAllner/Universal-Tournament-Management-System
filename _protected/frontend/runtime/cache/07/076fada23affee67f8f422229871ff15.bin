@@ -1,0 +1,769 @@
+a:2:{i:0;a:2:{i:0;s:30700:"<!DOCTYPE html>
+<html lang="de">
+<head>
+    <link rel="apple-touch-icon" sizes="57x57" href="/utms-dev/images/favicon/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/utms-dev/images/favicon/apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/utms-dev/images/favicon/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/utms-dev/images/favicon/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114"
+          href="/utms-dev/images/favicon/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120"
+          href="/utms-dev/images/favicon/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144"
+          href="/utms-dev/images/favicon/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152"
+          href="/utms-dev/images/favicon/apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180"
+          href="/utms-dev/images/favicon/apple-touch-icon-180x180.png">
+    <link rel="icon" type="image/png" href="/utms-dev/images/favicon/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="/utms-dev/images/favicon/android-chrome-192x192.png"
+          sizes="192x192">
+    <link rel="icon" type="image/png" href="/utms-dev/images/favicon/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="/utms-dev/images/favicon/favicon-16x16.png" sizes="16x16">
+    <link rel="manifest" href="/utms-dev/images/favicon/manifest.json">
+    <link rel="mask-icon" href="/utms-dev/images/favicon/safari-pinned-tab.svg" color="#031d24">
+    <link rel="shortcut icon" href="/utms-dev/images/favicon/favicon.ico">
+    <meta name="apple-mobile-web-app-title" content="BarCraft HL">
+    <meta name="application-name" content="BarCraft HL"
+    ">
+    <meta name="msapplication-TileColor" content="#181818">
+    <meta name="msapplication-TileImage" content="/utms-dev/images/favicon/mstile-144x144.png">
+    <meta name="msapplication-config" content="/utms-dev/images/favicon/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-param" content="_csrf">
+    <meta name="csrf-token" content="UngzVEJKdGERLEU9ewAQFgNOAB5vHw4zB0xEZwh5JiQWDkknDh4wWQ==">
+    <title>Articles</title>
+    <link href="/utms-dev/assets/4d5a5897/css/material.min.css" rel="stylesheet">
+<link href="/utms-dev/assets/4d5a5897/css/ripples.min.css" rel="stylesheet">
+<link href="/utms-dev/assets/8c90760c/css/lightbox.css" rel="stylesheet">
+<link href="/utms-dev/assets/ebc06088/css/material-icons.min.css" rel="stylesheet">
+<link href="/utms-dev/assets/3682be1c/css/font-awesome.min.css" rel="stylesheet">
+<link href="/utms-dev/themes/material/css/site.css" rel="stylesheet"></head>
+<body>
+<div class="wrap">
+    <nav id="w1" class="navbar-nav navbar-fixed-top navbar" role="navigation"><div class="container"><div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#w1-collapse"><span class="sr-only">Toggle navigation</span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span></button><a class="navbar-brand" href="/utms-dev/"><img src="/utms-dev/images/constant/logo-golds.png" class="logo"/> <b>BarCraft HL</b></a></div><div id="w1-collapse" class="collapse navbar-collapse"><ul id="w2" class="navbar-nav navbar-right nav"><li class="active"><a href="/utms-dev/article/index"><i class="material-icons">chrome_reader_mode</i> News</a></li>
+<li class="dropdown"><a class="dropdown-toggle" href="#" data-toggle="dropdown"><i class="material-icons">play_arrow</i> Medien <b class="caret"></b></a><ul id="w3" class="dropdown-menu"><li><a href="/utms-dev/galleries/index" tabindex="-1"><i class="material-icons">photo_library</i> Gallerie</a></li>
+<li><a href="/utms-dev/videos/index" tabindex="-1"><i class="material-icons">videocam</i> Videos</a></li>
+<li><a href="/utms-dev/halloffame/index" tabindex="-1"><i class="material-icons">star_rate</i> Hall Of Fame</a></li></ul></li>
+<li class="dropdown"><a class="dropdown-toggle" href="#" data-toggle="dropdown"><i class="material-icons">info</i> Infos <b class="caret"></b></a><ul id="w4" class="dropdown-menu"><li><a href="/utms-dev/site/about" tabindex="-1">Über uns</a></li>
+<li><a href="/utms-dev/site/contact" tabindex="-1">Kontakt</a></li>
+<li><a href="/utms-dev/site/journey" tabindex="-1">Anfahrt</a></li></ul></li>
+<li class="dropdown"><a class="dropdown-toggle" href="#" data-toggle="dropdown"><i class="material-icons">account_circle</i> Kanzler <b class="caret"></b></a><ul id="w5" class="dropdown-menu"><li><a href="/utms-dev/backend/user/view?id=1" tabindex="-1">Settings</a></li>
+<li><a href="/utms-dev/players/own-index" tabindex="-1">Spieler</a></li>
+<li class="divider"></li>
+<li><a href="/utms-dev/site/logout" data-method="post" tabindex="-1">Abmelden</a></li></ul></li>
+<li><a href="/utms-dev/backend"><i class="material-icons">settings</i></a></li></ul></div></div></nav>
+    <div class="container">
+        <ul class="breadcrumb"><li><a href="/utms-dev/">Home</a></li>
+<li class="active">Artikel</li>
+</ul>                
+<div class="article-index">
+
+    <h1>BarCraft HL Nachrichten        <span class="pull-right">
+                    <a class="btn btn-success" href="/utms-dev/article/create"><i class="material-icons">create</i> Artikel erstellen</a>                            <a class="btn btn-warning" href="/utms-dev/article/admin">Admin</a>                    </span>
+    </h1>
+
+    <div class="clearfix"></div>
+    <div class="col-lg-8 no-padding-left " style="padding-left: 0">
+
+
+        <div id="w0" class="list-view">
+<div class="item" data-key="9">
+<div class="col-lg-12 no-padding-left no-padding-right">
+
+    <div class="article-image-wrap" style="background-image: url('/utms-dev/images/news/1466520310starcup-i-bis-die-finger-gluhen.jpg')">
+        <div class="intro-Text-wrap">
+                <span class="article-Category">
+                <div class='blue'>Starcraft</div>                </span>
+
+            <h1 class="articleTitle" itemprop="headline"><a href=/utms-dev/article/view?id=9>
+                    StarCup I: Bis die Finger glühen                </a></h1>
+
+            <p class="introText" itemprop="description">
+                <i class="material-icons">account_circle</i> Author Kanzler                <i class="material-icons">schedule</i> Veröffentlicht June 21, 2016, 4:45 pm            </p>
+        </div>
+    </div>
+    <div class="well bs-component">
+
+        <p><p>Am Wochenende war es endlich so weit: das Finale des StarCup I zwischen Slender und TyphoonHawk wurde ausgefochten.</p>
+</p>
+        <span class="pull-right">
+    <a class="btn btn-primary" href=/utms-dev/article/view?id=9>
+        Lies mehr<i class="material-icons">chevron_right</i>
+    </a>
+            </span>
+        <div class="clearfix"></div>
+
+
+    </div>
+
+</div>
+
+
+</div>
+<div class="item" data-key="8">
+<div class="col-lg-12 no-padding-left no-padding-right">
+
+    <div class="article-image-wrap" style="background-image: url('/utms-dev/images/news/1466519657unser-season-2-champion-heisst-harlequin.jpg')">
+        <div class="intro-Text-wrap">
+                <span class="article-Category">
+                <div class='gold'>Hearthstone</div>                </span>
+
+            <h1 class="articleTitle" itemprop="headline"><a href=/utms-dev/article/view?id=8>
+                    Unser Season 2 Champion heißt Harlequin                </a></h1>
+
+            <p class="introText" itemprop="description">
+                <i class="material-icons">account_circle</i> Author Kanzler                <i class="material-icons">schedule</i> Veröffentlicht June 21, 2016, 4:34 pm            </p>
+        </div>
+    </div>
+    <div class="well bs-component">
+
+        <p><p>Die zweite Season des Dorfkrug Cup fand an diesem Wochenende ein fulminantes Ende. Samstag den 5ten Dezember um 10 Uhr morgens begann der Qualifier f&uuml;r das Abschlussturnier. Hierf&uuml;r reiste Haruc bereits Freitag aus Hamburg an um beim Aufbau zu helfen. Danke noch einmal daf&uuml;r!</p>
+</p>
+        <span class="pull-right">
+    <a class="btn btn-primary" href=/utms-dev/article/view?id=8>
+        Lies mehr<i class="material-icons">chevron_right</i>
+    </a>
+            </span>
+        <div class="clearfix"></div>
+
+
+    </div>
+
+</div>
+
+
+</div>
+<div class="item" data-key="7">
+<div class="col-lg-12 no-padding-left no-padding-right">
+
+    <div class="article-image-wrap" style="background-image: url('/utms-dev/images/news/1466519184das-finale-kommt.jpg')">
+        <div class="intro-Text-wrap">
+                <span class="article-Category">
+                <div class='gold'>Hearthstone</div>                </span>
+
+            <h1 class="articleTitle" itemprop="headline"><a href=/utms-dev/article/view?id=7>
+                    Das Finale kommt!                </a></h1>
+
+            <p class="introText" itemprop="description">
+                <i class="material-icons">account_circle</i> Author Kanzler                <i class="material-icons">schedule</i> Veröffentlicht June 21, 2016, 4:26 pm            </p>
+        </div>
+    </div>
+    <div class="well bs-component">
+
+        <p><p>Das Jahr neigt sich dem Ende zu und wir haben mittlerweile das elfte Hearthstone Turnier hinter uns gelassen. Um diese Season kr&ouml;nend abzuschlie&szlig;en folgt im Dezember das <strong>Dorfkrug Cup Season 2 Finale</strong>.</p>
+</p>
+        <span class="pull-right">
+    <a class="btn btn-primary" href=/utms-dev/article/view?id=7>
+        Lies mehr<i class="material-icons">chevron_right</i>
+    </a>
+            </span>
+        <div class="clearfix"></div>
+
+
+    </div>
+
+</div>
+
+
+</div>
+<div class="item" data-key="6">
+<div class="col-lg-12 no-padding-left no-padding-right">
+
+    <div class="article-image-wrap" style="background-image: url('/utms-dev/images/news/1466519076neues-turnier-barcraft-hl-starcup.jpg')">
+        <div class="intro-Text-wrap">
+                <span class="article-Category">
+                <div class='blue'>Starcraft</div>                </span>
+
+            <h1 class="articleTitle" itemprop="headline"><a href=/utms-dev/article/view?id=6>
+                    Neues Turnier: BarCraft HL StarCup                </a></h1>
+
+            <p class="introText" itemprop="description">
+                <i class="material-icons">account_circle</i> Author Kanzler                <i class="material-icons">schedule</i> Veröffentlicht June 21, 2016, 4:24 pm            </p>
+        </div>
+    </div>
+    <div class="well bs-component">
+
+        <p><p>Zum Launch von <em>Starcraft 2: Legacy of the Void (LotV)</em> wollen wir unser Turnier-Portfolio erweitern. Daher freuen wir uns euch den <em>Barcraft HL StarCup</em> ank&uuml;ndigen zu d&uuml;rfen.</p>
+
+<p>&nbsp;</p>
+</p>
+        <span class="pull-right">
+    <a class="btn btn-primary" href=/utms-dev/article/view?id=6>
+        Lies mehr<i class="material-icons">chevron_right</i>
+    </a>
+            </span>
+        <div class="clearfix"></div>
+
+
+    </div>
+
+</div>
+
+
+</div>
+<div class="item" data-key="5">
+<div class="col-lg-12 no-padding-left no-padding-right">
+
+    <div class="article-image-wrap" style="background-image: url('/utms-dev/images/news/1466518877dorfkrug-cup-x---the-winner-is.jpg')">
+        <div class="intro-Text-wrap">
+                <span class="article-Category">
+                <div class='gold'>Hearthstone</div>                </span>
+
+            <h1 class="articleTitle" itemprop="headline"><a href=/utms-dev/article/view?id=5>
+                    Dorfkrug Cup X - The Winner is...                </a></h1>
+
+            <p class="introText" itemprop="description">
+                <i class="material-icons">account_circle</i> Author Kanzler                <i class="material-icons">schedule</i> Veröffentlicht June 21, 2016, 4:21 pm            </p>
+        </div>
+    </div>
+    <div class="well bs-component">
+
+        <p><p>Der <strong>Dorfkrug Cup X (10)</strong> an diesem Samstag, den 24.10.2015 war ein voller Erfolg.</p>
+</p>
+        <span class="pull-right">
+    <a class="btn btn-primary" href=/utms-dev/article/view?id=5>
+        Lies mehr<i class="material-icons">chevron_right</i>
+    </a>
+            </span>
+        <div class="clearfix"></div>
+
+
+    </div>
+
+</div>
+
+
+</div>
+<ul class="pagination"><li class="prev disabled"><span>&laquo;</span></li>
+<li class="active"><a href="/utms-dev/article/index?page=1&amp;per-page=5" data-page="0">1</a></li>
+<li><a href="/utms-dev/article/index?page=2&amp;per-page=5" data-page="1">2</a></li>
+<li class="next"><a href="/utms-dev/article/index?page=2&amp;per-page=5" data-page="1">&raquo;</a></li></ul></div>
+    </div>
+    <div class="col-md-4 no-padding-left no-padding-right">
+
+        <div class="btn-group btn-group-justified external" role="group" aria-label="Justified button group">
+            <a href="https://www.facebook.com/BarCraftHL/" class="btn btn-default"><i
+                    class="fa fa-facebook-official" aria-hidden="true"></i></a>
+            <a href="https://twitter.com/BarCraftHL" class="btn btn-default"><i
+                    class="fa fa-twitter-square" aria-hidden="true"></i></a>
+            <a href="https://www.youtube.com/channel/UC6Hb-1s-cjpVVgBLvgijoRQ" class="btn btn-default"><i
+                    class="fa fa-youtube-square" aria-hidden="true"></i></a>
+            <a href="http://twitch.tv/barcrafthl" class="btn btn-default"><i
+                    class="fa fa-twitch" aria-hidden="true"></i></a>
+            <a href="http://bchl.challonge.com/" class="btn btn-default">
+                <img src="/utms-dev/images/constant/icons/challonge.png">
+                </img>
+            </a>
+            <a href="http://wiki.teamliquid.net/hearthstone/Dorfkrug_Cup" class="btn btn-default">
+                <img src="/utms-dev/images/constant/icons/liquidpedias.png">
+                </img>
+                </object>
+            </a>
+        </div>
+
+
+        <div class="well bs-component no-padding-left no-padding-right" style="margin: 0; text-align: center">
+            <h2> <i
+                    class="fa fa-twitter-square" aria-hidden="true"></i> Twitter Feed</h2>
+            <a class="twitter-timeline"
+               data-widget-id="643309100416278528"
+               href="https://twitter.com/BarCraftHL"
+               data-screen-name="BarCraftHL"
+               data-theme="dark"
+               data-tweet-limit="6"
+               data-link-color="#ffad24"
+               data-chrome="transparent noheader nofooter"
+            >
+                Tweets by @BarCraftHL
+
+            </a>
+            <script>!function (d, s, id) {
+                    var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https';
+                    if (!d.getElementById(id)) {
+                        js = d.createElement(s);
+                        js.id = id;
+                        js.src = p + "://platform.twitter.com/widgets.js";
+                        fjs.parentNode.insertBefore(js, fjs);
+                    }
+                }(document, "script", "twitter-wjs");</script>
+        </div>
+    </div>
+</div>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="container">
+
+
+        <ul class="navbar-nav nav navbar-left external-link-bar">
+            <li>
+                <a href="https://www.facebook.com/BarCraftHL/" class="external-link"><i
+                        class="fa fa-facebook-official" aria-hidden="true"></i></a>
+            </li>
+            <li>
+                <a href="https://twitter.com/BarCraftHL" class="external-link"><i
+                        class="fa fa-twitter-square" aria-hidden="true"></i></a>
+            </li>
+            <li>
+                <a href="https://www.youtube.com/channel/UC6Hb-1s-cjpVVgBLvgijoRQ" class="external-link"><i
+                        class="fa fa-youtube-square" aria-hidden="true"></i></a>
+            </li>
+            <li>
+                <a href="https://www.youtube.com/channel/UC6Hb-1s-cjpVVgBLvgijoRQ" class="external-link"><i
+                        class="fa fa-youtube-square" aria-hidden="true"></i></a>
+            </li>
+            <li>
+                <a href="http://bchl.challonge.com/" class="external-link">
+                    <img src="/utms-dev/images/constant/icons/challonge.png">
+                    </img>
+                </a>
+            </li>
+            <li>
+                <a href="http://wiki.teamliquid.net/hearthstone/Dorfkrug_Cup" class="external-link">
+                    <img src="/utms-dev/images/constant/icons/liquidpedias.png">
+                    </img>
+                    </object>
+                </a>
+            </li>
+        </ul>
+        <div class="pull-right" style="padding: 1em">
+            &copy;<a href="/utms-dev"> BarCraft HL      </a>2016        </div>
+    </div>
+</footer>
+
+<div id="yii-debug-toolbar" data-url="/utms-dev/debug/default/toolbar?tag=576a719fa6adb" style="display:none" class="yii-debug-toolbar-bottom"></div><style>
+#yii-debug-toolbar-logo {
+    position: fixed;
+    right: 31px;
+    bottom: 4px;
+}
+
+.yii-debug-toolbar {
+    font: 11px Verdana, Arial, sans-serif;
+    text-align: left;
+    width: 96px;
+    height: 42px;
+    transition: width .3s ease;
+    z-index: 1000000;
+}
+
+.yii-debug-toolbar_active {
+    width: 100%;
+    height: auto;
+}
+
+.yii-debug-toolbar_position_top {
+    margin: 0 0 20px 0;
+    width: 100%;
+}
+
+.yii-debug-toolbar_position_bottom {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    margin: 0;
+}
+
+.yii-debug-toolbar__bar {
+    position: relative;
+    padding: 0;
+    font: 11px Verdana, Arial, sans-serif;
+    text-align: left;
+    height: 40px;
+    overflow: hidden;
+
+    background: rgb(255, 255, 255);
+    background: -moz-linear-gradient(top, rgb(255, 255, 255) 0%, rgb(247, 247, 247) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, rgb(255, 255, 255) 0%, rgb(247, 247, 247) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, rgb(255, 255, 255) 0%, rgb(247, 247, 247) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#f7f7f7', GradientType=0); /* IE6-9 */
+
+    border: 1px solid rgba(0, 0, 0, 0.11);
+
+    /* ensure debug toolbar text is displayed ltr even on rtl pages */
+    direction: ltr;
+}
+
+.yii-debug-toolbar__bar:after {
+    content: '';
+    display: table;
+    clear: both;
+}
+
+.yii-debug-toolbar__view {
+    height: 0;
+    overflow: hidden;
+    background: white;
+    transition: height .3s ease;
+}
+
+.yii-debug-toolbar__view iframe {
+    margin: 0;
+    padding: 0;
+    padding-top: 10px;
+    height: 100%;
+    width: 100%;
+    border: 0;
+}
+
+.yii-debug-toolbar_iframe_active .yii-debug-toolbar__view {
+    height: 100%;
+}
+
+.yii-debug-toolbar__block {
+    float: left;
+    margin: 0;
+    border-right: 1px solid rgba(0, 0, 0, 0.11);
+    padding: 4px 8px;
+    line-height: 32px;
+    white-space: nowrap;
+}
+
+.yii-debug-toolbar__block_active {
+    background: rgb(247, 247, 247); /* Old browsers */
+    background: -moz-linear-gradient(top, rgb(247, 247, 247) 0%, rgb(224, 224, 224) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, rgb(247, 247, 247) 0%, rgb(224, 224, 224) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, rgb(247, 247, 247) 0%, rgb(224, 224, 224) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f7f7f7', endColorstr='#e0e0e0', GradientType=0); /* IE6-9 */
+}
+
+.yii-debug-toolbar__block a {
+    display: inline-block;
+    text-decoration: none;
+    color: black;
+}
+
+.yii-debug-toolbar__block img {
+    vertical-align: middle;
+}
+
+.yii-debug-toolbar__label {
+    display: inline-block;
+    padding: 2px 4px;
+    font-size: 12px;
+    font-weight: normal;
+    line-height: 14px;
+    white-space: nowrap;
+    vertical-align: baseline;
+    color: #ffffff;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    background-color: #999999;
+    -webkit-border-radius: 3px;
+       -moz-border-radius: 3px;
+            border-radius: 3px;
+}
+
+.yii-debug-toolbar__label:empty {
+    display: none;
+}
+
+a.yii-debug-toolbar__label:hover,
+a.yii-debug-toolbar__label:focus {
+    color: #ffffff;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.yii-debug-toolbar__label_important {
+    background-color: #b94a48;
+}
+
+.yii-debug-toolbar__label_important[href] {
+    background-color: #953b39;
+}
+
+.yii-debug-toolbar__label_warning,
+.yii-debug-toolbar__badge_warning {
+    background-color: #f89406;
+}
+
+.yii-debug-toolbar__label_warning[href] {
+    background-color: #c67605;
+}
+
+.yii-debug-toolbar__label_success {
+    background-color: #468847;
+}
+
+.yii-debug-toolbar__label_success[href] {
+    background-color: #356635;
+}
+
+.yii-debug-toolbar__label_info {
+    background-color: #3a87ad;
+}
+
+.yii-debug-toolbar__label_info[href] {
+    background-color: #2d6987;
+}
+
+.yii-debug-toolbar__label_inverse,
+.yii-debug-toolbar__badge_inverse {
+    background-color: #333333;
+}
+
+.yii-debug-toolbar__label_inverse[href],
+.yii-debug-toolbar__badge_inverse[href] {
+    background-color: #1a1a1a;
+}
+
+.yii-debug-toolbar__title {
+    background: rgb(247, 247, 247); /* Old browsers */
+    background: -moz-linear-gradient(top, rgb(247, 247, 247) 0%, rgb(224, 224, 224) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, rgb(247, 247, 247) 0%, rgb(224, 224, 224) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, rgb(247, 247, 247) 0%, rgb(224, 224, 224) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f7f7f7', endColorstr='#e0e0e0', GradientType=0); /* IE6-9 */
+}
+
+.yii-debug-toolbar__toggle,
+.yii-debug-toolbar__external {
+    cursor: pointer;
+    position: absolute;
+
+    width: 30px;
+    height: 30px;
+    font-size: 25px;
+    font-weight: 100;
+    line-height: 28px;
+    color: #ffffff;
+    text-align: center;
+
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+
+    transition: opacity .3s ease;
+}
+
+.yii-debug-toolbar__toggle:hover,
+.yii-debug-toolbar__toggle:focus,
+.yii-debug-toolbar__external:hover,
+.yii-debug-toolbar__external:focus {
+    color: #ffffff;
+    text-decoration: none;
+    opacity: 0.9;
+    filter: alpha(opacity=90);
+}
+
+.yii-debug-toolbar__toggle-icon,
+.yii-debug-toolbar__external-icon {
+    display: inline-block;
+
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+}
+
+.yii-debug-toolbar__toggle {
+    right: 10px;
+    top: 4px;
+}
+
+.yii-debug-toolbar__toggle-icon {
+    padding: 7px 0;
+    width: 10px;
+    height: 16px;
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNSIgaGVpZ2h0PSIxNSIgdmlld0JveD0iMCAwIDUwIDUwIj48cGF0aCBmaWxsPSIjNDQ0IiBkPSJNMTUuNTYzIDQwLjgzNmEuOTk3Ljk5NyAwIDAgMCAxLjQxNCAwbDE1LTE1YTEgMSAwIDAgMCAwLTEuNDE0bC0xNS0xNWExIDEgMCAwIDAtMS40MTQgMS40MTRMMjkuODU2IDI1LjEzIDE1LjU2MyAzOS40MmExIDEgMCAwIDAgMCAxLjQxNHoiLz48L3N2Zz4=');
+    transition: -webkit-transform .3s ease-out;
+    transition: transform .3s ease-out;
+}
+
+.yii-debug-toolbar_active .yii-debug-toolbar__toggle-icon {
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+
+.yii-debug-toolbar_iframe_active .yii-debug-toolbar__toggle-icon {
+    -webkit-transform: rotate(90deg);
+    transform: rotate(90deg);
+}
+
+.yii-debug-toolbar__external {
+    display: none;
+    right: 50px;
+    top: 4px;
+}
+
+.yii-debug-toolbar_iframe_active .yii-debug-toolbar__external {
+    display: block;
+}
+
+.yii-debug-toolbar__external-icon {
+    padding: 8px 0;
+    width: 14px;
+    height: 14px;
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNSIgaGVpZ2h0PSIxNSIgdmlld0JveD0iMCAwIDUwIDUwIj48cGF0aCBmaWxsPSIjNDQ0IiBkPSJNMzkuNjQyIDkuNzIyYTEuMDEgMS4wMSAwIDAgMC0uMzgyLS4wNzdIMjguMTAzYTEgMSAwIDAgMCAwIDJoOC43NDNMMjEuNyAyNi43OWExIDEgMCAwIDAgMS40MTQgMS40MTVMMzguMjYgMTMuMDZ2OC43NDNhMSAxIDAgMCAwIDIgMFYxMC42NDZhMS4wMDUgMS4wMDUgMCAwIDAtLjYxOC0uOTI0eiIvPjxwYXRoIGQ9Ik0zOS4yNiAyNy45ODVhMSAxIDAgMCAwLTEgMXYxMC42NmgtMjh2LTI4aDEwLjY4M2ExIDEgMCAwIDAgMC0ySDkuMjZhMSAxIDAgMCAwLTEgMXYzMGExIDEgMCAwIDAgMSAxaDMwYTEgMSAwIDAgMCAxLTF2LTExLjY2YTEgMSAwIDAgMC0xLTF6Ii8+PC9zdmc+');
+}
+</style><script>(function () {
+    'use strict';
+
+    var findToolbar = function () {
+            return document.querySelector('#yii-debug-toolbar');
+        },
+        ajax = function (url, settings) {
+            var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+            settings = settings || {};
+            xhr.open(settings.method || 'GET', url, true);
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            xhr.setRequestHeader('Accept', 'text/html');
+            xhr.onreadystatechange = function (state) {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200 && settings.success) {
+                        settings.success(xhr);
+                    } else if (xhr.status != 200 && settings.error) {
+                        settings.error(xhr);
+                    }
+                }
+            };
+            xhr.send(settings.data || '');
+        },
+        url,
+        div,
+        toolbarEl = findToolbar(),
+        barSelector = '.yii-debug-toolbar__bar',
+        viewSelector = '.yii-debug-toolbar__view',
+        blockSelector = '.yii-debug-toolbar__block',
+        toggleSelector = '.yii-debug-toolbar__toggle',
+        externalSelector = '.yii-debug-toolbar__external',
+
+        CACHE_KEY = 'yii-debug-toolbar',
+        ACTIVE_STATE = 'active',
+
+        activeClass = 'yii-debug-toolbar_active',
+        iframeActiveClass = 'yii-debug-toolbar_iframe_active',
+        titleClass = 'yii-debug-toolbar__title',
+        blockClass = 'yii-debug-toolbar__block',
+        blockActiveClass = 'yii-debug-toolbar__block_active';
+
+    if (toolbarEl) {
+        url = toolbarEl.getAttribute('data-url');
+
+        ajax(url, {
+            success: function (xhr) {
+                div = document.createElement('div');
+                div.innerHTML = xhr.responseText;
+
+                toolbarEl.parentNode.replaceChild(div, toolbarEl);
+
+                showToolbar(findToolbar());
+            },
+            error: function (xhr) {
+                toolbarEl.innerHTML = xhr.responseText;
+            }
+        });
+    }
+
+    function showToolbar(toolbarEl) {
+        var barEl = toolbarEl.querySelector(barSelector),
+            viewEl = toolbarEl.querySelector(viewSelector),
+            toggleEl = toolbarEl.querySelector(toggleSelector),
+            externalEl = toolbarEl.querySelector(externalSelector),
+            blockEls = barEl.querySelectorAll(blockSelector),
+            iframeEl = viewEl.querySelector('iframe'),
+            iframeHeight = function () {
+                return (window.innerHeight * 0.7) + 'px';
+            },
+            isIframeActive = function () {
+                return toolbarEl.classList.contains(iframeActiveClass);
+            },
+            showIframe = function (href) {
+                toolbarEl.classList.add(iframeActiveClass);
+
+                iframeEl.src = externalEl.href = href;
+                viewEl.style.height = iframeHeight();
+            },
+            hideIframe = function () {
+                toolbarEl.classList.remove(iframeActiveClass);
+                removeActiveBlocksCls();
+
+                externalEl.href = '#';
+                viewEl.style.height = '';
+            },
+            removeActiveBlocksCls = function () {
+                [].forEach.call(blockEls, function (el) {
+                    el.classList.remove(blockActiveClass);
+                });
+            },
+            toggleToolbarClass = function (className) {
+                if (toolbarEl.classList.contains(className)) {
+                    toolbarEl.classList.remove(className);
+                } else {
+                    toolbarEl.classList.add(className);
+                }
+            },
+            toggleStorageState = function (key, value) {
+                if (window.localStorage) {
+                    var item = localStorage.getItem(key);
+
+                    if (item) {
+                        localStorage.removeItem(key);
+                    } else {
+                        localStorage.setItem(key, value);
+                    }
+                }
+            },
+            restoreStorageState = function (key) {
+                if (window.localStorage) {
+                    return localStorage.getItem(key);
+                }
+            },
+            togglePosition = function () {
+                if (isIframeActive()) {
+                    hideIframe();
+                } else {
+                    toggleToolbarClass(activeClass);
+                    toggleStorageState(CACHE_KEY, ACTIVE_STATE);
+                }
+            };
+
+        toolbarEl.style.display = 'block';
+
+        if (restoreStorageState(CACHE_KEY) == ACTIVE_STATE) {
+            toolbarEl.classList.add(activeClass);
+        }
+
+        window.onresize = function () {
+            if (toolbarEl.classList.contains(iframeActiveClass)) {
+                viewEl.style.height = iframeHeight();
+            }
+        };
+
+        barEl.onclick = function (e) {
+            var target = e.target,
+                block = findAncestor(target, blockClass);
+
+            if (block && !block.classList.contains(titleClass)) {
+                while (target !== this) {
+                    if (target.href) {
+                        removeActiveBlocksCls();
+                        block.classList.add(blockActiveClass);
+                        showIframe(target.href);
+                    }
+                    target = target.parentNode;
+                }
+
+                e.preventDefault();
+            }
+        };
+
+        toggleEl.onclick = togglePosition;
+    }
+
+    function findAncestor(el, cls) {
+        while ((el = el.parentElement) && !el.classList.contains(cls));
+        return el;
+    }
+})();
+</script><script src="/utms-dev/assets/cd5a8909/jquery.js"></script>
+<script src="/utms-dev/assets/cd54b136/yii.js"></script>
+<script src="/utms-dev/assets/4d5a5897/js/ripples.min.js"></script>
+<script src="/utms-dev/assets/4d5a5897/js/material.min.js"></script>
+<script src="/utms-dev/assets/8c90760c/js/lightbox.min.js"></script>
+<script src="/utms-dev/assets/6c4a9ff5/js/bootstrap.js"></script></body>
+</html>
+";i:1;N;}i:1;N;}
