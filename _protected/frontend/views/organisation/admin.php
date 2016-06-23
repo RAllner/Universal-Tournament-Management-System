@@ -40,27 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $data->getAuthorName();
                 },
             ],
-            'title',
-            [
-                'attribute'=>'status',
-                'filter' => $searchModel->statusList,
-                'value' => function ($data) {
-                    return $data->getStatusName($data->status);
-                },
-                'contentOptions'=>function($model, $key, $index, $column) {
-                    return ['class'=>CssHelper::generalStatusCss($model->statusName)];
-                }
-            ],
-            [
-                'attribute'=>'category',
-                'filter' => $searchModel->categoryList,
-                'value' => function ($data) {
-                    return $data->getCategoryName($data->category);
-                },
-                'contentOptions'=>function($model, $key, $index, $column) {
-                    return ['class'=>CssHelper::generalCategoryCss($model->categoryName)];
-                }
-            ],
+            'name',
 
             ['class' => 'yii\grid\ActionColumn',
             'header' => Yii::t('app', 'Menu')],

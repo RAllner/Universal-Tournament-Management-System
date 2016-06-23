@@ -21,7 +21,8 @@ $this->params['breadcrumbs'][] = $this->title;
     </span>         
 
     </h1>
-
+    <div class="clearfix"></div>
+    <div class="well">
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -63,7 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'class'=>'glyphicon glyphicon-eye-open']);
                     },
                     'update' => function ($url, $model, $key) {
-                        return Html::a('', $url, ['title'=>'Manage user', 
+                        return Html::a('', $url, ['title'=>'Manage user',
                             'class'=>'glyphicon glyphicon-user']);
                     },
                     'delete' => function ($url, $model, $key) {
@@ -79,5 +80,5 @@ $this->params['breadcrumbs'][] = $this->title;
             ], // ActionColumn
         ], // columns
     ]); ?>
-
+    </div>
 </div>

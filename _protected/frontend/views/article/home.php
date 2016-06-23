@@ -25,14 +25,10 @@ $options = ['data-lightbox' => 'news-image', 'data-title' => $photoInfo['alt']];
             <?= Yii::t('app', 'Wellcome'). ' '.Yii::t('app', 'on the new Platform for your Tournament!')?>
             </p>
         </br>
-
-
-
             <div class="btn-group">
-                <a class="btn btn-primary" href="../site/login"><?php echo Yii::t('app', 'Login'); ?></a>
-                <a class="btn btn-default" href="../site/signup"><?php echo Yii::t('app', 'Signup'); ?></a>
+                <a class="btn btn-primary" href="<?= Url::to('@web/site/login')?>"><?php echo Yii::t('app', 'Login'); ?></a>
+                <a class="btn btn-default" href="<?= Url::to('@web/site/signup')?>"><?php echo Yii::t('app', 'Signup'); ?></a>
             </div>
-
     </div>
         <?php
     }

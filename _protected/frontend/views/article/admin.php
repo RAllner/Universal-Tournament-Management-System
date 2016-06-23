@@ -63,7 +63,32 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
 
             ['class' => 'yii\grid\ActionColumn',
-            'header' => Yii::t('app', 'Menu')],
+                'header' => Yii::t('app', 'Menu'),
+                'template' => '{view} {update} {delete}',
+                'buttons' => [
+                    'view' => function ($url, $model, $key) {
+                        return Html::a('', $url, ['title'=>Yii::t('app', 'View article'),
+                            'class'=>'glyphicon glyphicon-eye-open']);
+                    },
+                    'update' => function ($url, $model, $key) {
+                        if(Yii::$app->user->can('updateArticle', ['model' => $model])){
+                            return Html::a('', $url, ['title'=>Yii::t('app', 'Update article'),
+                                'class'=>'glyphicon glyphicon-pencil']);
+                        } else return "";
+                    },
+                    'delete' => function ($url, $model, $key) {
+                        if(Yii::$app->user->can('deleteArticle', ['model' => $model])) {
+                            return Html::a('', $url,
+                                ['title' => Yii::t('app', 'Delete article'),
+                                    'class' => 'glyphicon glyphicon-trash',
+                                    'data' => [
+                                        'confirm' => Yii::t('app', 'Are you sure you want to delete this article?'),
+                                        'method' => 'post']
+                                ]);
+                        }else return "";
+                    }
+                ]
+            ]
         ],
     ]); ?>
 

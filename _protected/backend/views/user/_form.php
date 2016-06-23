@@ -28,13 +28,24 @@ use yii\widgets\ActiveForm;
     <div class="row">
     <div class="col-lg-6">
 
+        <?php if(Yii::$app->user->can('manageUsers')){ ?>
         <?= $form->field($user, 'status')->dropDownList($user->statusList) ?>
 
         <?php foreach (AuthItem::getRoles() as $item_name): ?>
             <?php $roles[$item_name->name] = $item_name->name ?>
         <?php endforeach ?>
         <?= $form->field($role, 'item_name')->dropDownList($roles) ?>
+        <?php } ?>
 
+
+        <?php if(!Yii::$app->user->can('manageUsers')){ ?>
+            <?= $form->field($user, 'status', [ 'options' => [ 'hidden' => 'true','disabled' => 'true']])->dropDownList($user->statusList) ?>
+
+            <?php foreach (AuthItem::getRoles() as $item_name): ?>
+                <?php $roles[$item_name->name] = $item_name->name ?>
+            <?php endforeach ?>
+            <?= $form->field($role, 'item_name', [ 'options' => [ 'hidden' => 'true', 'disabled' => 'true']])->dropDownList($roles) ?>
+        <?php } ?>
     </div>
     </div>
 

@@ -19,7 +19,8 @@
         "hiqdev/yii2-asset-lightbox2": "2.8.2.1",
         "metalguardian/yii2-fotorama-widget": "*",
         "mervick/yii2-material-design-icons": "~1.0",
-        "rmrevin/yii2-fontawesome": "~2.15"
+        "rmrevin/yii2-fontawesome": "~2.15",
+        "kartik-v/yii2-widget-datetimepicker": "*"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

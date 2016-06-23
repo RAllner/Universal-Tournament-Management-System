@@ -169,8 +169,8 @@ AppAsset::register($this);
                         class="fa fa-youtube-square" aria-hidden="true"></i></a>
             </li>
             <li>
-                <a href="https://www.youtube.com/channel/UC6Hb-1s-cjpVVgBLvgijoRQ" class="external-link"><i
-                        class="fa fa-youtube-square" aria-hidden="true"></i></a>
+                <a href="http://twitch.tv/barcrafthl" class="external-link"><i
+                        class="fa fa-twitch" aria-hidden="true"></i></a>
             </li>
             <li>
                 <a href="http://bchl.challonge.com/" class="external-link">

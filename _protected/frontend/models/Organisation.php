@@ -138,6 +138,7 @@ class Organisation extends ActiveRecord
         return $this->hasMany(OrganisationHasUser::className(), ['organisation_id' => 'id']);
     }
 
+
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -180,7 +181,7 @@ class Organisation extends ActiveRecord
         if (file_exists($path . $filename)) {
             $imageInfo['url'] = $url.$filename;
         } else {
-            $imageInfo['url'] = $url.'default.jpg';
+            $imageInfo['url'] = $url.'default.png';
         }
 
         return $imageInfo;

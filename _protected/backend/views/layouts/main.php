@@ -50,7 +50,7 @@ AppAsset::register($this);
         <?php
         if (Yii::$app->user->can('admin')) {
             NavBar::begin([
-                'brandLabel' => Yii::t('app', Yii::$app->name) . " Admin",
+                'brandLabel' => '<img src="' . Url::to("@web/images/constant/logo-golds.png") . '" class="logo"/> <b>' . Yii::$app->name . " Admin". '</b>',
                 'brandUrl' => Yii::$app->homeUrl,
                 'options' => [
                     'class' => 'navbar-default navbar-fixed-top',
@@ -58,7 +58,7 @@ AppAsset::register($this);
             ]);
         } else {
             NavBar::begin([
-                'brandLabel' => Yii::t('app', Yii::$app->name) . " Settings",
+                'brandLabel' => '<img src="' . Url::to("@web/images/constant/logo-golds.png") . '" class="logo"/> <b>' . Yii::$app->name. " Settings".'</b>',
                 'brandUrl' => '../../site/index',
                 'options' => [
                     'class' => 'navbar-default navbar-fixed-top',
@@ -103,8 +103,42 @@ AppAsset::register($this);
 
     <footer class="footer">
         <div class="container">
-        <p class="pull-left">&copy; <?= Yii::t('app', Yii::$app->name) ?> <?= date('Y') ?></p>
-        <p class="pull-right"><?= Yii::powered() ?></p>
+
+
+            <ul class="navbar-nav nav navbar-left external-link-bar">
+                <li>
+                    <a href="https://www.facebook.com/BarCraftHL/" class="external-link"><i
+                            class="fa fa-facebook-official" aria-hidden="true"></i></a>
+                </li>
+                <li>
+                    <a href="https://twitter.com/BarCraftHL" class="external-link"><i
+                            class="fa fa-twitter-square" aria-hidden="true"></i></a>
+                </li>
+                <li>
+                    <a href="https://www.youtube.com/channel/UC6Hb-1s-cjpVVgBLvgijoRQ" class="external-link"><i
+                            class="fa fa-youtube-square" aria-hidden="true"></i></a>
+                </li>
+                <li>
+                    <a href="http://twitch.tv/barcrafthl" class="external-link"><i
+                            class="fa fa-twitch" aria-hidden="true"></i></a>
+                </li>
+                <li>
+                    <a href="http://bchl.challonge.com/" class="external-link">
+                        <img src="<?= Url::to('@web/images/constant/icons/challonge.png') ?>">
+                        </img>
+                    </a>
+                </li>
+                <li>
+                    <a href="http://wiki.teamliquid.net/hearthstone/Dorfkrug_Cup" class="external-link">
+                        <img src="<?= Url::to('@web/images/constant/icons/liquidpedias.png') ?>">
+                        </img>
+                        </object>
+                    </a>
+                </li>
+            </ul>
+            <div class="pull-right" style="padding: 1em">
+                &copy;<a href="<?= Url::to("@web") ?>"> <?= Yii::t('app', Yii::$app->name) ?>      </a><?= date('Y') ?>
+            </div>
         </div>
     </footer>
 

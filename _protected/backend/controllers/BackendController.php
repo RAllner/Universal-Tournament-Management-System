@@ -35,6 +35,7 @@ class BackendController extends Controller
                         'controllers' => ['user'],
                         'actions' => ['view', 'update', 'delete'],
                         'allow' => true,
+                        'roles' => ['member'],
                     ],
                     [
                         // other rules

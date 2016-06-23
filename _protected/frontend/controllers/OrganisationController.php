@@ -2,9 +2,11 @@
 
 namespace frontend\controllers;
 
+use frontend\models\OrganisationHasUser;
 use Yii;
 use frontend\models\Organisation;
 use frontend\models\OrganisationSearch;
+use yii\db\IntegrityException;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\MethodNotAllowedHttpException;
@@ -101,7 +103,7 @@ class OrganisationController extends FrontendController
         {
             if ($model->load(Yii::$app->request->post()))
             {
-                if($currentModel->title != $model->title){
+                if($currentModel->name != $model->name){
                     //TODO: Name des Bildes ändern.
                 }
                 $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
@@ -122,6 +124,51 @@ class OrganisationController extends FrontendController
         {
             throw new MethodNotAllowedHttpException(Yii::t('app', 'You are not allowed to access this page.'));
         }
+    }
+
+    /**
+     * @param $id
+     * @return string|\yii\web\Response
+     * @throws IntegrityException
+     * @throws NotFoundHttpException
+     */
+    public function actionAdd($id){
+        $model = new OrganisationHasUser();
+        $organisationModel = $this->findModel($id);
+        $model->organisation_id = $id;
+        if ($model->load(Yii::$app->request->post()))
+        {
+            if (!OrganisationHasUser::find()->where(['organisation_id' => $model->organisation_id, 'user_id'=> $model->user_id])->exists()){
+                if($model->save())
+                {
+                    return $this->redirect(['view', 'id' => $organisationModel->id]);
+                }
+            }else {
+                Yii::$app->session->setFlash('error', 'User is already part of the organisation');
+                return $this->redirect(['add', 'id' => $organisationModel->id]);
+
+            }
+
+        }
+        else
+        {
+            return $this->render('add', [
+                'model' => $model,
+            ]);
+        }
+
+//        if (Yii::$app->user->id == $this->findModel($id)->user_id) {
+//            if($model->save())
+//            {
+//                return $this->redirect(['view', 'id' => $model->id]);
+//            }
+//
+//            return $this->render('add', [
+//                'model' => $model,
+//            ]);
+//
+//        }
+
     }
 
     /**
@@ -153,11 +200,14 @@ class OrganisationController extends FrontendController
         $searchModel = new OrganisationSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        return $this->render('admin', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+        if(Yii::$app->user->can('adminOrganisation')){
+            return $this->render('admin', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
+        } else throw new MethodNotAllowedHttpException(Yii::t('app', 'You are not allowed to access this page.'));
     }
+
 
 
     /**

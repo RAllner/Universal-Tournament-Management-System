@@ -55,23 +55,20 @@ class UserController extends BackendController
         $user = new User(['scenario' => 'create']);
         $role = new Role();
 
-        if ($user->load(Yii::$app->request->post()) && 
+        if ($user->load(Yii::$app->request->post()) &&
             $role->load(Yii::$app->request->post()) &&
-            Model::validateMultiple([$user, $role]))
-        {
+            Model::validateMultiple([$user, $role])
+        ) {
             $user->setPassword($user->password);
             $user->generateAuthKey();
-            
-            if ($user->save()) 
-            {
-                $role->user_id = $user->getId();
-                $role->save(); 
-            }  
 
-            return $this->redirect('index');      
-        } 
-        else 
-        {
+            if ($user->save()) {
+                $role->user_id = $user->getId();
+                $role->save();
+            }
+
+            return $this->redirect('index');
+        } else {
             return $this->render('create', [
                 'user' => $user,
                 'role' => $role,
@@ -92,43 +89,49 @@ class UserController extends BackendController
     {
         // get role
         $role = Role::findOne(['user_id' => $id]);
+        $roleOld = Role::findOne(['user_id' => $id]);
 
         // get user details
         $user = $this->findModel($id);
-
+        $userOld = $this->findModel($id);
         // only The Creator can update everyone`s roles
         // admin will not be able to update role of theCreator
-        if (!Yii::$app->user->can('theCreator')) 
-        {
-            if ($role->item_name === 'theCreator') 
-            {
+        if (!Yii::$app->user->can('theCreator')) {
+            if ($role->item_name === 'theCreator') {
                 return $this->goHome();
             }
         }
 
+
         // load user data with role and validate them
-        if ($user->load(Yii::$app->request->post()) && 
-            $role->load(Yii::$app->request->post()) && Model::validateMultiple([$user, $role])) 
-        {
-            // only if user entered new password we want to hash and save it
-            if ($user->password) 
-            {
-                $user->setPassword($user->password);
+        if ($user->load(Yii::$app->request->post()) &&
+            $role->load(Yii::$app->request->post())
+        ) {
+
+            if (Model::validateMultiple([$user, $role])) {
+                if (!Yii::$app->user->can('manageUsers')) {
+                    if($userOld->status != $user->status || $roleOld->item_name != $role->item_name){
+                        Yii::$app->session->setFlash('error', 'Sie können ihre Rolle nicht ändern!');
+                    }
+                    $role->item_name = $roleOld->item_name;
+                    $user->status = $userOld->status;
+                }
+                // only if user entered new password we want to hash and save it
+                if ($user->password) {
+                    $user->setPassword($user->password);
+                }
+
+                // if admin is activating user manually we want to remove account activation token
+                if ($user->status == User::STATUS_ACTIVE && $user->account_activation_token != null) {
+                    $user->removeAccountActivationToken();
+                }
+
+                $user->save(false);
+                $role->save(false);
+
+                return $this->redirect(['view', 'id' => $user->id]);
             }
-
-            // if admin is activating user manually we want to remove account activation token
-            if ($user->status == User::STATUS_ACTIVE && $user->account_activation_token != null) 
-            {
-                $user->removeAccountActivationToken();
-            }            
-
-            $user->save(false);
-            $role->save(false); 
-            
-            return $this->redirect(['view', 'id' => $user->id]);
-        }
-        else 
-        {
+        } else {
             return $this->render('update', [
                 'user' => $user,
                 'role' => $role,
@@ -147,17 +150,15 @@ class UserController extends BackendController
      */
     public function actionDelete($id)
     {
-        if(Yii::$app->user->id == $id){
+        if (Yii::$app->user->id == $id) {
             Yii::$app->user->logout();
         }
 
         $this->findModel($id)->delete();
 
 
-
         // delete this user's role from auth_assignment table
-        if ($role = Role::find()->where(['user_id'=>$id])->one()) 
-        {
+        if ($role = Role::find()->where(['user_id' => $id])->one()) {
             $role->delete();
         }
 
@@ -175,12 +176,9 @@ class UserController extends BackendController
      */
     protected function findModel($id)
     {
-        if (($model = User::findOne($id)) !== null) 
-        {
+        if (($model = User::findOne($id)) !== null) {
             return $model;
-        } 
-        else 
-        {
+        } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }

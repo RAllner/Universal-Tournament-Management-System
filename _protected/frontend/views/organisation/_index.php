@@ -10,7 +10,7 @@ $photo = Html::img($photoInfo['url'], ['alt' => $photoInfo['alt'], 'width' => '1
 $options = ['data-title' => $photoInfo['alt']];
 ?>
 
-<div class="col-lg-12 well no-padding-left no-padding-right">
+<div class="col-lg-12 well">
 
     <div class="media">
         <div class="media-left">
@@ -19,7 +19,7 @@ $options = ['data-title' => $photoInfo['alt']];
                 <img class="media-object" style="width:100px" src="<?= $photoInfo['url'] ?>" alt="<?= $model->name ?>">
             </a>
         </div>
-        <div class="media-body">
+        <div class="media-body media-middle">
             <h3 class="media-heading">
                 <a href=<?= Url::to(['organisation/view', 'id' => $model->id]) ?>>
                     <?= $model->name ?>

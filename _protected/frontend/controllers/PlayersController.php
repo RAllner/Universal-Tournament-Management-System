@@ -35,6 +35,7 @@ class PlayersController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'showAll' => true
         ]);
     }
 
@@ -48,6 +49,7 @@ class PlayersController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'showAll' => false
         ]);
     }
 
@@ -96,6 +98,8 @@ class PlayersController extends Controller
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
+     * @throws MethodNotAllowedHttpException
+     * @throws NotFoundHttpException
      */
     public function actionUpdate($id)
     {
@@ -141,8 +145,8 @@ class PlayersController extends Controller
 
     /**
      * Manage Players.
-     *
      * @return mixed
+     * @throws MethodNotAllowedHttpException
      */
     public function actionAdmin()
     {
@@ -155,11 +159,12 @@ class PlayersController extends Controller
 
         $searchModel = new PlayersSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $pageSize, false);
-
+        if(Yii::$app->user->can('adminPlayer')){
         return $this->render('admin', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
+        } else throw new MethodNotAllowedHttpException(Yii::t('app', 'You are not allowed to access this page.'));
     }
 
     /**

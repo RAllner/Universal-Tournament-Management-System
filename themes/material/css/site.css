@@ -52,7 +52,7 @@ body {
 
 
 .breadcrumb {
-    background-color: #181818;
+    background-color: #292929;
 }
 
 a {
@@ -210,6 +210,11 @@ option:hover, option:focus {
     transition: all 0.3s ease-in;
 }
 
+.nav.external-link-bar>li>a:focus, .nav.external-link-bar>li>a:hover {
+    background-color: #292929 !important;
+}
+
+
 .material-icons {
     font-family: 'Material Icons';
     font-weight: normal;
@@ -317,7 +322,7 @@ border-bottom: hidden !important;
     padding: 0 !important;
     color: white;
     font-size: 22px;
-
+    height: 71px;
 }
 
 .external-link img, .external-link i {

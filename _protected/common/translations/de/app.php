@@ -12,6 +12,9 @@ return [
     'Save'   => 'Speichern',
     'Menu'   => 'Menü',
     'Back'   => 'Zurück',
+    'Show mine'   => 'Meine anzeigen',
+    'Show all'   => 'Alle anzeigen',
+
 
     //-- CMS buttons --//
     'Create User' => 'Nutzer erstellen',
@@ -133,12 +136,12 @@ return [
     'Sport'   => 'Sport',
 
     //-- errors --//
-    'The above error occurred while the Web server was processing your request.' => 'S\'ha produït un error mentres el servidor processava la teua petició.',
-    'Please contact us if you think this is a server error. Thank you.' => 'Per favor, contacta amb nosaltres si creus que s\'ha produït un error al servidor. Gràcies.',
-    'You are not allowed to access this page.' => 'No tens permís per accedir a aquesta pàgina.',
+    'The above error occurred while the Web server was processing your request.' => 'Dieser Fehler trat auf, als der Server versucht hat ihre Anfrage zu bearbeiten.',
+    'Please contact us if you think this is a server error. Thank you.' => 'Bitte kontaktieren Sie uns, falls Sie denken, dass dies ein Serverfehler ist. Danke!',
+    'You are not allowed to access this page.' => 'Sie dürfen diese Seite leider nicht sehen.',
 
     //-- delete messages --//
-    'Are you sure you want to delete this user?' => 'Estas segur que vols eliminar aquest usuari?',
-    'Are you sure you want to delete this article?' => 'Estas segur que vols eliminar aquest article?',
+    'Are you sure you want to delete this user?' => 'Sind Sie sicher, dass sie diesen Nutzer löschen wollen?',
+    'Are you sure you want to delete this article?' => 'Sind Sie sicher, dass sie diesen Artikel löschen wollen?',
 
 ];

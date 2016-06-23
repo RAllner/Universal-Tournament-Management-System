@@ -27,19 +27,19 @@ class FrontendController extends Controller
                 'rules' => [
                     [
                         'controllers' => ['article'],
-                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'admin','last-article', 'home'],
+                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'admin', 'home'],
                         'allow' => true,
                         'roles' => ['admin'],
                     ],
                     [
                         'controllers' => ['article'],
-                        'actions' => ['create', 'update', 'admin','last-article', 'home'],
+                        'actions' => ['create', 'update', 'admin', 'home'],
                         'allow' => true,
                         'roles' => ['editor'],
                     ],
                     [
                         'controllers' => ['article'],
-                        'actions' => ['index', 'view','last-article', 'home'],
+                        'actions' => ['index', 'view', 'home'],
                         'allow' => true
                     ],
                     [
@@ -84,49 +84,49 @@ class FrontendController extends Controller
                     ],
                     [
                         'controllers' => ['players'],
-                        'actions' => ['create', 'update', 'admin'],
+                        'actions' => ['create', 'update'],
                         'allow' => true,
                         'roles' => ['editor'],
                     ],
                     [
                         'controllers' => ['players'],
-                        'actions' => ['index', 'view'],
-                        'allow' => true
-                    ],
-                    [
-                        'controllers' => ['halloffame'],
-                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'admin'],
-                        'allow' => true,
-                        'roles' => ['admin'],
-                    ],
-                    [
-                        'controllers' => ['halloffame'],
-                        'actions' => ['create', 'update', 'admin'],
-                        'allow' => true,
-                        'roles' => ['editor'],
-                    ],
-                    [
-                        'controllers' => ['halloffame'],
-                        'actions' => ['index', 'view'],
-                        'allow' => true
-                    ],
-                    [
-                        'controllers' => ['organisation'],
-                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'admin'],
-                        'allow' => true,
-                        'roles' => ['admin'],
-                    ],
-                    [
-                        'controllers' => ['organisation'],
-                        'actions' => ['create', 'update', 'admin'],
-                        'allow' => true,
-                        'roles' => ['editor'],
-                    ],
-                    [
-                        'controllers' => ['organisation'],
                         'actions' => ['create', 'update'],
                         'allow' => true,
                         'roles' => ['member'],
+                    ],
+                    [
+                        'controllers' => ['players'],
+                        'actions' => ['index', 'view'],
+                        'allow' => true,
+                    ],
+                    [
+                        'controllers' => ['halloffame'],
+                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'admin'],
+                        'allow' => true,
+                        'roles' => ['admin'],
+                    ],
+                    [
+                        'controllers' => ['halloffame'],
+                        'actions' => ['create', 'update', 'admin'],
+                        'allow' => true,
+                        'roles' => ['editor'],
+                    ],
+                    [
+                        'controllers' => ['halloffame'],
+                        'actions' => ['index', 'view'],
+                        'allow' => true
+                    ],
+                    [
+                        'controllers' => ['organisation'],
+                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'admin'],
+                        'allow' => true,
+                        'roles' => ['admin'],
+                    ],
+                    [
+                        'controllers' => ['organisation'],
+                        'actions' => ['create', 'update', 'admin'],
+                        'allow' => true,
+                        'roles' => ['editor'],
                     ],
                     [
                         'controllers' => ['organisation'],

@@ -52,7 +52,7 @@ body {
 
 
 .breadcrumb {
-    background-color: #181818;
+    background-color: #292929;
 }
 
 a {
@@ -72,10 +72,14 @@ a:hover {
 .footer {
     background-color: #181818;
     border-top: 1px solid #292929;
-    padding-top: 20px;
+}
+.footer > .container {
+    min-height: 70px;
 }
 
-
+.cke_source {
+    background-color: #181818 !important;
+}
 
 
 .navbar-nav>li>.dropdown-menu {
@@ -206,6 +210,11 @@ option:hover, option:focus {
     transition: all 0.3s ease-in;
 }
 
+.nav.external-link-bar>li>a:focus, .nav.external-link-bar>li>a:hover {
+    background-color: #292929 !important;
+}
+
+
 .material-icons {
     font-family: 'Material Icons';
     font-weight: normal;
@@ -258,10 +267,10 @@ option:hover, option:focus {
 
 }
 .no-padding-left {
-    padding-left: 0;
+    padding-left: 0!important;
 }
 .no-padding-right {
-    padding-right: 0;
+    padding-right: 0!important;
 }
 
 
@@ -272,21 +281,53 @@ option:hover, option:focus {
     padding: 19px;
 }
 
+.btn-group.btn-group-justified.external {
+    margin-top: 0;
+}
+
+.btn-group.btn-group-justified.external>a {
+    font-size: 22px;
+    background-color: #181818;
+    border-bottom: solid 2px #181818;
+}
+.btn-group.btn-group-justified.external>a:hover, .btn-group.btn-group-justified.external>a:focus {
+    color: white;
+    background-color: rgba(158,158,158,0.2);
+    border-bottom: solid 2px #ffad24;
+}
+
+.btn-group.btn-group-justified.external>a>img {
+    width: 22px;
+    margin: -22px;
+}.btn-group.btn-group-justified.external>a>i {
+    width: 22px;
+    margin: -22px;
+}
+
 .external-link-bar {
+    display: block;
     margin: 0 !important;
-    padding-right: 0px !important;
+
+    border-bottom: hidden;
+    min-height: 70px;
+    background-color: #181818;
+}
+
+.external-link-bar>li {
+border-bottom: hidden !important;
 }
 
 .external-link {
     border-top: solid #292929 4px;
+    padding: 0 !important;
     color: white;
     font-size: 22px;
-    line-height: 22px;
-    padding: 1em;
+    height: 71px;
 }
 
 .external-link img, .external-link i {
     width: 22px;
+    margin: 1em;
 }
 
 

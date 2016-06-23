@@ -21,6 +21,8 @@ return array(
     'nenad\\' => array($vendorDir . '/nenad/yii2-widgets-base', $vendorDir . '/nenad/yii2-strength-meter'),
     'mihaildev\\ckeditor\\' => array($vendorDir . '/mihaildev/yii2-ckeditor'),
     'metalguardian\\fotorama\\' => array($vendorDir . '/metalguardian/yii2-fotorama-widget/src'),
+    'kartik\\datetime\\' => array($vendorDir . '/kartik-v/yii2-widget-datetimepicker'),
+    'kartik\\base\\' => array($vendorDir . '/kartik-v/yii2-krajee-base'),
     'hiqdev\\assets\\lightbox2\\' => array($vendorDir . '/hiqdev/yii2-asset-lightbox2/src'),
     'cebe\\markdown\\' => array($vendorDir . '/cebe/markdown'),
     'Faker\\' => array($vendorDir . '/fzaninotto/faker/src/Faker'),
