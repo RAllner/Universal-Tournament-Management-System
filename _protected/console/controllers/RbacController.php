@@ -409,7 +409,7 @@ class RbacController extends Controller
         $auth->addChild($editor, $adminOrganisation);
         $auth->addChild($admin, $updateEventsAndLocations);
         $auth->addChild($admin, $deleteEventsAndLocations);
-         $auth->addChild($admin, $updateTournament);
+        $auth->addChild($admin, $updateTournament);
         $auth->addChild($admin, $deleteTournament);
         $auth->addChild($editor, $adminTournament);
 

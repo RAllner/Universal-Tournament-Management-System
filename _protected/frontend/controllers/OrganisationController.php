@@ -66,16 +66,28 @@ class OrganisationController extends FrontendController
      */
     public function actionCreate()
     {
+        if(!Yii::$app->user->can('createOrganisation')){
+            Yii::$app->session->setFlash('error', Yii::t('app', 'You are not allowed to access this page.'));
+            return $this->redirect(['index']);
+        }
         $model = new Organisation();
-
         $model->user_id = Yii::$app->user->id;
+
+        $memberModel = new OrganisationHasUser();
 
         if ($model->load(Yii::$app->request->post()))
         {
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
             if($model->save())
             {
-                return $this->redirect(['view', 'id' => $model->id]);
+                $memberModel->user_id = Yii::$app->user->id;
+                $memberModel->organisation_id = $model->id;
+                $memberModel->admin = 1;
+                $memberModel->created_at = $model->created_at;
+                $memberModel->updated_at = $model->updated_at;
+                if($memberModel->save()){
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
             }
         }
         else
@@ -96,6 +108,10 @@ class OrganisationController extends FrontendController
      */
     public function actionUpdate($id)
     {
+        if(!Yii::$app->user->can('updateOrganisation', ['model' => $this->findModel($id)])){
+            Yii::$app->session->setFlash('error', Yii::t('app', 'You are not allowed to access this page.'));
+            return $this->redirect(['view', 'id' => $this->findModel($id)->id]);
+        }
         $currentModel = $this->findModel($id);
         $model = $this->findModel($id);
 
@@ -133,6 +149,10 @@ class OrganisationController extends FrontendController
      * @throws NotFoundHttpException
      */
     public function actionAdd($id){
+        if(!Yii::$app->user->can('updateOrganisation', ['model' => $this->findModel($id)])){
+            Yii::$app->session->setFlash('error', Yii::t('app', 'You are not allowed to access this page.'));
+            return $this->redirect(['view', 'id' => $this->findModel($id)->id]);
+        }
         $model = new OrganisationHasUser();
         $organisationModel = $this->findModel($id);
         $model->organisation_id = $id;
@@ -157,18 +177,6 @@ class OrganisationController extends FrontendController
             ]);
         }
 
-//        if (Yii::$app->user->id == $this->findModel($id)->user_id) {
-//            if($model->save())
-//            {
-//                return $this->redirect(['view', 'id' => $model->id]);
-//            }
-//
-//            return $this->render('add', [
-//                'model' => $model,
-//            ]);
-//
-//        }
-
     }
 
     /**
@@ -186,9 +194,9 @@ class OrganisationController extends FrontendController
     }
 
     /**
-     * Manage Articles.
-     *
+     * Admin Organisations.
      * @return mixed
+     * @throws MethodNotAllowedHttpException
      */
     public function actionAdmin()
     {

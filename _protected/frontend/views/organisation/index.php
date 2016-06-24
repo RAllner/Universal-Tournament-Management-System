@@ -14,10 +14,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?>
         <span class="pull-right">
-        <?php if (!Yii::$app->user->isGuest): ?>
+        <?php if (Yii::$app->user->can('createOrganisation')): ?>
             <?= Html::a('<i class="material-icons">create</i> ' . Yii::t('app', 'Create Organisation'), ['create'], ['class' => 'btn btn-success']) ?>
         <?php endif ?>
-        <?php if (Yii::$app->user->can('adminArticle')): ?>
+        <?php if (Yii::$app->user->can('adminOrganisation')): ?>
             <?= Html::a(Yii::t('app', 'Admin'), ['admin'], ['class' => 'btn btn-warning']) ?>
         <?php endif ?>
             </span>

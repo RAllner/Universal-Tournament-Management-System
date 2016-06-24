@@ -20,13 +20,13 @@ $options = ['data-title' => $photoInfo['alt']];
     <h1><?= Html::encode($this->title) ?>
         <div class="pull-right">
 
-            <?php if (Yii::$app->user->can('updateArticle', ['model' => $model])): ?>
+            <?php if (Yii::$app->user->can('updateOrganisation', ['model' => $model])): ?>
 
                 <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
 
             <?php endif ?>
 
-            <?php if (Yii::$app->user->can('adminArticle')): ?>
+            <?php if (Yii::$app->user->can('deleteOrganisation')): ?>
 
                 <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
                     'class' => 'btn btn-danger',
@@ -37,60 +37,70 @@ $options = ['data-title' => $photoInfo['alt']];
                 ]) ?>
 
             <?php endif ?>
-            <?php if (Yii::$app->user->can('adminArticle')): ?>
-
-                <?= Html::a(Yii::t('app', 'Back'), ['index'], ['class' => 'btn btn-warning']) ?>
-
-            <?php endif ?>
+            <?= Html::a(Yii::t('app', 'Back'), ['index'], ['class' => 'btn btn-warning']) ?>
         </div>
     </h1>
     <div class="clearfix"></div>
     <div class="well">
         <div class="media">
             <div class="media-left">
-
                 <a href="#">
                     <img class="media-object" style="width:100px" src="<?= $photoInfo['url'] ?>"
                          alt="<?= $model->name ?>">
                 </a>
             </div>
             <div class="media-body media-middle">
-                <div class="pull-right">
-                    <h5><?= Yii::t('app', 'Members') ?></h5>
-                    <table class="col-lg-12">
-                        <thead>
-                        <tr>
-                            <th>
-                                <?= Yii::t('app', 'User') ?>
-                            </th>
-                            <th>
-                                <?= Yii::t('app', 'Joined') ?>
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <?php foreach ($model->organisationHasUsers as $ouser) {
-                            echo '<tr>';
-                            $user = User::find()->where(['id' => $ouser->user_id])->one();
-                            echo "<td>".$user->username . "</td><td>" .date('F j, Y, g:i a', $ouser->created_at)."</td>";
-                            echo '</tr>';
-                        }; ?>
-                        </tbody>
-                    </table>
-                    <?= Html::a(Yii::t('app', 'Add User'), Url::to(['organisation/add', 'id' => $model->id]), ['class' => 'btn btn-warning']) ?>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>
+                            <i class="material-icons">account_circle</i> <?= Yii::t('app', 'Owner') . ' ' . $model->authorName ?>
+                            <i class="material-icons">schedule</i> <?= Yii::t('app', 'Created on') . ' ' . date('F j, Y, g:i a', $model->created_at) ?>
+                        </p>
+                        <p>
+                            <?= $model->description ?>
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <table class="col-md-12">
+                            <thead>
+                            <tr>
+                                <th>
+                                    <?= Yii::t('app', 'User') ?>
+                                </th>
+                                <th>
+                                    <?= Yii::t('app', 'Joined') ?>
+                                </th>
+                                <th>
+                                    <?= Yii::t('app', 'Admin') ?>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php foreach ($model->organisationHasUsers as $ouser) {
+                                $user = User::find()->where(['id' => $ouser->user_id])->one();
+                                $admin = '';
+                                if ($ouser->admin == 1) {
+                                    $admin = Yii::t('app', 'Yes');
+                                }
+                                echo '<tr>';
+                                echo "<th>" . $user->username;
+                                if ($model->user_id == $user->id) {
+                                    echo " (" . Yii::t('app', 'Owner') . ") ";
+                                }
+                                echo "</th><td>" . date('F j, Y, g:i a', $ouser->created_at) . "</td><td>" . $admin . "</td>";
+
+                                echo '</tr>';
+                            }; ?>
+                            </tbody>
+                        </table>
+                        <?php if (Yii::$app->user->can('updateOrganisation', ['model' => $model])): ?>
+                        <div class="pull-right">
+                        <?= Html::a(Yii::t('app', 'Add User'), Url::to(['organisation/add', 'id' => $model->id]), ['class' => 'btn btn-success']) ?>
+                        </div>
+                        <?php endif ?>
+                    </div>
                 </div>
-                <p>
-                    <i class="material-icons">account_circle</i> <?= Yii::t('app', 'Owner') . ' ' . $model->authorName ?>
-                    <i class="material-icons">schedule</i> <?= Yii::t('app', 'Created on') . ' ' . date('F j, Y, g:i a', $model->created_at) ?>
-                </p>
-                <p>
-                    <?= $model->description ?>
-                </p>
-
-
             </div>
         </div>
     </div>
-
-
 </div>
