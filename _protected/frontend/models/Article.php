@@ -103,6 +103,11 @@ class Article extends ActiveRecord
     }
 
 
+    /**
+     * Uploads the given ImageFile and save it with a sanitized title
+     * 
+     * @return bool
+     */
     public function upload()
     {
 
@@ -116,6 +121,74 @@ class Article extends ActiveRecord
             return false;
         }
     }
+
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            $this->upload();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function deleteImage(){
+        $path = Url::to('@webroot/images/news/');
+        $escapedTitle = $this->sanitize($this->title);
+        $filename = $this->created_at.$escapedTitle.'.jpg';
+        if(file_exists($path.$filename)){
+            unlink($path.$filename);
+        }
+    }
+
+    public function getPhotoInfo()
+    {
+        $path = Url::to('@webroot/images/news/');
+        $url = Url::to('@web/images/news/');
+        $escapedTitle = $this->sanitize($this->title);
+        $filename = $this->created_at.$escapedTitle.'.jpg';
+        $alt = $this->title;
+
+        $imageInfo = ['alt'=> $alt];
+
+        if (file_exists($path . $filename)) {
+            $imageInfo['url'] = $url.$filename;
+        } else {
+            $imageInfo['url'] = $url.'default.jpg';
+        }
+
+        return $imageInfo;
+    }
+
+    /**
+     * Function: sanitize
+     * Returns a sanitized string, typically for URLs.
+     *
+     * Parameters:
+     *     $string - The string to sanitize.
+     *     $force_lowercase - Force the string to lowercase?
+     *     $anal - If set to *true*, will remove all non-alphanumeric characters.
+     */
+    function sanitize($string, $force_lowercase = true, $anal = false) {
+        $unwanted_array = array(    'Š'=>'S', 'š'=>'s', 'Ž'=>'Z', 'ž'=>'z', 'À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C', 'È'=>'E', 'É'=>'E',
+            'Ê'=>'E', 'Ë'=>'E', 'Ì'=>'I', 'Í'=>'I', 'Î'=>'I', 'Ï'=>'I', 'Ñ'=>'N', 'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O', 'Õ'=>'O', 'Ö'=>'O', 'Ø'=>'O', 'Ù'=>'U',
+            'Ú'=>'U', 'Û'=>'U', 'Ü'=>'U', 'Ý'=>'Y', 'Þ'=>'B', 'ß'=>'Ss', 'à'=>'a', 'á'=>'a', 'â'=>'a', 'ã'=>'a', 'ä'=>'a', 'å'=>'a', 'æ'=>'a', 'ç'=>'c',
+            'è'=>'e', 'é'=>'e', 'ê'=>'e', 'ë'=>'e', 'ì'=>'i', 'í'=>'i', 'î'=>'i', 'ï'=>'i', 'ð'=>'o', 'ñ'=>'n', 'ò'=>'o', 'ó'=>'o', 'ô'=>'o', 'õ'=>'o',
+            'ö'=>'o', 'ø'=>'o', 'ù'=>'u', 'ú'=>'u', 'û'=>'u', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y', 'Ğ'=>'G', 'İ'=>'I', 'Ş'=>'S', 'ğ'=>'g', 'ı'=>'i', 'ş'=>'s', 'ü'=>'u' );
+        $string = strtr( $string, $unwanted_array );
+        $strip = array("~", "`", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "=", "+", "[", "{", "]",
+            "}", "\\", "|", ";", ":", "\"", "'", "&#8216;", "&#8217;", "&#8220;", "&#8221;", "&#8211;", "&#8212;",
+            "â€”", "â€“", ",", "<", ".", ">", "/", "?");
+        $clean = trim(str_replace($strip, "", strip_tags($string)));
+        $clean = preg_replace('/\s+/', "-", $clean);
+        $clean = ($anal) ? preg_replace("/[^a-zA-Z0-9]/", "", $clean) : $clean ;
+        return ($force_lowercase) ?
+            (function_exists('mb_strtolower')) ?
+                mb_strtolower($clean, 'UTF-8') :
+                strtolower($clean) :
+            $clean;
+    }
+
 
 
     /**
@@ -244,73 +317,6 @@ class Article extends ActiveRecord
             self::CATEGORY_OTHER  => Yii::t('app', 'Other'),
         ];
         return $statusArray;
-    }
-
-    public function beforeSave($insert)
-    {
-        if (parent::beforeSave($insert)) {
-            $this->upload();
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public function deleteImage(){
-        $path = Url::to('@webroot/images/news/');
-        $escapedTitle = $this->sanitize($this->title);
-        $filename = $this->created_at.$escapedTitle.'.jpg';
-        if(file_exists($path.$filename)){
-            unlink($path.$filename);
-        }
-    }
-
-    public function getPhotoInfo()
-    {
-        $path = Url::to('@webroot/images/news/');
-        $url = Url::to('@web/images/news/');
-        $escapedTitle = $this->sanitize($this->title);
-        $filename = $this->created_at.$escapedTitle.'.jpg';
-        $alt = $this->title;
-
-        $imageInfo = ['alt'=> $alt];
-
-        if (file_exists($path . $filename)) {
-            $imageInfo['url'] = $url.$filename;
-        } else {
-            $imageInfo['url'] = $url.'default.jpg';
-        }
-
-        return $imageInfo;
-    }
-
-    /**
-     * Function: sanitize
-     * Returns a sanitized string, typically for URLs.
-     *
-     * Parameters:
-     *     $string - The string to sanitize.
-     *     $force_lowercase - Force the string to lowercase?
-     *     $anal - If set to *true*, will remove all non-alphanumeric characters.
-     */
-    function sanitize($string, $force_lowercase = true, $anal = false) {
-        $unwanted_array = array(    'Š'=>'S', 'š'=>'s', 'Ž'=>'Z', 'ž'=>'z', 'À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C', 'È'=>'E', 'É'=>'E',
-            'Ê'=>'E', 'Ë'=>'E', 'Ì'=>'I', 'Í'=>'I', 'Î'=>'I', 'Ï'=>'I', 'Ñ'=>'N', 'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O', 'Õ'=>'O', 'Ö'=>'O', 'Ø'=>'O', 'Ù'=>'U',
-            'Ú'=>'U', 'Û'=>'U', 'Ü'=>'U', 'Ý'=>'Y', 'Þ'=>'B', 'ß'=>'Ss', 'à'=>'a', 'á'=>'a', 'â'=>'a', 'ã'=>'a', 'ä'=>'a', 'å'=>'a', 'æ'=>'a', 'ç'=>'c',
-            'è'=>'e', 'é'=>'e', 'ê'=>'e', 'ë'=>'e', 'ì'=>'i', 'í'=>'i', 'î'=>'i', 'ï'=>'i', 'ð'=>'o', 'ñ'=>'n', 'ò'=>'o', 'ó'=>'o', 'ô'=>'o', 'õ'=>'o',
-            'ö'=>'o', 'ø'=>'o', 'ù'=>'u', 'ú'=>'u', 'û'=>'u', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y', 'Ğ'=>'G', 'İ'=>'I', 'Ş'=>'S', 'ğ'=>'g', 'ı'=>'i', 'ş'=>'s', 'ü'=>'u' );
-        $string = strtr( $string, $unwanted_array );
-        $strip = array("~", "`", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "=", "+", "[", "{", "]",
-            "}", "\\", "|", ";", ":", "\"", "'", "&#8216;", "&#8217;", "&#8220;", "&#8221;", "&#8211;", "&#8212;",
-            "â€”", "â€“", ",", "<", ".", ">", "/", "?");
-        $clean = trim(str_replace($strip, "", strip_tags($string)));
-        $clean = preg_replace('/\s+/', "-", $clean);
-        $clean = ($anal) ? preg_replace("/[^a-zA-Z0-9]/", "", $clean) : $clean ;
-        return ($force_lowercase) ?
-            (function_exists('mb_strtolower')) ?
-                mb_strtolower($clean, 'UTF-8') :
-                strtolower($clean) :
-            $clean;
     }
 
 }

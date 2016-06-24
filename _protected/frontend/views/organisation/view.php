@@ -19,15 +19,10 @@ $options = ['data-title' => $photoInfo['alt']];
 
     <h1><?= Html::encode($this->title) ?>
         <div class="pull-right">
-
             <?php if (Yii::$app->user->can('updateOrganisation', ['model' => $model])): ?>
-
                 <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-
             <?php endif ?>
-
             <?php if (Yii::$app->user->can('deleteOrganisation')): ?>
-
                 <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
                     'class' => 'btn btn-danger',
                     'data' => [
@@ -35,7 +30,6 @@ $options = ['data-title' => $photoInfo['alt']];
                         'method' => 'post',
                     ],
                 ]) ?>
-
             <?php endif ?>
             <?= Html::a(Yii::t('app', 'Back'), ['index'], ['class' => 'btn btn-warning']) ?>
         </div>

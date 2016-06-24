@@ -25,6 +25,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Articles');
     </h1>
 
     <div class="clearfix"></div>
+    <div class="row">
     <div class="col-lg-8 no-padding-left " style="padding-left: 0">
 
 
@@ -87,5 +88,6 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Articles');
                     }
                 }(document, "script", "twitter-wjs");</script>
         </div>
+    </div>
     </div>
 </div>

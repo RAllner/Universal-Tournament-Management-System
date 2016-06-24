@@ -11,8 +11,12 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 ?>
 <div class="article-update">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1><?= Html::encode($this->title) ?>
+        <span class="pull-right">
+            <?= Html::a(Yii::t('app', 'Back'), ['index'], ['class' => 'btn btn-warning']) ?>
 
+        </span>
+    </h1>
     <div class="col-lg-8 well bs-component">
 
         <?= $this->render('_form', ['model' => $model]) ?>

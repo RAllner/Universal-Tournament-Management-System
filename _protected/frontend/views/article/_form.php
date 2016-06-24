@@ -26,7 +26,8 @@ use yii\widgets\ActiveForm;
         <div class="col-lg-6">
     
             <?= $form->field($model, 'status')->dropDownList($model->statusList) ?>
-    
+        </div>
+        <div class="col-lg-6">
             <?= $form->field($model, 'category')->dropDownList($model->categoryList) ?>
     
         </div>

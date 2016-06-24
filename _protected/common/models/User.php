@@ -7,6 +7,10 @@ use frontend\models\Halloffame;
 use frontend\models\Article;
 use frontend\models\Videos;
 use frontend\models\Players;
+use frontend\models\Events;
+use frontend\models\Locations;
+use frontend\models\Organisation;
+use frontend\models\OrganisationHasUser;
 use nenad\passwordStrength\StrengthValidator;
 use yii\behaviors\TimestampBehavior;
 use Yii;
@@ -164,6 +168,48 @@ class User extends UserIdentity
     public function getPlayers()
     {
         return $this->hasMany(Players::className(), ['user_id' => 'id']);
+    }
+
+    /**
+     * Relation with Organisation model.
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getOrganisation()
+    {
+        return $this->hasMany(Organisation::className(), ['user_id' => 'id']);
+    }    
+    
+    /**
+     * Relation with OrganisationHasUser model.
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getOrganisationHasUser()
+    {
+        return $this->hasMany(OrganisationHasUser::className(), ['user_id' => 'id']);
+    }
+    
+    
+    /**
+     * Relation with Events model.
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getEvents()
+    {
+        return $this->hasMany(Events::className(), ['user_id' => 'id']);
+    }
+
+
+    /**
+     * Relation with Locations model.
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLocations()
+    {
+        return $this->hasMany(Locations::className(), ['user_id' => 'id']);
     }
 
 //------------------------------------------------------------------------------------------------//

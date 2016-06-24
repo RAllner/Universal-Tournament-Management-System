@@ -161,7 +161,7 @@ class ArticleController extends FrontendController
          * How many articles we want to display per page.
          * @var integer
          */
-        $pageSize = 11;
+        $pageSize = 10;
 
         /**
          * Only admin+ roles can see everything.
@@ -207,6 +207,4 @@ class ArticleController extends FrontendController
         
         return $this->render('lastArticle', ['model' => $model]);
     }
-
-
 }

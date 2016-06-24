@@ -134,9 +134,39 @@ class FrontendController extends Controller
                         'allow' => true,
                     ],
                     [
-                        // other rules
+                        'controllers' => ['locations'],
+                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'admin', 'home'],
+                        'allow' => true,
+                        'roles' => ['admin'],
                     ],
-
+                    [
+                        'controllers' => ['locations'],
+                        'actions' => ['create', 'update', 'admin', 'home'],
+                        'allow' => true,
+                        'roles' => ['editor'],
+                    ],
+                    [
+                        'controllers' => ['locations'],
+                        'actions' => ['index', 'view', 'home'],
+                        'allow' => true
+                    ],
+                    [
+                        'controllers' => ['events'],
+                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'admin', 'home'],
+                        'allow' => true,
+                        'roles' => ['admin'],
+                    ],
+                    [
+                        'controllers' => ['events'],
+                        'actions' => ['create', 'update', 'admin', 'home'],
+                        'allow' => true,
+                        'roles' => ['editor'],
+                    ],
+                    [
+                        'controllers' => ['events'],
+                        'actions' => ['index', 'view', 'home'],
+                        'allow' => true
+                    ],
                 ], // rules
 
             ], // access
