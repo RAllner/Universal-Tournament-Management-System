@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Hall Of Fame');
         <span class="pull-right">
 
                     <?php if (Yii::$app->user->can('createArticle')): ?>
-                        <?= Html::a('<i class="material-icons">create</i> '.Yii::t('app', 'Create HOF Member'), ['create'], ['class' => 'btn btn-success']) ?>
+                        <?= Html::a('<i class="material-icons">create</i> '.Yii::t('app', 'Create HOF Member'), ['create'], ['class' => 'btn btn-success'])?>
                     <?php endif ?>
                     <?php if (Yii::$app->user->can('adminArticle')): ?>
 
@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Hall Of Fame');
             </span>
     </h1>
     <div class="clearfix"></div>
-
+    <div class="row">
 
     <?= ListView::widget([
         'summary' => false,
@@ -37,6 +37,6 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Hall Of Fame');
             return $this->render('_index', ['model' => $model]);
         },
     ]) ?>
-
+    </div>
 </div>
 

@@ -9,7 +9,12 @@ $this->title = Yii::t('app', 'Journey');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-about">
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1><?= Html::encode($this->title) ?>
+        <span class="pull-right">
+            <?= Html::a(Yii::t('app', 'All Locations'), Url::to('@web/locations'), ['class' => 'btn btn-primary']) ?>
+        </span>
+    </h1>
+    <div class="clearfix"></div>
         <div class="col-lg-6 no-padding-left">
             <div class="well bs-component no-padding">
                 <img src="<?= Url::to("@web/images/constant/anfahrt/dk.jpg") ?>" class="md-card-img" alt="Jodder">

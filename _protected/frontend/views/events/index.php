@@ -1,7 +1,8 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+use yii\widgets\ListView;
+
 
 /* @var $this yii\web\View */
 /* @var $searchModel frontend\models\EventsSearch */
@@ -12,38 +13,31 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="events-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <h1><?= Html::encode($this->title) ?>
+        <span class="pull-right">
 
-    <p>
-        <?= Html::a(Yii::t('app', 'Create Events'), ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+                    <?php if (Yii::$app->user->can('createEventsAndLocations')): ?>
+                        <?= Html::a('<i class="material-icons">create</i> ' . Yii::t('app', 'Create Event'), ['create'], ['class' => 'btn btn-success']) ?>
+                    <?php endif ?>
+                    <?php if (Yii::$app->user->can('adminEventsAndLocations')): ?>
 
-            'id',
-            'user_id',
-            'locations_id',
-            'tournaments_id',
-            'name',
-            // 'description:ntext',
-            // 'type',
-            // 'startdate',
-            // 'enddate',
-            // 'game',
-            // 'partners',
-            // 'facebook',
-            // 'liquidpedia',
-            // 'challonge',
-            // 'status',
-            // 'category',
-            // 'created_at',
-            // 'updated_at',
+                        <?= Html::a(Yii::t('app', 'Admin'), ['admin'], ['class' => 'btn btn-warning']) ?>
 
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
+                    <?php endif ?>
+            </span>
+    </h1>
+    <div class="clearfix"></div>
+    <div class="row">
+        <div class="col-lg-12">
+            <?= ListView::widget([
+                'summary' => false,
+                'dataProvider' => $dataProvider,
+                'emptyText' => Yii::t('app', 'We haven\'t added any Events yet.'),
+                'itemOptions' => ['class' => 'item'],
+                'itemView' => function ($model, $key, $index, $widget) {
+                    return $this->render('_index', ['model' => $model]);
+                },
+            ]) ?>
+        </div>
+    </div>
 </div>

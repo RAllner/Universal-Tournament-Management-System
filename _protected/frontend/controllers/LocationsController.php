@@ -70,6 +70,10 @@ class LocationsController extends FrontendController
      */
     public function actionCreate()
     {
+        if(!Yii::$app->user->can('createEventsAndLocations')){
+            Yii::$app->session->setFlash('error', Yii::t('app', 'You are not allowed to access this page.'));
+            return $this->redirect(['index']);
+        }
         $model = new Locations();
 
         $model->user_id = Yii::$app->user->id;
@@ -100,6 +104,10 @@ class LocationsController extends FrontendController
      */
     public function actionUpdate($id)
     {
+        if(!Yii::$app->user->can('updateEventsAndLocations')){
+            Yii::$app->session->setFlash('error', Yii::t('app', 'You are not allowed to access this page.'));
+            return $this->redirect(['index']);
+        }
         $currentModel = $this->findModel($id);
         $model = $this->findModel($id);
 

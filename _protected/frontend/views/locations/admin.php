@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <span class="pull-right">
         <?= Html::a('<i class="material-icons">create</i> '.Yii::t('app', 'Create Location'), ['create'], ['class' => 'btn btn-success']) ?>
-        <?= Html::a(Yii::t('app', 'Back'), ['index'], ['class' => 'btn btn-warning']) ?>
+        <?= Html::a('<i class="material-icons">view_headline</i> ' . Yii::t('app', 'Overview'), ['index'], ['class' => 'btn btn-default']) ?>
 
     </span>  
 
@@ -51,13 +51,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             'class'=>'glyphicon glyphicon-eye-open']);
                     },
                     'update' => function ($url, $model, $key) {
-                        if(Yii::$app->user->can('updateArticle', ['model' => $model])){
+                        if(Yii::$app->user->can('updateEventsAndLocations', ['model' => $model])){
                             return Html::a('', $url, ['title'=>Yii::t('app', 'Update location'),
                                 'class'=>'glyphicon glyphicon-pencil']);
                         } else return "";
                     },
                     'delete' => function ($url, $model, $key) {
-                        if(Yii::$app->user->can('deleteArticle', ['model' => $model])) {
+                        if(Yii::$app->user->can('deleteEventsAndLocations', ['model' => $model])) {
                             return Html::a('', $url,
                                 ['title' => Yii::t('app', 'Delete location'),
                                     'class' => 'glyphicon glyphicon-trash',

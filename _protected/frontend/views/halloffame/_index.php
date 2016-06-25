@@ -10,7 +10,7 @@ $photo = Html::img($photoInfo['url'],['alt' =>$photoInfo['alt'], 'width' => '100
 $options = ['data-lightbox'=>'news-image','data-title'=>$photoInfo['alt']];
 ?>
 
-<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" style="padding-left: 0">
+<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
     <div class="well bs-component">
         <figure style="text-align: center">
             <?= Html::a($photo, $photoInfo['url'], $options) ?>

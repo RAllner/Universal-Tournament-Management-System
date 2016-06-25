@@ -9,7 +9,7 @@ use yii\widgets\ActiveForm;
 ?>
 
 <div class="videos-form">
-    <div class="col-lg-7 col-md-12 well bs-component">
+
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'title')->textInput(['maxlength' => 255]) ?>
@@ -35,6 +35,6 @@ use yii\widgets\ActiveForm;
     </div>
 
 <?php ActiveForm::end(); ?>
-        </div>
+
 </div>
 

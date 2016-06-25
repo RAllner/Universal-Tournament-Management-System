@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Articles');
 
     <div class="clearfix"></div>
     <div class="row">
-    <div class="col-lg-8 no-padding-left " style="padding-left: 0">
+    <div class="col-lg-8">
 
 
         <?= ListView::widget([
@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Articles');
         ]) ?>
 
     </div>
-    <div class="col-md-4 no-padding-left no-padding-right">
+    <div class="col-md-4">
 
         <div class="btn-group btn-group-justified external" role="group" aria-label="Justified button group">
             <a href="https://www.facebook.com/BarCraftHL/" class="btn btn-default"><i

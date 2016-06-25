@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
              <?php if (Yii::$app->user->can('createArticle')): ?>
                 <?= Html::a('<i class="material-icons">create</i> '.Yii::t('app', 'Create Article'), ['create'], ['class' => 'btn btn-success']) ?>
             <?php endif ?>
-             <?= Html::a(Yii::t('app', 'Back'), ['index'], ['class' => 'btn btn-warning']) ?>
+             <?= Html::a('<i class="material-icons">view_headline</i> ' . Yii::t('app', 'Overview'), ['index'], ['class' => 'btn btn-default']) ?>
         </span>
     </h1>
     <div class="clearfix"></div>

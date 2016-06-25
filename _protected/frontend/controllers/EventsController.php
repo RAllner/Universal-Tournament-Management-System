@@ -76,8 +76,11 @@ class EventsController extends FrontendController
      */
     public function actionCreate()
     {
+        if(!Yii::$app->user->can('createEventsAndLocations')){
+            Yii::$app->session->setFlash('error', Yii::t('app', 'You are not allowed to access this page.'));
+            return $this->redirect(['index']);
+        }
         $model = new Events();
-
         $model->user_id = Yii::$app->user->id;
 
         if ($model->load(Yii::$app->request->post()))
@@ -106,6 +109,10 @@ class EventsController extends FrontendController
      */
     public function actionUpdate($id)
     {
+        if(!Yii::$app->user->can('createEventsAndLocations')){
+            Yii::$app->session->setFlash('error', Yii::t('app', 'You are not allowed to access this page.'));
+            return $this->redirect(['index']);
+        }
         $currentModel = $this->findModel($id);
         $model = $this->findModel($id);
 
@@ -113,7 +120,7 @@ class EventsController extends FrontendController
         {
             if ($model->load(Yii::$app->request->post()))
             {
-                if($currentModel->title != $model->title){
+                if($currentModel->name != $model->name){
                     //TODO: Name des Bildes ändern.
                 }
                 $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
@@ -157,6 +164,10 @@ class EventsController extends FrontendController
      */
     public function actionAdmin()
     {
+        if(!Yii::$app->user->can('adminEventsAndLocations')){
+            Yii::$app->session->setFlash('error', Yii::t('app', 'You are not allowed to access this page.'));
+            return $this->redirect(['index']);
+        }
         /**
          * How many articles we want to display per page.
          * @var integer

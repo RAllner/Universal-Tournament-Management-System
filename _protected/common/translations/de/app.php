@@ -19,8 +19,13 @@ return [
     //-- CMS buttons --//
     'Create User' => 'Nutzer erstellen',
     'Create Article' => 'Artikel erstellen',
+    'Create Location' => 'Einrichtung erstellen',
+    'Create Gallery' => 'Gallerie erstellen',
+    'Create HOF Member' => 'HOF Mitglied erstellen',
     'Add Videos' => 'Video hinzufügen',
     'Create Player' => 'Spieler erstellen',
+    'Create Event' => 'Event erstellen',
+
 
     //-- top menu --//
     'Home'     => 'Home',
@@ -36,6 +41,7 @@ return [
     'Journey' => 'Anfahrt',
     'Tournaments' => 'Turniere',
     'Players' => 'Spieler',
+    'Overview' => 'Übersicht',
 
 
     //-- static pages --//
@@ -96,6 +102,8 @@ return [
     //-- general db fields --//
     'Created At' => 'Erstellt',
     'Updated At' => 'Aktuallisiert',
+    'Added on' => 'Hinzugefügt am',
+
 
     //-- mixed --//
     'My Company' => 'BarCraft HL',
@@ -104,7 +112,6 @@ return [
     
     //-- users management --//
     'Role' => 'Rolle',
-    'Create User' => 'Nutzer erstellen',
     'Update User' => 'Update User',
     'New pwd ( if you want to change it )' => 'Neues Passwort ( Falls Sie es ändern möchten )',
 
@@ -122,9 +129,23 @@ return [
     'We haven\'t added any player yet.' => 'Es wurden noch keine Spieler erstellt.',
     'We haven\'t created any galleries yet.' => 'Wir haben noch keine Gallerien veröffentlicht.',
     'We haven\'t added any videos yet.' => 'Wir haben noch keine Videos veröffentlicht.',
+    'We haven\'t added any Hall of fame Members yet.' => 'Wir haben noch keine Hall Of Fame Mitglieder hinzugefügt.',
     'Read more'    => 'Lies mehr',
     'Published on' => 'Veröffentlicht',
-	
+    'o\' clock' => 'Uhr',
+    'Street' => 'Straße',
+    'City' => 'Ort',
+    'Postcode' => 'Postleitzahl',
+    'Description' => 'Beschreibung',
+    'Locations' => 'Einrichtungen',
+    'Location' => 'Einrichtung',
+    'Game played' => 'Gespieltes Spiel',
+    'Partners' => 'Partner',
+
+
+
+
+
     // statuses
     'Draft'     => 'Entwurf',
     'Published' => 'Veröffentlicht',

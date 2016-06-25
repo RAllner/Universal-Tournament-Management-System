@@ -49,6 +49,12 @@ class Events extends ActiveRecord
     const CATEGORY_DIABLO = 7;
     const CATEGORY_OTHER = 8;
 
+    const TYPE_TOURNAMENT = 0;
+    const TYPE_BROADCAST = 1;
+    const TYPE_MEETING = 2;
+    const TYPE_OTHER = 3;
+
+
     /**
      * @var UploadedFile
      */
@@ -74,6 +80,7 @@ class Events extends ActiveRecord
             [['user_id', 'locations_id', 'tournaments_id', 'type', 'status', 'category'], 'integer'],
             [['description'], 'string'],
             [['startdate', 'enddate'], 'safe'],
+            [['imageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg'],
             [['name', 'game', 'partners'], 'string', 'max' => 255],
             [['facebook', 'liquidpedia', 'challonge'], 'string', 'max' => 512],
             [['locations_id'], 'exist', 'skipOnError' => true, 'targetClass' => Locations::className(), 'targetAttribute' => ['locations_id' => 'id']],
@@ -100,9 +107,9 @@ class Events extends ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'user_id' => Yii::t('app', 'User ID'),
-            'locations_id' => Yii::t('app', 'Locations ID'),
-            'tournaments_id' => Yii::t('app', 'Tournaments ID'),
+            'user_id' => Yii::t('app', 'Owner'),
+            'locations_id' => Yii::t('app', 'Location'),
+            'tournaments_id' => Yii::t('app', 'Tournament'),
             'name' => Yii::t('app', 'Name'),
             'description' => Yii::t('app', 'Description'),
             'type' => Yii::t('app', 'Type'),
@@ -278,6 +285,51 @@ class Events extends ActiveRecord
         ];
 
         return $statusArray;
+    }   
+    
+    /**
+     * Returns the article status in nice format.
+     *
+     * @param  null|integer $status Status integer value if sent to method.
+     * @return string               Nicely formatted status.
+     */
+    public function getTypeName($type = null)
+    {
+        $type = (empty($type)) ? $this->type : $type ;
+
+        if ($type === self::TYPE_TOURNAMENT)
+        {
+            return Yii::t('app', 'Tournament');
+        }
+        elseif ($type === self::TYPE_BROADCAST)
+        {
+            return Yii::t('app', 'Broadcast');
+        }
+        elseif ($type === self::TYPE_MEETING)
+        {
+            return Yii::t('app', 'Meeting');
+        }
+        elseif ($type === self::TYPE_OTHER)
+        {
+            return Yii::t('app', 'Other');
+        }
+    }
+
+    /**
+     * Returns the array of possible article status values.
+     *
+     * @return array
+     */
+    public function getTypeList()
+    {
+        $typeArray = [
+            self::TYPE_TOURNAMENT     => Yii::t('app', 'Tournament'),
+            self::TYPE_BROADCAST => Yii::t('app', 'Broadcast'),
+            self::TYPE_MEETING => Yii::t('app', 'Meeting'),
+            self::TYPE_OTHER => Yii::t('app', 'Other'),
+        ];
+
+        return $typeArray;
     }
 
     /**

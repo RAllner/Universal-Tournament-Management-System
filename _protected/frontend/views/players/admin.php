@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\ArticleSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Players');
+$this->title = Yii::t('app', 'Admin');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Players'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -15,10 +15,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1>
 
-    <?= 'Admin '.Html::encode($this->title) ?>
+    <?= 'Admin '.Yii::t('app', 'Players') ?>
     <span class="pull-right">
+        <?php if (Yii::$app->user->can('createPlayer')): ?>
         <?= Html::a('<i class="material-icons">create</i> '.Yii::t('app', 'Create Player'), ['create'], ['class' => 'btn btn-success']) ?>
-        <?= Html::a(Yii::t('app', 'Back'), ['index'], ['class' => 'btn btn-warning']) ?>
+        <?php endif ?>
+        <?= Html::a('<i class="material-icons">view_headline</i> ' . Yii::t('app', 'Overview'), ['index'], ['class' => 'btn btn-default']) ?>
     </span>
     </h1>
     <div class="clearfix"></div>

@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel frontend\models\HalloffameSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Hall Of Fame');
+$this->title = Yii::t('app', 'Admin');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Hall Of Fame'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -15,11 +15,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1>
 
-    <?= 'Admin '.Html::encode($this->title) ?>
+    <?= 'Admin '.Yii::t('app', 'Hall Of Fame') ?>
 
         <span class="pull-right">
         <?= Html::a('<i class="material-icons">create</i> '.Yii::t('app', 'Create HOF Member'), ['create'], ['class' => 'btn btn-success']) ?>
-        <?= Html::a(Yii::t('app', 'Back'), ['index'], ['class' => 'btn btn-warning']) ?>
+        <?= Html::a('<i class="material-icons">view_headline</i> ' . Yii::t('app', 'Overview'), ['index'], ['class' => 'btn btn-default']) ?>
 
     </span>
 
@@ -63,7 +63,32 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
 
             ['class' => 'yii\grid\ActionColumn',
-            'header' => Yii::t('app', 'Menu')],
+                'header' => Yii::t('app', 'Menu'),
+                'template' => '{view} {update} {delete}',
+                'buttons' => [
+                    'view' => function ($url, $model, $key) {
+                        return Html::a('', $url, ['title'=>Yii::t('app', 'View HOF Member'),
+                            'class'=>'glyphicon glyphicon-eye-open']);
+                    },
+                    'update' => function ($url, $model, $key) {
+                        if(Yii::$app->user->can('updateArticle', ['model' => $model])){
+                            return Html::a('', $url, ['title'=>Yii::t('app', 'Update HOF Member'),
+                                'class'=>'glyphicon glyphicon-pencil']);
+                        } else return "";
+                    },
+                    'delete' => function ($url, $model, $key) {
+                        if(Yii::$app->user->can('deleteArticle', ['model' => $model])) {
+                            return Html::a('', $url,
+                                ['title' => Yii::t('app', 'Delete HOF Member'),
+                                    'class' => 'glyphicon glyphicon-trash',
+                                    'data' => [
+                                        'confirm' => Yii::t('app', 'Are you sure you want to delete this member?'),
+                                        'method' => 'post']
+                                ]);
+                        }else return "";
+                    }
+                ]
+            ]
         ],
     ]); ?>
 

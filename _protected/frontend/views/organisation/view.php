@@ -31,7 +31,7 @@ $options = ['data-title' => $photoInfo['alt']];
                     ],
                 ]) ?>
             <?php endif ?>
-            <?= Html::a(Yii::t('app', 'Back'), ['index'], ['class' => 'btn btn-warning']) ?>
+            <?= Html::a('<i class="material-icons">view_headline</i> ' . Yii::t('app', 'Overview'), ['index'], ['class' => 'btn btn-default']) ?>
         </div>
     </h1>
     <div class="clearfix"></div>

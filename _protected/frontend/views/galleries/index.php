@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="clearfix"></div>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-
+    <div class="row">
     <?= ListView::widget([
         'summary' => false,
         'dataProvider' => $dataProvider,
@@ -37,5 +37,6 @@ $this->params['breadcrumbs'][] = $this->title;
             return $this->render('_index', ['model' => $model]);
         },
     ]) ?>
+    </div>
 
 </div>

@@ -24,13 +24,13 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php if (Yii::$app->user->can('createPlayer')): ?>
                 <?= Html::a('<i class="material-icons">create</i> '.Yii::t('app', 'Create Player'), ['create'], ['class' => 'btn btn-success']) ?>
             <?php endif ?>
-            <?php if (Yii::$app->user->can('adminArticle')): ?>
+            <?php if (Yii::$app->user->can('adminPlayer')): ?>
                 <?= Html::a(Yii::t('app', 'Admin'), ['admin'], ['class' => 'btn btn-warning']) ?>
             <?php endif ?>
         </div>
     </h1>
     <div class="clearfix"></div>
- 
+        <div class="row">
         <?= ListView::widget([
             'summary' => false,
             'dataProvider' => $dataProvider,
@@ -40,5 +40,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 return $this->render('_index', ['model' => $model]);
             },
         ]) ?>
+        </div>
 
 </div>

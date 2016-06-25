@@ -16,7 +16,28 @@ $options = ['data-lightbox' => 'profile-image', 'data-title' => $photoInfo['alt'
 
 <div class="article-view">
     <div class="col-lg-12 no-padding">
+        <div class="pull-right">
 
+            <?php if (Yii::$app->user->can('updateArticle', ['model' => $model])): ?>
+
+                <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+
+            <?php endif ?>
+
+            <?php if (Yii::$app->user->can('deleteArticle')): ?>
+
+                <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
+                    'class' => 'btn btn-danger',
+                    'data' => [
+                        'confirm' => Yii::t('app', 'Are you sure you want to delete this article?'),
+                        'method' => 'post',
+                    ],
+                ]) ?>
+
+            <?php endif ?>
+            <?= Html::a('<i class="material-icons">view_headline</i> ' . Yii::t('app', 'Overview'), ['index'], ['class' => 'btn btn-default']) ?>
+        </div>
+        <div class="clearfix"></div>
 
         <div class="article-image-wrap-detail" style="background-image: url('<?= $photoInfo['url'] ?>')">
             <div class="intro-Text-wrap">
@@ -28,7 +49,7 @@ $options = ['data-lightbox' => 'profile-image', 'data-title' => $photoInfo['alt'
 
                 <p class="introText" itemprop="description">
                     <i class="material-icons">account_circle</i> <?= Yii::t('app', 'Author') . ' ' . $model->authorName ?>
-                    <i class="material-icons">schedule</i> <?= Yii::t('app', 'Published on') . ' ' . date('F j, Y, g:i a', $model->created_at) ?>
+                    <i class="material-icons">schedule</i> <?= Yii::t('app', 'Published on') . ' ' . date('d.m.Y, G:i', $model->created_at) ?>
                 </p>
             </div>
         </div>
@@ -41,30 +62,6 @@ $options = ['data-lightbox' => 'profile-image', 'data-title' => $photoInfo['alt'
             </div>
         </div>
     </div>
-    <div class="pull-right">
 
-        <?php if (Yii::$app->user->can('updateArticle', ['model' => $model])): ?>
-
-            <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-
-        <?php endif ?>
-
-        <?php if (Yii::$app->user->can('deleteArticle')): ?>
-
-            <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
-                'class' => 'btn btn-danger',
-                'data' => [
-                    'confirm' => Yii::t('app', 'Are you sure you want to delete this article?'),
-                    'method' => 'post',
-                ],
-            ]) ?>
-
-        <?php endif ?>
-        <?php if (Yii::$app->user->can('adminArticle')): ?>
-
-            <?= Html::a(Yii::t('app', 'Back'), ['index'], ['class' => 'btn btn-warning']) ?>
-
-        <?php endif ?>
-    </div>
 
 </div>

@@ -72,6 +72,11 @@ class PlayersController extends Controller
      */
     public function actionCreate()
     {
+        if(!Yii::$app->user->can('createPlayer')){
+            Yii::$app->session->setFlash('error', Yii::t('app', 'You are not allowed to access this page.'));
+            return $this->redirect(['index']);
+        }
+
         $model = new Players();
 
         $model->user_id = Yii::$app->user->id;
@@ -103,8 +108,13 @@ class PlayersController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
 
+        $model = $this->findModel($id);
+        if(!Yii::$app->user->can('updatePlayer', ['model' => $model])){
+            Yii::$app->session->setFlash('error', Yii::t('app', 'You are not allowed to access this page.'));
+            return $this->redirect(['index']);
+        }
+        
         if (Yii::$app->user->can('updateArticle', ['model' => $model]))
         {
             if ($model->load(Yii::$app->request->post()))

@@ -13,14 +13,17 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 
     <h1><?= Html::encode($this->title) ?>
         <span class="pull-right">
-            <?= Html::a(Yii::t('app', 'Back'), ['index'], ['class' => 'btn btn-warning']) ?>
+                        <?= Html::a('<i class="material-icons">view_headline</i> ' . Yii::t('app', 'Overview'), ['index'], ['class' => 'btn btn-default']) ?>
 
         </span>
     </h1>
-    <div class="col-lg-8 well bs-component">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="well">
 
-        <?= $this->render('_form', ['model' => $model]) ?>
-
+                <?= $this->render('_form', ['model' => $model]) ?>
+            </div>
+        </div>
     </div>
 
 </div>

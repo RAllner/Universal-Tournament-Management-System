@@ -7,7 +7,7 @@ use yii\widgets\ListView;
 /* @var $searchModel frontend\models\VideosSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', Yii::$app->name) .' '. Yii::t('app', 'Videos');
+$this->title = Yii::t('app', 'Videos');
 $this->params['breadcrumbs'][] = Yii::t('app', 'Videos');
 ?>
 <div class="videos-index">

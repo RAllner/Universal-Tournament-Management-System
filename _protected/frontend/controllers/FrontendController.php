@@ -40,7 +40,7 @@ class FrontendController extends Controller
                     [
                         'controllers' => ['article'],
                         'actions' => ['index', 'view', 'home'],
-                        'allow' => true
+                        'allow' => true,
                     ],
                     [
                         'controllers' => ['galleries'],
@@ -57,7 +57,7 @@ class FrontendController extends Controller
                     [
                         'controllers' => ['galleries'],
                         'actions' => ['index', 'view'],
-                        'allow' => true
+                        'allow' => true,
                     ],
                     [
                         'controllers' => ['videos'],
@@ -74,7 +74,7 @@ class FrontendController extends Controller
                     [
                         'controllers' => ['videos'],
                         'actions' => ['index', 'view'],
-                        'allow' => true
+                        'allow' => true,
                     ],
                     [
                         'controllers' => ['players'],
@@ -114,7 +114,7 @@ class FrontendController extends Controller
                     [
                         'controllers' => ['halloffame'],
                         'actions' => ['index', 'view'],
-                        'allow' => true
+                        'allow' => true,
                     ],
                     [
                         'controllers' => ['organisation'],
@@ -148,7 +148,7 @@ class FrontendController extends Controller
                     [
                         'controllers' => ['locations'],
                         'actions' => ['index', 'view', 'home'],
-                        'allow' => true
+                        'allow' => true,
                     ],
                     [
                         'controllers' => ['events'],
@@ -165,7 +165,7 @@ class FrontendController extends Controller
                     [
                         'controllers' => ['events'],
                         'actions' => ['index', 'view', 'home'],
-                        'allow' => true
+                        'allow' => true,
                     ],
                 ], // rules
 
