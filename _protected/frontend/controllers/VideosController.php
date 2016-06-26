@@ -75,6 +75,10 @@ class VideosController extends Controller
      */
     public function actionCreate()
     {
+        if(!Yii::$app->user->can('createArticle')){
+            Yii::$app->session->setFlash('error', Yii::t('app', 'You are not allowed to access this page.'));
+            return $this->redirect(['index']);
+        }
         $model = new Videos();
 
         $model->user_id = Yii::$app->user->id;
@@ -96,6 +100,10 @@ class VideosController extends Controller
      */
     public function actionUpdate($id)
     {
+        if(!Yii::$app->user->can('updateArticle')){
+            Yii::$app->session->setFlash('error', Yii::t('app', 'You are not allowed to access this page.'));
+            return $this->redirect(['index']);
+        }
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -115,6 +123,10 @@ class VideosController extends Controller
      */
     public function actionDelete($id)
     {
+        if(!Yii::$app->user->can('deleteArticle')){
+            Yii::$app->session->setFlash('error', Yii::t('app', 'You are not allowed to access this page.'));
+            return $this->redirect(['index']);
+        }
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
@@ -127,6 +139,10 @@ class VideosController extends Controller
      */
     public function actionAdmin()
     {
+        if(!Yii::$app->user->can('adminArticle')){
+            Yii::$app->session->setFlash('error', Yii::t('app', 'You are not allowed to access this page.'));
+            return $this->redirect(['index']);
+        }
         /**
          * How many articles we want to display per page.
          * @var integer

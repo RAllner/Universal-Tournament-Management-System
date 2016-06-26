@@ -58,6 +58,8 @@ class ArticleController extends FrontendController
 
     public function actionHome()
     {
+
+  
         $lastArticle = Article::find()->orderBy(['id' => SORT_DESC])->one();
         $model = $this->findModel($lastArticle->id);
         return $this->render('home', [

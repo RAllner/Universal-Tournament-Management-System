@@ -130,6 +130,7 @@ return [
     'We haven\'t created any galleries yet.' => 'Wir haben noch keine Gallerien veröffentlicht.',
     'We haven\'t added any videos yet.' => 'Wir haben noch keine Videos veröffentlicht.',
     'We haven\'t added any Hall of fame Members yet.' => 'Wir haben noch keine Hall Of Fame Mitglieder hinzugefügt.',
+    'We haven\'t created any events yet.' => 'Wir haben noch keine Events erstellt.',
     'Read more'    => 'Lies mehr',
     'Published on' => 'Veröffentlicht',
     'o\' clock' => 'Uhr',

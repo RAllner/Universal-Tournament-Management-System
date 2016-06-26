@@ -51,9 +51,11 @@ class EventsSearch extends Events
             $query->orWhere(['user_id' => Yii::$app->user->id]);
         }
 
+        
+
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'sort'=> ['defaultOrder' => ['id' => SORT_DESC]],
+            'sort'=> ['defaultOrder' => ['startdate' => SORT_ASC]],
             'pagination' => [
                 'pageSize' => $pageSize,
             ]

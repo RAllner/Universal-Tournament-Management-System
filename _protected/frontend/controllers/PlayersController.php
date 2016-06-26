@@ -147,8 +147,14 @@ class PlayersController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-        $this->findModel($id)->deleteImage();
+        $model = $this->findModel($id);
+        if(!Yii::$app->user->can('deletePlayer', ['model' => $model])){
+            Yii::$app->session->setFlash('error', Yii::t('app', 'You are not allowed to access this page.'));
+            return $this->redirect(['index']);
+        }
+
+        $model->delete();
+        $model->deleteImage();
         return $this->redirect(['admin']);
     }
 
@@ -160,6 +166,12 @@ class PlayersController extends Controller
      */
     public function actionAdmin()
     {
+        if(!Yii::$app->user->can('adminPlayer')){
+            Yii::$app->session->setFlash('error', Yii::t('app', 'You are not allowed to access this page.'));
+            return $this->redirect(['index']);
+        }
+
+
         /**
          * How many players we want to display per page.
          * @var integer

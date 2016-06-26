@@ -766,6 +766,32 @@ hr.article-devider {
 }
 
 
+.wrap-event-date-home {
+    text-align: center;
+    background-color: #ff9800;
+    color: #181818;
+    margin:  0  0  4px 0;
+    padding: 0.2em;
+    height: 55px;
+}
+
+.wrap-event-date-home .day {
+    font-weight: 700;
+    font-size: 22px;
+}
+
+.wrap-event-date-home .month {
+    font-weight: 700;
+    font-size: 15px;
+    margin-top: -10px;
+}
+
+
+.well .wrap-event-info-home {
+    padding: 0.8em;
+}
+
+
 .event-image-wrap{
     width: 100%;
     display: block;
@@ -814,10 +840,10 @@ hr.article-devider {
 
 
 .event-link img {
-    height: 35px;
+    height: 25px;
     margin-top: -17px;
 
 }
 .event-link i {
-    font-size: 35px;
+    font-size: 25px;
 }
