@@ -15,7 +15,7 @@ $location = Locations::find()->where(['id' => $model->locations_id])->one();
 
 
 <div class="row">
-    <div class="col-sm-2" style="text-align: center">
+    <div class="col-sm-2 no-padding-left-md" style="text-align: center">
         <div class=" wrap-event-date">
             <div class="day">
                 <?=
@@ -37,7 +37,7 @@ $location = Locations::find()->where(['id' => $model->locations_id])->one();
             <div class="time start">
                 <i class="material-icons">play_arrow</i>
                 <?=
-                $date->format('h:s') . ' ' . Yii::t('app', 'o\' clock');
+                $date->format('H:i') . ' ' . Yii::t('app', 'o\' clock');
                 ?>
             </div>
 
@@ -68,7 +68,7 @@ $location = Locations::find()->where(['id' => $model->locations_id])->one();
             <div class="time stop">
                 <i class="material-icons">stop</i>
                 <?=
-                $date->format('h:s') . ' ' . Yii::t('app', 'o\' clock');
+                $enddate->format('H:i') . ' ' . Yii::t('app', 'o\' clock');
                 ?>
             </div>
             <?php endif ?>

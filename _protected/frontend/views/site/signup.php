@@ -1,5 +1,6 @@
 <?php
 use nenad\passwordStrength\PasswordInput;
+use yii\captcha\Captcha;
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
@@ -23,6 +24,9 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= $form->field($model, 'username') ?>
             <?= $form->field($model, 'email') ?>
             <?= $form->field($model, 'password')->widget(PasswordInput::classname(), []) ?>
+        <?= $form->field($model, 'verifyCode')->widget(Captcha::className(), [
+            'template' => '<div class="row"><div class="col-lg-4">{image}</div><div class="col-lg-6">{input}</div></div>',
+        ]) ?>
 
             <div class="form-group">
                 <?= Html::submitButton(Yii::t('app', 'Signup'), ['class' => 'btn btn-primary', 'name' => 'signup-button']) ?>

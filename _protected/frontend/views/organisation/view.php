@@ -67,6 +67,11 @@ $options = ['data-title' => $photoInfo['alt']];
                                 <th>
                                     <?= Yii::t('app', 'Admin') ?>
                                 </th>
+                                <?php if (Yii::$app->user->can('updateOrganisation', ['model' => $model])): ?>
+                                    <th>
+                                        <?= Yii::t('app', 'Remove') ?>
+                                    </th>
+                                <?php endif ?>
                             </tr>
                             </thead>
                             <tbody>
@@ -82,7 +87,9 @@ $options = ['data-title' => $photoInfo['alt']];
                                     echo " (" . Yii::t('app', 'Owner') . ") ";
                                 }
                                 echo "</th><td>" . date('F j, Y, g:i a', $ouser->created_at) . "</td><td>" . $admin . "</td>";
-
+                                if (Yii::$app->user->can('updateOrganisation', ['model' => $model])){
+                                    echo '<td>' . Html::a('<i class="material-icons">delete</i>', Url::to(['remove-member', 'id' => $model->id, 'memberID' => $ouser->user_id])) . '</td>';
+                                }
                                 echo '</tr>';
                             }; ?>
                             </tbody>

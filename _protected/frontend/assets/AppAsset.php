@@ -39,7 +39,7 @@ class AppAsset extends AssetBundle
         'frontend\assets\MaterialJSAsset',
         'hiqdev\assets\lightbox2\LightboxAsset',
         'yii\materialicons\AssetBundle',
-        '\rmrevin\yii\fontawesome\AssetBundle'
+        '\rmrevin\yii\fontawesome\AssetBundle',
     ];
 }
 

@@ -67,7 +67,7 @@ $options = ['data-title' => $photoInfo['alt']];
                 <div class="time start">
                     <i class="material-icons">play_arrow</i>
                     <?=
-                    $date->format('h:s') . ' ' . Yii::t('app', 'o\' clock');
+                    $date->format('H:i') . ' ' . Yii::t('app', 'o\' clock');
                     ?>
                 </div>
 
@@ -98,7 +98,7 @@ $options = ['data-title' => $photoInfo['alt']];
                 <div class="time stop">
                     <i class="material-icons">stop</i>
                     <?=
-                    $date->format('h:s') . ' ' . Yii::t('app', 'o\' clock');
+                    $enddate->format('H:i') . ' ' . Yii::t('app', 'o\' clock');
                     ?>
                 </div>
                 <?php endif ?>

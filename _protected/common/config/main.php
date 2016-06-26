@@ -10,7 +10,6 @@ return [
                 'yii\bootstrap\BootstrapAsset' => [
                     'css' => [], // do not use yii default one
                 ],
-
                 // // use bootstrap js from CDN
                 // 'yii\bootstrap\BootstrapPluginAsset' => [
                 //     'sourcePath' => null,   // do not use file from our server

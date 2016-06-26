@@ -16,6 +16,7 @@ class SignupForm extends Model
     public $email;
     public $password;
     public $status;
+    public $verifyCode;
 
     /**
      * Returns the validation rules for attributes.
@@ -30,7 +31,8 @@ class SignupForm extends Model
             ['username', 'string', 'min' => 2, 'max' => 255],
             ['username', 'unique', 'targetClass' => '\common\models\User', 
                 'message' => 'This username has already been taken.'],
-
+            ['verifyCode', 'captcha'],
+            ['verifyCode', 'required' ],
             ['email', 'filter', 'filter' => 'trim'],
             ['email', 'required'],
             ['email', 'email'],
@@ -83,6 +85,7 @@ class SignupForm extends Model
             'username' => Yii::t('app', 'Username'),
             'password' => Yii::t('app', 'Password'),
             'email' => Yii::t('app', 'Email'),
+            'verifyCode' => Yii::t('app', 'Verification Code'),
         ];
     }
 

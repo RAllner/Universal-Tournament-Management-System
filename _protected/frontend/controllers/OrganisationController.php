@@ -27,6 +27,7 @@ class OrganisationController extends FrontendController
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                    'removeMember' => ['POST'],
                 ],
             ],
         ];
@@ -176,9 +177,17 @@ class OrganisationController extends FrontendController
                 'model' => $model,
             ]);
         }
-
     }
 
+    public function actionRemoveMember($id, $memberID){
+        if(!Yii::$app->user->can('updateOrganisation', ['model' => $this->findModel($id)])){
+            Yii::$app->session->setFlash('error', Yii::t('app', 'You are not allowed to access this page.'));
+            return $this->redirect(['view', 'id' => $this->findModel($id)->id]);
+        }
+        $member = OrganisationHasUser::findOne(['organisation_id' => $id, 'user_id'=> $memberID]);
+        $member->delete();
+        return $this->redirect(['view', 'id' => $this->findModel($id)->id]);
+    }
     /**
      * Deletes an existing Organisation model.
      * If deletion is successful, the browser will be redirected to the 'index' page.

@@ -25,22 +25,30 @@ if (isset($nextEvent)) {
 <ol class="breadcrumb">
     <li class="active">Home</li>
 </ol>
-<div class="col-md-8" style="padding-left: 0">
+<div class="row">
+<div class="col-md-8">
 
     <div class="jumbotron">
-        <h1><b><img src="<?= Url::to('@web/images/constant/logo-golds.png') ?>"/> BarCraft HL <img
-                    src="<?= Url::to('@web/images/constant/logo-golds.png') ?>"/></b></h1>
-        <p class="lead">
-            <?= Yii::t('app', 'Wellcome') . ' ' . Yii::t('app', 'on the new Platform for your Tournament!') ?>
-        </p>
-        </br>
-        <?php
-        if (Yii::$app->user->isGuest) {
+        <div class="media">
+            <div class="media-left media-middle">
+                    <img class="media-object" src="<?= Url::to('@web/images/constant/logo-golds.png') ?>"/>
+            </div>
+            <div class="media-body media-middle">
+                <h2 class="media-heading">BarCraft HL</h2>
+                <p class="lead">
+                    <?= Yii::t('app', 'Wellcome') . ' ' . Yii::t('app', 'on the new Platform for your Tournament!') ?>
+                </p>
+                <?php
+                if (Yii::$app->user->isGuest) {
 
-            ?>
-            <a class="btn btn-primary"
-               href="<?= Url::to('@web/site/login') ?>"><?php echo Yii::t('app', 'Login'); ?></a>
-        <?php } ?>
+                    ?>
+                    <a class="btn btn-primary"
+                       href="<?= Url::to('@web/site/login') ?>"><?php echo Yii::t('app', 'Login'); ?></a>
+                <?php } ?>
+            </div>
+        </div>
+
+
     </div>
     <h1><?= Yii::t('app', 'News') ?></h1>
     <?php if (!isset($model)): ?>
@@ -84,7 +92,7 @@ if (isset($nextEvent)) {
     <?php if (isset($nextEvent)): ?>
 
         <div class="row">
-            <div class="col-sm-2" style="text-align: center">
+            <div class="col-xs-12 col-md-2 no-padding-right-md" style="text-align: center">
                 <div class=" wrap-event-date">
                     <div class="day">
                         <?=
@@ -106,7 +114,7 @@ if (isset($nextEvent)) {
                     <div class="time start">
                         <i class="material-icons">play_arrow</i>
                         <?=
-                        $date->format('h:s') . ' ' . Yii::t('app', 'o\' clock');
+                        $date->format('H:i') . ' ' . Yii::t('app', 'o\' clock');
                         ?>
                     </div>
 
@@ -137,13 +145,13 @@ if (isset($nextEvent)) {
                     <div class="time stop">
                         <i class="material-icons">stop</i>
                         <?=
-                        $date->format('h:s') . ' ' . Yii::t('app', 'o\' clock');
+                        $enddate->format('H:i') . ' ' . Yii::t('app', 'o\' clock');
                         ?>
                     </div>
                     <?php endif ?>
                 </div>
             </div>
-            <div class="col-sm-10 wrap-event-content">
+            <div class="col-xs-12 col-md-10 no-padding-left-md wrap-event-content">
                 <div class="event-image-wrap" style="background-image: url('<?= $photoEventInfo['url'] ?>')">
                     <div class="intro-Text-wrap">
                             <span class="article-Category">
@@ -199,7 +207,7 @@ if (isset($nextEvent)) {
         </div>
     <?php endif ?>
 </div>
-<div class="col-md-4 no-padding-left no-padding-right">
+<div class="col-md-4">
     <?php if (isset($next5Events)): ?>
         <?php
         foreach ($next5Events as $event) {
@@ -209,7 +217,7 @@ if (isset($nextEvent)) {
             ?>
             <a href="<?= $url5 ?>">
                 <div class="row">
-                    <div class="col-sm-2 no-padding-right" style="text-align: center">
+                    <div class="col-xs-2 no-padding-right" style="text-align: center">
                         <div class="wrap-event-date-home">
                             <div class="day">
                                 <?=
@@ -223,7 +231,7 @@ if (isset($nextEvent)) {
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-10 no-padding-left">
+                    <div class="col-xs-10 no-padding-left">
                         <div class="well wrap-event-info-home">
 
                             <b><?= $event->name ?>
@@ -287,4 +295,5 @@ if (isset($nextEvent)) {
                 }
             }(document, "script", "twitter-wjs");</script>
     </div>
+</div>
 </div>
