@@ -15,7 +15,7 @@ $location = Locations::find()->where(['id' => $model->locations_id])->one();
 
 
 <div class="row">
-    <div class="col-sm-2 no-padding-left-md" style="text-align: center">
+    <div class="col-sm-2 no-padding-right-sm" style="text-align: center">
         <div class=" wrap-event-date">
             <div class="day">
                 <?=
@@ -74,7 +74,7 @@ $location = Locations::find()->where(['id' => $model->locations_id])->one();
             <?php endif ?>
         </div>
     </div>
-    <div class="col-sm-10 wrap-event-content">
+    <div class="col-sm-10 no-padding-left-sm wrap-event-content">
         <div class="event-image-wrap" style="background-image: url('<?= $photoInfo['url'] ?>')">
             <div class="intro-Text-wrap">
                             <span class="article-Category">
@@ -88,19 +88,21 @@ $location = Locations::find()->where(['id' => $model->locations_id])->one();
                 <p class="introText" itemprop="description">
                 <span class="pull-right">
                     <?php
-                       if ($model->facebook != "") { ?>
-                          <a class="event-link" href="<?= $model->facebook ?>"><i class="fa fa-facebook-official"
-                                                                                        aria-hidden="true"></i></a>
-                          <?php }
+                    if ($model->facebook != "") { ?>
+                        <a class="event-link" href="<?= $model->facebook ?>"><i class="fa fa-facebook-official"
+                                                                                aria-hidden="true"></i></a>
+                    <?php }
                     if ($model->liquidpedia != "") { ?>
-                        <a class="event-link" href="<?= $model->liquidpedia ?>"><img src="<?= Url::to('@web/images/constant/icons/liquidpedias.png')?>"></a>
+                        <a class="event-link" href="<?= $model->liquidpedia ?>"><img
+                                src="<?= Url::to('@web/images/constant/icons/liquidpedias.png') ?>"></a>
                     <?php }
                     if ($model->challonge != "") { ?>
-                        <a class="event-link" href="<?= $model->challonge ?>"><img src="<?= Url::to('@web/images/constant/icons/challonge.png')?>"></a>
+                        <a class="event-link" href="<?= $model->challonge ?>"><img
+                                src="<?= Url::to('@web/images/constant/icons/challonge.png') ?>"></a>
                     <?php } ?>
                 </span>
                     <i class="material-icons">account_circle</i> <?= Yii::t('app', 'Author') . ' ' . $model->authorName ?>
-                    <i class="material-icons">schedule</i> <?= Yii::t('app', 'Added on') . ' ' . date('d.m.Y, G:i', $model->created_at). ' '.Yii::t('app','o\' clock') ?>
+                    <i class="material-icons">schedule</i> <?= Yii::t('app', 'Added on') . ' ' . date('d.m.Y, G:i', $model->created_at) . ' ' . Yii::t('app', 'o\' clock') ?>
                     </br>
                     <i class="material-icons">home</i> <?= Yii::t('app', 'Location') . ': ' . Html::a($location->name, Url::to(['locations/view', 'id' => $location->id])) . ' - ' . $location->adress . ' | ' . $location->citystate . ' | ' . $location->postalcode ?>
                 </p>
@@ -119,14 +121,13 @@ $location = Locations::find()->where(['id' => $model->locations_id])->one();
             <div class="clearfix">
 
 
-
-        <span class="pull-right">
-        <a class="btn btn-primary" href=<?= Url::to(['events/update', 'id' => $model->id]) ?>>
-            <?php if (Yii::$app->user->can('updateEventsAndLocations')): ?>
-                <?= yii::t('app', 'Update'); ?>
-            <?php endif ?>
-        </a>
-            </span>
+                <?php if (Yii::$app->user->can('updateEventsAndLocations')): ?>
+                    <span class="pull-right">
+                        <a class="btn btn-primary" href=<?= Url::to(['events/update', 'id' => $model->id]) ?>>
+                                <?= yii::t('app', 'Update'); ?>
+                        </a>
+                    </span>
+                <?php endif ?>
                 <div class="clearfix"></div>
             </div>
         </div>

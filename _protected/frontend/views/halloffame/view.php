@@ -9,8 +9,8 @@ $this->title = $model->playername;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Hall of Fame Member'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 $photoInfo = $model->PhotoInfo;
-$photo = Html::img($photoInfo['url'],['alt' =>$photoInfo['alt'], 'width'=>'100%', 'object-fit' => 'cover']);
-$options = ['data-lightbox'=>'profile-image','data-title'=>$photoInfo['alt']];
+$photo = Html::img($photoInfo['url'], ['alt' => $photoInfo['alt'], 'width' => '100%', 'object-fit' => 'cover']);
+$options = ['data-lightbox' => 'profile-image', 'data-title' => $photoInfo['alt']];
 ?>
 
 <div class="article-view">
@@ -39,39 +39,34 @@ $options = ['data-lightbox'=>'profile-image','data-title'=>$photoInfo['alt']];
         </div>
 
     </h1>
+    <div class="row">
+        <div class="col-lg-6 well bs-component">
 
-    <div class="col-lg-6 well bs-component">
-
-    <figure style="text-align: center">
-        <?= Html::a($photo, $photoInfo['url'],$options)?>
-        <figcaption>(Click to enlarge)</figcaption>
-    </figure>
-    </br>
+            <figure style="text-align: center">
+                <?= Html::a($photo, $photoInfo['url'], $options) ?>
+                <figcaption>(Click to enlarge)</figcaption>
+            </figure>
+            </br>
 
 
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            //'id',
-             [
-                 'label' => Yii::t('app', 'Author'),
-                 'value' => $model->authorName,
-             ],
-            'playername',
-            'achievements',
-            'description:html',
-            // [
-            //     'label' => Yii::t('app', 'Status'),
-            //     'value' => $model->statusName,
-            // ],
-            [
-                'label' => Yii::t('app', 'Category'),
-                'value' => $model->categoryName,
-            ],
-            'created_at:dateTime',
-            //'updated_at:dateTime',
-        ],
-    ]) ?>
-
-</div>
+            <?= DetailView::widget([
+                'model' => $model,
+                'attributes' => [
+                    //'id',
+                    [
+                        'label' => Yii::t('app', 'Author'),
+                        'value' => $model->authorName,
+                    ],
+                    'playername',
+                    'achievements',
+                    'description:html',
+                    [
+                        'label' => Yii::t('app', 'Category'),
+                        'value' => $model->categoryName,
+                    ],
+                    'created_at:dateTime',
+                ],
+            ]) ?>
+        </div>
     </div>
+</div>

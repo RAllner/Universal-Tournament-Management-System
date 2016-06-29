@@ -103,6 +103,18 @@ class SiteController extends Controller
     }
 
     /**
+     * Displays the about static page.
+     *
+     * @return string
+     */
+    public function actionImprint()
+    {
+        return $this->render('imprint');
+    }
+
+
+
+    /**
      * Displays the journey static page.
      *
      * @return string

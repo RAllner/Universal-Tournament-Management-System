@@ -14,6 +14,8 @@ return [
     'Back'   => 'Zurück',
     'Show mine'   => 'Meine anzeigen',
     'Show all'   => 'Alle anzeigen',
+    'Search'   => 'Suchen',
+    'Reset'   => 'Zurücksetzen',
 
 
     //-- CMS buttons --//
@@ -25,6 +27,7 @@ return [
     'Add Videos' => 'Video hinzufügen',
     'Create Player' => 'Spieler erstellen',
     'Create Event' => 'Event erstellen',
+    'Create Organisation' => 'Organisation erstellen',
 
 
     //-- top menu --//
@@ -42,6 +45,9 @@ return [
     'Tournaments' => 'Turniere',
     'Players' => 'Spieler',
     'Overview' => 'Übersicht',
+    'Organisations' => 'Organisationen',
+    'Organisation' => 'Organisation',
+    'Imprint' => 'Impressum',
 
 
     //-- static pages --//
@@ -50,7 +56,7 @@ return [
 
     //-- Index page --//
     'Wellcome' => 'Willkommen ',
-    'on the new Platform for your Tournament!' => ' auf der neuen Plattform für dein Turnier',
+    'on the new Platform for your Tournament!' => ' auf der neuen Plattform für dein Turnier!',
 
 
     // contact
@@ -142,6 +148,7 @@ return [
     'Location' => 'Einrichtung',
     'Game played' => 'Gespieltes Spiel',
     'Partners' => 'Partner',
+    'All Events' => 'Alle Events',
 
 
 

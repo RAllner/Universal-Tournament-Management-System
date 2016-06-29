@@ -133,6 +133,23 @@ class Galleries extends ActiveRecord
     }
 
 
+    /**
+     * @param $oldDirName
+     * @param $newDirName
+     */
+    public function rename($oldDirName, $newDirName){
+        $path = Url::to('@webroot/images/galleries/');
+        $escapedNewName = $this->sanitize($newDirName);
+        $escapedOldName = $this->sanitize($oldDirName);
+        if(rename($path.$this->created_at.$escapedOldName, $path.$this->created_at.$escapedNewName)){
+            Yii::$app->session->setFlash('success', 'Gallery directory name changed to '.$escapedNewName);
+        } else {
+            Yii::$app->session->setFlash('error', 'Gallery directory name not changed from'.$escapedOldName.' to '.$escapedNewName);
+        }
+    }
+
+
+
 
     function png2jpg($originalFilePath, $filename) {
             $info = pathinfo($originalFilePath.$filename);

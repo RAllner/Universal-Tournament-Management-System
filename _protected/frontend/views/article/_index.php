@@ -32,7 +32,7 @@ $options = ['data-title' => $photoInfo['alt']];
 
         <p><?= $model->summary ?></p>
         <span class="pull-right">
-    <a class="btn btn-primary" href=<?= Url::to(['article/view', 'id' => $model->id]) ?>>
+    <a class="btn btn-default" href=<?= Url::to(['article/view', 'id' => $model->id]) ?>>
         <?= yii::t('app', 'Read more'); ?><i class="material-icons">chevron_right</i>
     </a>
             </span>

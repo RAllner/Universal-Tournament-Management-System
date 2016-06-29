@@ -3,12 +3,24 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 
 
+
+function age($birthDate){
+  //date in mm/dd/yyyy format; or it can be in other formats as well
+  //explode the date to get month, day and year
+  $birthDate = explode("/", $birthDate);
+  //get age from date or birthdate
+    return (date("md", date("U", mktime(0, 0, 0, $birthDate[0], $birthDate[1], $birthDate[2]))) > date("md")
+      ? ((date("Y") - $birthDate[2]) - 1)
+      : (date("Y") - $birthDate[2]));
+}
+
+
 /* @var $this yii\web\View */
 
 $this->title = Yii::t('app', 'About');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="site-about">
+<div class="site-about" xmlns="http://www.w3.org/1999/html">
     <h1><?= Html::encode($this->title) ?></h1>
     <div class="col-lg-12 well bs-component no-padding">
         <img width="100%" style="margin-bottom: 1em" src="<?= Url::to("@web/images/constant/team/Gruppenfoto.jpg") ?>"/>
@@ -24,13 +36,14 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 
-
-    <div class="col-lg-4 with-padding-sm">
+    <div class="row">
+    <div class="col-lg-4 col-md-6 col-md-6">
         <div class="well bs-component no-padding">
             <img src="<?= Url::to("@web/images/constant/team/Jodder.jpg") ?>" class="md-card-img" alt="Jodder">
             <div class="with-padding">
-                <h3>Jodder aka Jasper</h3>
+                <h3>Jodder</h3>
                 <p>
+                    <strong>Vorname:</strong> Jasper </br>
                     <strong>Alter:</strong> 26 </br>
                     <strong>Beruf:</strong> Informatiker</br>
                     <strong>Rolle:</strong> Orga, PR, Soziale Medien, Streaming</br>
@@ -49,13 +62,14 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
     </div>
-    <div class="col-lg-4 with-padding-sm">
+    <div class="col-lg-4 col-md-6">
         <div class="well bs-component no-padding">
             <img src="<?= Url::to("@web/images/constant/team/Kanzler.jpg") ?>" class="md-card-img" alt="Jodder">
             <div class="with-padding">
-                <h3>Kanzler aka Raphael</h3>
+                <h3>Kanzler</h3>
                 <p>
-                    <strong>Alter:</strong> 25 </br>
+                    <strong>Vorname:</strong> Raphael</br>
+                    <strong>Alter:</strong> <?= age("07/28/1990") ?> </br>
                     <strong>Beruf:</strong> Informatiker</br>
                     <strong>Rolle:</strong> Orga, Website PR, Soziale Medien, Streaming</br>
                     <strong>Mail:</strong> <a href="mailto:kanzler@barcraft-hl.de">kanzler@barcraft-hl.de</a> </br>
@@ -68,12 +82,14 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
     </div>
-    <div class="col-lg-4 with-padding-sm">
+        <div class="clearfix hidden-lg"></div>
+    <div class="col-lg-4 col-md-6">
         <div class="well bs-component no-padding">
             <img src="<?= Url::to("@web/images/constant/team/Zersch.jpg") ?>" class="md-card-img" alt="Jodder">
             <div class="with-padding">
-                <h3>Zersch aka Tim</h3>
+                <h3>Zersch</h3>
                 <p>
+                    <strong>Vorname:</strong> Tim</br>
                     <strong>Alter:</strong> 29 </br>
                     <strong>Beruf:</strong> Student</br>
                     <strong>Rolle:</strong> Tresen, Aufbau Lokation</br>
@@ -88,13 +104,14 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
     </div>
-    <div class="clearfix"></div>
-    <div class="col-lg-4 with-padding-sm">
+    <div class="clearfix hidden-md"></div>
+    <div class="col-lg-4 col-md-6">
         <div class="well bs-component no-padding">
             <img src="<?= Url::to("@web/images/constant/team/NiWo.jpg") ?>" class="md-card-img" alt="Jodder">
             <div class="with-padding">
-                <h3>NiWo aka Nicklas</h3>
+                <h3>NiWo</h3>
                 <p>
+                    <strong>Vorname:</strong>Nicklas</br>
                     <strong>Alter:</strong> 23 </br>
                     <strong>Beruf:</strong> Hörakustiker</br>
                     <strong>Rolle:</strong> Casting, Tresen, Aufbau Lokation</br>
@@ -114,12 +131,14 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
     </div>
-    <div class="col-lg-4 with-padding-sm">
+        <div class="clearfix hidden-lg"></div>
+    <div class="col-lg-4 col-md-6">
         <div class="well bs-component no-padding">
             <img src="<?= Url::to("@web/images/constant/team/TyphoonHawk.jpg") ?>" class="md-card-img" alt="Jodder">
             <div class="with-padding">
-                <h3>TyphoonHawk aka Jonas</h3>
+                <h3>TyphoonHawk</h3>
                 <p>
+                    <strong>Vorname:</strong>Jonas</br>
                     <strong>Alter:</strong> 26 </br>
                     <strong>Beruf:</strong> Informatiker</br>
                     <strong>Rolle:</strong> Orga, PR, Soziale Medien, Streaming</br>
@@ -133,12 +152,13 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
     </div>
-    <div class="col-lg-4 with-padding-sm">
+    <div class="col-lg-4 col-md-6">
         <div class="well bs-component no-padding">
             <img src="<?= Url::to("@web/images/constant/team/Haruc.jpg") ?>" class="md-card-img" alt="Jodder">
             <div class="with-padding">
-                <h3>Haruc aka Gregor</h3>
+                <h3>Haruc</h3>
                 <p>
+                    <strong>Vorname:</strong>Gregor</br>
                     <strong>Alter:</strong> 23 </br>
                     <strong>Beruf:</strong> Lasertechniker</br>
                     <strong>Rolle:</strong> Casting, Aufbau Lokation, Streaming, PR</br>
@@ -155,4 +175,5 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
     </div>
+</div>
 </div>

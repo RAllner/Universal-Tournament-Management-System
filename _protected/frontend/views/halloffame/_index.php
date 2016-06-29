@@ -6,23 +6,23 @@ use common\helpers\CssHelper;
 /* @var $this yii\web\View */
 $this->title = 'Hall Of Fame';
 $photoInfo = $model->PhotoInfo;
-$photo = Html::img($photoInfo['url'],['alt' =>$photoInfo['alt'], 'width' => '100%']);
+$photo = Html::img($photoInfo['url'],['alt' =>$photoInfo['alt'], 'style:' => 'height: 150px','class'=>'media-object']);
 $options = ['data-lightbox'=>'news-image','data-title'=>$photoInfo['alt']];
 ?>
 
-<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-    <div class="well bs-component">
-        <figure style="text-align: center">
-            <?= Html::a($photo, $photoInfo['url'], $options) ?>
-        </figure>
-
-        <h3>
-            <?= $model->playername ?>
-
-        </h3>
-        <h4>Achievements:</h4>
-        <p>   <?= $model->achievements ?></p>
-        <h4>Description:</h4>
-        <p>   <?= $model->description ?></p>
+<div class="col-xs-12">
+    <div class="media">
+        <div class="media-left">
+                <?= Html::a($photo, $photoInfo['url'], $options) ?>
+        </div>
+        <div class="media-body well">
+            <h2>
+                <?= $model->playername ?>
+            </h2>
+            <h4><?= Yii::t('app', 'Achievements')?>:</h4>
+            <p>   <?= $model->achievements ?></p>
+            <h4><?= Yii::t('app', 'Description') ?>:</h4>
+            <p>   <?= $model->description ?></p>
+        </div>
     </div>
 </div>

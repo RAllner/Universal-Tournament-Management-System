@@ -95,6 +95,21 @@ class Players extends ActiveRecord
         }
     }
 
+    /**
+     * @param $oldName
+     * @param $newName
+     */
+    public function rename($oldName, $newName){
+        $path = Url::to('@webroot/images/players/');
+        $escapedNewName = $this->sanitize($newName);
+        $escapedOldName = $this->sanitize($oldName);
+        if(rename($path.$this->created_at.$escapedOldName.'.jpg', $path.$this->created_at.$escapedNewName.'.jpg')){
+            Yii::$app->session->setFlash('success', 'Filename changed to '.$escapedNewName.'.jpg');
+        } else {
+            Yii::$app->session->setFlash('error', 'Filename not changed from'.$escapedOldName.'.jpg'.' to '.$escapedNewName.'.jpg' );
+        }
+    }
+
 
     /**
      * @return \yii\db\ActiveQuery

@@ -51,7 +51,7 @@ body {
 }
 
 a {
-    color: #ff8f26;
+    color: #ff9800;
     line-height: inherit;
     text-decoration: none;
 }
@@ -254,10 +254,13 @@ option:hover, option:focus {
 
 .btn-default, .btn-default:active, .btn-default:focus, .btn-link:focus, .btn-link, .btn-link:hover, .btn:not([class^="btn btn-"]) {
     color: white;
+    border-bottom: solid 2px white;
 }
 
 .btn-default:hover, .btn-link:hover, .btn:not([class^="btn btn-"]) {
     color: #ffad24;
+    background-color: #292929 !important;
+    border-bottom: solid 2px #ffad24;
 }
 
 .md-card-img {
@@ -778,8 +781,9 @@ hr.article-devider {
     margin-top: -10px;
 }
 
-.well .wrap-event-info-home {
+.well.wrap-event-info-home {
     padding: 0.8em;
+    border-bottom: solid 2px #ff9800;
 }
 
 .event-image-wrap {
@@ -831,7 +835,7 @@ hr.article-devider {
 
 .event-link img {
     height: 25px;
-    margin-top: -17px;
+    margin-top: -10px;
 }
 
 .event-link i {
@@ -846,6 +850,18 @@ hr.article-devider {
 
 @media screen and (min-width: 991px) {
     .no-padding-right-md {
+        padding-right: 0;
+    }
+}
+
+@media screen and (min-width: 767px) {
+    .no-padding-left-sm {
+        padding-left: 0;
+    }
+}
+
+@media screen and (min-width: 767px) {
+    .no-padding-right-sm {
         padding-right: 0;
     }
 }

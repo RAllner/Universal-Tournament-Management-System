@@ -82,7 +82,8 @@ AppAsset::register($this);
         'items' => [
             ['label' => Yii::t('app', 'About'), 'url' => ['/site/about']],
             ['label' => Yii::t('app', 'Contact'), 'url' => ['/site/contact']],
-            ['label' => Yii::t('app', 'Journey'), 'url' => ['/site/journey']]
+            ['label' => Yii::t('app', 'Journey'), 'url' => ['/site/journey']],
+            ['label' => Yii::t('app', 'Imprint'), 'url' => ['/site/imprint']]
         ]
     ];
 
@@ -143,7 +144,7 @@ AppAsset::register($this);
     <div class="container">
 
 
-        <ul class="navbar-nav nav navbar-left external-link-bar">
+        <ul class="navbar-nav nav navbar-left external-link-bar hidden-xs hidden-md">
             <li>
                 <a href="https://www.facebook.com/BarCraftHL/" class="external-link"><i
                         class="fa fa-facebook-official" aria-hidden="true"></i></a>
@@ -175,7 +176,8 @@ AppAsset::register($this);
             </li>
         </ul>
         <div class="pull-right" style="padding: 1em">
-            &copy;<a href="<?= Url::to("@web") ?>"> <?= Yii::t('app', Yii::$app->name) ?>      </a><?= date('Y') ?>
+            &copy;<a href="<?= Url::to("@web") ?>"> <?= Yii::t('app', Yii::$app->name) ?>      </a><?= date('Y') ?></br>
+            <?= Html::a(Yii::t('app', 'Imprint'),Url::to('@web/site/imprint'))?>
         </div>
     </div>
 </footer>

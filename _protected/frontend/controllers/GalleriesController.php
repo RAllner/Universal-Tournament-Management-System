@@ -92,17 +92,21 @@ class GalleriesController extends FrontendController
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
+     * @throws MethodNotAllowedHttpException
+     * @throws NotFoundHttpException
      */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $oldModel = $this->findModel($id);
 
         if (Yii::$app->user->can('updateGallery', ['model' => $model])) {
 
             if ($model->load(Yii::$app->request->post()))
             {
-
-
+                if($oldModel->title != $model->title) {
+                    $model->rename($oldModel->title, $model->title);
+                }
                 $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
                 if ($model->save()) {
                     return $this->redirect(['view', 'id' => $model->id]);

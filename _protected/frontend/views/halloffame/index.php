@@ -27,7 +27,6 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Hall Of Fame');
     </h1>
     <div class="clearfix"></div>
     <div class="row">
-
     <?= ListView::widget([
         'summary' => false,
         'dataProvider' => $dataProvider,

@@ -122,6 +122,21 @@ class Article extends ActiveRecord
         }
     }
 
+    /**
+     * @param $oldTitle
+     * @param $newTitle
+     */
+    public function rename($oldTitle, $newTitle){
+        $path = Url::to('@webroot/images/news/');
+        $escapedNewTitle = $this->sanitize($newTitle);
+        $escapedOldTitle = $this->sanitize($oldTitle);
+        if(rename($path.$this->created_at.$escapedOldTitle.'.jpg', $path.$this->created_at.$escapedNewTitle.'.jpg')){
+            Yii::$app->session->setFlash('success', 'Filename changed to '.$escapedNewTitle.'.jpg');
+        } else {
+            Yii::$app->session->setFlash('error', 'Filename not changed from'.$escapedOldTitle.'.jpg'.' to '.$escapedNewTitle.'.jpg' );
+        }
+    }
+
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {

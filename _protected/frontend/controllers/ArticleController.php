@@ -106,15 +106,15 @@ class ArticleController extends FrontendController
      */
     public function actionUpdate($id)
     {
-        $currentModel = $this->findModel($id);
+        $oldModel = $this->findModel($id);
         $model = $this->findModel($id);
 
         if (Yii::$app->user->can('updateArticle', ['model' => $model])) 
         {
             if ($model->load(Yii::$app->request->post()))
             {
-                if($currentModel->title != $model->title){
-                    //TODO: Name des Bildes ändern.
+                if($oldModel->name != $model->name){
+                    $model->rename($oldModel->name, $model->name);
                 }
                 $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
                 if($model->save()) 

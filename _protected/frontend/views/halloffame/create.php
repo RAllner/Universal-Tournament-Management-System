@@ -9,21 +9,25 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Hall Of Fame'), 'url
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="article-create">
-
-    <h1><?= Html::encode($this->title) ?>
-        <span class="pull-right">
+    <div class="row">
+        <div class="col-sm-12 col-lg-12 col-xs-12 col-md-12">
+            <h1><?= Html::encode($this->title) ?>
+                <span class="pull-right">
 
         <?= Html::a('<i class="material-icons">view_headline</i> ' . Yii::t('app', 'Overview'), ['index'], ['class' => 'btn btn-default']) ?>
 
     </span>
 
-    </h1>
-    <div class="clearfix"></div>
-
-    <div class="col-lg-8 well bs-component">
-
-        <?= $this->render('_form', ['model' => $model]) ?>
-
+            </h1>
+        </div>
     </div>
-
+    <div class="clearfix"></div>
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="well">
+            <?= $this->render('_form', ['model' => $model]) ?>
+            </div>
+        </div>
+    </div>
 </div>
+

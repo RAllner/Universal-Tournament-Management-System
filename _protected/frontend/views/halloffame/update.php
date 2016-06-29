@@ -17,10 +17,11 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
     </span>
     </h1>
     <div class="clearfix"></div>
+    <div class="row">
     <div class="col-lg-8 well bs-component">
 
         <?= $this->render('_form', ['model' => $model]) ?>
 
     </div>
-
+    </div>
 </div>
