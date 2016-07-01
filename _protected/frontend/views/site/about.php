@@ -139,7 +139,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <h3>TyphoonHawk</h3>
                 <p>
                     <strong>Vorname:</strong>Jonas</br>
-                    <strong>Alter:</strong> 26 </br>
+                    <strong>Alter:</strong> <?= age('07/04/1992')?> </br>
                     <strong>Beruf:</strong> Informatiker</br>
                     <strong>Rolle:</strong> Orga, PR, Soziale Medien, Streaming</br>
                     <strong>Mail:</strong> <a class="contact-mail ng-binding" ng-href="mailto:jodder@barcraft-hl.de"

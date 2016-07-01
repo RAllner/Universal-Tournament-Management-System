@@ -44,6 +44,7 @@ return [
     'Journey' => 'Anfahrt',
     'Tournaments' => 'Turniere',
     'Players' => 'Spieler',
+    'Player' => 'Spieler',
     'Overview' => 'Übersicht',
     'Organisations' => 'Organisationen',
     'Organisation' => 'Organisation',
@@ -99,7 +100,7 @@ return [
 
     // account activation
     'We couldn\'t send you account activation email, please contact us.' => 'Wir konnten Ihnen keine E-Mail zu Account Aktivierung zusenden. Bitte kontaktieren Sie uns.',
-    'Success! You can now log in.' => 'Erfolg! Sie können sich jetzt einloggen',
+    'Success! You can now log in.' => 'Aktivierung Erfolgreich! Sie können sich jetzt einloggen',
     'for joining us!' => ',dass du bei uns bist!.',
     'your account could not be activated, please contact us!' => 'Ihr Account konnte nicht aktiviert werden. Bitte kontaktieren Sie uns.',
     'Account activation token cannot be blank.' => 'Account Aktivierungstoken kann nicht leer sein.',
@@ -109,6 +110,8 @@ return [
     'Created At' => 'Erstellt',
     'Updated At' => 'Aktuallisiert',
     'Added on' => 'Hinzugefügt am',
+    'Joined' => 'Beigetreten',
+
 
 
     //-- mixed --//

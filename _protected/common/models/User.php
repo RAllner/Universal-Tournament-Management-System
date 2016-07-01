@@ -6,7 +6,7 @@ use frontend\models\Galleries;
 use frontend\models\Halloffame;
 use frontend\models\Article;
 use frontend\models\Videos;
-use frontend\models\Players;
+use frontend\models\Player;
 use frontend\models\Events;
 use frontend\models\Locations;
 use frontend\models\Organisation;
@@ -167,7 +167,7 @@ class User extends UserIdentity
      */
     public function getPlayers()
     {
-        return $this->hasMany(Players::className(), ['user_id' => 'id']);
+        return $this->hasMany(Player::className(), ['user_id' => 'id']);
     }
 
     /**

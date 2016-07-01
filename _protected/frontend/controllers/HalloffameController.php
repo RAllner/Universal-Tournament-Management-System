@@ -92,12 +92,16 @@ class HalloffameController extends FrontendController
      */
     public function actionUpdate($id)
     {
+        $oldModel = $this->findModel($id);
         $model = $this->findModel($id);
 
         if (Yii::$app->user->can('updateArticle', ['model' => $model]))
         {
             if ($model->load(Yii::$app->request->post()))
             {
+                if ($oldModel->playername != $model->playername){
+                    $model->rename($oldModel->playername, $model->playername);
+                }
                 $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
                 if($model->save())
                 {

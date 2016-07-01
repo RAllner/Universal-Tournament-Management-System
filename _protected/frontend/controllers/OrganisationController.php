@@ -67,7 +67,7 @@ class OrganisationController extends FrontendController
      */
     public function actionCreate()
     {
-        if(!Yii::$app->user->can('createOrganisation')){
+        if (!Yii::$app->user->can('createOrganisation')) {
             Yii::$app->session->setFlash('error', Yii::t('app', 'You are not allowed to access this page.'));
             return $this->redirect(['index']);
         }
@@ -76,23 +76,19 @@ class OrganisationController extends FrontendController
 
         $memberModel = new OrganisationHasUser();
 
-        if ($model->load(Yii::$app->request->post()))
-        {
+        if ($model->load(Yii::$app->request->post())) {
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
-            if($model->save())
-            {
+            if ($model->save()) {
                 $memberModel->user_id = Yii::$app->user->id;
                 $memberModel->organisation_id = $model->id;
                 $memberModel->admin = 1;
                 $memberModel->created_at = $model->created_at;
                 $memberModel->updated_at = $model->updated_at;
-                if($memberModel->save()){
+                if ($memberModel->save()) {
                     return $this->redirect(['view', 'id' => $model->id]);
                 }
             }
-        }
-        else
-        {
+        } else {
             return $this->render('create', [
                 'model' => $model,
             ]);
@@ -109,36 +105,29 @@ class OrganisationController extends FrontendController
      */
     public function actionUpdate($id)
     {
-        if(!Yii::$app->user->can('updateOrganisation', ['model' => $this->findModel($id)])){
+        $model = $this->findModel($id);
+        if (!Yii::$app->user->can('updateOrganisation', ['model' => $this->findModel($id)]) || $model->isUserAdmin()) {
             Yii::$app->session->setFlash('error', Yii::t('app', 'You are not allowed to access this page.'));
             return $this->redirect(['view', 'id' => $this->findModel($id)->id]);
         }
         $oldModel = $this->findModel($id);
-        $model = $this->findModel($id);
 
-        if (Yii::$app->user->can('updateArticle', ['model' => $model]))
-        {
-            if ($model->load(Yii::$app->request->post()))
-            {
-                if($oldModel->name != $model->name){
+        if (Yii::$app->user->can('updateOrganisation', ['model' => $model])) {
+            if ($model->load(Yii::$app->request->post())) {
+                if ($oldModel->name != $model->name) {
                     $model->rename($oldModel->name, $model->name);
                 }
                 $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
-                if($model->save())
-                {
+                if ($model->save()) {
                     return $this->redirect(['view', 'id' => $model->id]);
                 }
 
-            }
-            else
-            {
+            } else {
                 return $this->render('update', [
                     'model' => $model,
                 ]);
             }
-        }
-        else
-        {
+        } else {
             throw new MethodNotAllowedHttpException(Yii::t('app', 'You are not allowed to access this page.'));
         }
     }
@@ -149,45 +138,78 @@ class OrganisationController extends FrontendController
      * @throws IntegrityException
      * @throws NotFoundHttpException
      */
-    public function actionAdd($id){
-        if(!Yii::$app->user->can('updateOrganisation', ['model' => $this->findModel($id)])){
-            Yii::$app->session->setFlash('error', Yii::t('app', 'You are not allowed to access this page.'));
-            return $this->redirect(['view', 'id' => $this->findModel($id)->id]);
-        }
-        $model = new OrganisationHasUser();
+    public function actionAdd($id)
+    {
         $organisationModel = $this->findModel($id);
-        $model->organisation_id = $id;
-        if ($model->load(Yii::$app->request->post()))
-        {
-            if (!OrganisationHasUser::find()->where(['organisation_id' => $model->organisation_id, 'user_id'=> $model->user_id])->exists()){
-                if($model->save())
-                {
-                    return $this->redirect(['view', 'id' => $organisationModel->id]);
-                }
-            }else {
-                Yii::$app->session->setFlash('error', 'User is already part of the organisation');
-                return $this->redirect(['add', 'id' => $organisationModel->id]);
-
-            }
-
-        }
-        else
-        {
-            return $this->render('add', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    public function actionRemoveMember($id, $memberID){
-        if(!Yii::$app->user->can('updateOrganisation', ['model' => $this->findModel($id)])){
+        if (!Yii::$app->user->can('updateOrganisation', ['model' => $organisationModel]) || $organisationModel->isUserAdmin()) {
             Yii::$app->session->setFlash('error', Yii::t('app', 'You are not allowed to access this page.'));
-            return $this->redirect(['view', 'id' => $this->findModel($id)->id]);
+            return $this->redirect(['view', 'id' => $organisationModel->id]);
+        } else {
+            $model = new OrganisationHasUser();
+            $model->organisation_id = $id;
+            if ($model->load(Yii::$app->request->post())) {
+                if (!OrganisationHasUser::find()->where(['organisation_id' => $model->organisation_id, 'user_id' => $model->user_id])->exists()) {
+                    if ($model->save()) {
+                        return $this->redirect(['view', 'id' => $organisationModel->id]);
+                    }
+                } else {
+                    Yii::$app->session->setFlash('error', 'User is already part of the organisation');
+                    return $this->redirect(['add', 'id' => $organisationModel->id]);
+                }
+            } else {
+                return $this->render('add', [
+                    'model' => $model,
+                ]);
+            }
         }
-        $member = OrganisationHasUser::findOne(['organisation_id' => $id, 'user_id'=> $memberID]);
-        $member->delete();
-        return $this->redirect(['view', 'id' => $this->findModel($id)->id]);
     }
+    /**
+     * @param $id
+     * @param $memberID
+     * @return \yii\web\Response
+     * @throws NotFoundHttpException
+     * @throws \Exception
+     */
+    public function actionSetMemberAdmin($id, $memberID, $set)
+    {
+        $model = $this->findModel($id);
+        if (!((Yii::$app->user->can('updateOrganisation', ['model' => $model])  || ($model->isUserAdmin())) && ($memberID !== $model->user_id))) {
+            Yii::$app->session->setFlash('error', Yii::t('app', 'You are not allowed to access this page.'));
+            return $this->redirect(['view', 'id' => $model->id]);
+        } else {
+            if (($member = OrganisationHasUser::findOne(['organisation_id' => $id, 'user_id' => $memberID]))!== null) {
+                $member->admin = $set;
+                $member->save();
+                return $this->redirect(['view', 'id' => $model->id]);
+            } else {
+                throw new NotFoundHttpException('The requested page does not exist.');
+            }
+        }
+    }
+    /**
+     * @param $id
+     * @param $memberID
+     * @return \yii\web\Response
+     * @throws NotFoundHttpException
+     * @throws \Exception
+     */
+    public function actionRemoveMember($id, $memberID)
+    {
+        $model = $this->findModel($id);
+        if (!((Yii::$app->user->can('updateOrganisation', ['model' => $model])  || ($model->isUserAdmin())) && ($memberID !== $model->user_id))) {
+            Yii::$app->session->setFlash('error', Yii::t('app', 'You are not allowed to access this page.'));
+            return $this->redirect(['view', 'id' => $model->id]);
+        } else {
+            if (($member = OrganisationHasUser::findOne(['organisation_id' => $id, 'user_id' => $memberID]))!== null){
+                $member->delete();
+                return $this->redirect(['view', 'id' => $model->id]);
+            }else {
+                throw new NotFoundHttpException('The requested page does not exist.');
+            }
+        }
+    }
+
+
     /**
      * Deletes an existing Organisation model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
@@ -196,6 +218,10 @@ class OrganisationController extends FrontendController
      */
     public function actionDelete($id)
     {
+        $model = $this->findModel($id);
+        foreach ($model->organisationHasUsers as $organisationHasUser) {
+            $organisationHasUser->delete();
+        }
         $this->findModel($id)->deleteImage();
         $this->findModel($id)->delete();
 
@@ -217,14 +243,13 @@ class OrganisationController extends FrontendController
         $searchModel = new OrganisationSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        if(Yii::$app->user->can('adminOrganisation')){
+        if (Yii::$app->user->can('adminOrganisation')) {
             return $this->render('admin', [
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
             ]);
         } else throw new MethodNotAllowedHttpException(Yii::t('app', 'You are not allowed to access this page.'));
     }
-
 
 
     /**

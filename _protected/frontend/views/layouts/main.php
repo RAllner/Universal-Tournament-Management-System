@@ -99,7 +99,8 @@ AppAsset::register($this);
                 'label' => '<i class="material-icons">account_circle</i> ' . Yii::$app->user->identity->username,
                 'items' => [
                     ['label' => Yii::t('app', 'Settings'), 'url' => ['/backend/user/view', 'id' => Yii::$app->user->id]],
-                    ['label' => Yii::t('app', 'Players'), 'url' => ['/players/own-index']],
+                    ['label' => Yii::t('app', 'Players'), 'url' => ['/player/own-index']],
+                    ['label' => Yii::t('app', 'Teams'), 'url' => ['/team/index']],
                     ['label' => Yii::t('app', 'Organisations'), 'url' => ['/organisation/index']],
                     '<li class="divider"></li>',
                     ['label' => Yii::t('app', 'Logout'), 'url' => ['/site/logout'], 'linkOptions' => ['data-method' => 'post']],
@@ -110,7 +111,8 @@ AppAsset::register($this);
                 'label' => '<i class="material-icons">account_circle</i> ' . Yii::$app->user->identity->username,
                 'items' => [
                     ['label' => Yii::t('app', 'Settings'), 'url' => ['/backend/user/view', 'id' => Yii::$app->user->id]],
-                    ['label' => Yii::t('app', 'Players'), 'url' => ['/players/own-index']],
+                    ['label' => Yii::t('app', 'Players'), 'url' => ['/player/own-index']],
+                    ['label' => Yii::t('app', 'Teams'), 'url' => ['/team/index']],
                     '<li class="divider"></li>',
                     ['label' => Yii::t('app', 'Logout'), 'url' => ['/site/logout'], 'linkOptions' => ['data-method' => 'post']],
                  ]

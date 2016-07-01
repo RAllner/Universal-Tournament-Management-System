@@ -6,8 +6,6 @@ use Yii;
 use common\models\User;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
-use yii\web\UploadedFile;
-use yii\helpers\Url;
 
 /**
  * This is the model class for table "organisation_has_user".

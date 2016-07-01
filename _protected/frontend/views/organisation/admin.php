@@ -1,5 +1,5 @@
 <?php
-use common\helpers\CssHelper;
+
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -11,7 +11,7 @@ $this->title = Yii::t('app', 'Admin');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Organisations'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="articles-admin">
+<div class="organisation-admin">
 
     <h1>
 
@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <span class="pull-right">
         <?= Html::a('<i class="material-icons">create</i> '.Yii::t('app', 'Create Organisation'), ['create'], ['class' => 'btn btn-success']) ?>
-        <?= Html::a(Yii::t('app', 'Back'), ['index'], ['class' => 'btn btn-warning']) ?>
+        <?= Html::a('<i class="material-icons">view_headline</i> ' . Yii::t('app', 'Overview'), ['index'], ['class' => 'btn btn-default']) ?>
 
     </span>  
 

@@ -49,7 +49,8 @@ $options = ['data-lightbox' => 'profile-image', 'data-title' => $photoInfo['alt'
 
                 <p class="introText" itemprop="description">
                     <i class="material-icons">account_circle</i> <?= Yii::t('app', 'Author') . ' ' . $model->authorName ?>
-                    <i class="material-icons">schedule</i> <?= Yii::t('app', 'Published on') . ' ' . date('d.m.Y, G:i', $model->created_at) ?>
+                    <i class="material-icons">schedule</i> <?= Yii::t('app', 'Published on') . ' ' . date('d.m.Y, G:i', $model->created_at).' '.Yii::t('app','o\' clock') ?>
+                    
                 </p>
             </div>
         </div>

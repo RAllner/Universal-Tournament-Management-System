@@ -1,0 +1,46 @@
+Message-ID: <fe1ab1b0a2fb8efab8a92d7fae28313b@localhost>
+Date: Fri, 01 Jul 2016 11:06:32 +0200
+Subject: Account activation for BarCraft HL
+From: BarCraft HL robot <support@barcraft-hl.de>
+To: member1@member.de
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="_=_swift_v4_1467363992_b604597b46ec3a129dd8e6578228464f_=_"
+
+
+--_=_swift_v4_1467363992_b604597b46ec3a129dd8e6578228464f_=_
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+Hello member1,
+
+Follow this link to activate your account:
+
+Please,=
+ click here to activate your account.
+
+--_=_swift_v4_1467363992_b604597b46ec3a129dd8e6578228464f_=_
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org=
+/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns=3D"http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3DUTF-8=
+" />
+    <title></title>
+    </head>
+<body>
+       =20
+Hello member1,
+
+Follow this link to activate your account:
+
+<a href=3D"http://localhost/utms-dev/site/activate-account?token=3DA_r3jBzD=
+JGk5vczSpNVZw_zl_G1rV-Qp_1467363992">Please, click here to activate your ac=
+count.</a>    </body>
+</html>
+
+
+--_=_swift_v4_1467363992_b604597b46ec3a129dd8e6578228464f_=_--

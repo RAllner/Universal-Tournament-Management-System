@@ -865,3 +865,7 @@ hr.article-devider {
         padding-right: 0;
     }
 }
+
+.ui-autocomplete-input {
+    background-color: #292929;
+}

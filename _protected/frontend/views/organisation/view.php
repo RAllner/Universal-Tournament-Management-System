@@ -14,15 +14,17 @@ $this->params['breadcrumbs'][] = $this->title;
 $photoInfo = $model->PhotoInfo;
 $photo = Html::img($photoInfo['url'], ['alt' => $photoInfo['alt'], 'width' => '100%']);
 $options = ['data-title' => $photoInfo['alt']];
+$isOwner = Yii::$app->user->can('updateOrganisation', ['model' => $model]);
+$isAdmin = $model->isUserAdmin();
 ?>
 <div class="organisation-view">
 
     <h1><?= Html::encode($this->title) ?>
         <div class="pull-right">
-            <?php if (Yii::$app->user->can('updateOrganisation', ['model' => $model])): ?>
+            <?php if ($isOwner): ?>
                 <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
             <?php endif ?>
-            <?php if (Yii::$app->user->can('deleteOrganisation')): ?>
+            <?php if (Yii::$app->user->can('deleteOrganisation', ['model' => $model])): ?>
                 <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
                     'class' => 'btn btn-danger',
                     'data' => [
@@ -38,10 +40,10 @@ $options = ['data-title' => $photoInfo['alt']];
     <div class="well">
         <div class="media">
             <div class="media-left">
-                <a href="#">
-                    <img class="media-object" style="width:100px" src="<?= $photoInfo['url'] ?>"
+
+                    <img class="media-object" style="width:150px" src="<?= $photoInfo['url'] ?>"
                          alt="<?= $model->name ?>">
-                </a>
+
             </div>
             <div class="media-body media-middle">
                 <div class="row">
@@ -67,34 +69,45 @@ $options = ['data-title' => $photoInfo['alt']];
                                 <th>
                                     <?= Yii::t('app', 'Admin') ?>
                                 </th>
-                                <?php if (Yii::$app->user->can('updateOrganisation', ['model' => $model])): ?>
+                                <?php
+                                if ($isOwner || $isAdmin): ?>
                                     <th>
-                                        <?= Yii::t('app', 'Remove') ?>
+                                        <i class="material-icons">remove</i>
                                     </th>
                                 <?php endif ?>
                             </tr>
                             </thead>
                             <tbody>
-                            <?php foreach ($model->organisationHasUsers as $ouser) {
+                            <?php
+
+                            foreach ($model->organisationHasUsers as $ouser) {
                                 $user = User::find()->where(['id' => $ouser->user_id])->one();
                                 $admin = '';
-                                if ($ouser->admin == 1) {
-                                    $admin = Yii::t('app', 'Yes');
+                                if ($ouser->admin == 1 || $model->user_id == $user->id) {
+                                    if ($isAdmin || $isOwner) {
+                                        $admin = Yii::t('app', 'Yes'). Html::a(' <i class="material-icons">do_not_disturb</i>', Url::to(['set-member-admin', 'id' => $model->id, 'memberID' => $ouser->user_id , 'set' => 0]));
+                                    } else {
+                                        $admin = Yii::t('app', 'Yes');
+                                    }
+                                } else {
+                                    if ($isAdmin || $isOwner) {
+                                        $admin = Html::a(' <i class="material-icons">done</i>', Url::to(['set-member-admin', 'id' => $model->id, 'memberID' => $ouser->user_id , 'set' => 1]));
+                                    }
                                 }
                                 echo '<tr>';
                                 echo "<th>" . $user->username;
                                 if ($model->user_id == $user->id) {
                                     echo " (" . Yii::t('app', 'Owner') . ") ";
                                 }
-                                echo "</th><td>" . date('F j, Y, g:i a', $ouser->created_at) . "</td><td>" . $admin . "</td>";
-                                if (Yii::$app->user->can('updateOrganisation', ['model' => $model])){
-                                    echo '<td>' . Html::a('<i class="material-icons">delete</i>', Url::to(['remove-member', 'id' => $model->id, 'memberID' => $ouser->user_id])) . '</td>';
+                                echo "</th><td>" . date('d.m.Y', $model->created_at) . "</td><td>" . $admin . "</td>";
+                                if (Yii::$app->user->can('updateOrganisation', ['model' => $model]) || $isAdmin){
+                                    echo '<td>' . Html::a('<i class="material-icons">remove</i>', Url::to(['remove-member', 'id' => $model->id, 'memberID' => $ouser->user_id])) . '</td>';
                                 }
                                 echo '</tr>';
                             }; ?>
                             </tbody>
                         </table>
-                        <?php if (Yii::$app->user->can('updateOrganisation', ['model' => $model])): ?>
+                        <?php if ($isOwner || $isAdmin): ?>
                         <div class="pull-right">
                         <?= Html::a(Yii::t('app', 'Add User'), Url::to(['organisation/add', 'id' => $model->id]), ['class' => 'btn btn-success']) ?>
                         </div>

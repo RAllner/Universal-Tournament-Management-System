@@ -113,15 +113,15 @@ class EventsController extends FrontendController
             Yii::$app->session->setFlash('error', Yii::t('app', 'You are not allowed to access this page.'));
             return $this->redirect(['index']);
         }
-        $currentModel = $this->findModel($id);
+        $oldModel = $this->findModel($id);
         $model = $this->findModel($id);
 
         if (Yii::$app->user->can('updateEventsAndLocations', ['model' => $model]))
         {
             if ($model->load(Yii::$app->request->post()))
             {
-                if($currentModel->name != $model->name){
-                    //TODO: Name des Bildes ändern.
+                if($oldModel->name != $model->name){
+                    $model->rename($oldModel->name, $model->name);
                 }
                 $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
                 if($model->save())

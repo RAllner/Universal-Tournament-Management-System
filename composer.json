@@ -20,7 +20,10 @@
         "metalguardian/yii2-fotorama-widget": "*",
         "mervick/yii2-material-design-icons": "~1.0",
         "rmrevin/yii2-fontawesome": "~2.15",
-        "kartik-v/yii2-widget-datetimepicker": "*"
+        "kartik-v/yii2-widget-datetimepicker": "*",
+        "kartik-v/yii2-widgets": "*",
+        "fxp/composer-asset-plugin": "~1.0",
+        "yiisoft/yii2-jui": "^2.0"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

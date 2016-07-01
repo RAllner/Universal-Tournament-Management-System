@@ -19,10 +19,10 @@ $this->params['breadcrumbs'][] = $this->title;
         </span>
     </h1>
     <div class="clearfix"></div>
-    <div class="col-lg-8 well bs-component">
-
-        <?= $this->render('_form', ['model' => $model]) ?>
-
+    <div class="col-lg-8">
+        <div class=" well bs-component">
+            <?= $this->render('_form', ['model' => $model]) ?>
+        </div>
     </div>
-
 </div>
+

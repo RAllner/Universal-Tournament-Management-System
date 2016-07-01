@@ -82,7 +82,7 @@ class Events extends ActiveRecord
             [['startdate', 'enddate'], 'safe'],
             [['imageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg'],
             [['name', 'game', 'partners'], 'string', 'max' => 255],
-            [['facebook', 'liquidpedia', 'challonge'], 'string', 'max' => 512],
+            [['facebook', 'liquidpedia', 'challonge'], 'url', 'validSchemes' => ['http', 'https']],
             [['locations_id'], 'exist', 'skipOnError' => true, 'targetClass' => Locations::className(), 'targetAttribute' => ['locations_id' => 'id']],
         ];
     }
@@ -146,6 +146,27 @@ class Events extends ActiveRecord
             return false;
         }
     }
+
+
+    /**
+     * @param $oldName
+     * @param $newName
+     */
+    public function rename($oldName, $newName){
+        $path = Url::to('@webroot/images/events/');
+        $escapedNewName = $this->sanitize($newName);
+        $escapedOldName = $this->sanitize($oldName);
+        if (file_exists($path . $this->created_at . $escapedOldName . '.jpg')) {
+            if (rename($path . $this->created_at . $escapedOldName . '.jpg', $path . $this->created_at . $escapedNewName . '.jpg')) {
+                Yii::$app->session->setFlash('success', 'Filename changed to ' . $escapedNewName . '.jpg');
+            } else {
+                Yii::$app->session->setFlash('error', 'Filename not changed from' . $escapedOldName . '.jpg' . ' to ' . $escapedNewName . '.jpg');
+            }
+        }
+    }
+
+
+
 
     public function beforeSave($insert)
     {

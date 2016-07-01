@@ -107,10 +107,12 @@ class Organisation extends ActiveRecord
         $path = Url::to('@webroot/images/organisations/');
         $escapedNewName = $this->sanitize($newName);
         $escapedOldName = $this->sanitize($oldName);
-        if(rename($path.$this->created_at.$escapedOldName.'.jpg', $path.$this->created_at.$escapedNewName.'.jpg')){
-            Yii::$app->session->setFlash('success', 'Filename changed to '.$escapedNewName.'.jpg');
-        } else {
-            Yii::$app->session->setFlash('error', 'Filename not changed from'.$escapedOldName.'.jpg'.' to '.$escapedNewName.'.jpg' );
+        if (file_exists($path . $this->created_at . $escapedOldName . '.jpg')) {
+            if (rename($path . $this->created_at . $escapedOldName . '.jpg', $path . $this->created_at . $escapedNewName . '.jpg')) {
+                Yii::$app->session->setFlash('success', 'Filename changed to ' . $escapedNewName . '.jpg');
+            } else {
+                Yii::$app->session->setFlash('error', 'Filename not changed from' . $escapedOldName . '.jpg' . ' to ' . $escapedNewName . '.jpg');
+            }
         }
     }
 
@@ -233,5 +235,17 @@ class Organisation extends ActiveRecord
             $clean;
     }
 
-
+    public function isUserAdmin()
+    {
+        $isAdmin = false;
+        $organisationHasUsers = $this->organisationHasUsers;
+        foreach ($organisationHasUsers as $organisationHasUser) {
+            if ($organisationHasUser->admin == 1) {
+                if ($organisationHasUser->user_id == Yii::$app->user->id) {
+                    $isAdmin = true;
+                }
+            }
+        }
+        return $isAdmin;
+    }
 }

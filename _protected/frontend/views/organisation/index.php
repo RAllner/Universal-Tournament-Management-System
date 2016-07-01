@@ -23,18 +23,22 @@ $this->params['breadcrumbs'][] = $this->title;
             </span>
     </h1>
     <div class="clearfix"></div>
-    <div class="col-lg-12 well bs-component">
-    <?php echo $this->render('_search', ['model' => $searchModel]); ?>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="well">
+                <?php echo $this->render('_search', ['model' => $searchModel]); ?>
+            </div>
+        </div>
     </div>
 
-        <?= ListView::widget([
-            'summary' => false,
-            'dataProvider' => $dataProvider,
-            'emptyText' => Yii::t('app', 'We haven\'t created any articles yet.'),
-            'itemOptions' => ['class' => 'item'],
-            'itemView' => function ($model, $key, $index, $widget) {
-                return $this->render('_index', ['model' => $model]);
-            },
-        ]) ?>
+    <?= ListView::widget([
+        'summary' => false,
+        'dataProvider' => $dataProvider,
+        'emptyText' => '<div class="row"><div class="col-lg-12"><div class="well">'.Yii::t('app', 'We haven\'t created any articles yet.').'</div></div></div>',
+        'itemOptions' => ['class' => 'item'],
+        'itemView' => function ($model, $key, $index, $widget) {
+            return $this->render('_index', ['model' => $model]);
+        },
+    ]) ?>
 
 </div>

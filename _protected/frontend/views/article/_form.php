@@ -15,10 +15,10 @@ use yii\widgets\ActiveForm;
         <?= $form->field($model, 'title')->textInput(['maxlength' => 255]) ?>
 
         <?= $form->field($model, 'summary')->widget(CKEditor::className(),
-            ['editorOptions' => [ 'preset' => 'basic', 'inline' => false]]); ?>
+            ['editorOptions' => [ 'preset' => 'standard', 'inline' => false]]); ?>
 
         <?= $form->field($model, 'content')->widget(CKEditor::className(),
-            ['editorOptions' => [ 'preset' => 'standard', 'inline' => false]]); ?>
+            ['editorOptions' => [ 'preset' => 'full', 'inline' => false]]); ?>
     
         <?= $form->field($model, 'imageFile')->fileInput() ?>
 

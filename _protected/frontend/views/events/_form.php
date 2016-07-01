@@ -1,7 +1,7 @@
 <?php
 
 use frontend\models\Locations;
-use \kartik\datetime\DateTimePicker;
+use kartik\datetime\DateTimePicker;
 use mihaildev\ckeditor\CKEditor;
 use yii\helpers\Html;
 use yii\helpers\Url;
