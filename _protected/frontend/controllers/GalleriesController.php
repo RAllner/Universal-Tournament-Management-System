@@ -144,6 +144,10 @@ class GalleriesController extends FrontendController
     }
 
 
+    public function actionDeleteImage($id, $imageID){
+        $this->findModel($id)->deleteImage($imageID);
+        return $this->redirect(['update', 'id' => $id]);
+    }
 
 
     /**

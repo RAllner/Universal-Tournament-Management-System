@@ -55,7 +55,7 @@ use yii\helpers\Url;
             $options = ['data-lightbox' => 'gallery-image'];
             for ($i = 0; $i <= $imageCount - 1; $i++) {
 
-                echo '<div class="col-md-3 col-sm-3 col-xs-3" style="text-align: center;  padding:0.5em"><a href="' . $imageInfos['imageUrls'][$i] . '" data-lightbox="gallery" ><img src="' . $imageInfos['imageUrls'][$i] . '" style="max-height:150px; max-width:100%"/></a></div>';
+                echo '<div class="col-md-3 col-sm-3 col-xs-3" style="text-align: center;  padding:0.5em"><a href="'.Url::to(['delete-image', 'id'=> $model->id , 'imageID' => $i]).'" ><img src="' . $imageInfos['thumbsUrls'][$i] . '" style="max-height:150px; max-width:100%"/></a></div>';
                 if (($i == 3) || ($i > 3 && (($i + 1) % 4 == 0))) {
                     echo '<div class="clearfix"></div>';
                 }

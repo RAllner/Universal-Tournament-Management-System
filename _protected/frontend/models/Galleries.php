@@ -170,7 +170,7 @@ class Galleries extends ActiveRecord
     }
 
 
-
+    // TODO: Komischen Bug beheben.
     function createThumbs( $pathToImages, $pathToThumbs, $thumbWidth )
     {
         $pathToImages = $pathToImages.'/';
@@ -354,16 +354,16 @@ class Galleries extends ActiveRecord
     /**
      *
      */
-    public function deleteImage($imageNr){
+    public function deleteImage($imageID){
         $escapedTitle = $this->sanitize($this->title);
         $path = Url::to('@webroot/images/galleries/'.$this->created_at.$escapedTitle);
         $pathToImages = $path.'/images/';
         $pathToThumbs = $path.'/thumbs/';
 
-        unlink($pathToImages.$imageNr.'.jpg');
-        unlink($pathToThumbs.$imageNr.'.jpg');
+        unlink($pathToImages.$imageID.'.jpg');
+        unlink($pathToThumbs.$imageID.'.jpg');
 
-        for($i = $imageNr+1; $i<$this->getImageCount()+1; $i++){
+        for($i = $imageID+1; $i<$this->getImageCount()+1; $i++){
             rename($pathToImages.$i.".jpg", $pathToImages.($i-1).".jpg");
             rename($pathToThumbs.$i.".jpg", $pathToThumbs.($i-1).".jpg");
         }
