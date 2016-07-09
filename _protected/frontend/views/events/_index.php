@@ -80,11 +80,19 @@ $location = Locations::find()->where(['id' => $model->locations_id])->one();
                             <span class="article-Category">
                 <?php echo "<div class='" . CssHelper::generalCategoryCss($model->categoryName) . "'>" . $model->categoryName . ' ' . $model->typeName . "</div>"; ?>
                 </span>
-                <h1 class="articleTitle" itemprop="headline"><a
-                        href=<?= Url::to(['events/view', 'id' => $model->id]) ?>>
-                        <?= $model->name ?>
-                    </a></h1>
-
+                <?php if (is_null($model->eventpage)) { ?>
+                    <h1 class="articleTitle" itemprop="headline"><a
+                            href=<?= Url::to(['events/view', 'id' => $model->id]) ?>>
+                            <?= $model->name ?>
+                        </a></h1>
+                <?php } else { ?>
+                    <h1 class="articleTitle" itemprop="headline"><a
+                            href=<?= Url::to($model->eventpage) ?>>
+                            <?= $model->name ?>
+                        </a></h1>
+                    <?php
+                }
+                ?>
                 <p class="introText" itemprop="description">
                 <span class="pull-right">
                     <?php
@@ -124,7 +132,7 @@ $location = Locations::find()->where(['id' => $model->locations_id])->one();
                 <?php if (Yii::$app->user->can('updateEventsAndLocations')): ?>
                     <span class="pull-right">
                         <a class="btn btn-primary" href=<?= Url::to(['events/update', 'id' => $model->id]) ?>>
-                                <?= yii::t('app', 'Update'); ?>
+                            <?= yii::t('app', 'Update'); ?>
                         </a>
                     </span>
                 <?php endif ?>

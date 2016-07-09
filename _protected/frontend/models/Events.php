@@ -24,6 +24,7 @@ use Yii;
  * @property string $game
  * @property string $partners
  * @property string $facebook
+ * @property string $eventpage
  * @property string $liquidpedia
  * @property string $challonge
  * @property integer $status
@@ -82,7 +83,7 @@ class Events extends ActiveRecord
             [['startdate', 'enddate'], 'safe'],
             [['imageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg'],
             [['name', 'game', 'partners'], 'string', 'max' => 255],
-            [['facebook', 'liquidpedia', 'challonge'], 'url', 'validSchemes' => ['http', 'https']],
+            [['facebook', 'liquidpedia', 'challonge', 'eventpage'], 'url', 'validSchemes' => ['http', 'https']],
             [['locations_id'], 'exist', 'skipOnError' => true, 'targetClass' => Locations::className(), 'targetAttribute' => ['locations_id' => 'id']],
         ];
     }
@@ -117,6 +118,7 @@ class Events extends ActiveRecord
             'enddate' => Yii::t('app', 'Enddate'),
             'game' => Yii::t('app', 'Game'),
             'partners' => Yii::t('app', 'Partners'),
+            'eventpage' => Yii::t('app', 'Evemt Page'),
             'facebook' => Yii::t('app', 'Facebook'),
             'liquidpedia' => Yii::t('app', 'Liquidpedia'),
             'challonge' => Yii::t('app', 'Challonge'),

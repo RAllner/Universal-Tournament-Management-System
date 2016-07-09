@@ -2,7 +2,7 @@
 use mihaildev\ckeditor\CKEditor;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use frontend\models\Players;
+use frontend\models\Player;
 use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
@@ -17,7 +17,7 @@ use yii\helpers\ArrayHelper;
     <?= $form->field($model, 'playername')->textInput(['maxlength' => 255]) ?>
     <div class="row">
         <div class="col-lg-6">
-            <?= $form->field($model, "players_id")->dropDownList(ArrayHelper::map(Players::find()->all(), 'id', 'name'),['prompt'=>'Select...'])->hint(Yii::t('app', 'Select an existing Player to link him with this member. This is not required.')); ?>
+            <?= $form->field($model, "player_id")->dropDownList(ArrayHelper::map(Player::find()->all(), 'id', 'name'),['prompt'=>'Select...'])->hint(Yii::t('app', 'Select an existing Player to link him with this member. This is not required.')); ?>
         </div>
         <div class="col-lg-6">
         <?= $form->field($model, 'imageFile')->fileInput() ?>

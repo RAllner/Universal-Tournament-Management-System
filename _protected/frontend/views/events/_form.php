@@ -76,13 +76,17 @@ use yii\helpers\ArrayHelper;
 
     <?= $form->field($model, 'imageFile')->fileInput() ?>
 
-  <?= $form->field($model, 'tournaments_id')->textInput()->hint('http://example.de/example') ?>
+  <?= $form->field($model, 'tournaments_id')->textInput()->hint('not working right now') ?>
 
     <?= $form->field($model, 'game')->textInput(['maxlength' => true])->hint('Hearthstone, Starcraft, ...') ?>
 
     <?= $form->field($model, 'partners')->textInput(['maxlength' => true])->hint('Gecko-Bar, Heimrat-HL, Blizzard, ...') ?>
 
     <h2>Links</h2>
+    <div class="input-group">
+        <span class="input-group-addon"><i class="material-icons">http</i></span>
+        <?= $form->field($model, 'eventpage')->textInput(['maxlength' => true])->hint('http://example.de/example') ?>
+    </div>    
     <div class="input-group">
         <span class="input-group-addon"><i class="material-icons">http</i></span>
         <?= $form->field($model, 'facebook')->textInput(['maxlength' => true])->hint('http://example.de/example') ?>

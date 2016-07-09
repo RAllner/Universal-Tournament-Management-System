@@ -111,10 +111,9 @@ $options = ['data-title' => $photoInfo['alt']];
                             <span class="article-Category">
                 <?php echo "<div class='" . CssHelper::generalCategoryCss($model->categoryName) . "'>" . $model->categoryName . ' ' . $model->typeName . "</div>"; ?>
                 </span>
-                            <h1 class="articleTitle" itemprop="headline"><a
-                                    href=<?= Url::to(['events/view', 'id' => $model->id]) ?>>
+                            <h1 class="articleTitle" itemprop="headline">
                                     <?= $model->name ?>
-                                </a></h1>
+                                </h1>
 
                             <p class="introText" itemprop="description">
                 <span class="pull-right">

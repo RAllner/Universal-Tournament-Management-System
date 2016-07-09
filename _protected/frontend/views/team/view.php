@@ -94,7 +94,7 @@ $options = ['data-title' => $photoInfo['alt']];
                                 }
                                 echo '<tr>';
                                 echo "<td>" . Html::a($player->name, Url::to(['player/view', 'id' =>$player->id]));
-                                echo "</td><td>" . date('d.m.Y', $model->created_at). "</td><td>" . $admin . "</td>";
+                                echo "</td><td>" . date('d.m.Y', $member->created_at). "</td><td>" . $admin . "</td>";
                                 if ($isOwner || $isAdmin){
                                     echo '<td>' . Html::a('<i class="material-icons">remove</i>', Url::to(['remove-member', 'id' => $model->id, 'memberID' => $member->player_id])) . '</td>';
                                 }

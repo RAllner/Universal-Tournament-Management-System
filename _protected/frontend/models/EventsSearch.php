@@ -19,7 +19,7 @@ class EventsSearch extends Events
     {
         return [
             [['id', 'user_id', 'locations_id', 'tournaments_id', 'type', 'status', 'category', 'created_at', 'updated_at'], 'integer'],
-            [['name', 'description', 'startdate', 'enddate', 'game', 'partners', 'facebook', 'liquidpedia', 'challonge'], 'safe'],
+            [['name', 'description', 'startdate', 'enddate', 'game', 'partners', 'facebook', 'liquidpedia', 'challonge', 'eventpage'], 'safe'],
         ];
     }
 
@@ -86,7 +86,8 @@ class EventsSearch extends Events
             ->andFilterWhere(['like', 'partners', $this->partners])
             ->andFilterWhere(['like', 'facebook', $this->facebook])
             ->andFilterWhere(['like', 'liquidpedia', $this->liquidpedia])
-            ->andFilterWhere(['like', 'challonge', $this->challonge]);
+            ->andFilterWhere(['like', 'challonge', $this->challonge])
+            ->andFilterWhere(['like', 'eventpage', $this->eventpage]);
 
         return $dataProvider;
     }

@@ -218,10 +218,19 @@ if (isset($nextEvent)) {
                             <span class="article-Category">
                 <?php echo "<div class='" . CssHelper::generalCategoryCss($nextEvent->categoryName) . "'>" . $nextEvent->categoryName . ' ' . $nextEvent->typeName . "</div>"; ?>
                 </span>
-                            <h1 class="articleTitle" itemprop="headline"><a
-                                    href=<?= Url::to(['events/view', 'id' => $nextEvent->id]) ?>>
-                                    <?= $nextEvent->name ?>
-                                </a></h1>
+                            <?php if (is_null($nextEvent->eventpage)) { ?>
+                                <h1 class="articleTitle" itemprop="headline"><a
+                                        href=<?= Url::to(['events/view', 'id' => $nextEvent->id]) ?>>
+                                        <?= $nextEvent->name ?>
+                                    </a></h1>
+                            <?php } else { ?>
+                                <h1 class="articleTitle" itemprop="headline"><a
+                                        href=<?= Url::to($nextEvent->eventpage) ?>>
+                                        <?= $nextEvent->name ?>
+                                    </a></h1>
+                                <?php
+                            }
+                            ?>
 
                             <p class="introText" itemprop="description">
                 <span class="pull-right">
@@ -274,10 +283,17 @@ if (isset($nextEvent)) {
                 <?php
                 foreach ($next5Events as $event) {
                     $url5 = Url::to(['events/view', 'id' => $event->id]);
+                    if(!is_null($event->eventpage)){
+                        $urlEventPage = Url::to($event->eventpage);
+                    }
                     $date5 = new DateTime($event->startdate);
                     $location5 = Locations::find()->where(['id' => $event->locations_id])->one();
-                    ?>
-                    <a href="<?= $url5 ?>">
+
+                    if(is_null($event->eventpage)){
+                        echo '<a href="'. $url5 .'">';
+                    }else {
+                        echo '<a href="'. $urlEventPage .'">';
+                    } ?>
                         <div class="row">
                             <div class="col-xs-2 no-padding-right" style="text-align: center">
                                 <div class="wrap-event-date-home">
