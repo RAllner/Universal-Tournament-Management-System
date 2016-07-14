@@ -1,6 +1,6 @@
 <?php
 
-use frontend\models\Locations;
+use frontend\models\Location;
 use kartik\datetime\DateTimePicker;
 use mihaildev\ckeditor\CKEditor;
 use yii\helpers\Html;
@@ -24,8 +24,8 @@ use yii\helpers\ArrayHelper;
         <div class="col-lg-4">
 
             <div class="input-group">
-                <?= $form->field($model, 'locations_id')->dropDownList(ArrayHelper::map(Locations::find()->all(), 'id', 'name')) ?>
-                <?= Html::a('<i class="material-icons">add</i>', ['locations/create'], ['class' => 'input-group-btn btn']) ?>
+                <?= $form->field($model, 'locations_id')->dropDownList(ArrayHelper::map(Location::find()->all(), 'id', 'name')) ?>
+                <?= Html::a('<i class="material-icons">add</i>', ['location/create'], ['class' => 'input-group-btn btn']) ?>
             </div>
 
         </div>

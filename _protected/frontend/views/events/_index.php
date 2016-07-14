@@ -2,7 +2,7 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 use common\helpers\CssHelper;
-use frontend\models\Locations;
+use frontend\models\Location;
 
 /* @var $this yii\web\View */
 $this->title = 'Events';
@@ -10,7 +10,7 @@ $photoInfo = $model->PhotoInfo;
 $photo = Html::img($photoInfo['url'], ['alt' => $photoInfo['alt'], 'width' => '100%']);
 $options = ['data-title' => $photoInfo['alt']];
 $date = new DateTime($model->startdate);
-$location = Locations::find()->where(['id' => $model->locations_id])->one();
+$location = Location::find()->where(['id' => $model->locations_id])->one();
 ?>
 
 
@@ -112,7 +112,7 @@ $location = Locations::find()->where(['id' => $model->locations_id])->one();
                     <i class="material-icons">account_circle</i> <?= Yii::t('app', 'Author') . ' ' . $model->authorName ?>
                     <i class="material-icons">schedule</i> <?= Yii::t('app', 'Added on') . ' ' . date('d.m.Y, G:i', $model->created_at) . ' ' . Yii::t('app', 'o\' clock') ?>
                     </br>
-                    <i class="material-icons">home</i> <?= Yii::t('app', 'Location') . ': ' . Html::a($location->name, Url::to(['locations/view', 'id' => $location->id])) . ' - ' . $location->adress . ' | ' . $location->citystate . ' | ' . $location->postalcode ?>
+                    <i class="material-icons">home</i> <?= Yii::t('app', 'Location') . ': ' . Html::a($location->name, Url::to(['location/view', 'id' => $location->id])) . ' - ' . $location->adress . ' | ' . $location->citystate . ' | ' . $location->postalcode ?>
                 </p>
             </div>
         </div>

@@ -113,8 +113,8 @@ class ArticleController extends FrontendController
         {
             if ($model->load(Yii::$app->request->post()))
             {
-                if($oldModel->name != $model->name){
-                    $model->rename($oldModel->name, $model->name);
+                if($oldModel->title != $model->title){
+                    $model->rename($oldModel->title, $model->title);
                 }
                 $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
                 if($model->save()) 

@@ -65,9 +65,9 @@ AppAsset::register($this);
         ],
     ]);
 
-    // everyone can see Home page
-    //$menuItems[] = ['label' => '<span class="glyphicon glyphicon-home"></span>', 'url' => ['/site/index']];
 
+    $menuItems[] = ['label' => '<span class="glyphicon glyphicon-home"></span>', 'url' => ['/article/home']];
+    $menuItems[] = ['label' => '<i class="material-icons">gamepad</i> ' . Yii::t('app', 'Tournaments'), 'url' => ['/tournament/index']];
     $menuItems[] = ['label' => '<i class="material-icons">chrome_reader_mode</i> ' . Yii::t('app', 'News'), 'url' => ['/article/index']];
     $menuItems[] = ['label' => '<i class="material-icons">event</i> ' . Yii::t('app', 'Events'), 'url' => ['/events/index']];
     $menuItems[] = ['label' => '<i class="material-icons">play_arrow</i> ' . Yii::t('app', 'Media'),
@@ -82,7 +82,7 @@ AppAsset::register($this);
         'items' => [
             ['label' => Yii::t('app', 'About'), 'url' => ['/site/about']],
             ['label' => Yii::t('app', 'Contact'), 'url' => ['/site/contact']],
-            ['label' => Yii::t('app', 'Journey'), 'url' => ['/site/journey']],
+            ['label' => Yii::t('app', 'Journey'), 'url' => ['/location/index']],
             ['label' => Yii::t('app', 'Imprint'), 'url' => ['/site/imprint']]
         ]
     ];
@@ -94,11 +94,26 @@ AppAsset::register($this);
         $menuItems[] = ['label' => Yii::t('app', 'Login'), 'url' => ['/site/login']];
     } // display Logout to all logged in users
     else  {
-        if (Yii::$app->user->can('premium')){
+        if(Yii::$app->user->can('admin')) {
             $menuItems[] = [
                 'label' => '<i class="material-icons">account_circle</i> ' . Yii::$app->user->identity->username,
                 'items' => [
-                    ['label' => Yii::t('app', 'Settings'), 'url' => ['/backend/user/view', 'id' => Yii::$app->user->id]],
+                    ['label' => '<i class="material-icons">settings</i> Backend', 'url' => ['/backend']],
+                    '<li class="divider"></li>',
+                    ['label' => Yii::t('app', 'User Settings'), 'url' => ['/backend/user/update', 'id' => Yii::$app->user->id]],
+                    ['label' => Yii::t('app', 'Players'), 'url' => ['/player/own-index']],
+                    ['label' => Yii::t('app', 'Teams'), 'url' => ['/team/index']],
+                    ['label' => Yii::t('app', 'Organisations'), 'url' => ['/organisation/index']],
+                    '<li class="divider"></li>',
+                    ['label' => Yii::t('app', 'Logout'), 'url' => ['/site/logout'], 'linkOptions' => ['data-method' => 'post']],
+                ]
+            ];
+
+        } else if (Yii::$app->user->can('premium')){
+            $menuItems[] = [
+                'label' => '<i class="material-icons">account_circle</i> ' . Yii::$app->user->identity->username,
+                'items' => [
+                    ['label' => Yii::t('app', 'User Settings'), 'url' => ['/backend/user/update', 'id' => Yii::$app->user->id]],
                     ['label' => Yii::t('app', 'Players'), 'url' => ['/player/own-index']],
                     ['label' => Yii::t('app', 'Teams'), 'url' => ['/team/index']],
                     ['label' => Yii::t('app', 'Organisations'), 'url' => ['/organisation/index']],
@@ -110,19 +125,19 @@ AppAsset::register($this);
             $menuItems[] = [
                 'label' => '<i class="material-icons">account_circle</i> ' . Yii::$app->user->identity->username,
                 'items' => [
-                    ['label' => Yii::t('app', 'Settings'), 'url' => ['/backend/user/view', 'id' => Yii::$app->user->id]],
+                    ['label' => Yii::t('app', 'Settings'), 'url' => ['/backend/user/update', 'id' => Yii::$app->user->id]],
                     ['label' => Yii::t('app', 'Players'), 'url' => ['/player/own-index']],
                     ['label' => Yii::t('app', 'Teams'), 'url' => ['/team/index']],
                     '<li class="divider"></li>',
                     ['label' => Yii::t('app', 'Logout'), 'url' => ['/site/logout'], 'linkOptions' => ['data-method' => 'post']],
-                 ]
+                ]
             ];
         }
     }
 
 
     if (Yii::$app->user->can('admin')) {
-        $menuItems[] = ['label' => '<i class="material-icons">settings</i>', 'url' => ['/backend']];
+
     }
 
     echo Nav::widget([

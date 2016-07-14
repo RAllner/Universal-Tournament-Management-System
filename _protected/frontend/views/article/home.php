@@ -1,5 +1,5 @@
 <?php
-use frontend\models\Locations;
+use frontend\models\Location;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use common\helpers\CssHelper;
@@ -15,7 +15,7 @@ $next5Events = Events::find()->orderBy(['startdate' => SORT_ASC])->where('startd
 $nextEvent = Events::find()->orderBy(['startdate' => SORT_ASC])->where('startdate>:time')->addParams([':time' => (new DateTime())->format('Y-m-d H:i:s')])->one();
 if (isset($nextEvent)) {
     $date = new DateTime($nextEvent->startdate);
-    $location = Locations::find()->where(['id' => $nextEvent->locations_id])->one();
+    $location = Location::find()->where(['id' => $nextEvent->locations_id])->one();
     $photoEventInfo = $nextEvent->PhotoInfo;
     $photoEvent = Html::img($photoEventInfo['url'], ['alt' => $photoEventInfo['alt'], 'width' => '100%']);
 }
@@ -54,7 +54,7 @@ if (isset($nextEvent)) {
                 foreach ($next5Events as $event) {
                     $url5 = Url::to(['events/view', 'id' => $event->id]);
                     $date5 = new DateTime($event->startdate);
-                    $location5 = Locations::find()->where(['id' => $event->locations_id])->one();
+                    $location5 = Location::find()->where(['id' => $event->locations_id])->one();
                     ?>
                     <a href="<?= $url5 ?>">
                         <div class="row">
@@ -251,7 +251,7 @@ if (isset($nextEvent)) {
                                 <i class="material-icons">account_circle</i> <?= Yii::t('app', 'Author') . ' ' . $nextEvent->authorName ?>
                                 <i class="material-icons">schedule</i> <?= Yii::t('app', 'Added on') . ' ' . date('d.m.Y, G:i', $nextEvent->created_at) . ' ' . Yii::t('app', 'o\' clock') ?>
                                 </br>
-                                <i class="material-icons">home</i> <?= Yii::t('app', 'Location') . ': ' . Html::a($location->name, Url::to(['locations/view', 'id' => $location->id])) . ' - ' . $location->adress . ' | ' . $location->citystate . ' | ' . $location->postalcode ?>
+                                <i class="material-icons">home</i> <?= Yii::t('app', 'Location') . ': ' . Html::a($location->name, Url::to(['location/view', 'id' => $location->id])) . ' - ' . $location->adress . ' | ' . $location->citystate . ' | ' . $location->postalcode ?>
                             </p>
                         </div>
                     </div>
@@ -287,7 +287,7 @@ if (isset($nextEvent)) {
                         $urlEventPage = Url::to($event->eventpage);
                     }
                     $date5 = new DateTime($event->startdate);
-                    $location5 = Locations::find()->where(['id' => $event->locations_id])->one();
+                    $location5 = Location::find()->where(['id' => $event->locations_id])->one();
 
                     if(is_null($event->eventpage)){
                         echo '<a href="'. $url5 .'">';

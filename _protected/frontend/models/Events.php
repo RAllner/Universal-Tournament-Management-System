@@ -32,7 +32,7 @@ use Yii;
  * @property integer $created_at
  * @property integer $updated_at
  *
- * @property Locations $locations
+ * @property Location $location
  * @property User $user
  */
 class Events extends ActiveRecord
@@ -84,7 +84,7 @@ class Events extends ActiveRecord
             [['imageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg'],
             [['name', 'game', 'partners'], 'string', 'max' => 255],
             [['facebook', 'liquidpedia', 'challonge', 'eventpage'], 'url', 'validSchemes' => ['http', 'https']],
-            [['locations_id'], 'exist', 'skipOnError' => true, 'targetClass' => Locations::className(), 'targetAttribute' => ['locations_id' => 'id']],
+            [['locations_id'], 'exist', 'skipOnError' => true, 'targetClass' => Location::className(), 'targetAttribute' => ['locations_id' => 'id']],
         ];
     }
 
@@ -241,9 +241,9 @@ class Events extends ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getLocations()
+    public function getLocation()
     {
-        return $this->hasOne(Locations::className(), ['id' => 'locations_id']);
+        return $this->hasOne(Location::className(), ['id' => 'locations_id']);
     }
 
     /**

@@ -26,7 +26,7 @@ class HalloffameController extends FrontendController
          * How many articles we want to display per page.
          * @var integer
          */
-        $pageSize = 5;
+        $pageSize = 12;
 
         /**
          * Articles have to be published.

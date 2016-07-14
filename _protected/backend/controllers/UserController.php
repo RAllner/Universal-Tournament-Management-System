@@ -4,6 +4,17 @@ namespace backend\controllers;
 use common\models\User;
 use common\models\UserSearch;
 use common\rbac\models\Role;
+use frontend\models\Article;
+use frontend\models\Events;
+use frontend\models\Galleries;
+use frontend\models\Halloffame;
+use frontend\models\Location;
+use frontend\models\Organisation;
+use frontend\models\OrganisationHasUser;
+use frontend\models\Player;
+use frontend\models\Team;
+use frontend\models\TeamMember;
+use frontend\models\Videos;
 use yii\base\Model;
 use yii\web\NotFoundHttpException;
 use Yii;
@@ -154,13 +165,75 @@ class UserController extends BackendController
             Yii::$app->user->logout();
         }
 
-        $this->findModel($id)->delete();
-
+        $model = $this->findModel($id);
 
         // delete this user's role from auth_assignment table
         if ($role = Role::find()->where(['user_id' => $id])->one()) {
             $role->delete();
         }
+        if ($hallOfFameMembers = Halloffame::find()->where(['user_id' => $id])->all()) {
+            foreach ($hallOfFameMembers as $member) {
+                $member->delete();
+            }
+        }
+        if ($players = Player::find()->where(['user_id' => $id])->all()) {
+            foreach ($players as $player) {
+                if($teamMember = TeamMember::find()->where(['player_id' => $player->id])->all()){
+                    foreach ($teamMember as $member){
+                        $member->delete();
+                    }
+                }
+                if($hallOfFameMembers = Halloffame::find()->where(['player_id' => $player->id])->all()){
+                    foreach ($hallOfFameMembers as $member){
+                        $member->player_id = null;
+                        $member->save();
+                    }
+                }
+                $player->delete();
+            }
+        }
+        if ($articles = Article::find()->where(['user_id' => $id])->all()) {
+            foreach ($articles as $article) {
+                $article->delete();
+            }
+        }
+        if ($galleries = Galleries::find()->where(['user_id' => $id])->all()) {
+            foreach ($galleries as $gallery) {
+                $gallery->delete();
+            }
+        }
+        if ($videos = Videos::find()->where(['user_id' => $id])->all()) {
+            foreach ($videos as $video) {
+                $video->delete();
+            }
+        }
+        if ($teams = Team::find()->where(['user_id' => $id])->all()) {
+            foreach ($teams as $team) {
+                $team->delete();
+            }
+        }
+        if ($organisationUsers = OrganisationHasUser::find()->where(['user_id' => $id])->all()) {
+            foreach ($organisationUsers as $user) {
+                $user->delete();
+            }
+        }
+        if ($organisations = Organisation::find()->where(['user_id' => $id])->all()) {
+            foreach ($organisations as $organisation) {
+                $organisation->delete();
+            }
+        }
+        if ($locations = Location::find()->where(['user_id' => $id])->all()) {
+            foreach ($locations as $location) {
+                $location->delete();
+            }
+        }
+        if ($events = Events::find()->where(['user_id' => $id])->all()) {
+            foreach ($events as $event) {
+                $event->delete();
+            }
+        }
+
+        $model->delete();
 
         return $this->goHome();
     }

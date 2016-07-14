@@ -8,7 +8,7 @@ use frontend\models\Article;
 use frontend\models\Videos;
 use frontend\models\Player;
 use frontend\models\Events;
-use frontend\models\Locations;
+use frontend\models\Location;
 use frontend\models\Organisation;
 use frontend\models\OrganisationHasUser;
 use nenad\passwordStrength\StrengthValidator;
@@ -175,7 +175,7 @@ class User extends UserIdentity
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getOrganisation()
+    public function getOrganisations()
     {
         return $this->hasMany(Organisation::className(), ['user_id' => 'id']);
     }    
@@ -203,13 +203,13 @@ class User extends UserIdentity
 
 
     /**
-     * Relation with Locations model.
+     * Relation with Location model.
      *
      * @return \yii\db\ActiveQuery
      */
     public function getLocations()
     {
-        return $this->hasMany(Locations::className(), ['user_id' => 'id']);
+        return $this->hasMany(Location::className(), ['user_id' => 'id']);
     }
 
 //------------------------------------------------------------------------------------------------//

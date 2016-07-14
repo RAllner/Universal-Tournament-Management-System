@@ -5,8 +5,8 @@
 html,
 body {
     height: 100%;
-    background-color: rgb(74, 74, 74);
     color: white;
+    background: #292929;
 }
 
 .wrap {
@@ -14,6 +14,11 @@ body {
     height: auto;
     margin: 0 auto -60px;
     padding: 0 0 60px;
+    background: #292929 url("../../../images/constant/background.jpg") no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
 }
 
 .wrap > .container {
@@ -43,7 +48,13 @@ body {
 }
 
 .navbar, .navbar-default, .navbar-primary {
-    background-color: #181818;
+    background: repeating-linear-gradient(
+            -45deg,
+            #181818,
+            #222 2px,
+            #181818 5px,
+            #181818 5px
+    );
 }
 
 .breadcrumb {
@@ -66,7 +77,13 @@ a:hover {
 }
 
 .footer {
-    background-color: #181818;
+    background: repeating-linear-gradient(
+            -45deg,
+            #181818,
+            #222 2px,
+            #181818 5px,
+            #181818 5px
+    );
     border-top: 1px solid #292929;
 }
 
@@ -84,7 +101,6 @@ a:hover {
 
 .navbar-nav > li > .dropdown-menu > li:not(.active):hover, .navbar-nav > li > .dropdown-menu > li:not(.active):focus {
     background-color: #292929;
-    border-left: solid 4px #ffad24;
 }
 
 .dropdown-menu > li > a {
@@ -108,7 +124,7 @@ a:hover {
 }
 
 .navbar-nav > li > .dropdown-menu > li:not(.active) {
-    border-left: solid 4px #292929;
+    border-left: solid 4px transparent;
 }
 
 .table-striped > tbody > tr:nth-of-type(odd) {
@@ -324,10 +340,8 @@ option:hover, option:focus {
 .external-link-bar {
     display: block;
     margin: 0 !important;
-
     border-bottom: hidden;
     min-height: 70px;
-    background-color: #181818;
 }
 
 .external-link-bar > li {
@@ -335,7 +349,7 @@ option:hover, option:focus {
 }
 
 .external-link {
-    border-top: solid #292929 4px;
+    border-top: solid transparent 4px;
     padding: 0 !important;
     color: white;
     font-size: 22px;
@@ -348,7 +362,7 @@ option:hover, option:focus {
 }
 
 .external-link:hover, .external-link:focus {
-    border-top: solid #ffad24 4px;
+    border-top: solid transparent 4px;
     background-color: rgba(158, 158, 158, 0.2);
     color: #FFF;
 }
@@ -366,11 +380,11 @@ option:hover, option:focus {
 }
 
 .navbar-nav > li {
-    border-bottom: solid #292929 4px;
+    border-bottom: solid transparent 4px;
 }
 
 .navbar-nav > li:hover, .navbar-nav > li:focus {
-    border-bottom: solid #ffad24 4px;
+    border-bottom: solid rgba(158, 158, 158, 0.2) 4px;
 }
 
 /* ------------------------ Ende meine Änderungen */
@@ -614,9 +628,17 @@ hr.article-devider {
     display: block;
     height: 400px;
     position: relative;
-    background-repeat: no-repeat;
     background-size: cover;
-    background-position: center;
+    background: no-repeat center;
+}
+
+.hof-image-wrap {
+    width: 100%;
+    display: block;
+    height: 295px;
+    position: relative;
+    background-size: cover;
+    background: no-repeat center;
 }
 
 .article-image-wrap-detail {
@@ -636,6 +658,9 @@ hr.article-devider {
     padding: 0 40px;
     width: 100%;
 }
+.hof-image-wrap .intro-Text-wrap {
+    padding: 0 20px;
+}
 
 .article-Category {
     float: right;
@@ -643,6 +668,13 @@ hr.article-devider {
     position: initial;
     padding: 6px;
     background-color: rgba(0, 0, 0, 0.7);
+}
+.hof-image-wrap .article-Category{
+    margin: -32px -20px 0 0;
+}
+.hof-image-wrap .articleTitle{
+    font-size: 24px;
+    font-weight: 700;
 }
 
 .articleTitle {
@@ -654,6 +686,8 @@ hr.article-devider {
     margin-bottom: 30px;
     font-weight: 700;
 }
+
+
 
 /* ----- Locations ------ */
 
@@ -867,5 +901,9 @@ hr.article-devider {
 }
 
 .ui-autocomplete-input {
+    background-color: #292929;
+}
+
+optgroup{
     background-color: #292929;
 }

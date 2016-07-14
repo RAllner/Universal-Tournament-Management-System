@@ -116,10 +116,42 @@ class Halloffame extends ActiveRecord
             $escapedTitle = $this->sanitize($this->playername);
             $filename = $this->created_at . $escapedTitle . '.jpg';
             $this->imageFile->saveAs($path . $filename);
+            $this->makeRect($path . $filename);
             return true;
         } else {
             return false;
         }
+    }
+
+    /**
+     * @param $path
+     */
+    public function makeRect($path)
+    {
+        //getting the image dimensions
+        list($width, $height) = getimagesize($path);
+
+        //saving the image into memory (for manipulation with GD Library)
+        $myImage = imagecreatefromjpeg($path);
+
+        // calculating the part of the image to use for thumbnail
+        if ($width > $height) {
+            $y = 0;
+            $x = ($width - $height) / 2;
+            $smallestSide = $height;
+        } else {
+            $x = 0;
+            $y = ($height - $width) / 2;
+            $smallestSide = $width;
+        }
+
+        $imageSize = 295;
+        $image = imagecreatetruecolor($imageSize, $imageSize);
+        imagecopyresampled($image, $myImage, 0, 0, $x, $y, $imageSize, $imageSize, $smallestSide, $smallestSide);
+
+        //final output
+        header('Content-type: image/jpeg');
+        imagejpeg($image ,$path, 80);
     }
 
     /**

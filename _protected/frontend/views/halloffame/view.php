@@ -1,5 +1,7 @@
 <?php
+use common\helpers\CssHelper;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
@@ -39,34 +41,31 @@ $options = ['data-lightbox' => 'profile-image', 'data-title' => $photoInfo['alt'
         </div>
 
     </h1>
+    <div class="clearfix"></div>
     <div class="row">
-        <div class="col-lg-6 well bs-component">
+        <div class="col-xs-12 col-sm-5 col-md-4 col-lg-3">
 
-            <figure style="text-align: center">
-                <?= Html::a($photo, $photoInfo['url'], $options) ?>
-                <figcaption>(Click to enlarge)</figcaption>
-            </figure>
-            </br>
+                <div class="hof-image-wrap" style="background-image: url('<?= $photoInfo['url'] ?>')">
+                    <div class="intro-Text-wrap">
+                <span class="article-Category">
+                <?php echo "<div class='" . CssHelper::generalCategoryCss($model->categoryName) . "'>" . $model->categoryName . "</div>"; ?>
+                </span>
+                            <h1 class="articleTitle" itemprop="headline"><?= $model->playername ?></h1>
+                        </a>
 
-
-            <?= DetailView::widget([
-                'model' => $model,
-                'attributes' => [
-                    //'id',
-                    [
-                        'label' => Yii::t('app', 'Author'),
-                        'value' => $model->authorName,
-                    ],
-                    'playername',
-                    'achievements',
-                    'description:html',
-                    [
-                        'label' => Yii::t('app', 'Category'),
-                        'value' => $model->categoryName,
-                    ],
-                    'created_at:dateTime',
-                ],
-            ]) ?>
+                    </div>
+                </div>
+        </div>
+        <div class="col-xs-12 col-sm-7 col-md-8 col-lg-9">
+            <div class="well">
+            <p class="introText" itemprop="description">
+                <i class="material-icons">schedule</i> <?= date('d.m.Y, G:i', $model->created_at) . ' ' . Yii::t('app', 'o\' clock') ?></br>
+                <i class="material-icons">flag</i> <?= Yii::t('app', 'Achievements') ?>: <?= $model->achievements ?>
+            </p>
+            <p>
+                <?= $model->description ?>
+            </p>
+        </div>
         </div>
     </div>
 </div>
