@@ -907,3 +907,10 @@ hr.article-devider {
 optgroup{
     background-color: #292929;
 }
+
+
+/* TOURNAMENT */
+
+#tournament-stage_type > label {
+    display: inherit;
+}
