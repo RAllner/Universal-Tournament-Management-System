@@ -5,14 +5,13 @@ namespace frontend\controllers;
 use Yii;
 use frontend\models\Tournament;
 use frontend\models\TournamentSearch;
-use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
  * TournamentController implements the CRUD actions for Tournament model.
  */
-class TournamentController extends Controller
+class TournamentController extends FrontendController
 {
     /**
      * @inheritdoc
@@ -33,10 +32,13 @@ class TournamentController extends Controller
      * Lists all Tournament models.
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex($filter = 0)
     {
         $searchModel = new TournamentSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        if(!isset($_GET['filter'])){
+            $_GET['filter'] = 0;
+        }
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $filter);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -64,21 +66,32 @@ class TournamentController extends Controller
     public function actionCreate()
     {
         $model = new Tournament();
-        $model->participants_count = 0;
-        if ($model->load(Yii::$app->request->post())){
-            if($model->hosted_by === -1){
+        $this->loadDefault($model);
+        if ($model->load(Yii::$app->request->post())) {
+            if($model->hosted_by == -1){
                 $model->user_id = Yii::$app->user->id;
             } else {
                 $model->organisation_id = $model->hosted_by;
             }
-            if($model->save()) {
+            if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
+            } else {
+                return $this->render('create', [
+                    'model' => $model,
+                ]);
             }
         } else {
             return $this->render('create', [
                 'model' => $model,
             ]);
         }
+    }
+
+    public function loadDefault($model){
+        $model->participants_compete = 4;
+        $model->participants_advance = 2;
+        $model->stage_type = 0;
+        $model->fs_de_grand_finals = 0;
     }
 
     /**
@@ -99,6 +112,7 @@ class TournamentController extends Controller
             ]);
         }
     }
+
 
     /**
      * Deletes an existing Tournament model.

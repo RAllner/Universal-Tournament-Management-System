@@ -914,3 +914,58 @@ optgroup{
 #tournament-stage_type > label {
     display: inherit;
 }
+
+#tournament-fs_de_grand_finals > label {
+    display: inherit;
+}
+
+.group-stage {
+    display: inline;
+}
+
+.group-stage .well {
+    background-color: #494949;
+}
+.final-stage .well {
+    background-color: #494949;
+
+}
+
+.datetimepicker table tr td.day:hover {
+    background: #292929;
+    cursor: pointer;
+}
+.datetimepicker table tr td {
+    border-radius: 0;
+}
+
+.datetimepicker table tr td {
+    border-color: #ff9800;
+}
+.datetimepicker table tr th {
+    border-radius: 0;
+}
+.datetimepicker table tr td.active:hover, .datetimepicker table tr td.active:hover:hover, .datetimepicker table tr td.active.disabled:hover, .datetimepicker table tr td.active.disabled:hover:hover, .datetimepicker table tr td.active:active, .datetimepicker table tr td.active:hover:active, .datetimepicker table tr td.active.disabled:active, .datetimepicker table tr td.active.disabled:hover:active, .datetimepicker table tr td.active.active, .datetimepicker table tr td.active:hover.active, .datetimepicker table tr td.active.disabled.active, .datetimepicker table tr td.active.disabled:hover.active, .datetimepicker table tr td.active.disabled, .datetimepicker table tr td.active:hover.disabled, .datetimepicker table tr td.active.disabled.disabled, .datetimepicker table tr td.active.disabled:hover.disabled, .datetimepicker table tr td.active[disabled], .datetimepicker table tr td.active:hover[disabled], .datetimepicker table tr td.active.disabled[disabled], .datetimepicker table tr td.active.disabled:hover[disabled] {
+    background-color: #ff9800;
+    border-color: #ff9800;
+}
+
+.datetimepicker thead tr:first-child th:hover, .datetimepicker tfoot tr:first-child th:hover {
+    background: #181818;
+}
+
+.nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover {
+    color: #000;
+    background-color: #ff9800;
+}
+.nav-pills>li>a:focus, .nav-pills>li>a:hover {
+    background-color: rgba(158, 158, 158, 0.2);
+}
+
+.nav-pills>li>a {
+    color: #fff;
+}
+.nav-pills {
+    background-color: #181818;
+    border-radius: 5px;
+}

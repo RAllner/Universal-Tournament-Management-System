@@ -2,10 +2,12 @@
 
 namespace frontend\models;
 
+use Faker\Provider\zh_TW\DateTime;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use common\models\User;
+use yii\helpers\Url;
 
 /**
  * This is the model class for table "tournament".
@@ -27,8 +29,8 @@ use common\models\User;
  * @property integer $updated_at
  * @property integer $has_sets
  * @property integer $participants_count
+ * @property integer $is_team_tournament
  * @property integer $stage_type
- * @property integer $first_stage
  * @property integer $fs_format
  * @property integer $fs_third_place
  * @property integer $fs_de_grand_finals
@@ -79,6 +81,8 @@ class Tournament extends ActiveRecord
     const RANKED_BY_POINTS_SCORED = 4;
     const RANKED_BY_POINTS_DIFFERENCE = 5;
     const RANKED_BY_CUSTOM = 6;
+    const RANKED_BY_WINS_VS_TIED_PARTICIPANTS = 7;
+    const RANKED_BY_MEDIAN_BUCHHOLZ_SYSTEM = 8;
 
 
 
@@ -96,14 +100,28 @@ class Tournament extends ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'game_id', 'organisation_id', 'hosted_by', 'location', 'max_participants', 'status', 'has_sets', 'participants_count', 'stage_type', 'first_stage', 'fs_format', 'fs_third_place', 'fs_de_grand_finals', 'fs_rr_ranked_by', 'participants_compete', 'participants_advance', 'gs_format', 'gs_rr_ranked_by', 'gs_tie_break1', 'gs_tie_break2', 'quick_advance', 'gs_tie_break3', 'gs_tie_break1_copy1', 'gs_tie_break2_copy1', 'gs_tie_break3_copy1', 'notifications'], 'integer'],
-            [['game_id', 'name', 'begin', 'location', 'max_participants', 'status', 'created_at', 'updated_at', 'fs_format', 'notifications'], 'required'],
+            [['user_id', 'game_id', 'organisation_id', 'hosted_by', 'location', 'max_participants', 'status', 'has_sets', 'participants_count', 'stage_type', 'fs_format', 'fs_third_place', 'fs_de_grand_finals', 'fs_rr_ranked_by', 'participants_compete', 'participants_advance', 'gs_format', 'gs_rr_ranked_by', 'gs_tie_break1', 'gs_tie_break2', 'quick_advance', 'gs_tie_break3', 'gs_tie_break1_copy1', 'gs_tie_break2_copy1', 'gs_tie_break3_copy1', 'notifications','is_team_tournament'], 'integer'],
+            [['game_id', 'name', 'begin', 'location', 'max_participants', 'status', 'fs_format', 'notifications','is_team_tournament'], 'required'],
             [['begin', 'end'], 'safe'],
             [['description'], 'string'],
-            [['fs_rr_ppmw', 'fs_rr_ppmt', 'fs_rr_ppgw', 'fs_rr_ppgt', 'fs_s_ppb', 'gs_rr_ppmw', 'gs_rr_ppmt', 'gs_rr_ppgw', 'gs_rr_ppgt'], 'number'],
+            [['fs_rr_ppmw', 'fs_rr_ppmt', 'fs_rr_ppgw', 'fs_rr_ppgt', 'fs_s_ppb', 'gs_rr_ppmw', 'gs_rr_ppmt', 'gs_rr_ppgw', 'gs_rr_ppgt'], 'double'],
             [['name'], 'string', 'max' => 255],
             [['url'], 'string', 'max' => 512],
             [['game_id'], 'exist', 'skipOnError' => true, 'targetClass' => Game::className(), 'targetAttribute' => ['game_id' => 'id']],
+            [['gs_tie_break1', 'gs_tie_break1_copy1'], 'default', 'value' => 6],
+            [['gs_tie_break2', 'gs_tie_break2_copy1'], 'default', 'value' => 2],
+            [['gs_tie_break3', 'gs_tie_break3_copy1'], 'default', 'value' => 4],
+            [['fs_rr_ppmw', 'gs_rr_ppmw'], 'default', 'value' => '1.0'],
+            [['fs_rr_ppmt', 'gs_rr_ppmt'], 'default', 'value' => '0.5'],
+            [['fs_rr_ppgw', 'gs_rr_ppgw'], 'default', 'value' => '0.0'],
+            [['fs_rr_ppgt', 'gs_rr_ppgt'], 'default', 'value' => '0.0'],
+            ['fs_s_ppb', 'default', 'value' => '1.0'],
+            ['participants_compete', 'default', 'value' => 4],
+            ['participants_advance', 'default', 'value' => 2],
+            ['stage_type', 'default', 'value' => 0],
+            ['fs_de_grand_finals', 'default', 'value' => 0],
+            ['is_team_tournament', 'default', 'value' => 0],
+
         ];
     }
 
@@ -130,8 +148,8 @@ class Tournament extends ActiveRecord
             'updated_at' => Yii::t('app', 'Updated At'),
             'has_sets' => Yii::t('app', 'Has Sets'),
             'participants_count' => Yii::t('app', 'Participants Count'),
+            'is_team_tournament' => Yii::t('app', 'Team Tournament'),
             'stage_type' => Yii::t('app', 'Stage Type'),
-            'first_stage' => Yii::t('app', 'First Stage'),
             'fs_format' => Yii::t('app', 'Format'),
             'fs_third_place' => Yii::t('app', 'Third Place'),
             'fs_de_grand_finals' => Yii::t('app', 'Grand Finals'),
@@ -227,12 +245,12 @@ class Tournament extends ActiveRecord
     }
 
 
-
     /**
      * Returns the tournaments status in nice format.
      *
-     * @param  null|integer $status Status integer value if sent to method.
-     * @return string               Nicely formatted status.
+     * @param null $format
+     * @return string Nicely formatted status.
+     * @internal param int|null $status Status integer value if sent to method.
      */
     public function getFormatName($format = null)
     {
@@ -355,8 +373,26 @@ class Tournament extends ActiveRecord
 
         return $rankedByArray;
     }
-    
-    
+
+    /**
+     * Returns the array of possible tournaments ranked_by values.
+     *
+     * @return array
+     */
+    public function getMatchTiesByList()
+    {
+        $rankedByArray = [
+            self::RANKED_BY_MATCH_WINS => Yii::t('app', 'Match wins'),
+            self::RANKED_BY_GAME_SET_WINS => Yii::t('app', 'Game/Set wins'),
+            self::RANKED_BY_GAME_SET_PERCENT => Yii::t('app', 'Game/Set %'),
+            self::RANKED_BY_POINTS_SCORED => Yii::t('app', 'Points scored'),
+            self::RANKED_BY_POINTS_DIFFERENCE => Yii::t('app', 'Points difference'),
+            self::RANKED_BY_WINS_VS_TIED_PARTICIPANTS => Yii::t('app', 'Wins vs Tied Participants'),
+            self::RANKED_BY_MEDIAN_BUCHHOLZ_SYSTEM => Yii::t('app', 'Median-Buchholz system'),
+        ];
+
+        return $rankedByArray;
+    }
 
     public function getHostedByList()
     {
@@ -377,6 +413,16 @@ class Tournament extends ActiveRecord
         return $result;
     }
 
+    public function getHostedBy(){
+        if($this->hosted_by == -1 && isset($this->user_id)){
+
+            return $this->user->username;
+        } else if($this->hosted_by >= 0 && isset($this->organisation_id)) {
+            return $this->organisation->name;
+        }
+    }
+    
+
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -384,4 +430,66 @@ class Tournament extends ActiveRecord
     {
         return $this->hasOne(Game::className(), ['id' => 'game_id']);
     }
+
+    public function getOrganisation(){
+        if (isset($this->organisation_id)) {
+            return Organisation::find()->where(['id' => $this->organisation_id])->one();
+        }else return null;
+    }
+
+    public function getUser(){
+        if (isset($this->user_id)) {
+            return User::find()->where(['id' => $this->user_id])->one();
+        }else return null;
+    }
+
+
+    public function getCountdown(){
+        /* Datum bitte anpassen (Stunde, Minute, Sekunde, Monat, Tag, Jahr) */
+        $bis = strtotime($this->begin);
+        $rest = $bis - time();
+        if ($rest <=0){
+            return Yii::t('app', 'In the past');
+        }
+        $wochen = 0;
+        $tage = 0;
+
+        if ($rest >= 604800) {
+            $wochen = floor($rest/604800);
+            $rest -= $wochen*604800;
+        }
+
+        if ($rest >= 86400) {
+            $tage = floor($rest/86400);
+            $rest -= $tage*86400;
+        }
+        if ($rest >= 3600) {
+            $stunden = floor($rest/3600);
+        }
+
+        return $wochen . ' '. Yii::t('app', 'weeks').', '. $tage.' ' .Yii::t('app','days') . ', '. $stunden . ' '. Yii::t('app','hours');
+    }
+
+    public function getPhotoInfo()
+    {
+        $alt = $this->name;
+
+        $imageInfo = ['alt'=> $alt];
+
+        if (isset($this->organisation_id)){
+            $imageInfo['url'] =$this->getOrganisation()->PhotoInfo;
+        } else if (isset($this->user_id)){
+            $imageInfo['url'] = Url::to('@web/images/players/default.jpg');
+        } else {
+            $imageInfo['url'] = Url::to('@web/images/organisations/default.png');
+        }
+        return $imageInfo;
+    }
+
+    public function setParticipantCount(){
+        $this->participants_count = count($this->participants);
+        $this->save();
+        Yii::$app->session->setFlash('error', 'count($this->participants)');
+    }
+
 }

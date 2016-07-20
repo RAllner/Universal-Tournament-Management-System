@@ -18,7 +18,7 @@ class ParticipantSearch extends Participant
     public function rules()
     {
         return [
-            [['id', 'tournament_id', 'signup', 'checked_in', 'seed', 'updated_at', 'created_at', 'rank', 'user_id', 'team_id', 'removed', 'on_waiting_list'], 'integer'],
+            [['id', 'tournament_id', 'signup', 'checked_in', 'seed', 'updated_at', 'created_at', 'rank', 'player_id', 'team_id', 'removed', 'on_waiting_list'], 'integer'],
             [['name'], 'safe'],
         ];
     }
@@ -39,7 +39,7 @@ class ParticipantSearch extends Participant
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $tournament_id, $standings = 0)
     {
         $query = Participant::find();
 
@@ -48,7 +48,7 @@ class ParticipantSearch extends Participant
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
-
+        $query->where(['tournament_id' => $tournament_id]);
         $this->load($params);
 
         if (!$this->validate()) {
@@ -67,12 +67,14 @@ class ParticipantSearch extends Participant
             'updated_at' => $this->updated_at,
             'created_at' => $this->created_at,
             'rank' => $this->rank,
-            'user_id' => $this->user_id,
+            'player_id' => $this->player_id,
             'team_id' => $this->team_id,
             'removed' => $this->removed,
             'on_waiting_list' => $this->on_waiting_list,
         ]);
-
+        if ($standings == 1){
+            $query->orderBy('rank');
+        }
         $query->andFilterWhere(['like', 'name', $this->name]);
 
         return $dataProvider;

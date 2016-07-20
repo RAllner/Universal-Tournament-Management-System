@@ -18,7 +18,7 @@ use yii\db\ActiveRecord;
  * @property integer $updated_at
  * @property integer $created_at
  * @property integer $rank
- * @property integer $user_id
+ * @property integer $player_id
  * @property integer $team_id
  * @property integer $removed
  * @property integer $on_waiting_list
@@ -44,7 +44,7 @@ class Participant extends ActiveRecord
     {
         return [
             [['tournament_id', 'name'], 'required'],
-            [['tournament_id', 'signup', 'checked_in', 'seed', 'updated_at', 'created_at', 'rank', 'user_id', 'team_id', 'removed', 'on_waiting_list'], 'integer'],
+            [['tournament_id', 'signup', 'checked_in', 'seed', 'updated_at', 'created_at', 'rank', 'player_id', 'team_id', 'removed', 'on_waiting_list'], 'integer'],
             [['name'], 'string', 'max' => 255],
             [['tournament_id'], 'exist', 'skipOnError' => true, 'targetClass' => Tournament::className(), 'targetAttribute' => ['tournament_id' => 'id']],
         ];
@@ -65,7 +65,7 @@ class Participant extends ActiveRecord
             'updated_at' => Yii::t('app', 'Updated At'),
             'created_at' => Yii::t('app', 'Created At'),
             'rank' => Yii::t('app', 'Rank'),
-            'user_id' => Yii::t('app', 'User ID'),
+            'player_id' => Yii::t('app', 'Player ID'),
             'team_id' => Yii::t('app', 'Team ID'),
             'removed' => Yii::t('app', 'Removed'),
             'on_waiting_list' => Yii::t('app', 'On Waiting List'),
@@ -107,4 +107,53 @@ class Participant extends ActiveRecord
     {
         return $this->hasOne(Tournament::className(), ['id' => 'tournament_id']);
     }
+
+    public function getPlayers()
+    {
+        return Player::find()->where(['user_id' => Yii::$app->user->id])->all();
+    }
+
+    public function getTeams()
+    {
+        foreach ($this->getPlayers() as $player) {
+            $teamMembers = TeamMember::find()->where(['player_id' => $player->id, 'admin' => 1])->all();
+            $i = 0;
+            foreach ($teamMembers as $teamMember) {
+                if ($i == 0) {
+                    $teams = array(Team::find()->where(['id' => $teamMember->team_id])->one());
+                } else {
+                    array_push($teams, Team::find()->where(['id' => $teamMember->team_id])->one());
+                }
+                $i++;
+            }
+        }
+        return $teams;
+    }
+
+    public function getPlayerName()
+    {
+        if (isset($this->player_id)) {
+            $player = Player::find()->where(['id' => $this->player_id])->one();
+            return $player->name;
+        } else return "";
+    }
+
+    public function getTeamName()
+    {
+        if (isset($this->team_id)) {
+            $team = Team::find()->where(['id' => $this->team_id])->one();
+            return $team->name;
+        } else return "";
+    }
+
+    public function getTournamentName()
+    {
+        return $this->tournament->name;
+    }
+
+
 }
+
+?>
+
+

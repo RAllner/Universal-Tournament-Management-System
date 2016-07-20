@@ -12,7 +12,7 @@ use yii\filters\VerbFilter;
 /**
  * MassageController implements the CRUD actions for Massage model.
  */
-class MassageController extends Controller
+class MassageController extends FrontendController
 {
     /**
      * @inheritdoc

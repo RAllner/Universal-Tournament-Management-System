@@ -2,6 +2,7 @@
 
 namespace frontend\models;
 
+use Faker\Provider\zh_TW\DateTime;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -18,7 +19,7 @@ class TournamentSearch extends Tournament
     public function rules()
     {
         return [
-            [['id', 'user_id', 'game_id', 'organisation_id', 'hosted_by', 'location', 'max_participants', 'status', 'created_at', 'updated_at', 'has_sets', 'participants_count', 'stage_type', 'first_stage', 'fs_format', 'fs_third_place', 'fs_de_grand_finals', 'fs_rr_ranked_by', 'participants_compete', 'participants_advance', 'gs_format', 'gs_rr_ranked_by', 'gs_tie_break1', 'gs_tie_break2', 'quick_advance', 'gs_tie_break3', 'gs_tie_break1_copy1', 'gs_tie_break2_copy1', 'gs_tie_break3_copy1', 'notifications'], 'integer'],
+            [['id', 'user_id', 'game_id', 'organisation_id', 'hosted_by', 'location', 'max_participants', 'status', 'created_at', 'updated_at', 'has_sets', 'participants_count', 'stage_type', 'fs_format', 'fs_third_place', 'fs_de_grand_finals', 'fs_rr_ranked_by', 'participants_compete', 'participants_advance', 'gs_format', 'gs_rr_ranked_by', 'gs_tie_break1', 'gs_tie_break2', 'quick_advance', 'gs_tie_break3', 'gs_tie_break1_copy1', 'gs_tie_break2_copy1', 'gs_tie_break3_copy1', 'notifications', 'is_team_tournament'], 'integer'],
             [['name', 'begin', 'end', 'description', 'url'], 'safe'],
             [['fs_rr_ppmw', 'fs_rr_ppmt', 'fs_rr_ppgw', 'fs_rr_ppgt', 'fs_s_ppb', 'gs_rr_ppmw', 'gs_rr_ppmt', 'gs_rr_ppgw', 'gs_rr_ppgt'], 'number'],
         ];
@@ -40,7 +41,7 @@ class TournamentSearch extends Tournament
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $filter = 0)
     {
         $query = Tournament::find();
 
@@ -56,6 +57,16 @@ class TournamentSearch extends Tournament
             // uncomment the following line if you do not want to return any records when validation fails
             // $query->where('0=1');
             return $dataProvider;
+        }
+        $time = new \DateTime('now');
+        $today = $time->format('Y-m-d H:i:s');
+
+        if($filter == 0){
+            $query->andFilterWhere(['>=', 'begin', $today]);
+        }else if ($filter == 1){
+            $query->andFilterWhere(['status' => 1]);
+        } else {
+            $query->andFilterWhere(['<=', 'begin', $today]);
         }
 
         // grid filtering conditions
@@ -75,7 +86,6 @@ class TournamentSearch extends Tournament
             'has_sets' => $this->has_sets,
             'participants_count' => $this->participants_count,
             'stage_type' => $this->stage_type,
-            'first_stage' => $this->first_stage,
             'fs_format' => $this->fs_format,
             'fs_third_place' => $this->fs_third_place,
             'fs_de_grand_finals' => $this->fs_de_grand_finals,
@@ -101,6 +111,7 @@ class TournamentSearch extends Tournament
             'gs_tie_break2_copy1' => $this->gs_tie_break2_copy1,
             'gs_tie_break3_copy1' => $this->gs_tie_break3_copy1,
             'notifications' => $this->notifications,
+            'is_team_tournament' => $this->is_team_tournament,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])

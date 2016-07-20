@@ -13,7 +13,7 @@ use yii\filters\VerbFilter;
 /**
  * GameController implements the CRUD actions for Game model.
  */
-class GameController extends Controller
+class GameController extends FrontendController
 {
     /**
      * @inheritdoc

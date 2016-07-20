@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\helpers\Url;
+use yii\widgets\ListView;
 
 /* @var $this yii\web\View */
 /* @var $searchModel frontend\models\TournamentSearch */
@@ -24,68 +26,47 @@ $this->params['breadcrumbs'][] = $this->title;
     </h1>
     <div class="clearfix"></div>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-2">
+            <ul class="nav nav-pills nav-stacked">
+
+                    <li role="tournament_nav"
+                        <?php if($_GET['filter']==0): ?>
+                            class="active"
+                        <?php endif ?>
+                    ><a
+                            href="<?= Url::to(['index', 'filter' => 0]) ?>"><?= Yii::t('app', 'Comming') ?></a>
+                    </li>
+                    <li role="tournament_nav"
+                        <?php if($_GET['filter']==1): ?>
+                            class="active"
+                        <?php endif ?>
+                    ><a
+                        href="<?= Url::to(['index', 'filter' => 1]) ?>"><?= Yii::t('app', 'Running') ?></a>
+                    </li>
+                    <li role="tournament_nav"
+                        <?php if($_GET['filter']==2): ?>
+                            class="active"
+                        <?php endif ?>
+                    ><a
+                            href="<?= Url::to(['index', 'filter' => 2]) ?>"><?= Yii::t('app', 'Past') ?></a>
+                    </li>
+
+            </ul>
+
+        </div>
+        <div class="col-md-10">
             <div class="well">
                 <?php echo $this->render('_search', ['model' => $searchModel]); ?>
             </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-xs-12">
-            <div class="well">
-
-                <?= GridView::widget([
-                    'dataProvider' => $dataProvider,
-                    'filterModel' => $searchModel,
-                    'columns' => [
-                        ['class' => 'yii\grid\SerialColumn'],
-
-
-                        'name',
-                        'game_id',
-                        'begin',
-                        // 'end',
-                        'location',
-                        // 'description:ntext',
-                        // 'url:url',
-                        // 'max_participants',
-                        // 'status',
-                        // 'created_at',
-                        // 'updated_at',
-                        // 'has_sets',
-                        // 'participants_count',
-                        // 'stage_type',
-                        // 'first_stage',
-                        // 'fs_format',
-                        // 'fs_third_place',
-                        // 'fs_de_grand_finals',
-                        // 'fs_rr_ranked_by',
-                        // 'fs_rr_ppmw',
-                        // 'fs_rr_ppmt',
-                        // 'fs_rr_ppgw',
-                        // 'fs_rr_ppgt',
-                        // 'fs_s_ppb',
-                        // 'participants_compete',
-                        // 'participants_advance',
-                        // 'gs_format',
-                        // 'gs_rr_ranked_by',
-                        // 'gs_rr_ppmw',
-                        // 'gs_rr_ppmt',
-                        // 'gs_rr_ppgw',
-                        // 'gs_rr_ppgt',
-                        // 'gs_tie_break1',
-                        // 'gs_tie_break2',
-                        // 'quick_advance',
-                        // 'gs_tie_break3',
-                        // 'gs_tie_break1_copy1',
-                        // 'gs_tie_break2_copy1',
-                        // 'gs_tie_break3_copy1',
-                        // 'notifications',
-
-                        ['class' => 'yii\grid\ActionColumn'],
-                    ],
-                ]); ?>
-            </div>
+            <?= ListView::widget([
+                'summary' => false,
+                'dataProvider' => $dataProvider,
+                'emptyText' => '<div class="row"><div class="col-lg-12"><div class="well">' . Yii::t('app', 'We haven\'t created any Tournaments yet.') . '</div></div></div>',
+                'itemOptions' => ['class' => 'item'],
+                'itemView' => function ($model, $key, $index, $widget) {
+                    return $this->render('_index', ['model' => $model]);
+                },
+            ]) ?>
         </div>
     </div>
 </div>

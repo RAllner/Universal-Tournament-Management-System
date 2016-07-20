@@ -13,9 +13,9 @@ $options = ['data-title' => $photoInfo['alt']];
 
 <div class="col-lg-12 well">
 
+    <a href="<?= Url::to(['tournament/view', 'id' => $model->id]) ?>">
     <div class="media">
         <div class="media-left">
-          
             <a href="<?= Url::to(['tournament/view', 'id' => $model->id]) ?>">
                 <img class="media-object" style="width:100px" src="<?= $photoInfo['url'] ?>" alt="<?= $model->name ?>">
             </a>
@@ -25,16 +25,21 @@ $options = ['data-title' => $photoInfo['alt']];
                 <a href="<?= Url::to(['tournament/view', 'id' => $model->id]) ?>">
                     <?= $model->name ?>
                 </a>
+                <div class="pull-right">
+                    <?= $model->game->name?>
+                </div>
             </h3>
             <p>
-                <i class="material-icons">account_circle</i> <?= Yii::t('app', 'Owner') . ' ' . $model->authorName ?>
-                <i class="material-icons">schedule</i> <?= Yii::t('app', 'Created on') . ' ' . date('d.m.Y, G:i', $model->created_at).' '.Yii::t('app','o\' clock') ?>
+                <i class="material-icons">schedule</i> <?= $model->begin .' '.Yii::t('app','o\' clock') ?>
+                <i class="material-icons">people</i> <?= $model->participants_count ?>
             </p>
+            <p><?= $model->countdown ?></p>
             <p>
-                <i class="material-icons">people</i> <?= Yii::t('app', 'Members'). ' ' . count($model->teamMembers) ?>
+
             </p>
         </div>
     </div>
+    </a>
 </div>
 
 

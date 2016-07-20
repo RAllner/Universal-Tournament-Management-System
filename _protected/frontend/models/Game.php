@@ -10,7 +10,6 @@ use yii\db\ActiveRecord;
  *
  * @property integer $id
  * @property string $name
- * @property string $templatesUrl
  *
  * @property Tournament[] $tournaments
  */

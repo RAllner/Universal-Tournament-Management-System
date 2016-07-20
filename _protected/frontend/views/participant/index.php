@@ -1,44 +1,72 @@
 <?php
 
+use frontend\models\Tournament;
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $searchModel frontend\models\ParticipantSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-
-$this->title = Yii::t('app', 'Participants');
+$tournament = Tournament::find()->where(['id' => $_GET['tournament_id']])->one();
+$this->title = $tournament->name. " ". Yii::t('app', 'Participants');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Tournaments'), 'url' => ['tournament/index']];
+$this->params['breadcrumbs'][] = ['label' => $tournament->name, 'url' => ['tournament/view', 'id' => $tournament->id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="participant-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <h1><?= Html::encode($this->title);
+        ?>
+        <div class="pull-right">
+            <?php if (Yii::$app->user->can('member')): ?>
+                <?= Html::a('<i class="material-icons">add</i> ' . Yii::t('app', 'Signup'), ['signup', 'tournament_id' => $tournament->id], ['class' => 'btn btn-info']) ?>
+            <?php endif ?>
+            <?= Html::a('<i class="material-icons">view_headline</i> ' . Yii::t('app', 'Overview'), ['tournament/index'], ['class' => 'btn btn-default']) ?>
+        </div>
+    </h1>
+    <div class="clearfix"></div>
+    <div class="row">
+        <div class="col-md-2">
+            <ul class="nav nav-pills nav-stacked">
+                <?php if($tournament->stage_type == 1): ?>
+                    <li role="tournament_nav"><a href="<?= Url::to(['tournament/view', 'id' => $tournament->id])?>"><?= Yii::t('app', 'Group Stage') ?></a></li>
+                    <li role="tournament_nav"><a href="<?= Url::to(['tournament/view', 'id' => $tournament->id])?>"><?= Yii::t('app', 'Final Stage') ?></a></li>
+                <?php endif ?>
+                <?php if($tournament->stage_type == 0): ?>
+                    <li role="tournament_nav"><a href="<?= Url::to(['tournament/view', 'id' => $tournament->id])?>"><?= Yii::t('app', 'Tree') ?></a></li>
+                <?php endif ?>
+                <li role="tournament_nav"><a href="<?= Url::to(['standings', 'tournament_id' => $tournament->id]) ?>"><?= Yii::t('app', 'Standings')?></a></li>
+                <li role="tournament_nav" class="active"><a href="#"><?= Yii::t('app', 'Participants') ?></a>
+                <li role="tournament_nav"><a href="<?= Url::to(['tournament/update', 'id' => $tournament->id])?>"><?= Yii::t('app', 'Settings')?></a></li>
+                <li role="tournament_nav"><a href="<?= Url::to(['signup', 'tournament_id' => $tournament->id]) ?>"><?= '<i class="material-icons">plus_one</i> ' .Yii::t('app', 'Signup') ?></a>
+            </ul>
 
-    <p>
-        <?= Html::a(Yii::t('app', 'Create Participant'), ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+        </div>
+        <div class="col-md-10">
+            <?= GridView::widget([
+                'dataProvider' => $dataProvider,
+                'filterModel' => $searchModel,
+                'columns' => [
+                    ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'tournament_id',
-            'signup',
-            'checked_in',
-            'name',
-            // 'seed',
-            // 'updated_at',
-            // 'created_at',
-            // 'rank',
-            // 'user_id',
-            // 'team_id',
-            // 'removed',
-            // 'on_waiting_list',
+                    'id',
+                    'tournament_id',
+                    'signup',
+                    'checked_in',
+                    'name',
+                    // 'seed',
+                    // 'updated_at',
+                    // 'created_at',
+                    // 'rank',
+                    // 'user_id',
+                    // 'team_id',
+                    // 'removed',
+                    // 'on_waiting_list',
 
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
+                    ['class' => 'yii\grid\ActionColumn'],
+                ],
+            ]); ?>
+        </div>
+    </div>
 </div>

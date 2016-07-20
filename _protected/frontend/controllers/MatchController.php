@@ -12,7 +12,7 @@ use yii\filters\VerbFilter;
 /**
  * MatchController implements the CRUD actions for Match model.
  */
-class MatchController extends Controller
+class MatchController extends FrontendController
 {
     /**
      * @inheritdoc

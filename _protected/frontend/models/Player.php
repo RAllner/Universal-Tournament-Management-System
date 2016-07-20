@@ -215,6 +215,10 @@ class Player extends ActiveRecord
         return $this->hasMany(Team::className(), ['id' => 'team_id'])->viaTable('{{%team_member}}', ['player_id' => 'id']);
     }
 
+    public function getTeamAdmins(){
+        return $this->hasMany(Team::className(), ['id' => 'team_id'])->viaTable('{{%team_member}}', ['player_id' => 'id', 'admin' => 1]);
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */

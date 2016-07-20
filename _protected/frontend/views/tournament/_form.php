@@ -6,11 +6,103 @@ use kartik\widgets\DateTimePicker;
 use mihaildev\ckeditor\CKEditor;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
+use yii\web\View;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Tournament */
 /* @var $form yii\widgets\ActiveForm */
+$script = <<< JS
+$(document).ready(function(){
+    $('#final-stage-header').hide();
+    $('.group-stage').hide();
+    $('.gs-custom-points').hide();
+    $('.form-group.field-tournament-gs_rr_ranked_by').hide();       
+    $('.form-group.field-tournament-fs_third_place').show();
+    $('.form-group.field-tournament-fs_rr_ranked_by').hide();
+    $('.form-group.field-tournament-fs_de_grand_finals').hide();
+    $('.field-tournament-fs_s_ppb').hide();
+    $('.fs-custom-points').hide();
+    $('#tournament-stage_type > label > input[type="radio"]').click((function(){
+        var stage = $('#tournament-stage_type > label > input[type="radio"]:checked').val();
+        if (stage == 0){
+            $('.group-stage').hide();
+            $('#final-stage-header').hide();
+            $('.field-tournament-fs_s_ppb').hide();
+        } else {
+            $('.group-stage').show();
+            $('#final-stage-header').show();
+            $('.field-tournament-fs_s_ppb').show();
+        }
+    }));
+    $('#tournament-gs_rr_ranked_by').change(function() {
+       if($('#tournament-gs_rr_ranked_by').val() == 6) {
+            $('.gs-custom-points').show();
+       } else {
+            $('.gs-custom-points').hide();
+       }
+    });
+    $('#tournament-fs_rr_ranked_by').change(function() {
+       if($('#tournament-fs_rr_ranked_by').val() == 6) {
+            $('.fs-custom-points').show();
+       } else {
+            $('.fs-custom-points').hide();
+       }
+    })
+    $('#tournament-gs_format').change(function() {
+        if($('#tournament-gs_format').val() == 3){
+            $('.form-group.field-tournament-gs_rr_ranked_by').show();
+             if($('#tournament-gs_rr_ranked_by').val() == 6){ 
+                $('.gs-custom-points').show();
+            } else {
+                $('.gs-custom-points').hide();
+            }
+        } else {
+            $('.form-group.field-tournament-gs_rr_ranked_by').hide();
+            $('.gs-custom-points').hide();
+        }
+    })
+        $('#tournament-fs_format').change(function() {
+        if($('#tournament-fs_format').val() == 1){
+            $('.form-group.field-tournament-fs_third_place').show();
+            $('.form-group.field-tournament-fs_rr_ranked_by').hide();
+            $('.form-group.field-tournament-fs_de_grand_finals').hide();
+            $('.fs-custom-points').hide();
+        } else if ($('#tournament-fs_format').val() == 2){
+            $('.form-group.field-tournament-fs_third_place').hide();
+            $('.form-group.field-tournament-fs_rr_ranked_by').hide();
+            $('.form-group.field-tournament-fs_de_grand_finals').show();
+            $('.fs-custom-points').hide();
+        } else if ($('#tournament-fs_format').val() == 3){
+            $('.form-group.field-tournament-fs_third_place').hide();
+            $('.form-group.field-tournament-fs_rr_ranked_by').show();
+            $('.form-group.field-tournament-fs_de_grand_finals').hide();
+            if($('#tournament-fs_rr_ranked_by').val() == 6){ 
+                $('.fs-custom-points').show();
+            } else {
+                $('.fs-custom-points').hide();
+            }
+        } else {
+            $('.form-group.field-tournament-fs_third_place').hide();
+            $('.form-group.field-tournament-fs_rr_ranked_by').hide();
+            $('.form-group.field-tournament-fs_de_grand_finals').hide();
+            $('.fs-custom-points').show();
+        }
+    })
+    
+    $('.check-values').click(function() {
+      alert(
+        'Hosted by:' + $('#tournament-hosted_by').val() + '------' +
+        'Einrichtung:' + $('#tournament-location').val() + '------' +
+        'Game:' + $('#tournament-game_id').val() + '------' +
+        'Stage:' + $('#tournament-stage_type').val() + '------' 
+      );
+    })
+    
+}); 
+JS;
+$this->registerJs($script, View::POS_END);
+
 ?>
 
 <div class="tournament-form">
@@ -18,6 +110,7 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
+    <h3><?php Yii::t('app', 'General') ?></h3>
     <div class="row">
         <div class="col-lg-6">
             <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
@@ -29,11 +122,10 @@ use yii\widgets\ActiveForm;
             <?= $form->field($model, 'hosted_by')->dropDownList($model->hostedByList) ?>
         </div>
         <div class="col-lg-6">
-            <?= $form->field($model, 'notifications')->checkbox() ?>
+
         </div>
     </div>
 
-    <hr>
     <div class="row">
         <div class="col-md-6">
 
@@ -72,79 +164,130 @@ use yii\widgets\ActiveForm;
 
         </div>
     </div>
-
-    <hr>
+    </br>
 
     <?= $form->field($model, 'description')->widget(CKEditor::className(),
         ['editorOptions' => ['preset' => 'standard', 'inline' => false]]); ?>
+
+    <?php if ($model->isNewRecord): ?>
+    <?= $form->field($model, 'is_team_tournament')->checkbox() ?>
+    <?php endif ?>
+    <?= $form->field($model, 'stage_type')->radioList([0 => Yii::t('app', 'Single Stage Tournament'), 1 => Yii::t('app', 'Two Stage Tournament')]) ?>
+
+
+    <div class="group-stage">
+        <div class="well">
+            <h3><?= Yii::t('app', 'Group Stage') ?></h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <?= $form->field($model, 'gs_format')->dropDownList($model->groupStageFormatList) ?>
+
+                    <?= $form->field($model, 'participants_compete')->textInput(['type' => 'number', 'min' => 1]) ?>
+
+                    <?= $form->field($model, 'participants_advance')->textInput(['type' => 'number', 'min' => 1]) ?>
+
+                    <?= $form->field($model, 'gs_rr_ranked_by')->dropDownList($model->rankedByList) ?>
+                </div>
+
+                <div class="col-md-6 gs-custom-points">
+
+                    <?= $form->field($model, 'gs_rr_ppmw')->textInput(['value' => '1.0']) ?>
+
+                    <?= $form->field($model, 'gs_rr_ppmt')->textInput(['value' => '0.5']) ?>
+
+                    <?= $form->field($model, 'gs_rr_ppgw')->textInput(['value' => '0.0']) ?>
+
+                    <?= $form->field($model, 'gs_rr_ppgt')->textInput(['value' => '0.0']) ?>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <div class="final-stage">
+        <div class="well">
+            <h3 id="final-stage-header"><?= Yii::t('app', 'Final Stage') ?></h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <?= $form->field($model, 'fs_format')->dropDownList($model->formatList) ?>
+
+                    <?= $form->field($model, 'fs_third_place')->checkbox() ?>
+
+                    <?= $form->field($model, 'fs_de_grand_finals')->radioList(array('0' => Yii::t('app', '1-2 matches'), '1' => Yii::t('app', '1 match'), '2' => Yii::t('app', 'None')), ['value' => 0]) ?>
+
+                    <?= $form->field($model, 'fs_rr_ranked_by')->dropDownList($model->rankedByList) ?>
+                </div>
+                <div class="col-md-6 fs-custom-points">
+                    <?= $form->field($model, 'fs_rr_ppmw')->textInput(['value' => '1.0']) ?>
+
+                    <?= $form->field($model, 'fs_rr_ppmt')->textInput(['value' => '0.5']) ?>
+
+                    <?= $form->field($model, 'fs_rr_ppgw')->textInput(['value' => '0.0']) ?>
+
+                    <?= $form->field($model, 'fs_rr_ppgt')->textInput(['value' => '0.0']) ?>
+
+                    <?= $form->field($model, 'fs_s_ppb')->textInput(['value' => '1.0']) ?>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h3><?= Yii::t('app', 'Advanced Settings') ?></h3>
+    <?= $form->field($model, 'quick_advance')->checkbox() ?>
+
+    <?= $form->field($model, 'has_sets')->checkbox() ?>
+
+    <?= $form->field($model, 'notifications')->checkbox() ?>
 
     <?= $form->field($model, 'url')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'status')->dropDownList($model->statusList) ?>
 
-    <?= $form->field($model, 'max_participants')->textInput(['type' => 'number','min'=>2, 'value'=>50]) ?>
+    <?= $form->field($model, 'max_participants')->textInput(['type' => 'number', 'min' => 2, 'value' => 50]) ?>
 
-    <?= $form->field($model, 'has_sets')->checkbox() ?>
 
-    <?= $form->field($model, 'stage_type')->radioList(array('0' => Yii::t('app', 'Single Stage Tournament'), '1' => Yii::t('app', 'Two Stage Tournament'))) ?>
+    <?= $form->field($model, 'organisation_id')->hiddenInput()->label(false) ?>
 
-    <hr>
-
-    <?= $form->field($model, 'gs_format')->dropDownList($model->groupStageFormatList) ?>
-
-    <?= $form->field($model, 'participants_compete')->textInput(['type' => 'number','min'=>1, 'value'=>4]) ?>
-
-    <?= $form->field($model, 'participants_advance')->textInput(['type' => 'number','min'=>1, 'value'=>2]) ?>
-
-    <?= $form->field($model, 'gs_rr_ranked_by')->dropDownList($model->rankedByList) ?>
-
-    <?= $form->field($model, 'gs_rr_ppmw')->textInput() ?>
-
-    <?= $form->field($model, 'gs_rr_ppmt')->textInput() ?>
-
-    <?= $form->field($model, 'gs_rr_ppgw')->textInput() ?>
-
-    <?= $form->field($model, 'gs_rr_ppgt')->textInput() ?>
-
-    <?= $form->field($model, 'gs_tie_break1')->textInput() ?>
-
-    <?= $form->field($model, 'gs_tie_break2')->textInput() ?>
-
-    <hr>
-
-    <?= $form->field($model, 'first_stage')->textInput() ?>
-
-    <?= $form->field($model, 'fs_format')->dropDownList($model->formatList) ?>
-
-    <?= $form->field($model, 'fs_third_place')->checkbox() ?>
-
-    <?= $form->field($model, 'fs_de_grand_finals')->checkbox() ?>
-
-    <?= $form->field($model, 'fs_rr_ranked_by')->dropDownList($model->rankedByList) ?>
-
-    <?= $form->field($model, 'fs_rr_ppmw')->textInput() ?>
-
-    <?= $form->field($model, 'fs_rr_ppmt')->textInput() ?>
-
-    <?= $form->field($model, 'fs_rr_ppgw')->textInput() ?>
-
-    <?= $form->field($model, 'fs_rr_ppgt')->textInput() ?>
-
-    <?= $form->field($model, 'fs_s_ppb')->textInput() ?>
+    <?= $form->field($model, 'participants_count')->hiddenInput()->label(false) ?>
 
 
 
+    <?= $form->field($model, 'gs_tie_break1')->dropDownList($model->matchTiesByList, ['value' => 6])->hiddenInput()->label(false) ?>
+
+    <?= $form->field($model, 'gs_tie_break2')->dropDownList($model->matchTiesByList, ['value' => 2])->hiddenInput()->label(false) ?>
+
+    <?= $form->field($model, 'gs_tie_break3')->dropDownList($model->matchTiesByList, ['value' => 4])->hiddenInput()->label(false) ?>
+
+    <?= $form->field($model, 'gs_tie_break1_copy1')->dropDownList($model->matchTiesByList, ['value' => 6])->hiddenInput()->label(false) ?>
+
+    <?= $form->field($model, 'gs_tie_break2_copy1')->dropDownList($model->matchTiesByList, ['value' => 2])->hiddenInput()->label(false) ?>
+
+    <?= $form->field($model, 'gs_tie_break3_copy1')->dropDownList($model->matchTiesByList, ['value' => 4])->hiddenInput()->label(false) ?>
+
+    <button class="btn check-values">Check</button>
+
+    <!--    <div>
 
 
-    <?= $form->field($model, 'quick_advance')->checkbox() ?>
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Home</a></li>
+                <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Profile</a></li>
+                <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Messages</a></li>
+                <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a></li>
+            </ul>
 
-    <?= $form->field($model, 'gs_tie_break3')->textInput() ?>
 
-    <?= $form->field($model, 'gs_tie_break1_copy1')->textInput() ?>
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane fade in active" id="home">
 
-    <?= $form->field($model, 'gs_tie_break2_copy1')->textInput() ?>
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="profile">...</div>
+                <div role="tabpanel" class="tab-pane fade" id="messages">...</div>
+                <div role="tabpanel" class="tab-pane fade" id="settings">...</div>
+            </div>
 
-    <?= $form->field($model, 'gs_tie_break3_copy1')->textInput() ?>
+        </div>-->
 
 
     <div class="form-group">

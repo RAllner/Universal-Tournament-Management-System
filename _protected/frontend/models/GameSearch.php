@@ -19,7 +19,7 @@ class GameSearch extends Game
     {
         return [
             [['id'], 'integer'],
-            [['name', 'templatesUrl'], 'safe'],
+            [['name'], 'safe'],
         ];
     }
 
@@ -62,8 +62,7 @@ class GameSearch extends Game
             'id' => $this->id,
         ]);
 
-        $query->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'templatesUrl', $this->templatesUrl]);
+        $query->andFilterWhere(['like', 'name', $this->name]);
 
         return $dataProvider;
     }

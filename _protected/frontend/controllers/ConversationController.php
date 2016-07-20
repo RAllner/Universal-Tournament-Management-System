@@ -5,14 +5,13 @@ namespace frontend\controllers;
 use Yii;
 use frontend\models\Conversation;
 use frontend\models\ConversationSearch;
-use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
  * ConversationController implements the CRUD actions for Conversation model.
  */
-class ConversationController extends Controller
+class ConversationController extends FrontendController
 {
     /**
      * @inheritdoc
