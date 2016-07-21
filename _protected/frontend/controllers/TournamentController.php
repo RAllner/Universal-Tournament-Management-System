@@ -38,11 +38,25 @@ class TournamentController extends FrontendController
         if(!isset($_GET['filter'])){
             $_GET['filter'] = 0;
         }
+        $time = new \DateTime('now');
+        $today = $time->format('Y-m-d H:i:s');
+        $allCount = Tournament::find()->count();
+        $commingCount = Tournament::find()->where(['>=', 'begin', $today])
+            ->andWhere(['not', ['status' => 3]])
+            ->count();
+        $runningCount = Tournament::find()->where(['status' => 3])->count();
+        $pastCount = Tournament::find()->where(['<=', 'begin', $today])
+            ->andWhere(['not', ['status' => 3]])
+            ->count();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $filter);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'allCount' => $allCount,
+            'commingCount' => $commingCount,
+            'runningCount' => $runningCount,
+            'pastCount' => $pastCount,
         ]);
     }
 

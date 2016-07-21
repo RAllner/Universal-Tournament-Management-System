@@ -119,7 +119,7 @@ $this->registerJs($script, View::POS_END);
     </div>
     <div class="row">
         <div class="col-lg-6">
-            <?= $form->field($model, 'hosted_by')->dropDownList($model->hostedByList) ?>
+            <?=  $form->field($model, 'hosted_by')->dropDownList(ArrayHelper::map($model->hostedByList, "id", "name", "class")) ?>
         </div>
         <div class="col-lg-6">
 

@@ -629,7 +629,11 @@ hr.article-devider {
     height: 400px;
     position: relative;
     background-size: cover;
-    background: no-repeat center;
+    background: no-repeat center center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
 }
 
 .hof-image-wrap {
@@ -756,26 +760,76 @@ hr.article-devider {
 
 .wrap-event-date .day {
     font-weight: 700;
-    font-size: 55px;
+    font-size: 5em;
 }
 
 .wrap-event-date .month {
     font-weight: 700;
-    font-size: 31px;
-    margin-top: -20px;
+    font-size: 2.7em;
+    margin-top: -0.8em;
 }
 
 .wrap-event-date .year {
     font-weight: 700;
-    font-size: 22px;
-    margin-top: -10px;
+    font-size: 2.2em;
+    margin-top: -0.3em;
 }
 
 .wrap-event-time .time {
 
     font-weight: 700;
-    font-size: 22px;
+    font-size: 1.4em;
 }
+
+/** HOME **/
+
+.home > .wrap-event-date {
+    text-align: center;
+    background-color: #ff9800;
+    color: #181818;
+    margin: 0;
+    padding: 1em;
+}
+
+.home > .wrap-event-date.enddate {
+    text-align: center;
+    background-color: #292929;
+    color: white;
+    margin: 1em 0 0 0;
+    padding: 1em;
+}
+
+.home > .wrap-event-date .day {
+    font-weight: 700;
+    font-size: 3em;
+}
+
+.home > .wrap-event-date .month {
+    font-weight: 700;
+    font-size: 1.7em;
+    margin-top: -0.8em;
+}
+
+.home > .wrap-event-date .year {
+    font-weight: 700;
+    font-size: 1.4em;
+    margin-top: -0.3em;
+}
+
+.home > .wrap-event-time .time {
+
+    font-weight: 700;
+    font-size: 1em;
+
+}
+
+.home > .wrap-event-time > div > i {
+    font-size: 1em;
+    top: 0.25em;
+}
+
+/** End Home **/
+
 
 .wrap-event-time .time.start {
     background-color: #d07100;
@@ -969,3 +1023,56 @@ optgroup{
     background-color: #181818;
     border-radius: 5px;
 }
+
+.list-group-item.active>.badge, .nav-pills>.active>a>.badge {
+    color: #fff;
+    background-color: #181818;
+}
+
+.nav-pills>li>a>.badge {
+    color: #181818;
+    background-color: #fff;
+}
+
+.panel-body {
+    padding: 15px;
+    background-color: #292929;
+}
+
+.panel-default>.panel-heading {
+    color: #ff9800;
+    background-color: #181818;
+    border-color: #181818;
+}
+
+.panel {
+    border: none;
+}
+
+.panel > .list-group > li.list-group-item {
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+    margin-bottom: -1px;
+    background-color: #292929;
+    border-bottom: 1px solid #555;
+    border-top:  1px solid #555;
+}
+
+.well.tournament {
+    padding-top: 1em;
+    padding-bottom: 1em;
+    margin-bottom: 0.1em;
+    border-bottom: solid 1px #ff9800;
+}
+.media.tournament {
+    margin: 0;
+}
+
+blockquote {
+    padding: 10px 20px;
+    margin: 0 0 20px;
+    font-size: 1em;
+    border-left: 2px solid #ff9800;
+}
+

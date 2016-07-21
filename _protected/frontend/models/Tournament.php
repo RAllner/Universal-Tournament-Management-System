@@ -75,6 +75,9 @@ class Tournament extends ActiveRecord
     const FORMAT_ROUND_ROBIN = 3;
     const FORMAT_SWISS = 4;
 
+    const STAGE_TYPE_SINGLE_STAGE = 0;
+    const STAGE_TYPE_TWO_STAGE = 1;
+
     const RANKED_BY_MATCH_WINS = 1;
     const RANKED_BY_GAME_SET_WINS = 2;
     const RANKED_BY_GAME_SET_PERCENT = 3;
@@ -84,6 +87,11 @@ class Tournament extends ActiveRecord
     const RANKED_BY_WINS_VS_TIED_PARTICIPANTS = 7;
     const RANKED_BY_MEDIAN_BUCHHOLZ_SYSTEM = 8;
 
+    const SINGLE_TOURNAMENT = 0;
+    const TEAM_TOURNAMENT = 1;
+
+    const HAS_NO_SETS = 0;
+    const HAS_SETS = 1;
 
 
     /**
@@ -100,8 +108,8 @@ class Tournament extends ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'game_id', 'organisation_id', 'hosted_by', 'location', 'max_participants', 'status', 'has_sets', 'participants_count', 'stage_type', 'fs_format', 'fs_third_place', 'fs_de_grand_finals', 'fs_rr_ranked_by', 'participants_compete', 'participants_advance', 'gs_format', 'gs_rr_ranked_by', 'gs_tie_break1', 'gs_tie_break2', 'quick_advance', 'gs_tie_break3', 'gs_tie_break1_copy1', 'gs_tie_break2_copy1', 'gs_tie_break3_copy1', 'notifications','is_team_tournament'], 'integer'],
-            [['game_id', 'name', 'begin', 'location', 'max_participants', 'status', 'fs_format', 'notifications','is_team_tournament'], 'required'],
+            [['user_id', 'game_id', 'organisation_id', 'hosted_by', 'location', 'max_participants', 'status', 'has_sets', 'participants_count', 'stage_type', 'fs_format', 'fs_third_place', 'fs_de_grand_finals', 'fs_rr_ranked_by', 'participants_compete', 'participants_advance', 'gs_format', 'gs_rr_ranked_by', 'gs_tie_break1', 'gs_tie_break2', 'quick_advance', 'gs_tie_break3', 'gs_tie_break1_copy1', 'gs_tie_break2_copy1', 'gs_tie_break3_copy1', 'notifications', 'is_team_tournament'], 'integer'],
+            [['game_id', 'name', 'begin', 'location', 'max_participants', 'status', 'fs_format', 'notifications', 'is_team_tournament'], 'required'],
             [['begin', 'end'], 'safe'],
             [['description'], 'string'],
             [['fs_rr_ppmw', 'fs_rr_ppmt', 'fs_rr_ppgw', 'fs_rr_ppgt', 'fs_s_ppb', 'gs_rr_ppmw', 'gs_rr_ppmt', 'gs_rr_ppgw', 'gs_rr_ppgt'], 'double'],
@@ -198,6 +206,9 @@ class Tournament extends ActiveRecord
         return $this->hasMany(Participant::className(), ['tournament_id' => 'id']);
     }
 
+    public function getTournamentLocation(){
+        return $this->hasOne(Location::className(), ['id' => 'location']);
+    }
 
     /**
      * Returns the tournaments status in nice format.
@@ -267,6 +278,28 @@ class Tournament extends ActiveRecord
         }
     }
 
+    /**
+     * Returns the tournaments status in nice format.
+     *
+     * @param null $format
+     * @return string Nicely formatted status.
+     * @internal param int|null $status Status integer value if sent to method.
+     */
+    public function getFormatShortName($format = null)
+    {
+        $format = (empty($format)) ? $this->status : $format;
+
+        if ($format === self::FORMAT_SINGLE_ELIMINATION) {
+            return Yii::t('app', 'SE');
+        } else if ($format === self::FORMAT_DOUBLE_ELIMINATION) {
+            return Yii::t('app', 'DE');
+        } else if ($format === self::FORMAT_ROUND_ROBIN) {
+            return Yii::t('app', 'RR');
+        } else {
+            return Yii::t('app', 'SW');
+        }
+    }
+
 
     /**
      * Returns the array of possible tournaments status values.
@@ -284,7 +317,6 @@ class Tournament extends ActiveRecord
 
         return $formatArray;
     }
-
 
 
     /**
@@ -394,36 +426,41 @@ class Tournament extends ActiveRecord
         return $rankedByArray;
     }
 
+    /**
+     * Merges User_ID and Organisation_ID Array with readable labels
+     * @return mixed
+     */
     public function getHostedByList()
     {
         $user = User::find()->where(['id' => Yii::$app->user->id])->one();
 
-        $userArray = array(Yii::t('app', 'User') => array(-1 => $user->username));
-        $organisations = array();
-        $playerOrganisationMember = OrganisationHasUser::find()->where(['user_id' => $user->id])->all();
+        $array[] = ["id" => -1, "name" => $user->username, "class" => Yii::t('app', 'User')];
 
+        $playerOrganisationMember = OrganisationHasUser::find()->where(['user_id' => $user->id])->all();
         foreach ($playerOrganisationMember as $member) {
             $tmpOrganisation = Organisation::find()->where(['id' => $member->organisation_id])->one();
-            $organisations = array_merge($organisations, array($tmpOrganisation->id => $tmpOrganisation->name));
+            $array[] = ["id" => $tmpOrganisation->id, "name" => $tmpOrganisation->name, "class" => Yii::t('app', 'Organisation')];
         }
-
-        $organisationArray = array(Yii::t('app', 'Organisation') => $organisations);
-
-        $result = array_merge($userArray, $organisationArray);
-        return $result;
+        return $array;
     }
 
-    public function getHostedBy(){
-        if($this->hosted_by == -1 && isset($this->user_id)){
+    /**
+     * Returns the Hosted by Name
+     * @return mixed
+     */
+    public function getHostedBy()
+    {
+        if ($this->hosted_by == -1 && isset($this->user_id)) {
 
             return $this->user->username;
-        } else if($this->hosted_by >= 0 && isset($this->organisation_id)) {
+        } else if ($this->hosted_by >= 0 && isset($this->organisation_id)) {
             return $this->organisation->name;
         }
     }
-    
+
 
     /**
+     * Returns the Game
      * @return \yii\db\ActiveQuery
      */
     public function getGame()
@@ -431,54 +468,76 @@ class Tournament extends ActiveRecord
         return $this->hasOne(Game::className(), ['id' => 'game_id']);
     }
 
-    public function getOrganisation(){
-        if (isset($this->organisation_id)) {
+    /**
+     * Returns the Owner Organisation if defined
+     * @return array|null|ActiveRecord
+     */
+    public function getOrganisation()
+    {
+        if (!is_null($this->organisation_id)) {
             return Organisation::find()->where(['id' => $this->organisation_id])->one();
-        }else return null;
+        } else return null;
     }
 
-    public function getUser(){
-        if (isset($this->user_id)) {
+    /**
+     * Returns the Owner User if defined
+     * @return array|null|ActiveRecord
+     */
+    public function getUser()
+    {
+        if (!is_null($this->user_id)) {
             return User::find()->where(['id' => $this->user_id])->one();
-        }else return null;
+        } else return null;
     }
 
-
-    public function getCountdown(){
+    /**
+     * Returns a countdown until the Tournament begins
+     * @return string
+     */
+    public function getCountdown()
+    {
         /* Datum bitte anpassen (Stunde, Minute, Sekunde, Monat, Tag, Jahr) */
         $bis = strtotime($this->begin);
         $rest = $bis - time();
-        if ($rest <=0){
+        if ($rest <= 0) {
             return Yii::t('app', 'In the past');
         }
         $wochen = 0;
         $tage = 0;
+        $stunden = 0;
 
         if ($rest >= 604800) {
-            $wochen = floor($rest/604800);
-            $rest -= $wochen*604800;
+            $wochen = floor($rest / 604800);
+            $rest -= $wochen * 604800;
         }
 
         if ($rest >= 86400) {
-            $tage = floor($rest/86400);
-            $rest -= $tage*86400;
+            $tage = floor($rest / 86400);
+            $rest -= $tage * 86400;
         }
         if ($rest >= 3600) {
-            $stunden = floor($rest/3600);
+            $stunden = floor($rest / 3600);
         }
 
-        return $wochen . ' '. Yii::t('app', 'weeks').', '. $tage.' ' .Yii::t('app','days') . ', '. $stunden . ' '. Yii::t('app','hours');
+        return $wochen . ' ' . Yii::t('app', 'weeks') . ', ' . $tage . ' ' . Yii::t('app', 'days') . ', ' . $stunden . ' ' . Yii::t('app', 'hours');
     }
 
+    /**
+     * Returns the Image of the Organisation or User who owns the tournament
+     * @return array
+     */
     public function getPhotoInfo()
     {
         $alt = $this->name;
 
-        $imageInfo = ['alt'=> $alt];
+        $imageInfo = ['alt' => $alt];
 
-        if (isset($this->organisation_id)){
-            $imageInfo['url'] =$this->getOrganisation()->PhotoInfo;
-        } else if (isset($this->user_id)){
+        if (!(is_null($this->organisation_id))) {
+            $organisation = Organisation::find()->where(['id' => $this->organisation_id])->one();
+            //Yii::$app->session->setFlash('error', $organisation->user_id);
+            $organisation_photoInfo = $organisation->getPhotoInfo();
+            $imageInfo['url'] = $organisation_photoInfo['url'];
+        } else if (isset($this->user_id)) {
             $imageInfo['url'] = Url::to('@web/images/players/default.jpg');
         } else {
             $imageInfo['url'] = Url::to('@web/images/organisations/default.png');
@@ -486,7 +545,11 @@ class Tournament extends ActiveRecord
         return $imageInfo;
     }
 
-    public function setParticipantCount(){
+    /**
+     * Will be called if a new Participant is added or removed.
+     */
+    public function setParticipantCount()
+    {
         $this->participants_count = count($this->participants);
         $this->save();
         Yii::$app->session->setFlash('error', 'count($this->participants)');

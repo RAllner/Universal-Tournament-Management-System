@@ -61,12 +61,17 @@ class TournamentSearch extends Tournament
         $time = new \DateTime('now');
         $today = $time->format('Y-m-d H:i:s');
 
-        if($filter == 0){
-            $query->andFilterWhere(['>=', 'begin', $today]);
-        }else if ($filter == 1){
-            $query->andFilterWhere(['status' => 1]);
-        } else {
-            $query->andFilterWhere(['<=', 'begin', $today]);
+        if ($filter == 0) {
+            //all Tournaments
+        } else if ($filter == 1) {
+            $query->andFilterWhere(['>=', 'begin', $today])
+                ->andFilterWhere(['not', ['status' => 3]]);
+
+        } else if($filter == 2) {
+            $query->andFilterWhere(['status' => 3]);
+        }else {
+            $query->andFilterWhere(['<=', 'begin', $today])
+                ->andFilterWhere(['not', ['status' => 3]]);
         }
 
         // grid filtering conditions

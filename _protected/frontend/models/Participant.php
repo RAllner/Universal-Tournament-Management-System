@@ -115,8 +115,18 @@ class Participant extends ActiveRecord
 
     public function getTeams()
     {
+        $tournament_id = $this->tournament->id;
+        $currentParticipants = Participant::find()->where(['tournament_id' => $tournament_id])
+                ->andWhere(['not',['team_id' =>null]])
+                ->all();
+        $team_ids[] = array("");
+        foreach ($currentParticipants as $participant){
+            $team_ids[] = $participant->team_id;
+        }
         foreach ($this->getPlayers() as $player) {
-            $teamMembers = TeamMember::find()->where(['player_id' => $player->id, 'admin' => 1])->all();
+            $teamMembers = TeamMember::find()->where(['player_id' => $player->id, 'admin' => 1])
+                ->andWhere(['not',['team_id' => $team_ids]])
+                ->all();
             $i = 0;
             foreach ($teamMembers as $teamMember) {
                 if ($i == 0) {

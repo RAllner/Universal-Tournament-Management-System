@@ -8,6 +8,10 @@ use yii\widgets\ListView;
 /* @var $this yii\web\View */
 /* @var $searchModel frontend\models\TournamentSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $allCount integer */
+/* @var $commingCount integer */
+/* @var $runningCount integer */
+/* @var $pastCount integer */
 
 $this->title = Yii::t('app', 'Tournaments');
 $this->params['breadcrumbs'][] = $this->title;
@@ -28,28 +32,38 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="row">
         <div class="col-md-2">
             <ul class="nav nav-pills nav-stacked">
-
-                    <li role="tournament_nav"
-                        <?php if($_GET['filter']==0): ?>
-                            class="active"
-                        <?php endif ?>
-                    ><a
-                            href="<?= Url::to(['index', 'filter' => 0]) ?>"><?= Yii::t('app', 'Comming') ?></a>
-                    </li>
-                    <li role="tournament_nav"
-                        <?php if($_GET['filter']==1): ?>
-                            class="active"
-                        <?php endif ?>
-                    ><a
-                        href="<?= Url::to(['index', 'filter' => 1]) ?>"><?= Yii::t('app', 'Running') ?></a>
-                    </li>
-                    <li role="tournament_nav"
-                        <?php if($_GET['filter']==2): ?>
-                            class="active"
-                        <?php endif ?>
-                    ><a
-                            href="<?= Url::to(['index', 'filter' => 2]) ?>"><?= Yii::t('app', 'Past') ?></a>
-                    </li>
+                <li role="tournament_nav"
+                    <?php if ($_GET['filter'] == 0): ?>
+                        class="active"
+                    <?php endif ?>
+                ><a
+                        href="<?= Url::to(['index', 'filter' => 0]) ?>"><?= Yii::t('app', 'All') ?><span
+                            class="pull-right badge"><?= $allCount ?></span></a>
+                </li>
+                <li role="tournament_nav"
+                    <?php if ($_GET['filter'] == 1): ?>
+                        class="active"
+                    <?php endif ?>
+                ><a
+                        href="<?= Url::to(['index', 'filter' => 1]) ?>"><?= Yii::t('app', 'Comming') ?> <span
+                            class="pull-right badge"><?= $commingCount ?></span></a>
+                </li>
+                <li role="tournament_nav"
+                    <?php if ($_GET['filter'] == 2): ?>
+                        class="active"
+                    <?php endif ?>
+                ><a
+                        href="<?= Url::to(['index', 'filter' => 2]) ?>"><?= Yii::t('app', 'Running') ?><span
+                            class="pull-right badge"><?= $runningCount ?></span></a>
+                </li>
+                <li role="tournament_nav"
+                    <?php if ($_GET['filter'] == 3): ?>
+                        class="active"
+                    <?php endif ?>
+                ><a
+                        href="<?= Url::to(['index', 'filter' => 3]) ?>"><?= Yii::t('app', 'Past') ?><span
+                            class="pull-right badge"><?= $pastCount ?></span></a>
+                </li>
 
             </ul>
 

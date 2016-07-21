@@ -153,7 +153,7 @@ if (isset($nextEvent)) {
         <?php if (isset($nextEvent)): ?>
 
             <div class="row">
-                <div class="col-xs-12 col-md-2 no-padding-right-md" style="text-align: center">
+                <div class="col-xs-12 col-md-2 no-padding-right-md home" style="text-align: center">
                     <div class=" wrap-event-date">
                         <div class="day">
                             <?=

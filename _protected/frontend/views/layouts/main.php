@@ -5,12 +5,26 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
+use yii\web\View;
 use yii\widgets\Breadcrumbs;
 
 /* @var $this \yii\web\View */
 /* @var $content string */
 
 AppAsset::register($this);
+$script = <<< JS
+$(document).ready(function(){
+    $('.navbar-nav.navbar-right > .dropdown > .dropdown-menu').each(function() {
+        if($(this).children('li').hasClass('active')){
+            $(this).parent().addClass('active');
+        }
+    });
+    
+        
+
+}); 
+JS;
+$this->registerJs($script, View::POS_END);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
