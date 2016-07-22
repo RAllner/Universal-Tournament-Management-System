@@ -9,6 +9,8 @@ use yii\helpers\Url;
 /* @var $searchModel frontend\models\ParticipantSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 /* @var $tournament frontend\models\Tournament */
+/* @var $model frontend\models\Participant */
+/* @var $source array */
 
 $this->title = $tournament->name. " ". Yii::t('app', 'Participants');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Tournaments'), 'url' => ['tournament/index']];
@@ -66,6 +68,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php endif ?>
         </div>
         <div class="col-md-10">
+            <?= Html::a('<i class="material-icons">shuffle</i> '.Yii::t('app','Shuffle Seeds'), ['shuffle-seeds', 'tournament_id' => $tournament->id], ['class' => 'btn btn-info'])?>
             <?= GridView::widget([
                 'dataProvider' => $dataProvider,
                 'filterModel' => $searchModel,
@@ -75,10 +78,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     //'signup',
                     //'checked_in',
                     'name',
-                    // 'seed',
+                    'seed',
                     // 'updated_at',
                     // 'created_at',
-                    'rank',
+                    // 'rank',
                     // 'user_id',
                     // 'team_id',
                     // 'removed',
@@ -87,6 +90,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     ['class' => 'yii\grid\ActionColumn'],
                 ],
             ]); ?>
+            <div class="well">
+                <?= $this->render('_adminform', [
+                    'model' => $model,
+                    'source' => $source,
+                ]) ?>
+            </div>
         </div>
     </div>
 </div>

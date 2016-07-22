@@ -72,8 +72,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'columns' => [
                     ['class' => 'yii\grid\SerialColumn'],
 
-                    'tournament_id',
-                    'signup',
+                    //'tournament_id',
                     'name',
                     'rank',
                     // 'removed',

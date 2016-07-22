@@ -41,11 +41,37 @@ class ParticipantController extends FrontendController
         $searchModel = new ParticipantSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $tournament_id);
         $tournament = Tournament::find()->where(['id' => $tournament_id])->one();
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-            'tournament' => $tournament,
-        ]);
+
+        $source[] = null;
+        foreach (Player::find()->all() as $player){
+            $object  = (object)[ 'label' => $player['nameWithRunningNr'], 'value' => $player['id']];
+            $source[] = $object;
+        }
+
+        $model = new Participant();
+        $model->tournament_id = $tournament_id;
+        $model = $this->loadDefault($model);
+        if ($model->load(Yii::$app->request->post())){
+            if(!empty($model->player_id)){
+                $player = Player::find()->where(['id' => $model->player_id])->one();
+                $model->name = $player->name . $player->running_nr;
+            }
+            if($model->save()) {
+                $model->tournament->setParticipantCount();
+                return $this->redirect(['index', 'tournament_id' => $model->tournament_id]);
+            } else {
+                return $this->redirect(['index', 'tournament_id' => $model->tournament_id]);
+            }
+
+        } else {
+            return $this->render('index', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+                'tournament' => $tournament,
+                'source' => $source,
+                'model' => $model,
+            ]);
+        }
     }
 
     public function actionStandings($tournament_id)
