@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use frontend\models\Participant;
 use Yii;
 use frontend\models\Tournament;
 use frontend\models\TournamentSearch;
@@ -23,6 +24,8 @@ class TournamentController extends FrontendController
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                    'abort' => ['POST'],
+                    'reset' => ['POST']
                 ],
             ],
         ];
@@ -73,6 +76,32 @@ class TournamentController extends FrontendController
     }
 
     /**
+     * Displays a Tournament Tree of the only stage or the final stage.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionStage($id)
+    {
+        return $this->render('stage', [
+            'model' => $this->findModel($id),
+        ]);
+    }
+
+
+    /**
+     * Displays a Tournament Tree of the only stage or the final stage.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionGroupStage($id)
+    {
+        return $this->render('groupStage', [
+            'model' => $this->findModel($id),
+        ]);
+    }
+
+
+    /**
      * Creates a new Tournament model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
@@ -118,8 +147,20 @@ class TournamentController extends FrontendController
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            if($model->hosted_by == -1){
+                $model->user_id = Yii::$app->user->id;
+            } else {
+                $model->organisation_id = $model->hosted_by;
+            }
+            if ($model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }else {
+
+                return $this->render('update', [
+                    'model' => $model,
+                ]);
+            }
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -127,6 +168,72 @@ class TournamentController extends FrontendController
         }
     }
 
+    public function actionPublish($id)
+    {
+        $model = $this->findModel($id);
+
+        $model->status = Tournament::STATUS_PUBLISHED;
+        if($model->save()){
+            Yii::$app->session->setFlash('success', 'The tournament now published.');
+            return $this->redirect(['view', 'id' => $id]);
+        } else {
+            Yii::$app->session->setFlash('error', 'Something went wrong.');
+            return $this->redirect(['view', 'id' => $id]);
+        }
+    }
+
+    public function actionStart($id)
+    {
+        if($this->getParticipantCount($id)<=2){
+            $model = $this->findModel($id);
+
+            $model->status = ($model->stage_type === 0) ? Tournament::STATUS_FINAL_STAGE : Tournament::STATUS_RUNNING;
+            if($model->save()){
+                return $this->redirect($redirect = ($model->stage_type === 0) ? ['stage', 'id' => $id] : ['group-stage', 'id' => $id]);
+            } else {
+                Yii::$app->session->setFlash('error', 'Something went wrong.');
+                return $this->redirect(['view', 'id' => $id]);
+            }
+        } else {
+            Yii::$app->session->setFlash('error', 'Not enough participants to start the tournament');
+            return $this->redirect(['view', 'id' => $id]);
+        }
+    }
+
+
+    public function actionAbort($id)
+    {
+        $model = $this->findModel($id);
+
+        $model->status = Tournament::STATUS_ABORT;
+        if($model->save()){
+            Yii::$app->session->setFlash('info', 'The tournament is now aborted.');
+            return $this->redirect(['view', 'id' => $id]);
+        } else {
+            Yii::$app->session->setFlash('error', 'Something went wrong.');
+            return $this->redirect(['view', 'id' => $id]);
+        }
+    }
+
+    public function actionReset($id)
+    {
+        $model = $this->findModel($id);
+
+        $model->status = Tournament::STATUS_PUBLISHED;
+        //TODO: RESET ALL MATCH DATA
+        if($model->save()){
+            Yii::$app->session->setFlash('info', 'The tournament reset is finished.');
+            return $this->redirect(['view', 'id' => $id]);
+        } else {
+            Yii::$app->session->setFlash('error', 'Something went wrong.');
+            return $this->redirect(['view', 'id' => $id]);
+        }
+    }
+
+    public function getParticipantCount($id)
+    {
+        return Participant::find()->where(['tournament_id' => $id])->count();
+    }
 
     /**
      * Deletes an existing Tournament model.

@@ -110,7 +110,6 @@ class Article extends ActiveRecord
      */
     public function upload()
     {
-
         if ($this->imageFile) {
             $path = Url::to('@webroot/images/news/');
             $escapedTitle = $this->sanitize($this->title);

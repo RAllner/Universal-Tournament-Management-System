@@ -2,6 +2,7 @@
 
 use frontend\models\Game;
 use frontend\models\Location;
+use frontend\models\Tournament;
 use kartik\widgets\DateTimePicker;
 use mihaildev\ckeditor\CKEditor;
 use yii\helpers\ArrayHelper;
@@ -90,14 +91,6 @@ $(document).ready(function(){
         }
     })
     
-    $('.check-values').click(function() {
-      alert(
-        'Hosted by:' + $('#tournament-hosted_by').val() + '------' +
-        'Einrichtung:' + $('#tournament-location').val() + '------' +
-        'Game:' + $('#tournament-game_id').val() + '------' +
-        'Stage:' + $('#tournament-stage_type').val() + '------' 
-      );
-    })
     
 }); 
 JS;
@@ -169,10 +162,10 @@ $this->registerJs($script, View::POS_END);
     <?= $form->field($model, 'description')->widget(CKEditor::className(),
         ['editorOptions' => ['preset' => 'standard', 'inline' => false]]); ?>
 
-    <?php if ($model->isNewRecord): ?>
-    <?= $form->field($model, 'is_team_tournament')->checkbox() ?>
+    <?php if($model->status <= Tournament::STATUS_PUBLISHED): ?>
+        <?= $form->field($model, 'is_team_tournament')->checkbox() ?>
     <?php endif ?>
-    <?= $form->field($model, 'stage_type')->radioList([0 => Yii::t('app', 'Single Stage Tournament'), 1 => Yii::t('app', 'Two Stage Tournament')]) ?>
+        <?= $form->field($model, 'stage_type')->radioList([0 => Yii::t('app', 'Single Stage Tournament'), 1 => Yii::t('app', 'Two Stage Tournament')]) ?>
 
 
     <div class="group-stage">
@@ -180,6 +173,7 @@ $this->registerJs($script, View::POS_END);
             <h3><?= Yii::t('app', 'Group Stage') ?></h3>
             <div class="row">
                 <div class="col-md-6">
+
                     <?= $form->field($model, 'gs_format')->dropDownList($model->groupStageFormatList) ?>
 
                     <?= $form->field($model, 'participants_compete')->textInput(['type' => 'number', 'min' => 1]) ?>
@@ -210,11 +204,12 @@ $this->registerJs($script, View::POS_END);
             <h3 id="final-stage-header"><?= Yii::t('app', 'Final Stage') ?></h3>
             <div class="row">
                 <div class="col-md-6">
-                    <?= $form->field($model, 'fs_format')->dropDownList($model->formatList) ?>
 
-                    <?= $form->field($model, 'fs_third_place')->checkbox() ?>
+                        <?= $form->field($model, 'fs_format')->dropDownList($model->formatList) ?>
 
-                    <?= $form->field($model, 'fs_de_grand_finals')->radioList(array('0' => Yii::t('app', '1-2 matches'), '1' => Yii::t('app', '1 match'), '2' => Yii::t('app', 'None')), ['value' => 0]) ?>
+                        <?= $form->field($model, 'fs_third_place')->checkbox() ?>
+
+                        <?= $form->field($model, 'fs_de_grand_finals')->radioList(array('0' => Yii::t('app', '1-2 matches'), '1' => Yii::t('app', '1 match'), '2' => Yii::t('app', 'None')), ['value' => 0]) ?>
 
                     <?= $form->field($model, 'fs_rr_ranked_by')->dropDownList($model->rankedByList) ?>
                 </div>
@@ -234,15 +229,21 @@ $this->registerJs($script, View::POS_END);
     </div>
 
     <h3><?= Yii::t('app', 'Advanced Settings') ?></h3>
-    <?= $form->field($model, 'quick_advance')->checkbox() ?>
 
-    <?= $form->field($model, 'has_sets')->checkbox() ?>
+    <?php if($model->status < Tournament::STATUS_PUBLISHED): ?>
+        <?= $form->field($model, 'quick_advance')->checkbox() ?>
+
+        <?= $form->field($model, 'has_sets')->checkbox() ?>
+    <?php endif ?>
+
 
     <?= $form->field($model, 'notifications')->checkbox() ?>
 
-    <?= $form->field($model, 'url')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'url')->hiddenInput()->label(false) ?>
 
-    <?= $form->field($model, 'status')->dropDownList($model->statusList) ?>
+    <?php if($model->isNewRecord): ?>
+        <?= $form->field($model, 'status')->dropDownList($model->statusList) ?>
+    <?php endif ?>
 
     <?= $form->field($model, 'max_participants')->textInput(['type' => 'number', 'min' => 2, 'value' => 50]) ?>
 
@@ -265,7 +266,6 @@ $this->registerJs($script, View::POS_END);
 
     <?= $form->field($model, 'gs_tie_break3_copy1')->dropDownList($model->matchTiesByList, ['value' => 4])->hiddenInput()->label(false) ?>
 
-    <button class="btn check-values">Check</button>
 
     <!--    <div>
 

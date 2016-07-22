@@ -4,6 +4,7 @@ namespace frontend\controllers;
 
 use frontend\models\Player;
 use frontend\models\Team;
+use frontend\models\Tournament;
 use Yii;
 use frontend\models\Participant;
 use frontend\models\ParticipantSearch;
@@ -39,10 +40,11 @@ class ParticipantController extends FrontendController
     {
         $searchModel = new ParticipantSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $tournament_id);
-
+        $tournament = Tournament::find()->where(['id' => $tournament_id])->one();
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'tournament' => $tournament,
         ]);
     }
 
@@ -50,10 +52,11 @@ class ParticipantController extends FrontendController
     {
         $searchModel = new ParticipantSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $tournament_id, 1);
-
+        $tournament = Tournament::find()->where(['id' => $tournament_id])->one();
         return $this->render('standings', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'tournament' => $tournament,
         ]);
     }
 
@@ -109,6 +112,26 @@ class ParticipantController extends FrontendController
         return $model;
     }
 
+    public function actionShuffleSeeds($tournament_id){
+        $participants = Participant::find()->where(['tournament_id' => $tournament_id])->all();
+        $count = Participant::find()->where(['tournament_id' => $tournament_id])->count();
+        $seeds = range(0, $count-1);
+        shuffle($seeds);
+        $newSeeds[]= null;
+        $i = 0;
+        foreach ($seeds as $number) {
+            $newSeeds[$i] = $number;
+            $i++;
+        }
+        $j = 0;
+        foreach ($participants as $participant){
+            $participant->seed = $newSeeds[$j];
+            $j++;
+            $participant->save();
+        }
+        return $this->redirect(['index', 'tournament_id' => $tournament_id]);
+
+    }
     
     
     /**
@@ -138,9 +161,11 @@ class ParticipantController extends FrontendController
      */
     public function actionDelete($id)
     {
+        $model = $this->findModel($id);
+        $tournament_id = $model->tournament_id;
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['index', 'tournament_id' => $tournament_id]);
     }
 
     /**

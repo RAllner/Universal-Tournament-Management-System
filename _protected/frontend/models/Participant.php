@@ -117,12 +117,13 @@ class Participant extends ActiveRecord
     {
         $tournament_id = $this->tournament->id;
         $currentParticipants = Participant::find()->where(['tournament_id' => $tournament_id])
-                ->andWhere(['not',['team_id' =>null]])
+                ->andWhere(['not',['team_id' => null]])
                 ->all();
-        $team_ids[] = array("");
+        $team_ids[] = '-1';
         foreach ($currentParticipants as $participant){
             $team_ids[] = $participant->team_id;
         }
+        $teams = null;
         foreach ($this->getPlayers() as $player) {
             $teamMembers = TeamMember::find()->where(['player_id' => $player->id, 'admin' => 1])
                 ->andWhere(['not',['team_id' => $team_ids]])

@@ -1076,3 +1076,9 @@ blockquote {
     border-left: 2px solid #ff9800;
 }
 
+.progress .progress-bar, .progress .progress-bar-default, .progress .progress-bar-primary {
+    background-color: #ff9800;
+}
+.progress {
+    margin-bottom: 0;
+}

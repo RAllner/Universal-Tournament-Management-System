@@ -66,9 +66,10 @@ class Tournament extends ActiveRecord
     const STATUS_DRAFT = 1;
     const STATUS_PUBLISHED = 2;
     const STATUS_RUNNING = 3;
-    const STATUS_FINISHED = 4;
-    const STATUS_ABORT = 5;
-    const STATUS_DELETED = 6;
+    const STATUS_FINAL_STAGE = 4;
+    const STATUS_FINISHED = 5;
+    const STATUS_ABORT = 6;
+    const STATUS_DELETED = 7;
 
     const FORMAT_SINGLE_ELIMINATION = 1;
     const FORMAT_DOUBLE_ELIMINATION = 2;
@@ -226,6 +227,8 @@ class Tournament extends ActiveRecord
             return Yii::t('app', 'Published');
         } else if ($status === self::STATUS_RUNNING) {
             return Yii::t('app', 'Running');
+        } else if ($status === self::STATUS_FINAL_STAGE) {
+            return Yii::t('app', 'Running');
         } else if ($status === self::STATUS_FINISHED) {
             return Yii::t('app', 'Finished');
         } else if ($status === self::STATUS_ABORT) {
@@ -246,10 +249,6 @@ class Tournament extends ActiveRecord
         $statusArray = [
             self::STATUS_DRAFT => Yii::t('app', 'Draft'),
             self::STATUS_PUBLISHED => Yii::t('app', 'Published'),
-            self::STATUS_RUNNING => Yii::t('app', 'Running'),
-            self::STATUS_FINISHED => Yii::t('app', 'Finished'),
-            self::STATUS_ABORT => Yii::t('app', 'Abort'),
-            self::STATUS_DELETED => Yii::t('app', 'Deleted'),
         ];
 
         return $statusArray;
@@ -451,7 +450,6 @@ class Tournament extends ActiveRecord
     public function getHostedBy()
     {
         if ($this->hosted_by == -1 && isset($this->user_id)) {
-
             return $this->user->username;
         } else if ($this->hosted_by >= 0 && isset($this->organisation_id)) {
             return $this->organisation->name;

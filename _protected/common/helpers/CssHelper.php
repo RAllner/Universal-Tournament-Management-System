@@ -56,8 +56,37 @@ class CssHelper
         {
             return "boolean-false";
         }      
-    }  
+    }
 
+
+    public static function tournamentStatusCss($status)
+    {
+        if ($status === Yii::t('app', 'Draft'))
+        {
+            return "grey";
+        }
+        else if ($status === Yii::t('app', 'Published'))
+        {
+            return "green";
+        }
+        else if ($status === Yii::t('app', 'Running'))
+        {
+            return "gold";
+        }
+        else if ($status === Yii::t('app', 'Finished'))
+        {
+            return "black";
+        }
+        else if ($status === Yii::t('app', 'Abort'))
+        {
+            return "red";
+        }
+        else
+        {
+            return "red";
+        }
+    }
+    
     /**
      * Returns the appropriate css class based on the value of Article $category.
      * NOTE: used in article/admin view.

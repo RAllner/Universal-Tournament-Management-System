@@ -28,7 +28,7 @@ $options = ['data-title' => $photoInfo['alt']];
 
                     <i class="material-icons">schedule</i> <?= $model->begin . ' ' . Yii::t('app', 'o\' clock') ?>
                     </br>
-                    <?= '<div class='.CssHelper::generalStatusCss($model->statusName).">".$model->getStatusName($model->status).'</div>';?>
+                    <?= '<div class='.CssHelper::tournamentStatusCss($model->statusName).">".$model->getStatusName($model->status).'</div>';?>
                 </div>
                 <h3 class="media-heading">
                     <a href="<?= Url::to(['tournament/view', 'id' => $model->id]) ?>">
