@@ -87,11 +87,24 @@ class TournamentController extends FrontendController
     {
         $searchModel = new TournamentMatchSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $id, Tournament::STAGE_FS);
+        $tournament = $this->findModel($id);
         return $this->render('stage', [
             'model' => $this->findModel($id),
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'tournament' => $tournament,
         ]);
+    }
+
+    public function actionReportMatch($id){
+        $model = TournamentMatch::find()->where(['id' => $id])->one();
+        if (Yii::$app->user->can('updateTournament', ['model' => $model])) {
+            if ($model->load(Yii::$app->request->post())) {
+                if ($model->save()) {
+
+                }
+            }
+        }
     }
 
 

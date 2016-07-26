@@ -19,6 +19,7 @@ use yii\db\ActiveRecord;
  * @property integer $seed_A
  * @property integer $participant_id_B
  * @property integer $participant_score_B
+ * @property string $scores
  * @property integer $seed_B
  * @property integer $winner_id
  * @property integer $loser_id
@@ -62,7 +63,7 @@ class TournamentMatch extends ActiveRecord
             [['begin_at', 'finished_at'], 'safe'],
             [['metablob'], 'string'],
             [['matchID'], 'string', 'max' => 11],
-            [['follow_winner_and_loser_match_ids', 'qualification_match_ids'], 'string', 'max' => 512],
+            [['follow_winner_and_loser_match_ids', 'qualification_match_ids', 'scores'], 'string', 'max' => 512],
             [['tournament_id'], 'exist', 'skipOnError' => true, 'targetClass' => Tournament::className(), 'targetAttribute' => ['tournament_id' => 'id']],
         ];
     }
@@ -84,6 +85,7 @@ class TournamentMatch extends ActiveRecord
             'seed_A' => Yii::t('app', 'Seed A'),
             'participant_id_B' => Yii::t('app', 'Participant Id  B'),
             'participant_score_B' => Yii::t('app', 'Participant Score  B'),
+            'scores' => Yii::t('app', 'Scores'),
             'seed_B' => Yii::t('app', 'Seed B'),
             'winner_id' => Yii::t('app', 'Winner ID'),
             'loser_id' => Yii::t('app', 'Loser ID'),

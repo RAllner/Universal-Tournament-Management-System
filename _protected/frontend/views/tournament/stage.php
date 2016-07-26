@@ -7,8 +7,9 @@
  */
 
 /* @var $this yii\web\View */
-/* @var $model frontend\models\Tournament */
+/* @var $tournament frontend\models\Tournament */
 /* @var $dataProvider frontend\models\TournamentMatchSearch */
+/* @var $model frontend\models\TournamentMatch */
 
 use frontend\models\Tournament;
 use yii\helpers\Html;
@@ -17,11 +18,11 @@ use yii\widgets\ListView;
 
 $stage_name = ($model->stage_type == Tournament::STAGE_FS)? Yii::t('app', 'Bracket') : Yii::t('app', 'Final Stage');
 
-$this->title = $model->name. " ".$stage_name;
+$this->title = $tournament->name. " ".$stage_name;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Tournaments'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = ['label' => $tournament->name, 'url' => ['view', 'id' => $tournament->id]];
 $this->params['breadcrumbs'][] = $stage_name;
-$photoInfo = $model->PhotoInfo;
+$photoInfo = $tournament->PhotoInfo;
 $photo = Html::img($photoInfo['url'], ['alt' => $photoInfo['alt'], 'width' => '100%']);
 $options = ['data-title' => $photoInfo['alt']];
 
@@ -37,7 +38,7 @@ $options = ['data-title' => $photoInfo['alt']];
     <div class="clearfix"></div>
     <div class="row">
         <div class="col-md-2 col-xs-3">
-            <?php echo $this->render('nav', ['model' => $model, 'active' => Tournament::ACTIVE_FINAL_STAGE]); ?>
+            <?php echo $this->render('nav', ['model' => $tournament, 'active' => Tournament::ACTIVE_FINAL_STAGE]); ?>
             </div>
         <div class="col-md-10 col-xs-9">
             <div class="well">

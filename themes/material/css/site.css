@@ -1127,10 +1127,12 @@ blockquote {
 
 div.modal.fade.match {
     background-color: rgba(25, 25, 25, 0.67);
+
 }
 
 div.modal.fade.match .modal-content {
-    background-color: rgb(73, 73, 73);
+    background-color: #181818;
+    border: solid 1px #ff9800;
 }
 
 .center {
@@ -1148,7 +1150,6 @@ input[name=match-winner]{
 }
 div.fake-button.selected{
     background-color: #ff9800;
-    color: #181818;
 }
 
 div.match-winner{
@@ -1156,22 +1157,60 @@ div.match-winner{
     display: inline-flex;
 }
 div.match-winner div.fake-button:last-child {
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
     border-left: solid 1px #ff9800;
 
 }
 div.match-winner div.fake-button:not(.selected){
-    background-color: #181818;
+    background-color: #292929;
 }
 
 
 div.match-winner div.fake-button:first-child {
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
     border-right: solid 1px #ff9800;
 }
 
-#myModal > div > div > div.modal-header > button {
+div.modal-header > button {
     color: #fff;
+}
+.row.score-row {
+    margin-left: 0;
+    margin-right: 0;
+}
+.row.score-row h3{
+    display: inline;
+    position: relative;
+    top: 0.5em;
+    left: 0.5em;
+}
+.row.score-row label {
+    display: inline;
+}
+.row.score-row label > input {
+    float: right;
+    background-color: #4f4f4f;
+    border: none;
+    margin: 0.6em;
+    max-width: 65px;
+    padding: 0.5em;
+}
+div.scores {
+    background-color: #292929;
+    border-radius: 5px;
+}
+div.scores > .row.score-row:first-child {
+    border-bottom: solid 2px rgba(37, 37, 37, 0.8);
+    background-color: #303030;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+}
+
+.setsA{
+    display: inline;
+}
+.setsB{
+    display: inline;
 }

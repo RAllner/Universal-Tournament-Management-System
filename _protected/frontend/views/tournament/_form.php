@@ -231,7 +231,7 @@ $this->registerJs($script, View::POS_END);
 
     <h3><?= Yii::t('app', 'Advanced Settings') ?></h3>
 
-    <?php if($model->status < Tournament::STATUS_PUBLISHED): ?>
+    <?php if($model->status <= Tournament::STATUS_PUBLISHED): ?>
         <?= $form->field($model, 'quick_advance')->checkbox() ?>
 
         <?= $form->field($model, 'has_sets')->checkbox() ?>

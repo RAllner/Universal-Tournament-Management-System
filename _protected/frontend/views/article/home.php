@@ -266,7 +266,7 @@ if (isset($nextEvent)) {
                         }
                         ?>
                         <span class="pull-right">
-                        <a class="btn btn-default" href=<?= Url::to('events') ?>>
+                        <a class="btn btn-default" href=<?= Url::to('@web/events/index') ?>>
                             <?= yii::t('app', 'All Events'); ?><i class="material-icons">chevron_right</i>
                         </a>
                 </span>
