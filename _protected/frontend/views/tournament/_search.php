@@ -23,7 +23,6 @@ use yii\widgets\ActiveForm;
             <div class="btn-group" role="toolbar" aria-label="search" style="display: inline-flex">
                 <button  type="submit" class="btn btn-primary"><i class="material-icons">search</i>
                 </button>
-                <button  type="reset" class="btn btn-danger"><i class="material-icons">remove</i></button>
             </div>
         </span>
     </div>

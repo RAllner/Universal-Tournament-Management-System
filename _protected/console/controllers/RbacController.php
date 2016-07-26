@@ -50,8 +50,11 @@ class RbacController extends Controller
         // add the rule
         $rule = new \common\rbac\rules\AuthorRule;
         $userRule = new \common\rbac\rules\UserRule;
+        $tournamentRule = new \common\rbac\rules\TournamentRule;
         $auth->add($rule);
         $auth->add($userRule);
+        $auth->add($tournamentRule);
+
 
         //---------- PERMISSIONS ----------//
 
@@ -240,7 +243,7 @@ class RbacController extends Controller
         // add the "updateOwnTournament" permission and associate the rule with it.
         $updateOwnTournament = $auth->createPermission('updateOwnTournament');
         $updateOwnTournament->description = 'Update member to update own Tournament';
-        $updateOwnTournament->ruleName = $rule->name;
+        $updateOwnTournament->ruleName = $tournamentRule->name;
         $auth->add($updateOwnTournament);
 
         // "updateOwnTournament" will be used from "updateTournament"
@@ -249,7 +252,7 @@ class RbacController extends Controller
         // add the "updateOwnPlayer" permission and associate the rule with it.
         $deleteOwnTournament = $auth->createPermission('deleteOwnTournament');
         $deleteOwnTournament->description = 'Update member to delete own Tournament';
-        $deleteOwnTournament->ruleName = $rule->name;
+        $deleteOwnTournament->ruleName = $tournamentRule->name;
         $auth->add($deleteOwnTournament);
 
         $auth->addChild($deleteOwnTournament, $deleteTournament);

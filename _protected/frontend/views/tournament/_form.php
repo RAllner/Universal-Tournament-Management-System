@@ -13,6 +13,7 @@ use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Tournament */
 /* @var $form yii\widgets\ActiveForm */
+
 $script = <<< JS
 $(document).ready(function(){
     $('#final-stage-header').hide();
@@ -292,6 +293,22 @@ $this->registerJs($script, View::POS_END);
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?php if (Yii::$app->user->can('updateTournament', ['model' => $model]) && $model->status >=3 && $model->status <=4 && !$model->isNewRecord): ?>
+            <?= Html::a(Yii::t('app', 'Reset'), ['reset', 'id' => $model->id], [
+                'class' => 'btn btn-default',
+                'data' => [
+                    'confirm' => Yii::t('app', 'Are you sure you want to reset this tournament?'),
+                    'method' => 'post',
+                ],
+            ]) ?>
+            <?= Html::a(Yii::t('app', 'Abort'), ['abort', 'id' => $model->id], [
+                'class' => 'btn btn-danger',
+                'data' => [
+                    'confirm' => Yii::t('app', 'Are you sure you want to abort this tournament?'),
+                    'method' => 'post',
+                ],
+            ]) ?>
+        <?php endif ?>
     </div>
 
     <?php ActiveForm::end(); ?>

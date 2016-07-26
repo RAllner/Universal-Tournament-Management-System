@@ -6,7 +6,8 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model frontend\models\Team */
+/* @var $model frontend\models\Tournament */
+
 $this->title = 'Tournaments';
 $photoInfo = $model->PhotoInfo;
 $photo = Html::img($photoInfo['url'], ['alt' => $photoInfo['alt'], 'width' => '100%']);

@@ -118,7 +118,7 @@ class Events extends ActiveRecord
             'enddate' => Yii::t('app', 'Enddate'),
             'game' => Yii::t('app', 'Game'),
             'partners' => Yii::t('app', 'Partners'),
-            'eventpage' => Yii::t('app', 'Evemt Page'),
+            'eventpage' => Yii::t('app', 'Event Page'),
             'facebook' => Yii::t('app', 'Facebook'),
             'liquidpedia' => Yii::t('app', 'Liquidpedia'),
             'challonge' => Yii::t('app', 'Challonge'),

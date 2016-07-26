@@ -1082,3 +1082,96 @@ blockquote {
 .progress {
     margin-bottom: 0;
 }
+
+.tournament-header {
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.tournament-header > div > div.well {
+    margin-bottom: 0;
+}
+
+
+.tournament-header > div.register {
+    text-align: center;
+    vertical-align: middle;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.tournament-header > div.register > a {
+    display:inline-block;
+    width:100%;
+    height:100%;
+    bottom: 20px;
+    background-color: #0f9d58;
+    color: rgba(255,255,255,.84);
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    padding-top: 2em;
+    vertical-align: middle;
+}
+
+.tournament-header > div.register > a > i{
+    font-size: 5em;
+    margin-bottom: 0.5em;
+}
+
+.tournament-header > div.register > a:hover, .tournament-header > div.register > a:focus  {
+    color: white;
+}
+
+div.modal.fade.match {
+    background-color: rgba(25, 25, 25, 0.67);
+}
+
+div.modal.fade.match .modal-content {
+    background-color: rgb(73, 73, 73);
+}
+
+.center {
+    text-align: center;
+}
+
+label.match-winner {
+    padding:1em;
+    cursor:pointer;
+    border-radius: 5px;
+
+}
+input[name=match-winner]{
+    display:none
+}
+div.fake-button.selected{
+    background-color: #ff9800;
+    color: #181818;
+}
+
+div.match-winner{
+    text-align: center;
+    display: inline-flex;
+}
+div.match-winner div.fake-button:last-child {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-left: solid 1px #ff9800;
+
+}
+div.match-winner div.fake-button:not(.selected){
+    background-color: #181818;
+}
+
+
+div.match-winner div.fake-button:first-child {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-right: solid 1px #ff9800;
+}
+
+#myModal > div > div > div.modal-header > button {
+    color: #fff;
+}

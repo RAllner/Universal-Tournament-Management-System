@@ -1,7 +1,5 @@
 <?php
 
-use frontend\models\Player;
-use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -12,25 +10,11 @@ use yii\widgets\ActiveForm;
 
 ?>
 
-<div class="participant-form">
+<div class="participant-adminForm">
 
     <?php $form = ActiveForm::begin(); ?>
-        <div class="row">
-            <div class="col-xs-5">
-                <?= $form->field($model, 'name')->textInput() ?>
-            </div>
-            <div class="col-xs-5">
-                <?= $form->field($model, 'player_id')->widget(\yii\jui\AutoComplete::classname(), [
-                    'clientOptions' => [
-                        'source' => $source,
-                    ],
-                ]) ?>
-            </div>
-            <div class="col-xs-2">
+                <?= $form->field($model, 'name')->textInput()->hint(Yii::t('app', 'Enter a participant name.')) ?>
                 <?= Html::submitButton(Yii::t('app', 'Add'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-            </div>
-        </div>
-
     <?php ActiveForm::end(); ?>
 
 </div>

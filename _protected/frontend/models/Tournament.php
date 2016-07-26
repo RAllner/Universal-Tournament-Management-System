@@ -2,8 +2,7 @@
 
 namespace frontend\models;
 
-use Faker\Provider\zh_TW\DateTime;
-use Yii;
+use yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use common\models\User;
@@ -59,6 +58,8 @@ use yii\helpers\Url;
  *
  * @property Participant[] $participants
  * @property Game $game
+ * @property mixed organisation
+ * @property mixed user
  */
 class Tournament extends ActiveRecord
 {
@@ -93,6 +94,16 @@ class Tournament extends ActiveRecord
 
     const HAS_NO_SETS = 0;
     const HAS_SETS = 1;
+
+    const STAGE_FS = 0;
+    const STAGE_GS = 1;
+
+    const ACTIVE_VIEW = 0;
+    const ACTIVE_GROUP_STAGE = 1;
+    const ACTIVE_FINAL_STAGE = 2;
+    const ACTIVE_STANDINGS = 3;
+    const ACTIVE_PARTICIPANTS = 4;
+    const ACTIVE_SETTINGS = 5;
 
 
     /**
@@ -431,12 +442,14 @@ class Tournament extends ActiveRecord
      */
     public function getHostedByList()
     {
+        /** @var $user User*/
         $user = User::find()->where(['id' => Yii::$app->user->id])->one();
-
         $array[] = ["id" => -1, "name" => $user->username, "class" => Yii::t('app', 'User')];
 
         $playerOrganisationMember = OrganisationHasUser::find()->where(['user_id' => $user->id])->all();
         foreach ($playerOrganisationMember as $member) {
+            /** @var $tmpOrganisation Organisation */
+            /** @var $member OrganisationHasUser */
             $tmpOrganisation = Organisation::find()->where(['id' => $member->organisation_id])->one();
             $array[] = ["id" => $tmpOrganisation->id, "name" => $tmpOrganisation->name, "class" => Yii::t('app', 'Organisation')];
         }
@@ -449,10 +462,13 @@ class Tournament extends ActiveRecord
      */
     public function getHostedBy()
     {
+        /** @var $this Tournament */
         if ($this->hosted_by == -1 && isset($this->user_id)) {
             return $this->user->username;
         } else if ($this->hosted_by >= 0 && isset($this->organisation_id)) {
             return $this->organisation->name;
+        } else {
+            return null;
         }
     }
 
@@ -466,6 +482,22 @@ class Tournament extends ActiveRecord
         return $this->hasOne(Game::className(), ['id' => 'game_id']);
     }
 
+
+    /**
+     * Check if the Owner is a user or a organisation
+     * @return bool
+     */
+    public function isUserOwner(){
+        return $val = ($this->hosted_by == -1) ? true : false;
+    }
+
+    public function getCreatedBy(){
+        if($this->isUserOwner()){
+            return $this->getUser();
+        } else {
+            return $this->getOrganisation();
+        }
+    }
     /**
      * Returns the Owner Organisation if defined
      * @return array|null|ActiveRecord
@@ -530,12 +562,13 @@ class Tournament extends ActiveRecord
 
         $imageInfo = ['alt' => $alt];
 
-        if (!(is_null($this->organisation_id))) {
+        if ($this->hosted_by !== -1 && isset($this->organisation_id)) {
+            /** @var Organisation $organisation */
             $organisation = Organisation::find()->where(['id' => $this->organisation_id])->one();
             //Yii::$app->session->setFlash('error', $organisation->user_id);
             $organisation_photoInfo = $organisation->getPhotoInfo();
             $imageInfo['url'] = $organisation_photoInfo['url'];
-        } else if (isset($this->user_id)) {
+        } else if ($this->hosted_by == -1 && isset($this->user_id)) {
             $imageInfo['url'] = Url::to('@web/images/players/default.jpg');
         } else {
             $imageInfo['url'] = Url::to('@web/images/organisations/default.png');

@@ -23,8 +23,8 @@ use yii\db\ActiveRecord;
  * @property integer $removed
  * @property integer $on_waiting_list
  *
- * @property Match[] $matches
- * @property Match[] $matches0
+ * @property TournamentMatch[] $matches
+ * @property TournamentMatch[] $matches0
  * @property Tournament $tournament
  */
 class Participant extends ActiveRecord
@@ -89,7 +89,7 @@ class Participant extends ActiveRecord
      */
     public function getMatches()
     {
-        return $this->hasMany(Match::className(), ['participant_id_A' => 'id']);
+        return $this->hasMany(TournamentMatch::className(), ['participant_id_A' => 'id']);
     }
 
     /**
@@ -97,7 +97,7 @@ class Participant extends ActiveRecord
      */
     public function getMatches0()
     {
-        return $this->hasMany(Match::className(), ['participant_id_B' => 'id']);
+        return $this->hasMany(TournamentMatch::className(), ['participant_id_B' => 'id']);
     }
 
     /**

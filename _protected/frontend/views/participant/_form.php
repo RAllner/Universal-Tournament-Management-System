@@ -12,7 +12,9 @@ use yii\widgets\ActiveForm;
 
 <div class="participant-form">
 
+    <?php if(Yii::$app->user->can('member')): ?>
     <?php $form = ActiveForm::begin(); ?>
+
 
         <?php if ($model->tournament->is_team_tournament == 0 && !is_null($model->players)): ?>
             <?= $form->field($model, 'player_id')->dropDownList(ArrayHelper::map($model->players, 'id', 'name')) ?>
@@ -42,5 +44,6 @@ use yii\widgets\ActiveForm;
 
 
     <?php ActiveForm::end(); ?>
-
+    <?php endif ?>
+    
 </div>
