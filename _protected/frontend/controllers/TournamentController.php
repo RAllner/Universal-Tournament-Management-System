@@ -98,12 +98,47 @@ class TournamentController extends FrontendController
 
     public function actionReportMatch($id){
         $model = TournamentMatch::find()->where(['id' => $id])->one();
+        /** @var $model TournamentMatch */
         if (Yii::$app->user->can('updateTournament', ['model' => $model])) {
             if ($model->load(Yii::$app->request->post())) {
-                if ($model->save()) {
-
+                if(!is_null($model->winner_id) && !is_null($model->winner_id)){
+                    $model->state = TournamentMatch::MATCH_STATE_FINISHED;
                 }
+                if ($model->save()) {
+                    if(!is_null($model->winner_id) && !is_null($model->winner_id)){
+                        $winnerMatchID = explode(',',$model->follow_winner_and_loser_match_ids)[0];
+                        if(count(explode(',',$model->follow_winner_and_loser_match_ids)) > 1){
+                            $loserMatch = explode(',',$model->follow_winner_and_loser_match_ids)[1];
+                            //TODO: LoserMatch fill
+                        }
+                        $winnerMatch = TournamentMatch::find()
+                            ->where(['tournament_id' => $model->tournament_id])
+                            ->andWhere(['stage' => $model->stage])
+                            ->andWhere(['matchID' => $winnerMatchID])
+                            ->one();
+                        /** @var $winnerMatch TournamentMatch */
+                        if(explode(',',$winnerMatch->qualification_match_ids)[0] == $model->matchID){
+                            $winnerMatch->participant_id_A = $model->winner_id;
+                        } else {
+                            $winnerMatch->participant_id_B = $model->winner_id;
+                        }
+                        if(!is_null($winnerMatch->participant_id_A) || !is_null($winnerMatch->participant_id_B)){
+                            $winnerMatch->state = TournamentMatch::MATCH_STATE_OPEN;
+                        } else if(!is_null($winnerMatch->participant_id_A) && !is_null($winnerMatch->participant_id_B))
+                            $winnerMatch->state = TournamentMatch::MATCH_STATE_READY;
+                        $winnerMatch->save();
+
+                    }
+                    return $this->redirect(Yii::$app->request->referrer);
+                } else {
+                    return $this->redirect(Yii::$app->request->referrer);
+                }
+
+            } else {
+                return $this->redirect(Yii::$app->request->referrer);
             }
+        } else {
+            return $this->redirect(Yii::$app->request->referrer);
         }
     }
 
@@ -418,6 +453,8 @@ class TournamentController extends FrontendController
     }
 
     /**
+     * Creates an empty Single Elimination Tree recursive
+     *
      * @param $rounds integer
      * @param $currentRound integer
      * @param $fatherID integer
@@ -458,7 +495,6 @@ class TournamentController extends FrontendController
                 Yii::$app->session->setFlash('error', "Speichern klappt nicht");
                 return false;
             }
-
         }
         $innerIdUpperChild = ($innerRoundID * 2) - 1;
         $innerIdLowerChild = ($innerRoundID * 2);
@@ -473,7 +509,7 @@ class TournamentController extends FrontendController
             return true;
         } else {
             Yii::error($match->getErrors());
-            Yii::$app->session->setFlash('error', "Speichern klappt nicht" . $match->getErrors());
+            Yii::$app->session->setFlash('error', "Something went terrible wrong" . $match->getErrors());
             return false;
         }
     }

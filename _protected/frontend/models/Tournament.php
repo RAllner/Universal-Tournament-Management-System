@@ -297,7 +297,7 @@ class Tournament extends ActiveRecord
      */
     public function getFormatShortName($format = null)
     {
-        $format = (empty($format)) ? $this->status : $format;
+        $format = (empty($format)) ? $this->fs_format : $format;
 
         if ($format === self::FORMAT_SINGLE_ELIMINATION) {
             return Yii::t('app', 'SE');

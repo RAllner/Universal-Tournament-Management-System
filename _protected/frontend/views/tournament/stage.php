@@ -50,7 +50,7 @@ $options = ['data-title' => $photoInfo['alt']];
                         <th><?= Yii::t('app','Points A') ?></th>
                         <th><?= Yii::t('app','Points B') ?></th>
                         <th><?= Yii::t('app','Participant B') ?></th>
-                        <th><?= Yii::t('app','Status') ?></th>
+                        <th><?= Yii::t('app','Round') ?></th>
                         <th><i class="material-icons">edit</i></th>
                     </tr>
                 <?= ListView::widget([

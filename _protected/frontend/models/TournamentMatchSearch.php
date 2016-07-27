@@ -47,10 +47,10 @@ class TournamentMatchSearch extends TournamentMatch
         // add conditions that should always apply here
         $query->where(['tournament_id' => $tournament_id]);
         $query->where(['stage' => $stage]);
-        $query->where(['not',['and',['seed_A' => null],['seed_B' => null]]]);
+        $query->where(['>', 'state', 0]);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'sort'=> ['defaultOrder' => ['state' => SORT_DESC, 'matchID' => SORT_ASC,'round' => SORT_ASC]],
+            'sort'=> ['defaultOrder' => ['state' => SORT_DESC,'round' => SORT_ASC, 'matchID' => SORT_ASC]],
             'pagination' => [
                 'pageSize' => 100,
             ]

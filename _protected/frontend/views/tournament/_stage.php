@@ -12,6 +12,7 @@
 
 use frontend\models\Participant;
 
+use frontend\models\Tournament;
 use frontend\models\TournamentMatch;
 use yii\helpers\Html;
 use yii\web\View;
@@ -41,6 +42,7 @@ if (isset($participant_B)) {
         $participant_B_Name = "";
     }
 }
+$tournament = Tournament::find()->where(['id' => $model->tournament_id])->one();
 
 $script =
     <<< JS
@@ -51,10 +53,12 @@ $(':checkbox').on('change', function () {
          if($(this).parents('.selected').length){
                 $(':checkbox').closest('div').removeClass('selected');
                  $('.field-tournamentmatch-winner_id-'+targetID+'> input').val(undefined);
+                 $('.field-tournamentmatch-loser_id-'+targetID+'> input').val(undefined);
          } else {
                 $(':checkbox').not(this).closest('div').removeClass('selected');    
                 $(this).closest('div').addClass('selected');
                 $('.field-tournamentmatch-winner_id-'+targetID+'> input').val($(this).val());
+                $('.field-tournamentmatch-loser_id-'+targetID+'> input').val($(':checkbox').not(this).val());
         }
 });
 
@@ -67,8 +71,8 @@ $('.set-add').on('click', function() {
         $('.set-remove'+targetID).show();
     } 
         setCount++;
-        $('div.setsA'+targetID).append('<label class="set-points form-control additionalSetA'+ targetID + setCount +'">'+'<input type="number" name="A" min="0" value="0"></label>');
-        $('div.setsB'+targetID).append('<label class="set-points form-control additionalSetB'+ targetID + setCount +'">'+'<input type="number" name="B" min="0" value="0"></label>');
+        $('div.setsA'+targetID).prepend('<label class="set-points form-control additionalSetA'+ targetID + setCount +'">'+'<input type="number" name="A" min="0" value="0"></label>');
+        $('div.setsB'+targetID).prepend('<label class="set-points form-control additionalSetB'+ targetID + setCount +'">'+'<input type="number" name="B" min="0" value="0"></label>');
     
 
     $('input.setCount'+targetID).val(""+setCount);
@@ -77,14 +81,14 @@ $('.set-add').on('click', function() {
 $('.set-remove').on('click', function() {
     var targetID = $(this).data('target');
     var setCount = $('input.setCount'+targetID).val();
+    alert(setCount);
 
     $('label.set-points.form-control.additionalSetA'+ targetID + setCount).remove();
     $('label.set-points.form-control.additionalSetB'+ targetID + setCount).remove();
-            setCount--;
+    setCount--
     if(setCount == "1"){
-        $('.set-remove#'+targetID).hide();
+        $(this).hide();
     }
-
     $('input.setCount'+targetID).val(""+setCount);
 });
 
@@ -92,47 +96,61 @@ $('.report-match').on('click', function() {
    var targetID = $(this).data('target');
    var setCount = $('input.setCount'+targetID).val();
    var scoreCSV = "";
+   var scoreMatches_A = "0";
+   var scoreMatches_B = "0";
    for(i=1;i<= setCount; i++){
         var i_string = i.toString();
         var scoreA = $('.additionalSetA'+ targetID + i_string +' > input').val();
         var scoreB = $('.additionalSetB'+ targetID + i_string +' > input').val();
+        if(scoreA > scoreB){
+            scoreMatches_A++;
+        } else if(scoreB > scoreA){
+            scoreMatches_B++;
+        }
         if(i == 1){
         scoreCSV = scoreCSV+scoreA+'-'+scoreB;
         } else {
         scoreCSV = scoreCSV+','+scoreA+'-'+scoreB;
         }
-   }        
-           $('.field-tournamentmatch-scores-'+targetID+'> input').val(scoreCSV);
-  $('form#'+targetID).submit();
+   }
+   $('.field-tournamentmatch-participant_score_A-'+targetID+'> input').val(scoreMatches_A);
+   $('.field-tournamentmatch-participant_score_B-'+targetID+'> input').val(scoreMatches_B);
+   $('.field-tournamentmatch-scores-'+targetID+'> input').val(scoreCSV);
+   $('form#'+targetID).submit();
 });
 
 }); 
 JS;
 $this->registerJs($script, View::POS_END);
+
+$finished = ($model->state == TournamentMatch::MATCH_STATE_FINISHED)? "class='finished-match'": "";
+$winnerA = ($model->winner_id == $model->participant_id_A && $model->state == TournamentMatch::MATCH_STATE_FINISHED)? "class='winner-match'": "";
+$winnerB = ($model->winner_id == $model->participant_id_B && $model->state == TournamentMatch::MATCH_STATE_FINISHED)? "class='winner-match'": "";
+
 ?>
-<tr>
+<tr <?= $finished ?>>
     <td>
         <?= $model->matchID ?>
     </td>
-    <td>
+    <td <?= $winnerA ?>>
         <?= $participant_A_Name ?>
     </td>
-    <td>
+    <td <?= $winnerA ?>>
         <?= $model->participant_score_A ?>
     </td>
-    <td>
+    <td <?= $winnerB ?>>
         <?= $model->participant_score_B ?>
-    </td>
+    </td <?= $winnerB ?>>
     <td>
         <?= $participant_B_Name ?>
     </td>
     <td>
-        <?= $model->state ?>
+        <?= $model->getRoundName($model->round, $tournament) ?>
     </td>
     <!-- Button trigger modal -->
     <td>
         <?php if ($model->state >= TournamentMatch::MATCH_STATE_READY): ?>
-            <button type="button" class="btn btn-primary btn-lg open-match-modal" data-toggle="modal"
+            <button type="button" class="btn btn-primary open-match-modal" data-toggle="modal"
                     data-target="#myModal<?= $model->id ?>">
                 <i class="material-icons">edit</i>
             </button>
@@ -150,7 +168,7 @@ $this->registerJs($script, View::POS_END);
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel"><?= Yii::t('app', 'Match') . ' ' . $model->matchID ?></h4>
+                <h2 class="modal-title" id="myModalLabel"><?= Yii::t('app', 'Match') . ' ' . $model->matchID ?></h2>
             </div>
             <div class="modal-body">
                 <?php $form = ActiveForm::begin([
@@ -196,7 +214,7 @@ $this->registerJs($script, View::POS_END);
                     <?php if ($model->tournament->has_sets): ?>
                         <div class="pull-right">
                             <div
-                                class="btn btn-warning btn-xs set-remove<?= $model->id ?> <?php if (count(explode(',', $model->scores)) == 1) echo 'hidden' ?>"
+                                class="btn btn-warning btn-xs set-remove set-remove<?= $model->id ?> <?php if (count(explode(',', $model->scores)) == 1) echo 'hidden' ?>"
                                 data-target="<?= $model->id ?>">-
                             </div>
                             <div class="btn btn-success btn-xs set-add" data-target="<?= $model->id ?>">+</div>
@@ -204,6 +222,7 @@ $this->registerJs($script, View::POS_END);
                     <?php endif ?>
                     <h3><?= Yii::t('app', 'Scores') ?>
                     </h3>
+                    <div class="clearfix"></div>
                     <div class="scores">
                         <div class="row score-row A">
                             <h3><?= $participant_A_Name ?></h3>
@@ -229,11 +248,11 @@ $this->registerJs($script, View::POS_END);
                     </div>
                 </div>
 
+
                 <?= $form->field($model, 'winner_id')->textInput(['id' => 'tournamentmatch-winner_id-' . $model->id])->hiddenInput()->label(false) ?>
-
-                <?= $form->field($model, 'participant_score_A')->textInput()->hiddenInput()->label(false) ?>
-
-                <?= $form->field($model, 'participant_score_B')->textInput()->hiddenInput()->label(false) ?>
+                <?= $form->field($model, 'loser_id')->textInput(['id' => 'tournamentmatch-loser_id-' . $model->id])->hiddenInput()->label(false) ?>
+                <?= $form->field($model, 'participant_score_A')->textInput(['id' => 'tournamentmatch-participant_score_A-' . $model->id])->hiddenInput()->label(false) ?>
+                <?= $form->field($model, 'participant_score_B')->textInput(['id' => 'tournamentmatch-participant_score_B-' . $model->id])->hiddenInput()->label(false) ?>
                 <?= $form->field($model, 'scores')->textInput(['id' => 'tournamentmatch-scores-' . $model->id])->hiddenInput()->label(false) ?>
 
 

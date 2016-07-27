@@ -1214,3 +1214,10 @@ div.scores > .row.score-row:first-child {
 .setsB{
     display: inline;
 }
+
+.winner-match {
+    background-color: rgba(255, 152, 0, 0.67) !important;
+}
+.finished-match {
+    background-color: #585858 !important;
+}
