@@ -132,19 +132,29 @@ class TournamentMatch extends ActiveRecord
      * @return string Nicely formatted stage.
      *
      */
-    public function getRoundName($round = null, $tournament)
+    public function getRoundName($round = null, $tournament, $losers_round)
     {
         $round = (empty($round)) ? $this->round : $round;
         $rounds = ceil(log($tournament->participants_count, 2));
-        if ($round == $rounds) {
-            return Yii::t('app', 'Final');
-        } else if($round == $rounds-1) {
-            return Yii::t('app', 'Semifinal');
+        if($losers_round == 0){
+            if ($round == $rounds) {
+                return Yii::t('app', 'Final');
+            } else if($round == $rounds-1) {
+                return Yii::t('app', 'Semifinal');
+            } else {
+                return Yii::t('app', 'Round'). ' '. $round;
+            }
         } else {
-            return Yii::t('app', 'Round'). ' '. $round;
+            if ($round == $rounds) {
+                return Yii::t('app', 'Losers Final');
+            } else if($round == $rounds-1) {
+                return Yii::t('app', 'Losers Semifinal');
+            } else {
+                return Yii::t('app', 'Losers Round'). ' '. $round;
+            }
         }
     }
-
+    
 
     /**
      * @return \yii\db\ActiveQuery

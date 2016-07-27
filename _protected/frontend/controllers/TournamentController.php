@@ -101,11 +101,38 @@ class TournamentController extends FrontendController
         /** @var $model TournamentMatch */
         if (Yii::$app->user->can('updateTournament', ['model' => $model])) {
             if ($model->load(Yii::$app->request->post())) {
-                if(!is_null($model->winner_id) && !is_null($model->winner_id)){
+                if(!is_null($model->winner_id) && !is_null($model->loser_id)){
                     $model->state = TournamentMatch::MATCH_STATE_FINISHED;
+
+                    /** @var Participant $winnerParticipant */
+                    $winnerParticipant = Participant::find()
+                        ->where(['tournament_id' => $model->tournament_id])
+                        ->andWhere(['id' => $model->winner_id])
+                        ->one();
+                    if(is_null($winnerParticipant->rank)){
+                        $winnerParticipant->rank = 'w';
+                    } else {
+                        $winnerParticipant->rank = $winnerParticipant->rank.',w';
+                    }
+                    if (!$winnerParticipant->save()) {
+                        Yii::$app->session->setFlash('error',$winnerParticipant->getErrors());
+                    };
+
+                    /** @var Participant $loserParticipant */
+                    $loserParticipant = Participant::find()
+                        ->where(['tournament_id' => $model->tournament_id])
+                        ->andWhere(['id' => $model->loser_id])
+                        ->one();
+                    if(is_null($loserParticipant->rank)){
+                        $loserParticipant->rank = 'l';
+                    } else {
+                        $loserParticipant->rank = $loserParticipant->rank.',l';
+                    }
+                    $loserParticipant->save();
+
                 }
                 if ($model->save()) {
-                    if(!is_null($model->winner_id) && !is_null($model->winner_id)){
+                    if(!is_null($model->winner_id) && !is_null($model->loser_id)){
                         $winnerMatchID = explode(',',$model->follow_winner_and_loser_match_ids)[0];
                         if(count(explode(',',$model->follow_winner_and_loser_match_ids)) > 1){
                             $loserMatch = explode(',',$model->follow_winner_and_loser_match_ids)[1];
@@ -122,10 +149,10 @@ class TournamentController extends FrontendController
                         } else {
                             $winnerMatch->participant_id_B = $model->winner_id;
                         }
-                        if(!is_null($winnerMatch->participant_id_A) || !is_null($winnerMatch->participant_id_B)){
-                            $winnerMatch->state = TournamentMatch::MATCH_STATE_OPEN;
-                        } else if(!is_null($winnerMatch->participant_id_A) && !is_null($winnerMatch->participant_id_B))
+                        if(!is_null($winnerMatch->participant_id_A) && !is_null($winnerMatch->participant_id_B)){
                             $winnerMatch->state = TournamentMatch::MATCH_STATE_READY;
+                        } else if(!is_null($winnerMatch->participant_id_A) || !is_null($winnerMatch->participant_id_B))
+                            $winnerMatch->state = TournamentMatch::MATCH_STATE_OPEN;
                         $winnerMatch->save();
 
                     }
@@ -141,6 +168,28 @@ class TournamentController extends FrontendController
             return $this->redirect(Yii::$app->request->referrer);
         }
     }
+
+    public function actionMatchRunning($id, $match_id){
+        /** @var TournamentMatch $match */
+        $match = TournamentMatch::find()
+            ->where(['tournament_id' => $id])
+            ->andWhere(['id' => $match_id])
+            ->one();
+        if($match->state == TournamentMatch::MATCH_STATE_READY){
+            $match->state = TournamentMatch::MATCH_STATE_RUNNING;
+        } else {
+            $match->state = TournamentMatch::MATCH_STATE_READY;
+        }
+        $match->save();
+        return $this->redirect(Yii::$app->request->referrer);
+    }
+
+
+    public function actionMatchUndo($id, $match_id){
+
+        return $this->redirect(Yii::$app->request->referrer);
+    }
+
 
 
     /**
@@ -340,12 +389,23 @@ class TournamentController extends FrontendController
         }
     }
 
+    /**
+     * @param $id
+     * @return yii\web\Response
+     * @throws NotFoundHttpException
+     */
     public function actionReset($id)
     {
         $model = $this->findModel($id);
 
         $model->status = Tournament::STATUS_PUBLISHED;
-        //TODO: RESET ALL MATCH DATA
+        /** @var Participant $participants */
+        $participants = Participant::find()->where(['tournament_id' => $id])->all();
+        foreach ($participants as $participant){
+            $participant->rank = null;
+            $participant->save();
+        }
+        /** @var TournamentMatch $matches */
         $matches = TournamentMatch::find()->where(['tournament_id' => $id])->all();
         foreach ($matches as $match) {
             $match->delete();
@@ -420,22 +480,6 @@ class TournamentController extends FrontendController
         }
     }
 
-    public function dummyAdd()
-    {
-        $match = new TournamentMatch();
-        $match->matchID = (string)21234;
-        $match->stage = 1;
-        $match->round = 5;
-        $match->follow_winner_and_loser_match_ids = (string)123;
-        $match->created_at = time();
-        $match->updated_at = time();
-        $match->tournament_id = 2;
-        if (!$match->save()) {
-            Yii::error($match->getErrors());
-        };
-        Yii::error($match->getErrors());
-    }
-
 
     /**
      * @param $model Tournament
@@ -443,13 +487,81 @@ class TournamentController extends FrontendController
      */
     public function createSingleEliminationStage($model, $stage)
     {
-        $matchCount = $model->participants_count - 1;
+        //$matchCount = $model->participants_count - 1;
         $rounds = ceil(log($model->participants_count, 2));
         $maxMatches = pow(2, $rounds) - 1;
         $time = time();
         $tournament_id = $model->id;
         $this->createSEBracket($rounds, $rounds, null, $maxMatches, $stage, $time, 1, $maxMatches, $tournament_id, 1);
         $this->fillSEBracket($model, $stage);
+        if($model->fs_third_place == 1 && $stage == Tournament::STAGE_FS){
+            $this->createThirdPlaceMatch($rounds, $rounds, $maxMatches, $time, 1, $maxMatches, $tournament_id);
+        }
+    }
+
+    /**
+     * @param $rounds integer
+     * @param $currentRound integer
+     * @param $id integer
+     * @param $time integer
+     * @param $innerRoundID integer
+     * @param $maxMatches integer
+     * @param $tournament_id integer
+     * @internal param int $seed
+     * @return bool
+     */
+    public function createThirdPlaceMatch($rounds, $currentRound, $id, $time, $innerRoundID, $maxMatches, $tournament_id){
+        $match = new TournamentMatch();
+        $match->matchID = (string)(1 + $id);
+        $match->stage = Tournament::STAGE_FS;
+        $match->round = $currentRound;
+        $match->follow_winner_and_loser_match_ids = null;
+        $match->created_at = $time;
+        $match->updated_at = $time;
+        $match->tournament_id = $tournament_id;
+        $match->losers_round = 1;
+
+        $innerIdUpperChild = ($innerRoundID * 2) - 1;
+        $innerIdLowerChild = ($innerRoundID * 2);
+        $firstIndexOfRound = $maxMatches - (pow(2, $rounds - ($currentRound - 2)) - 1);
+        $idUpperChild = $firstIndexOfRound + $innerIdUpperChild;
+        $idLowerChild = $firstIndexOfRound + $innerIdLowerChild;
+        $match->qualification_match_ids = $idUpperChild . ',' . $idLowerChild;
+        $match->state = TournamentMatch::MATCH_STATE_OPEN;
+
+        /** @var TournamentMatch $upperMatch  */
+        $upperMatch = TournamentMatch::find()
+            ->where(['tournament_id' => $match->tournament_id])
+            ->andWhere(['round' => $match->round-1])
+            ->andWhere(['matchID' => $idUpperChild])
+            ->andWhere(['stage' => Tournament::STAGE_FS])
+            ->one();
+        $upperMatch->follow_winner_and_loser_match_ids = $upperMatch->follow_winner_and_loser_match_ids.','.$match->matchID;
+        if (!$upperMatch->save()) {
+            Yii::error($match->getErrors());
+            Yii::$app->session->setFlash('error', "Something went terrible wrong" . $match->getErrors());
+        }
+
+        /** @var TournamentMatch $lowerMatch */
+        $lowerMatch = TournamentMatch::find()
+            ->where(['tournament_id' => $match->tournament_id])
+            ->andWhere(['round' => $match->round-1])
+            ->andWhere(['matchID' => $idLowerChild])
+            ->andWhere(['stage' => Tournament::STAGE_FS])
+            ->one();
+        $lowerMatch->follow_winner_and_loser_match_ids = $lowerMatch->follow_winner_and_loser_match_ids.','.$match->matchID;
+        if (!$lowerMatch->save()) {
+            Yii::error($match->getErrors());
+            Yii::$app->session->setFlash('error', "Something went terrible wrong" . $match->getErrors());
+        }
+
+        if ($match->save()) {
+            return true;
+        } else {
+            Yii::error($match->getErrors());
+            Yii::$app->session->setFlash('error', "Something went terrible wrong" . $match->getErrors());
+            return false;
+        }
     }
 
     /**
@@ -501,10 +613,11 @@ class TournamentController extends FrontendController
         $firstIndexOfRound = $maxMatches - (pow(2, $rounds - ($currentRound - 2)) - 1);
         $idUpperChild = $firstIndexOfRound + $innerIdUpperChild;
         $idLowerChild = $firstIndexOfRound + $innerIdLowerChild;
-
         $match->qualification_match_ids = $idUpperChild . ',' . $idLowerChild;
+
         $this->createSEBracket($rounds, $currentRound - 1, $id, $idUpperChild, $stage, $time, $innerIdUpperChild, $maxMatches, $tournament_id, $match->seed_A);
         $this->createSEBracket($rounds, $currentRound - 1, $id, $idLowerChild, $stage, $time, $innerIdLowerChild, $maxMatches, $tournament_id, $match->seed_B);
+
         if ($match->save()) {
             return true;
         } else {
@@ -721,23 +834,7 @@ class TournamentController extends FrontendController
         return ceil($model->participants_count / $model->participants_compete);
     }
 
-    public
-    function calculateTournamentProgress()
-    {
 
-    }
-
-    public
-    function calculateGroupStageProgress()
-    {
-
-    }
-
-    public
-    function calculateFinalStageProgress()
-    {
-
-    }
     /** ----------------- END Crate Tournament Brackets ------------------------ */
 
 }

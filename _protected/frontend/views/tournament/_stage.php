@@ -15,6 +15,7 @@ use frontend\models\Participant;
 use frontend\models\Tournament;
 use frontend\models\TournamentMatch;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\web\View;
 use yii\widgets\ActiveForm;
 
@@ -24,8 +25,10 @@ if (isset($participant_A)) {
     $participant_A_Name = $participant_A->name;
 } else {
     $tmpArray = explode(',', $model->qualification_match_ids);
-    if ($tmpArray[0] != "0") {
+    if ($tmpArray[0] != "0"  && $model->losers_round == 0) {
         $participant_A_Name = Yii::t('app', 'Winner of') . " " . $tmpArray[0];
+    }else if($tmpArray[0] != "0"  && $model->losers_round == 1){
+        $participant_A_Name = Yii::t('app', 'Loser of') . " " . $tmpArray[0];
     } else {
         $participant_A_Name = "";
     }
@@ -36,9 +39,11 @@ if (isset($participant_B)) {
     $participant_B_Name = $participant_B->name;
 } else {
     $tmpArray = explode(',', $model->qualification_match_ids);
-    if (isset($tmpArray[1])) {
+    if (count($tmpArray) > 1 && $model->losers_round == 0) {
         $participant_B_Name = Yii::t('app', 'Winner of') . " " . $tmpArray[1];
-    } else {
+    } else if(count($tmpArray) > 1 && $model->losers_round == 1) {
+        $participant_B_Name = Yii::t('app', 'Loser of') . " " . $tmpArray[1];
+    }else {
         $participant_B_Name = "";
     }
 }
@@ -124,11 +129,12 @@ JS;
 $this->registerJs($script, View::POS_END);
 
 $finished = ($model->state == TournamentMatch::MATCH_STATE_FINISHED)? "class='finished-match'": "";
+$running = ($model->state == TournamentMatch::MATCH_STATE_RUNNING)? "class='running-match'": "";
 $winnerA = ($model->winner_id == $model->participant_id_A && $model->state == TournamentMatch::MATCH_STATE_FINISHED)? "class='winner-match'": "";
 $winnerB = ($model->winner_id == $model->participant_id_B && $model->state == TournamentMatch::MATCH_STATE_FINISHED)? "class='winner-match'": "";
 
 ?>
-<tr <?= $finished ?>>
+<tr <?= $finished.$running ?>>
     <td>
         <?= $model->matchID ?>
     </td>
@@ -140,12 +146,12 @@ $winnerB = ($model->winner_id == $model->participant_id_B && $model->state == To
     </td>
     <td <?= $winnerB ?>>
         <?= $model->participant_score_B ?>
-    </td <?= $winnerB ?>>
-    <td>
+    </td>
+    <td <?= $winnerB ?>>
         <?= $participant_B_Name ?>
     </td>
     <td>
-        <?= $model->getRoundName($model->round, $tournament) ?>
+        <?= $model->getRoundName($model->round, $tournament, $model->losers_round) ?>
     </td>
     <!-- Button trigger modal -->
     <td>
@@ -154,6 +160,12 @@ $winnerB = ($model->winner_id == $model->participant_id_B && $model->state == To
                     data-target="#myModal<?= $model->id ?>">
                 <i class="material-icons">edit</i>
             </button>
+        <?php endif ?>
+        <?php if ($model->state == TournamentMatch::MATCH_STATE_READY || $model->state == TournamentMatch::MATCH_STATE_RUNNING): ?>
+            <?= Html::a(($model->state == TournamentMatch::MATCH_STATE_READY)?'<i class="material-icons">play_arrow</i>':'<i class="material-icons">pause</i>', Url::to(['/tournament/match-running', 'id'=>$model->tournament_id, 'match_id' => $model->id]), ['class'=>'btn btn-success btn-xs']) ?>
+        <?php endif ?>
+        <?php if ($model->state == TournamentMatch::MATCH_STATE_FINISHED): ?>
+            <?= Html::a('<i class="material-icons">undo</i>', Url::to(['@web/tournament/match-undo', 'id'=>$model->tournament_id, 'match_id' => $model->id]), ['class'=>'btn btn-default btn-xs']) ?>
         <?php endif ?>
     </td>
 

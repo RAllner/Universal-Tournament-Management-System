@@ -68,8 +68,8 @@ $options = ['data-title' => $photoInfo['alt']];
                             </br>
                             <div class="progress">
                                 <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                     aria-valuemax="100" style="width: 0%;">
-                                    <span class="sr-only">0% Complete</span>
+                                     aria-valuemax="100" style="width: <?= $model->getTournamentProgress($model)?>%;">
+                                    <span class="sr-only"><?= $model->getTournamentProgress($model)?>% Complete</span>
                                 </div>
                             </div>
                         </div>

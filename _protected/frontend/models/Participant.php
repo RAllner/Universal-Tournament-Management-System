@@ -17,7 +17,7 @@ use yii\db\ActiveRecord;
  * @property integer $seed
  * @property integer $updated_at
  * @property integer $created_at
- * @property integer $rank
+ * @property string $rank
  * @property integer $player_id
  * @property integer $team_id
  * @property integer $removed
@@ -44,8 +44,9 @@ class Participant extends ActiveRecord
     {
         return [
             [['tournament_id', 'name'], 'required'],
-            [['tournament_id', 'signup', 'checked_in', 'seed', 'updated_at', 'created_at', 'rank', 'player_id', 'team_id', 'removed', 'on_waiting_list'], 'integer'],
+            [['tournament_id', 'signup', 'checked_in', 'seed', 'updated_at', 'created_at', 'player_id', 'team_id', 'removed', 'on_waiting_list'], 'integer'],
             [['name'], 'string', 'max' => 255],
+            [['rank'], 'string', 'max' => 512],
             [['tournament_id'], 'exist', 'skipOnError' => true, 'targetClass' => Tournament::className(), 'targetAttribute' => ['tournament_id' => 'id']],
         ];
     }
@@ -162,6 +163,67 @@ class Participant extends ActiveRecord
         return $this->tournament->name;
     }
 
+    public function getMatchWins(){
+        $winCounter = 0;
+        $participantAWins = TournamentMatch::find()
+            ->where(['tournament_id' => $this->tournament_id])
+            ->andWhere(['participant_id_A' => $this->id])
+            ->andWhere(['state' => TournamentMatch::MATCH_STATE_FINISHED])
+            ->all();
+        /** @var TournamentMatch $match */
+        foreach ($participantAWins as $match){
+            $tmpArray = explode(',',$match->scores);
+            /** @var string $score */
+            foreach ($tmpArray as $score){
+                $winCounter = $winCounter + intval(explode('-',$score)[0]);
+            }
+        }
+        $participantBWins = TournamentMatch::find()
+            ->where(['tournament_id' => $this->tournament_id])
+            ->andWhere(['participant_id_B' => $this->id])
+            ->andWhere(['state' => TournamentMatch::MATCH_STATE_FINISHED])
+            ->all();
+        /** @var TournamentMatch $match */
+        foreach ($participantBWins as $match){
+            $tmpArray = explode(',',$match->scores);
+            /** @var string $score */
+            foreach ($tmpArray as $score){
+                $winCounter = $winCounter + intval(explode('-',$score)[1]);
+            }
+        }
+        return $winCounter;
+    }
+
+    public function getMatchLosses(){
+        $lossCounter = 0;
+        $participantAWins = TournamentMatch::find()
+            ->where(['tournament_id' => $this->tournament_id])
+            ->andWhere(['participant_id_A' => $this->id])
+            ->andWhere(['state' => TournamentMatch::MATCH_STATE_FINISHED])
+            ->all();
+        /** @var TournamentMatch $match */
+        foreach ($participantAWins as $match){
+            $tmpArray = explode(',',$match->scores);
+            /** @var string $score */
+            foreach ($tmpArray as $score){
+                $lossCounter = $lossCounter + intval(explode('-',$score)[1]);
+            }
+        }
+        $participantBWins = TournamentMatch::find()
+            ->where(['tournament_id' => $this->tournament_id])
+            ->andWhere(['participant_id_B' => $this->id])
+            ->andWhere(['state' => TournamentMatch::MATCH_STATE_FINISHED])
+            ->all();
+        /** @var TournamentMatch $match */
+        foreach ($participantBWins as $match){
+            $tmpArray = explode(',',$match->scores);
+            /** @var string $score */
+            foreach ($tmpArray as $score){
+                $lossCounter = $lossCounter + intval(explode('-',$score)[0]);
+            }
+        }
+        return $lossCounter;
+    }
 
 }
 

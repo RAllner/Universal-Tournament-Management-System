@@ -47,6 +47,10 @@ class ParticipantSearch extends Participant
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort'=> ['defaultOrder' => ['rank' => SORT_DESC]],
+            'pagination' => [
+                'pageSize' => 100,
+            ]
         ]);
         $query->where(['tournament_id' => $tournament_id]);
         $this->load($params);

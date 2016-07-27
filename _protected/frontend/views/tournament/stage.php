@@ -16,9 +16,9 @@ use yii\helpers\Html;
 use yii\widgets\ListView;
 
 
-$stage_name = ($model->stage_type == Tournament::STAGE_FS)? Yii::t('app', 'Bracket') : Yii::t('app', 'Final Stage');
+$stage_name = ($model->stage_type == Tournament::STAGE_FS) ? Yii::t('app', 'Bracket') : Yii::t('app', 'Final Stage');
 
-$this->title = $tournament->name. " ".$stage_name;
+$this->title = $tournament->name . " " . $stage_name;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Tournaments'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $tournament->name, 'url' => ['view', 'id' => $tournament->id]];
 $this->params['breadcrumbs'][] = $stage_name;
@@ -39,31 +39,29 @@ $options = ['data-title' => $photoInfo['alt']];
     <div class="row">
         <div class="col-md-2 col-xs-3">
             <?php echo $this->render('nav', ['model' => $tournament, 'active' => Tournament::ACTIVE_FINAL_STAGE]); ?>
-            </div>
+        </div>
         <div class="col-md-10 col-xs-9">
-            <div class="well">
-                <div class="row">
-                <table class="col-xs-12">
+            <div class="row">
+                <table class="col-xs-12 centered">
                     <tr>
-                        <th><?= Yii::t('app','Match ID') ?></th>
-                        <th><?= Yii::t('app','Participant A') ?></th>
-                        <th><?= Yii::t('app','Points A') ?></th>
-                        <th><?= Yii::t('app','Points B') ?></th>
-                        <th><?= Yii::t('app','Participant B') ?></th>
-                        <th><?= Yii::t('app','Round') ?></th>
+                        <th><?= Yii::t('app', 'Match ID') ?></th>
+                        <th><?= Yii::t('app', 'Participant A') ?></th>
+                        <th><?= Yii::t('app', 'Points A') ?></th>
+                        <th><?= Yii::t('app', 'Points B') ?></th>
+                        <th><?= Yii::t('app', 'Participant B') ?></th>
+                        <th><?= Yii::t('app', 'Round') ?></th>
                         <th><i class="material-icons">edit</i></th>
                     </tr>
-                <?= ListView::widget([
-                    'summary' => false,
-                    'dataProvider' => $dataProvider,
-                    'emptyText' => '<div class="row"><div class="col-lg-12"><div class="well">' . Yii::t('app', 'We haven\'t created any matches yet.') . '</div></div></div>',
-                    'itemOptions' => ['class' => 'item'],
-                    'itemView' => function ($model, $key, $index, $widget) {
-                        return $this->render('_stage', ['model' => $model]);
-                    },
-                ]) ?>
+                    <?= ListView::widget([
+                        'summary' => false,
+                        'dataProvider' => $dataProvider,
+                        'emptyText' => '<div class="row"><div class="col-lg-12"><div class="well">' . Yii::t('app', 'We haven\'t created any matches yet.') . '</div></div></div>',
+                        'itemOptions' => ['class' => 'item'],
+                        'itemView' => function ($model, $key, $index, $widget) {
+                            return $this->render('_stage', ['model' => $model]);
+                        },
+                    ]) ?>
                 </table>
-                </div>
             </div>
         </div>
     </div>

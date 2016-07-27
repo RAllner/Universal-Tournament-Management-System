@@ -68,9 +68,10 @@ class Tournament extends ActiveRecord
     const STATUS_PUBLISHED = 2;
     const STATUS_RUNNING = 3;
     const STATUS_FINAL_STAGE = 4;
-    const STATUS_FINISHED = 5;
-    const STATUS_ABORT = 6;
-    const STATUS_DELETED = 7;
+    const STATUS_COMPLETE = 5;
+    const STATUS_FINISHED = 6;
+    const STATUS_ABORT = 7;
+    const STATUS_DELETED = 8;
 
     const FORMAT_SINGLE_ELIMINATION = 1;
     const FORMAT_DOUBLE_ELIMINATION = 2;
@@ -240,6 +241,8 @@ class Tournament extends ActiveRecord
             return Yii::t('app', 'Running');
         } else if ($status === self::STATUS_FINAL_STAGE) {
             return Yii::t('app', 'Running');
+        } else if ($status === self::STATUS_COMPLETE) {
+            return Yii::t('app', 'Complete');
         } else if ($status === self::STATUS_FINISHED) {
             return Yii::t('app', 'Finished');
         } else if ($status === self::STATUS_ABORT) {
@@ -584,6 +587,75 @@ class Tournament extends ActiveRecord
         $this->participants_count = count($this->participants);
         $this->save();
         Yii::$app->session->setFlash('error', 'count($this->participants)');
+    }
+
+
+
+    public function getTournamentProgress($model)
+    {
+        $tournamentMatchesCount = TournamentMatch::find()
+            ->where(['tournament_id' => $model->id])
+            ->andWhere(['>','state', TournamentMatch::MATCH_STATE_CREATED])
+            ->count();
+        $tournamentFinishedMatchesCount = TournamentMatch::find()
+            ->where(['tournament_id' => $model->id])
+            ->andWhere(['state' => TournamentMatch::MATCH_STATE_FINISHED])
+            ->count();
+        if($tournamentFinishedMatchesCount > 0){
+            return ($tournamentFinishedMatchesCount/$tournamentMatchesCount)*100;
+        }
+        else {
+            return 0;
+        }
+
+    }
+
+    /**
+     * @param $model Tournament
+     * @return float
+     */
+    public function getGroupStageProgress($model)
+    {
+        $tournamentMatchesCount = TournamentMatch::find()
+            ->where(['tournament_id' => $model->id])
+            ->andWhere(['stage' => Tournament::STAGE_GS])
+            ->andWhere(['>','state', TournamentMatch::MATCH_STATE_CREATED])
+            ->count();
+        $tournamentFinishedMatchesCount = TournamentMatch::find()
+            ->where(['tournament_id' => $model->id])
+            ->andWhere(['stage' => Tournament::STAGE_GS])
+            ->andWhere(['state' => TournamentMatch::MATCH_STATE_FINISHED])
+            ->count();
+        if($tournamentFinishedMatchesCount > 0){
+            return ($tournamentFinishedMatchesCount/$tournamentMatchesCount)*100;
+        }
+        else {
+            return 0;
+        }
+    }
+
+    /**
+     * @param $model Tournament
+     * @return float
+     */
+    public function getFinalStageProgress($model)
+    {
+        $tournamentMatchesCount = TournamentMatch::find()
+            ->where(['tournament_id' => $model->id])
+            ->andWhere(['stage' => Tournament::STAGE_FS])
+            ->andWhere(['>','state', TournamentMatch::MATCH_STATE_CREATED])
+            ->count();
+        $tournamentFinishedMatchesCount = TournamentMatch::find()
+            ->where(['tournament_id' => $model->id])
+            ->andWhere(['stage' => Tournament::STAGE_FS])
+            ->andWhere(['state' => TournamentMatch::MATCH_STATE_FINISHED])
+            ->count();
+        if($tournamentFinishedMatchesCount > 0){
+            return ($tournamentFinishedMatchesCount/$tournamentMatchesCount)*100;
+        }
+        else {
+            return 0;
+        }
     }
 
 }

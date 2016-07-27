@@ -198,7 +198,7 @@ table tr th {
     font-size: 1.1em;
     color: white;
     background-color: #292929;
-    padding: 0.3em;
+    padding: 0.6em;
 }
 
 table tr td.even, table tr td.alt, table tr td:nth-of-type(even) {
@@ -211,12 +211,39 @@ table tr th.even, table tr th.alt, table tr th:nth-of-type(even) {
 
 table tr td {
     color: #FFFFFF;
-    padding: 0.3em;
+    padding: 0.5em;
 }
 
 table tr.even, table tr.alt, table tr:nth-of-type(even) {
     background: rgba(73, 73, 73, 0.65);
 }
+
+table.centered tr th {
+    font-size: 1.1em;
+    color: white;
+    background-color: #292929;
+    padding: 0.6em;
+    text-align: center;
+}
+
+table.centered tr td.even, table tr td.alt, table.centered tr td:nth-of-type(even) {
+    background: rgba(73, 73, 73, 0.65);
+}
+
+table.centered tr th.even, table tr th.alt, table.centered tr th:nth-of-type(even) {
+    background: rgba(41, 41, 41, 0.91)
+}
+
+table.centered tr td {
+    color: #FFFFFF;
+    padding: 0.5em;
+    text-align: center;
+}
+
+table.centered tr.even, table tr.alt, table.centered tr:nth-of-type(even) {
+    background: rgba(73, 73, 73, 0.65);
+}
+
 
 option {
     color: white;
@@ -1220,4 +1247,28 @@ div.scores > .row.score-row:first-child {
 }
 .finished-match {
     background-color: #585858 !important;
+}
+
+.running-match {
+    background-color: #0f9d58 !important;
+}
+
+.achieved-match-win{
+    display: inline-block;
+    background: #0f9d58;
+    min-width: 2em;
+    min-height: 2em;
+    text-align: center;
+    line-height: 2em;
+    margin: 0.2em;
+}
+
+.achieved-match-loss{
+    display: inline-block;
+    background: #e62e1a;
+    min-width: 2em;
+    min-height: 2em;
+    text-align: center;
+    line-height: 2em;
+    margin: 0.2em;
 }
