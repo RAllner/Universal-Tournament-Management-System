@@ -67,15 +67,15 @@ class CssHelper
         }
         else if ($status === Yii::t('app', 'Published'))
         {
-            return "green";
+            return "blue";
         }
         else if ($status === Yii::t('app', 'Running'))
         {
-            return "gold";
+            return "green";
         }
         else if ($status === Yii::t('app', 'Finished'))
         {
-            return "black";
+            return "gold";
         }
         else if ($status === Yii::t('app', 'Abort'))
         {

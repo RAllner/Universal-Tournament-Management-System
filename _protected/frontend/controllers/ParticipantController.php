@@ -51,18 +51,16 @@ class ParticipantController extends FrontendController
 
         $bulk = new Bulk();
         $bulk->tournament_id = $tournament_id;
+        /** @var Participant $model */
         $model = new Participant();
         $model->tournament_id = $tournament_id;
         $model = $this->loadDefault($model);
         if ($model->load(Yii::$app->request->post())){
-            if(!empty($model->player_id)){
-                $player = Player::find()->where(['id' => $model->player_id])->one();
-                $model->name = $player->name . $player->running_nr;
-            }
             if($model->save()) {
                 $model->tournament->setParticipantCount();
                 return $this->redirect(['index', 'tournament_id' => $model->tournament_id]);
             } else {
+                Yii::error($model->getErrors());
                 return $this->redirect(['index', 'tournament_id' => $model->tournament_id]);
             }
 
@@ -74,6 +72,7 @@ class ParticipantController extends FrontendController
                 $model->tournament->setParticipantCount();
                 return $this->redirect(['index', 'tournament_id' => $model->tournament_id]);
             } else {
+
                 return $this->redirect(['index', 'tournament_id' => $model->tournament_id]);
             }
         } else {
@@ -95,6 +94,7 @@ class ParticipantController extends FrontendController
     public function createParticipantsFromBulk($bulk){
         $participantArray = preg_split("/\r\n|\n|\r/", $bulk->bulk);
         foreach ($participantArray as $participant){
+            /** @var Participant $model */
             $model = new Participant();
             $model->tournament_id = $bulk->tournament_id;
             $model->name = $participant;
@@ -113,11 +113,8 @@ class ParticipantController extends FrontendController
         $searchModel = new ParticipantSearch();
         /** @var Tournament $tournament */
         $tournament = Tournament::find()->where(['id' => $tournament_id])->one();
-        if($tournament->status >= Tournament::STATUS_RUNNING){
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $tournament_id, 1);
-        } else {
-            $dataProvider = null;
-        }
+
         return $this->render('standings', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -140,6 +137,7 @@ class ParticipantController extends FrontendController
     /**
      * Creates a new Participant model.
      * If creation is successful, the browser will be redirected to the 'view' page.
+     * @param $tournament_id
      * @return mixed
      */
     public function actionSignup($tournament_id)
@@ -169,26 +167,22 @@ class ParticipantController extends FrontendController
 
     public function loadDefault($model){
         $model->signup = 1;
-        $model->checked_in = 0;
         $model->seed = Participant::find()->where(['tournament_id' => $model->tournament_id])->count()+1;
-        $model->rank = 0;
-        $model->removed = 0;
-        $model->on_waiting_list = 0;
         return $model;
     }
 
     public function actionShuffleSeeds($tournament_id){
         $participants = Participant::find()->where(['tournament_id' => $tournament_id])->all();
         $count = Participant::find()->where(['tournament_id' => $tournament_id])->count();
-        $seeds = range(0, $count-1);
+        $seeds = range(1, $count);
         shuffle($seeds);
         $newSeeds[]= null;
-        $i = 0;
+        $i = 1;
         foreach ($seeds as $number) {
             $newSeeds[$i] = $number;
             $i++;
         }
-        $j = 0;
+        $j = 1;
         foreach ($participants as $participant){
             $participant->seed = $newSeeds[$j];
             $j++;
@@ -229,7 +223,9 @@ class ParticipantController extends FrontendController
         $model = $this->findModel($id);
         $tournament_id = $model->tournament_id;
         $this->findModel($id)->delete();
-
+        /** @var Tournament $tournament */
+        $tournament = Tournament::find()->where(['id' => $tournament_id])->one();
+        $tournament->setParticipantCount();
         return $this->redirect(['index', 'tournament_id' => $tournament_id]);
     }
 
@@ -248,4 +244,24 @@ class ParticipantController extends FrontendController
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+    
+    public function actionReorder($id, $order){
+
+        $orderedIDArray = explode(',',$order);
+        $seed = 1;
+        foreach ($orderedIDArray as $participantId){
+           /** @var Participant $participant */
+            $participant = Participant::find()
+               ->where(['tournament_id' => $id])
+                ->andWhere(['id' => $participantId])
+                ->one();
+            $participant->seed = $seed;
+            $participant->save();
+            $seed++;
+        }
+        Yii::$app->session->setFlash('success', Yii::t('app', 'New seed order successfully saved.'));
+        return $this->redirect(Yii::$app->request->referrer);
+
+    }
+    
 }

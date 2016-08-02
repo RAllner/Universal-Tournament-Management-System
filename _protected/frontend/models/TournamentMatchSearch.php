@@ -50,7 +50,7 @@ class TournamentMatchSearch extends TournamentMatch
         $query->where(['>', 'state', 0]);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'sort'=> ['defaultOrder' => ['state' => SORT_DESC,'round' => SORT_ASC, 'matchID' => SORT_ASC]],
+            'sort'=> ['defaultOrder' => ['state' => SORT_DESC,'round' => SORT_ASC, 'id' => SORT_ASC]],
             'pagination' => [
                 'pageSize' => 100,
             ]

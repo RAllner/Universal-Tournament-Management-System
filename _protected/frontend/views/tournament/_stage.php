@@ -25,9 +25,9 @@ if (isset($participant_A)) {
     $participant_A_Name = $participant_A->name;
 } else {
     $tmpArray = explode(',', $model->qualification_match_ids);
-    if ($tmpArray[0] != "0"  && $model->losers_round == 0) {
+    if ($tmpArray[0] != "0" && $model->losers_round == 0) {
         $participant_A_Name = Yii::t('app', 'Winner of') . " " . $tmpArray[0];
-    }else if($tmpArray[0] != "0"  && $model->losers_round == 1){
+    } else if ($tmpArray[0] != "0" && $model->losers_round == 1) {
         $participant_A_Name = Yii::t('app', 'Loser of') . " " . $tmpArray[0];
     } else {
         $participant_A_Name = "";
@@ -41,9 +41,9 @@ if (isset($participant_B)) {
     $tmpArray = explode(',', $model->qualification_match_ids);
     if (count($tmpArray) > 1 && $model->losers_round == 0) {
         $participant_B_Name = Yii::t('app', 'Winner of') . " " . $tmpArray[1];
-    } else if(count($tmpArray) > 1 && $model->losers_round == 1) {
+    } else if (count($tmpArray) > 1 && $model->losers_round == 1) {
         $participant_B_Name = Yii::t('app', 'Loser of') . " " . $tmpArray[1];
-    }else {
+    } else {
         $participant_B_Name = "";
     }
 }
@@ -57,13 +57,16 @@ $(':checkbox').on('change', function () {
              
          if($(this).parents('.selected').length){
                 $(':checkbox').closest('div').removeClass('selected');
-                 $('.field-tournamentmatch-winner_id-'+targetID+'> input').val(undefined);
-                 $('.field-tournamentmatch-loser_id-'+targetID+'> input').val(undefined);
+                 $('.field-tournamentmatch-winner_id-'+targetID+'> input').val("");
+                 $('.field-tournamentmatch-loser_id-'+targetID+'> input').val("");
          } else {
-                $(':checkbox').not(this).closest('div').removeClass('selected');    
+                $(':checkbox').not(this).closest('div').removeClass('selected');
+                $(':checkbox').not(this).closest('div').addClass('unselected'); 
                 $(this).closest('div').addClass('selected');
+                $(this).closest('div').removeClass('unselected');
                 $('.field-tournamentmatch-winner_id-'+targetID+'> input').val($(this).val());
-                $('.field-tournamentmatch-loser_id-'+targetID+'> input').val($(':checkbox').not(this).val());
+                $('.field-tournamentmatch-loser_id-'+targetID+'> input').val($(this).closest('div.match-winner').find('.fake-button.unselected input').val());
+                
         }
 });
 
@@ -78,7 +81,7 @@ $('.set-add').on('click', function() {
         setCount++;
         $('div.setsA'+targetID).prepend('<label class="set-points form-control additionalSetA'+ targetID + setCount +'">'+'<input type="number" name="A" min="0" value="0"></label>');
         $('div.setsB'+targetID).prepend('<label class="set-points form-control additionalSetB'+ targetID + setCount +'">'+'<input type="number" name="B" min="0" value="0"></label>');
-    
+        
 
     $('input.setCount'+targetID).val(""+setCount);
 })
@@ -128,13 +131,13 @@ $('.report-match').on('click', function() {
 JS;
 $this->registerJs($script, View::POS_END);
 
-$finished = ($model->state == TournamentMatch::MATCH_STATE_FINISHED)? "class='finished-match'": "";
-$running = ($model->state == TournamentMatch::MATCH_STATE_RUNNING)? "class='running-match'": "";
-$winnerA = ($model->winner_id == $model->participant_id_A && $model->state == TournamentMatch::MATCH_STATE_FINISHED)? "class='winner-match'": "";
-$winnerB = ($model->winner_id == $model->participant_id_B && $model->state == TournamentMatch::MATCH_STATE_FINISHED)? "class='winner-match'": "";
+$finished = ($model->state == TournamentMatch::MATCH_STATE_FINISHED) ? "class='finished-match'" : "";
+$running = ($model->state == TournamentMatch::MATCH_STATE_RUNNING) ? "class='running-match'" : "";
+$winnerA = ($model->winner_id == $model->participant_id_A && $model->state == TournamentMatch::MATCH_STATE_FINISHED) ? "class='winner-match'" : "";
+$winnerB = ($model->winner_id == $model->participant_id_B && $model->state == TournamentMatch::MATCH_STATE_FINISHED) ? "class='winner-match'" : "";
 
 ?>
-<tr <?= $finished.$running ?>>
+<tr <?= $finished . $running ?>>
     <td>
         <?= $model->matchID ?>
     </td>
@@ -154,23 +157,23 @@ $winnerB = ($model->winner_id == $model->participant_id_B && $model->state == To
         <?= $model->getRoundName($model->round, $tournament, $model->losers_round) ?>
     </td>
     <!-- Button trigger modal -->
+    <?php if($tournament->status != Tournament::STATUS_FINISHED): ?>
     <td>
-        <?php if ($model->state >= TournamentMatch::MATCH_STATE_READY): ?>
-            <button type="button" class="btn btn-primary open-match-modal" data-toggle="modal"
-                    data-target="#myModal<?= $model->id ?>">
+        <?php if ($model->state == TournamentMatch::MATCH_STATE_READY): ?>
+            <a data-toggle="modal"
+               data-target="#myModal<?= $model->id ?>">
                 <i class="material-icons">edit</i>
-            </button>
+            </a>
         <?php endif ?>
         <?php if ($model->state == TournamentMatch::MATCH_STATE_READY || $model->state == TournamentMatch::MATCH_STATE_RUNNING): ?>
-            <?= Html::a(($model->state == TournamentMatch::MATCH_STATE_READY)?'<i class="material-icons">play_arrow</i>':'<i class="material-icons">pause</i>', Url::to(['/tournament/match-running', 'id'=>$model->tournament_id, 'match_id' => $model->id]), ['class'=>'btn btn-success btn-xs']) ?>
+            <?= Html::a(($model->state == TournamentMatch::MATCH_STATE_READY) ? '<i class="material-icons">play_arrow</i>' : '<i class="material-icons">pause</i>', Url::to(['/tournament/match-running', 'id' => $model->tournament_id, 'match_id' => $model->id])) ?>
         <?php endif ?>
         <?php if ($model->state == TournamentMatch::MATCH_STATE_FINISHED): ?>
-            <?= Html::a('<i class="material-icons">undo</i>', Url::to(['@web/tournament/match-undo', 'id'=>$model->tournament_id, 'match_id' => $model->id]), ['class'=>'btn btn-default btn-xs']) ?>
+            <?= Html::a('<i class="material-icons">undo</i>', Url::to(['@web/tournament/match-undo', 'id' => $model->tournament_id, 'match_id' => $model->id])) ?>
         <?php endif ?>
     </td>
-
+    <?php endif ?>
     <!-- Modal -->
-
 </tr>
 
 <div class="modal fade match" id="myModal<?= $model->id ?>" tabindex="-1" role="dialog"

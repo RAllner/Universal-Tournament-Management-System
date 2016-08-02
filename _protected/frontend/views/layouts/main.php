@@ -70,7 +70,7 @@ $this->registerJs($script, View::POS_END);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => '<img src="' . Url::to("@web/images/constant/logo-golds.png") . '" class="logo"/> <b>' . Yii::$app->name . '</b>',
+        'brandLabel' => '<img src="' . Url::to("@web/images/constant/logo-golds.png") . '" class="logo"/> <b class="hidden-sm">' . Yii::$app->name . '</b>',
         'brandUrl' => Yii::$app->homeUrl,
 
         'options' => [

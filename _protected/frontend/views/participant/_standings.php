@@ -25,6 +25,9 @@ foreach($rankArray as $rank){
         <?= $model->name ?>
     </td>
     <td>
+        <?= $model->seed ?>
+    </td>
+    <td>
         <?= $rankString ?> 
     </td>
     <td>

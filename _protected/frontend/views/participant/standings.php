@@ -34,6 +34,9 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Standings');
                         <?= Yii::t('app', 'Name') ?>
                     </th>
                     <th>
+                        <?= Yii::t('app', 'Seed') ?>
+                    </th>
+                    <th>
                         <?= Yii::t('app', 'Achieved') ?>
                     </th>
                     <th>

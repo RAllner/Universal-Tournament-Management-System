@@ -25,6 +25,12 @@ $(document).ready(function(){
     $('.form-group.field-tournament-fs_de_grand_finals').hide();
     $('.field-tournament-fs_s_ppb').hide();
     $('.fs-custom-points').hide();
+    if($('#tournament-stage_type').is('[disabled]')){
+         $('#tournament-stage_type input').prop('disabled', true);
+    }
+    if($('#tournament-fs_de_grand_finals').is('[disabled]')){
+             $('#tournament-fs_de_grand_finals input').prop('disabled', true);
+    }
     $('#tournament-stage_type > label > input[type="radio"]').click((function(){
         var stage = $('#tournament-stage_type > label > input[type="radio"]:checked').val();
         if (stage == 0){
@@ -93,9 +99,13 @@ $(document).ready(function(){
     })
     
     
+    
 }); 
 JS;
 $this->registerJs($script, View::POS_END);
+
+$readOnly = ($model->status >= Tournament::STATUS_RUNNING)? ['readonly' => true, 'disabled' => true] : ['readonly' => false];
+$readOnlyBoolean = ($model->status >= Tournament::STATUS_RUNNING)? true : false;
 
 ?>
 
@@ -113,7 +123,7 @@ $this->registerJs($script, View::POS_END);
     </div>
     <div class="row">
         <div class="col-lg-6">
-            <?=  $form->field($model, 'hosted_by')->dropDownList(ArrayHelper::map($model->hostedByList, "id", "name", "class")) ?>
+            <?=  $form->field($model, 'hosted_by')->dropDownList(ArrayHelper::map($model->hostedByList, "id", "name", "class"), $readOnly) ?>
         </div>
         <div class="col-lg-6">
 
@@ -163,10 +173,10 @@ $this->registerJs($script, View::POS_END);
     <?= $form->field($model, 'description')->widget(CKEditor::className(),
         ['editorOptions' => ['preset' => 'standard', 'inline' => false]]); ?>
 
-    <?php if($model->status <= Tournament::STATUS_PUBLISHED): ?>
-        <?= $form->field($model, 'is_team_tournament')->checkbox() ?>
-    <?php endif ?>
-        <?= $form->field($model, 'stage_type')->radioList([0 => Yii::t('app', 'Single Stage Tournament'), 1 => Yii::t('app', 'Two Stage Tournament')]) ?>
+
+        <?= $form->field($model, 'is_team_tournament')->checkbox($readOnly) ?>
+
+        <?= $form->field($model, 'stage_type')->radioList([0 => Yii::t('app', 'Single Stage Tournament'), 1 => Yii::t('app', 'Two Stage Tournament')], $readOnly) ?>
 
 
     <div class="group-stage">
@@ -175,24 +185,24 @@ $this->registerJs($script, View::POS_END);
             <div class="row">
                 <div class="col-md-6">
 
-                    <?= $form->field($model, 'gs_format')->dropDownList($model->groupStageFormatList) ?>
+                    <?= $form->field($model, 'gs_format')->dropDownList($model->groupStageFormatList, $readOnly) ?>
 
-                    <?= $form->field($model, 'participants_compete')->textInput(['type' => 'number', 'min' => 1]) ?>
+                    <?= $form->field($model, 'participants_compete')->textInput(['type' => 'number', 'min' => 1, 'readonly' => $readOnlyBoolean, 'disabled' => $readOnlyBoolean]) ?>
 
-                    <?= $form->field($model, 'participants_advance')->textInput(['type' => 'number', 'min' => 1]) ?>
+                    <?= $form->field($model, 'participants_advance')->textInput(['type' => 'number', 'min' => 1, 'readonly' => $readOnlyBoolean, 'disabled' => $readOnlyBoolean]) ?>
 
-                    <?= $form->field($model, 'gs_rr_ranked_by')->dropDownList($model->rankedByList) ?>
+                    <?= $form->field($model, 'gs_rr_ranked_by')->dropDownList($model->rankedByList, $readOnly) ?>
                 </div>
 
                 <div class="col-md-6 gs-custom-points">
 
-                    <?= $form->field($model, 'gs_rr_ppmw')->textInput(['value' => '1.0']) ?>
+                    <?= $form->field($model, 'gs_rr_ppmw')->textInput(['value' => '1.0', 'readonly' => $readOnlyBoolean, 'disabled' => $readOnlyBoolean]) ?>
 
-                    <?= $form->field($model, 'gs_rr_ppmt')->textInput(['value' => '0.5']) ?>
+                    <?= $form->field($model, 'gs_rr_ppmt')->textInput(['value' => '0.5', 'readonly' => $readOnlyBoolean, 'disabled' => $readOnlyBoolean]) ?>
 
-                    <?= $form->field($model, 'gs_rr_ppgw')->textInput(['value' => '0.0']) ?>
+                    <?= $form->field($model, 'gs_rr_ppgw')->textInput(['value' => '0.0', 'readonly' => $readOnlyBoolean, 'disabled' => $readOnlyBoolean]) ?>
 
-                    <?= $form->field($model, 'gs_rr_ppgt')->textInput(['value' => '0.0']) ?>
+                    <?= $form->field($model, 'gs_rr_ppgt')->textInput(['value' => '0.0', 'readonly' => $readOnlyBoolean, 'disabled' => $readOnlyBoolean]) ?>
 
                 </div>
             </div>
@@ -206,24 +216,24 @@ $this->registerJs($script, View::POS_END);
             <div class="row">
                 <div class="col-md-6">
 
-                        <?= $form->field($model, 'fs_format')->dropDownList($model->formatList) ?>
+                        <?= $form->field($model, 'fs_format')->dropDownList($model->formatList, $readOnly) ?>
 
-                        <?= $form->field($model, 'fs_third_place')->checkbox() ?>
+                        <?= $form->field($model, 'fs_third_place')->checkbox($readOnly) ?>
 
-                        <?= $form->field($model, 'fs_de_grand_finals')->radioList(array('0' => Yii::t('app', '1-2 matches'), '1' => Yii::t('app', '1 match'), '2' => Yii::t('app', 'None')), ['value' => 0]) ?>
+                        <?= $form->field($model, 'fs_de_grand_finals')->radioList(['0' => Yii::t('app', '1-2 matches'), '1' => Yii::t('app', '1 match'), '2' => Yii::t('app', 'None')] ,$readOnly) ?>
 
-                    <?= $form->field($model, 'fs_rr_ranked_by')->dropDownList($model->rankedByList) ?>
+                    <?= $form->field($model, 'fs_rr_ranked_by')->dropDownList($model->rankedByList, $readOnly) ?>
                 </div>
                 <div class="col-md-6 fs-custom-points">
-                    <?= $form->field($model, 'fs_rr_ppmw')->textInput(['value' => '1.0']) ?>
+                    <?= $form->field($model, 'fs_rr_ppmw')->textInput(['value' => '1.0', 'readonly' => $readOnlyBoolean, 'disabled' => $readOnlyBoolean]) ?>
 
-                    <?= $form->field($model, 'fs_rr_ppmt')->textInput(['value' => '0.5']) ?>
+                    <?= $form->field($model, 'fs_rr_ppmt')->textInput(['value' => '0.5', 'readonly' => $readOnlyBoolean, 'disabled' => $readOnlyBoolean]) ?>
 
-                    <?= $form->field($model, 'fs_rr_ppgw')->textInput(['value' => '0.0']) ?>
+                    <?= $form->field($model, 'fs_rr_ppgw')->textInput(['value' => '0.0', 'readonly' => $readOnlyBoolean, 'disabled' => $readOnlyBoolean]) ?>
 
-                    <?= $form->field($model, 'fs_rr_ppgt')->textInput(['value' => '0.0']) ?>
+                    <?= $form->field($model, 'fs_rr_ppgt')->textInput(['value' => '0.0', 'readonly' => $readOnlyBoolean, 'disabled' => $readOnlyBoolean]) ?>
 
-                    <?= $form->field($model, 'fs_s_ppb')->textInput(['value' => '1.0']) ?>
+                    <?= $form->field($model, 'fs_s_ppb')->textInput(['value' => '1.0', 'readonly' => $readOnlyBoolean, 'disabled' => $readOnlyBoolean]) ?>
                 </div>
             </div>
         </div>
@@ -231,11 +241,11 @@ $this->registerJs($script, View::POS_END);
 
     <h3><?= Yii::t('app', 'Advanced Settings') ?></h3>
 
-    <?php if($model->status <= Tournament::STATUS_PUBLISHED): ?>
-        <?= $form->field($model, 'quick_advance')->checkbox() ?>
 
-        <?= $form->field($model, 'has_sets')->checkbox() ?>
-    <?php endif ?>
+        <?= $form->field($model, 'quick_advance')->checkbox($readOnly) ?>
+
+        <?= $form->field($model, 'has_sets')->checkbox($readOnly) ?>
+
 
 
     <?= $form->field($model, 'notifications')->checkbox() ?>

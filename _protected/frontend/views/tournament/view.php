@@ -66,20 +66,24 @@ $options = ['data-title' => $photoInfo['alt']];
                             </div>
                             <div class="clearfix"></div>
                             </br>
+
                             <div class="progress">
                                 <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0"
                                      aria-valuemax="100" style="width: <?= $model->getTournamentProgress($model)?>%;">
                                     <span class="sr-only"><?= $model->getTournamentProgress($model)?>% Complete</span>
                                 </div>
                             </div>
+                            <div class="pull-right">
+                                <?= $model->getTournamentFinishedMatchesCount($model->id).'/'.$model->getTournamentMatchesCount($model->id).' '.Yii::t('app','matches') ?>
+                            </div>
                         </div>
 
 
                     </div>
                 </div>
-                <div class="col-xs-2 no-padding-left register">
+                <div class="col-xs-2 no-padding-left register <?= $class=($model->status >= Tournament::STATUS_RUNNING)? "locked": "" ?>">
 
-                        <a href="<?= Url::to(['participant/signup', 'tournament_id' => $model->id]) ?>">
+                        <a href="<?= $class=($model->status >= Tournament::STATUS_RUNNING)? "#": Url::to(['participant/signup', 'tournament_id' => $model->id]) ?>">
 
                             <?= '<i class="material-icons">plus_one</i></br> ' . Yii::t('app', 'Signup') ?>
 

@@ -163,4 +163,42 @@ class TournamentMatch extends ActiveRecord
     {
         return $this->hasOne(Tournament::className(), ['id' => 'tournament_id']);
     }
+
+    /**
+     * Returns the participant names depending on the participant id of the match
+     * @return array Participant_A Name [0] Participant_B Name [1]
+     */
+    public function getParticipantNames(){
+        $participant_A = Participant::find()->where(['id' => $this->participant_id_A])->one();
+        /** @var Participant $participant_A */
+        if (isset($participant_A)) {
+            $participant_A_Name = $participant_A->name;
+        } else {
+            $tmpArray = explode(',', $this->qualification_match_ids);
+            if ($tmpArray[0] != "0"  && $this->losers_round == 0) {
+                $participant_A_Name = Yii::t('app', 'Winner of') . " " . $tmpArray[0];
+            }else if($tmpArray[0] != "0"  && $this->losers_round == 1){
+                $participant_A_Name = Yii::t('app', 'Loser of') . " " . $tmpArray[0];
+            } else {
+                $participant_A_Name = "";
+            }
+        }
+
+        $participant_B = Participant::find()->where(['id' => $this->participant_id_B])->one();
+        /** @var Participant $participant_B */
+        if (isset($participant_B)) {
+            $participant_B_Name = $participant_B->name;
+        } else {
+            $tmpArray = explode(',', $this->qualification_match_ids);
+            if (count($tmpArray) > 1 && $this->losers_round == 0) {
+                $participant_B_Name = Yii::t('app', 'Winner of') . " " . $tmpArray[1];
+            } else if(count($tmpArray) > 1 && $this->losers_round == 1) {
+                $participant_B_Name = Yii::t('app', 'Loser of') . " " . $tmpArray[1];
+            }else {
+                $participant_B_Name = "";
+            }
+        }
+        return ['A' => $participant_A_Name, 'B' => $participant_B_Name];
+    }
+
 }
