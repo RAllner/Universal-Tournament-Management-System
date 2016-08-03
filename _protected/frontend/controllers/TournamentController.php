@@ -86,13 +86,13 @@ class TournamentController extends FrontendController
     public function actionStage($id)
     {
         $searchModel = new TournamentMatchSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $id, Tournament::STAGE_FS);
-        $tournament = $this->findModel($id);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $id, Tournament::STAGE_FS, false);
+        $treeDataProvider = $searchModel->search(Yii::$app->request->queryParams, $id, Tournament::STAGE_FS, true);
         return $this->render('stage', [
             'model' => $this->findModel($id),
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'tournament' => $tournament,
+            'treeDataProvider' => $treeDataProvider,
         ]);
     }
 
@@ -179,7 +179,7 @@ class TournamentController extends FrontendController
                                 $winnerMatch->state = TournamentMatch::MATCH_STATE_OPEN;
                             $winnerMatch->save();
                     /** Check if tournament is complete and can be finished */
-                    } else if ($model->state == TournamentMatch::MATCH_STATE_FINISHED && is_null($model->follow_winner_and_loser_match_ids) && empty($model->follow_winner_and_loser_match_ids)) {
+                    } else if ($model->state == TournamentMatch::MATCH_STATE_FINISHED && (is_null($model->follow_winner_and_loser_match_ids) || empty($model->follow_winner_and_loser_match_ids))) {
                         $unfinishedMatchesCount = TournamentMatch::find()
                             ->where(['tournament_id' => $model->tournament_id])
                             ->andWhere(['<', 'state', TournamentMatch::MATCH_STATE_FINISHED])

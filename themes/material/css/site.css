@@ -306,9 +306,9 @@ option:hover, option:focus {
     color: #ffad24;
 }
 
-.btn:hover:not(.btn-link):not(.btn-flat) {
+.btn-default.active, .btn-default:hover, .btn-flat:not(.btn-link).active, .btn-flat:not(.btn-link):hover, .btn:not([class^="btn btn-"]).active, .btn:not([class^="btn btn-"]):hover {
     color: white;
-    background: none;
+    background-color: transparent;
 }
 
 .md-card-img {
@@ -1374,6 +1374,7 @@ ol#sortable-participants li.disabled > .control-group > i {
 .tournament-tree{
 
     width: 2000px;
+    min-height: 300px;
     transform: scale(1);
     transform-origin: 0 0;
     cursor: move;
@@ -1664,6 +1665,7 @@ ol#sortable-participants li.disabled > .control-group > i {
     background: #333;
     width: 100%;
     z-index:9999;
+    margin-bottom: 0 !important;
 }
 .m-participant{
     padding-left: 5px;

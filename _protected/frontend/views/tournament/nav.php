@@ -43,7 +43,8 @@ use yii\helpers\Url;
         <?php endif ?>
     </ul>
 <?php if(Yii::$app->user->can('updateTournament', ['model' => $model])): ?>
-<?php if ($model->status === 1): ?>
+    <?= $link = ($model->status == Tournament::STATUS_COMPLETE) ? Html::a('<i class="material-icons">done</i> ' . Yii::t('app', 'Finish'), ['finish', 'id' => $model->id], ['class' => 'btn btn-block btn-success']) : "" ?>
+    <?php if ($model->status === 1): ?>
     <?= Html::a('<i class="material-icons">publish</i> ' . Yii::t('app', 'Publish'), ['/tournament/publish', 'id' => $model->id], ['class' => 'btn btn-block btn-success']) ?>
 <?php endif ?>
 <?php if ($model->status < 3 && $model->status !== 1): ?>

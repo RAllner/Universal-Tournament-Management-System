@@ -38,19 +38,25 @@ class TournamentMatchSearch extends TournamentMatch
      *
      * @param array $params
      *
+     * @param $tournament_id integer
+     * @param $stage integer
+     * @param $tree
      * @return ActiveDataProvider
      */
-    public function search($params, $tournament_id, $stage)
+    public function search($params, $tournament_id, $stage, $tree)
     {
         $query = TournamentMatch::find();
 
         // add conditions that should always apply here
-        $query->where(['tournament_id' => $tournament_id]);
-        $query->where(['stage' => $stage]);
-        $query->where(['>', 'state', 0]);
+        $query->andFilterWhere(['tournament_id' => $tournament_id]);
+        $query->andFilterWhere(['stage' => $stage]);
+        if(!$tree){
+            $query->andFilterWhere(['>', 'state', 0]);
+        }
+
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'sort'=> ['defaultOrder' => ['state' => SORT_DESC,'round' => SORT_ASC, 'id' => SORT_ASC]],
+            'sort'=> ['defaultOrder' => ['round' => SORT_ASC, 'id' => SORT_ASC]],
             'pagination' => [
                 'pageSize' => 100,
             ]
@@ -63,7 +69,7 @@ class TournamentMatchSearch extends TournamentMatch
 
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
+            $query->where('0=1');
             return $dataProvider;
         }
 

@@ -8,7 +8,7 @@
 
 /* @var $this yii\web\View */
 /* @var $model frontend\models\TournamentMatch */
-/* @var $tournament frontend\models\Tournament */
+
 
 use frontend\models\Participant;
 
@@ -47,6 +47,7 @@ if (isset($participant_B)) {
         $participant_B_Name = "";
     }
 }
+/* @var $tournament frontend\models\Tournament */
 $tournament = Tournament::find()->where(['id' => $model->tournament_id])->one();
 
 $script =
@@ -158,20 +159,20 @@ $winnerB = ($model->winner_id == $model->participant_id_B && $model->state == To
     </td>
     <!-- Button trigger modal -->
     <?php if($tournament->status != Tournament::STATUS_FINISHED): ?>
-    <td>
-        <?php if ($model->state == TournamentMatch::MATCH_STATE_READY): ?>
-            <a data-toggle="modal"
-               data-target="#myModal<?= $model->id ?>">
-                <i class="material-icons">edit</i>
-            </a>
-        <?php endif ?>
-        <?php if ($model->state == TournamentMatch::MATCH_STATE_READY || $model->state == TournamentMatch::MATCH_STATE_RUNNING): ?>
-            <?= Html::a(($model->state == TournamentMatch::MATCH_STATE_READY) ? '<i class="material-icons">play_arrow</i>' : '<i class="material-icons">pause</i>', Url::to(['/tournament/match-running', 'id' => $model->tournament_id, 'match_id' => $model->id])) ?>
-        <?php endif ?>
-        <?php if ($model->state == TournamentMatch::MATCH_STATE_FINISHED): ?>
-            <?= Html::a('<i class="material-icons">undo</i>', Url::to(['@web/tournament/match-undo', 'id' => $model->tournament_id, 'match_id' => $model->id])) ?>
-        <?php endif ?>
-    </td>
+        <td>
+            <?php if ($model->state == TournamentMatch::MATCH_STATE_READY): ?>
+                <a data-toggle="modal"
+                   data-target="#myModal<?= $model->id ?>">
+                    <i class="material-icons">edit</i>
+                </a>
+            <?php endif ?>
+            <?php if ($model->state == TournamentMatch::MATCH_STATE_READY || $model->state == TournamentMatch::MATCH_STATE_RUNNING): ?>
+                <?= Html::a(($model->state == TournamentMatch::MATCH_STATE_READY) ? '<i class="material-icons">play_arrow</i>' : '<i class="material-icons">pause</i>', Url::to(['/tournament/match-running', 'id' => $model->tournament_id, 'match_id' => $model->id])) ?>
+            <?php endif ?>
+            <?php if ($model->state == TournamentMatch::MATCH_STATE_FINISHED): ?>
+                <?= Html::a('<i class="material-icons">undo</i>', Url::to(['@web/tournament/match-undo', 'id' => $model->tournament_id, 'match_id' => $model->id])) ?>
+            <?php endif ?>
+        </td>
     <?php endif ?>
     <!-- Modal -->
 </tr>

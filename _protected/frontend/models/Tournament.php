@@ -709,7 +709,7 @@ class Tournament extends ActiveRecord
             /** @var TournamentMatch $followMatch */
             $followMatch = TournamentMatch::find()
                 ->where(['tournament_id' => $model->tournament_id])
-                ->where(['matchID' => $followWinnerMatchID])
+                ->andWhere(['matchID' => $followWinnerMatchID])
                 ->one();
             if($index % 2 == 0){
                 $participantID = $followMatch->participant_id_A;
@@ -769,10 +769,10 @@ class Tournament extends ActiveRecord
      * @param $stage integer
      * @return array TournamentMatch
      */
-    public function getTreeMatches($stage){
+    public function getTreeMatches($stage, $id){
 
         $query = TournamentMatch::find();
-        $query->where(['tournament_id' => $this->id]);
+        $query->where(['tournament_id' => 6]);
         $query->where(['stage' => $stage]);
         /** @var ActiveDataProvider $dataProvidernew */
         $dataProvidernew = new ActiveDataProvider([
