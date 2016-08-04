@@ -8,6 +8,7 @@
 
 /* @var $this yii\web\View */
 /* @var $model frontend\models\TournamentMatch */
+/* @var $stage integer */
 
 
 use frontend\models\Participant;
@@ -142,6 +143,14 @@ $winnerB = ($model->winner_id == $model->participant_id_B && $model->state == To
     <td>
         <?= $model->matchID ?>
     </td>
+    <?php if ($stage == Tournament::STAGE_GS): ?>
+    <td>
+        <?= $model->groupID ?>
+    </td>
+    <?php endif ?>
+    <td>
+        <?= $model->getRoundName($model->round, $tournament, $model->losers_round) ?>
+    </td>
     <td <?= $winnerA ?>>
         <?= $participant_A_Name ?>
     </td>
@@ -153,9 +162,6 @@ $winnerB = ($model->winner_id == $model->participant_id_B && $model->state == To
     </td>
     <td <?= $winnerB ?>>
         <?= $participant_B_Name ?>
-    </td>
-    <td>
-        <?= $model->getRoundName($model->round, $tournament, $model->losers_round) ?>
     </td>
     <!-- Button trigger modal -->
     <?php if($tournament->status != Tournament::STATUS_FINISHED): ?>

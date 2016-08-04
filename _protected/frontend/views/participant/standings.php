@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Standings');
             <?php echo $this->render('../tournament/nav', ['model' => $tournament, 'active' => Tournament::ACTIVE_STANDINGS]); ?>
         </div>
         <div class="col-md-7 col-xs-9">
-            <table width="100%">
+            <table class="centered" width="100%">
                 <tr>
                     <th>
                         <?= Yii::t('app', 'Name') ?>
@@ -40,10 +40,10 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Standings');
                         <?= Yii::t('app', 'Achieved') ?>
                     </th>
                     <th>
-                        <?= Yii::t('app', 'Match Wins') ?>
+                        <?= Yii::t('app', 'Match wins') ?>
                     </th>
                     <th>
-                        <?= Yii::t('app', 'Match Losses') ?>
+                        <?= Yii::t('app', 'Match losses') ?>
                     </th>
                 </tr>
                 <?= ListView::widget([

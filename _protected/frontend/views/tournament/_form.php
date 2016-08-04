@@ -43,6 +43,16 @@ $(document).ready(function(){
             $('.field-tournament-fs_s_ppb').show();
         }
     }));
+            var stage = $('#tournament-stage_type > label > input[type="radio"]:checked').val();
+        if (stage == 0){
+            $('.group-stage').hide();
+            $('#final-stage-header').hide();
+            $('.field-tournament-fs_s_ppb').hide();
+        } else {
+            $('.group-stage').show();
+            $('#final-stage-header').show();
+            $('.field-tournament-fs_s_ppb').show();
+        }
     $('#tournament-gs_rr_ranked_by').change(function() {
        if($('#tournament-gs_rr_ranked_by').val() == 6) {
             $('.gs-custom-points').show();
@@ -50,6 +60,11 @@ $(document).ready(function(){
             $('.gs-custom-points').hide();
        }
     });
+           if($('#tournament-gs_rr_ranked_by').val() == 6) {
+            $('.gs-custom-points').show();
+       } else {
+            $('.gs-custom-points').hide();
+       }
     $('#tournament-fs_rr_ranked_by').change(function() {
        if($('#tournament-fs_rr_ranked_by').val() == 6) {
             $('.fs-custom-points').show();
@@ -57,6 +72,11 @@ $(document).ready(function(){
             $('.fs-custom-points').hide();
        }
     })
+           if($('#tournament-fs_rr_ranked_by').val() == 6) {
+            $('.fs-custom-points').show();
+       } else {
+            $('.fs-custom-points').hide();
+       }
     $('#tournament-gs_format').change(function() {
         if($('#tournament-gs_format').val() == 3){
             $('.form-group.field-tournament-gs_rr_ranked_by').show();
@@ -70,6 +90,42 @@ $(document).ready(function(){
             $('.gs-custom-points').hide();
         }
     })
+            if($('#tournament-gs_format').val() == 3){
+            $('.form-group.field-tournament-gs_rr_ranked_by').show();
+             if($('#tournament-gs_rr_ranked_by').val() == 6){ 
+                $('.gs-custom-points').show();
+            } else {
+                $('.gs-custom-points').hide();
+            }
+        } else {
+            $('.form-group.field-tournament-gs_rr_ranked_by').hide();
+            $('.gs-custom-points').hide();
+        }
+            if($('#tournament-fs_format').val() == 1){
+            $('.form-group.field-tournament-fs_third_place').show();
+            $('.form-group.field-tournament-fs_rr_ranked_by').hide();
+            $('.form-group.field-tournament-fs_de_grand_finals').hide();
+            $('.fs-custom-points').hide();
+        } else if ($('#tournament-fs_format').val() == 2){
+            $('.form-group.field-tournament-fs_third_place').hide();
+            $('.form-group.field-tournament-fs_rr_ranked_by').hide();
+            $('.form-group.field-tournament-fs_de_grand_finals').show();
+            $('.fs-custom-points').hide();
+        } else if ($('#tournament-fs_format').val() == 3){
+            $('.form-group.field-tournament-fs_third_place').hide();
+            $('.form-group.field-tournament-fs_rr_ranked_by').show();
+            $('.form-group.field-tournament-fs_de_grand_finals').hide();
+            if($('#tournament-fs_rr_ranked_by').val() == 6){ 
+                $('.fs-custom-points').show();
+            } else {
+                $('.fs-custom-points').hide();
+            }
+        } else {
+            $('.form-group.field-tournament-fs_third_place').hide();
+            $('.form-group.field-tournament-fs_rr_ranked_by').hide();
+            $('.form-group.field-tournament-fs_de_grand_finals').hide();
+            $('.fs-custom-points').show();
+        }
         $('#tournament-fs_format').change(function() {
         if($('#tournament-fs_format').val() == 1){
             $('.form-group.field-tournament-fs_third_place').show();
@@ -303,7 +359,7 @@ $readOnlyBoolean = ($model->status >= Tournament::STATUS_RUNNING)? true : false;
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-        <?php if (Yii::$app->user->can('updateTournament', ['model' => $model]) && $model->status >=3 && $model->status <=4 && !$model->isNewRecord): ?>
+        <?php if (Yii::$app->user->can('updateTournament', ['model' => $model]) && $model->status >=3 && $model->status <=Tournament::STATUS_FINISHED && !$model->isNewRecord): ?>
             <?= Html::a(Yii::t('app', 'Reset'), ['reset', 'id' => $model->id], [
                 'class' => 'btn btn-default',
                 'data' => [

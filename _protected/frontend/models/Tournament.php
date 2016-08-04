@@ -69,11 +69,12 @@ class Tournament extends ActiveRecord
     const STATUS_DRAFT = 1;
     const STATUS_PUBLISHED = 2;
     const STATUS_RUNNING = 3;
-    const STATUS_FINAL_STAGE = 4;
-    const STATUS_COMPLETE = 5;
-    const STATUS_FINISHED = 6;
-    const STATUS_ABORT = 7;
-    const STATUS_DELETED = 8;
+    const STATUS_GS_COMPLETE = 4;
+    const STATUS_FINAL_STAGE = 5;
+    const STATUS_COMPLETE = 6;
+    const STATUS_FINISHED = 7;
+    const STATUS_ABORT = 8;
+    const STATUS_DELETED = 9;
 
     const FORMAT_SINGLE_ELIMINATION = 1;
     const FORMAT_DOUBLE_ELIMINATION = 2;
@@ -141,11 +142,24 @@ class Tournament extends ActiveRecord
             ['fs_s_ppb', 'default', 'value' => '1.0'],
             ['participants_compete', 'default', 'value' => 4],
             ['participants_advance', 'default', 'value' => 2],
+            ['participants_advance', 'validateParticipantAdvance', 'skipOnEmpty' => false, 'skipOnError' => false],
             ['stage_type', 'default', 'value' => 0],
             ['fs_de_grand_finals', 'default', 'value' => 0],
             ['is_team_tournament', 'default', 'value' => 0],
 
         ];
+    }
+
+    public function validateParticipantAdvance ($attribute)
+    {
+        $x = $this->participants_advance;
+        if($this->participants_advance >= $this->participants_compete){
+            $this->addError($attribute, 'The amount of participants that advance have to lower than participants compete.');
+        } else {
+            if(!( ($x != 0) && (($x & ($x - 1)) == 0))){
+                $this->addError($attribute, 'The amount of participants that advance have to be a power of 2.');
+            }
+        }
     }
 
     /**
@@ -158,30 +172,30 @@ class Tournament extends ActiveRecord
             'user_id' => Yii::t('app', 'User ID'),
             'game_id' => Yii::t('app', 'Game'),
             'organisation_id' => Yii::t('app', 'Organisation ID'),
-            'hosted_by' => Yii::t('app', 'Hosted By'),
+            'hosted_by' => Yii::t('app', 'Hosted by'),
             'name' => Yii::t('app', 'Name'),
             'begin' => Yii::t('app', 'Begin'),
             'end' => Yii::t('app', 'End'),
             'location' => Yii::t('app', 'Location'),
             'description' => Yii::t('app', 'Description'),
             'url' => Yii::t('app', 'Url'),
-            'max_participants' => Yii::t('app', 'Max Participants'),
+            'max_participants' => Yii::t('app', 'Max. participants'),
             'status' => Yii::t('app', 'Status'),
-            'created_at' => Yii::t('app', 'Created At'),
-            'updated_at' => Yii::t('app', 'Updated At'),
-            'has_sets' => Yii::t('app', 'Has Sets'),
-            'participants_count' => Yii::t('app', 'Participants Count'),
-            'is_team_tournament' => Yii::t('app', 'Team Tournament'),
-            'stage_type' => Yii::t('app', 'Stage Type'),
+            'created_at' => Yii::t('app', 'Created at'),
+            'updated_at' => Yii::t('app', 'Updated at'),
+            'has_sets' => Yii::t('app', 'Has sets'),
+            'participants_count' => Yii::t('app', 'Participants count'),
+            'is_team_tournament' => Yii::t('app', 'Team tournament'),
+            'stage_type' => Yii::t('app', 'Stage type'),
             'fs_format' => Yii::t('app', 'Format'),
-            'fs_third_place' => Yii::t('app', 'Third Place'),
+            'fs_third_place' => Yii::t('app', 'Third place match'),
             'fs_de_grand_finals' => Yii::t('app', 'Grand Finals'),
-            'fs_rr_ranked_by' => Yii::t('app', 'Ranked By'),
+            'fs_rr_ranked_by' => Yii::t('app', 'Ranked by'),
             'fs_rr_ppmw' => Yii::t('app', 'P. p. match win'),
             'fs_rr_ppmt' => Yii::t('app', 'P. p. match tie'),
             'fs_rr_ppgw' => Yii::t('app', 'P. p. game win'),
             'fs_rr_ppgt' => Yii::t('app', 'P. p. game tie'),
-            'fs_s_ppb' => Yii::t('app', 'Fs S Ppb'),
+            'fs_s_ppb' => Yii::t('app', 'P. p. bye'),
             'participants_compete' => Yii::t('app', 'Participants Compete'),
             'participants_advance' => Yii::t('app', 'Participants Advance'),
             'gs_format' => Yii::t('app', 'Group Stage Format'),
@@ -537,6 +551,7 @@ class Tournament extends ActiveRecord
         if ($rest <= 0) {
             return Yii::t('app', 'In the past');
         }
+        $countDownString = "";
         $weeks = 0;
         $days = 0;
         $hours = 0;
@@ -544,17 +559,35 @@ class Tournament extends ActiveRecord
         if ($rest >= 604800) {
             $weeks = floor($rest / 604800);
             $rest -= $weeks * 604800;
+            if($weeks == 1){
+                $countDownString .= $weeks . ' ' . Yii::t('app', 'week');
+            } else {
+                $countDownString .= $weeks . ' ' . Yii::t('app', 'weeks');
+            }
         }
 
         if ($rest >= 86400) {
             $days = floor($rest / 86400);
             $rest -= $days * 86400;
+            if($days == 1){
+                $countDownString .= ', ' . $days . ' ' . Yii::t('app', 'day');
+            } else {
+                $countDownString .= ', ' . $days . ' ' . Yii::t('app', 'days');
+            }
         }
         if ($rest >= 3600) {
             $hours = floor($rest / 3600);
+            if($hours == 1){
+                $countDownString .= ', ' . $hours . ' ' . Yii::t('app', 'hour');
+            } else {
+                $countDownString .= ', ' . $hours . ' ' . Yii::t('app', 'hours');
+            }
+        }
+        if ($rest >= 1 && $countDownString == "") {
+            $countDownString .= Yii::t('app', 'the next hour');
         }
 
-        return $weeks . ' ' . Yii::t('app', 'weeks') . ', ' . $days . ' ' . Yii::t('app', 'days') . ', ' . $hours . ' ' . Yii::t('app', 'hours');
+        return $countDownString;
     }
 
     /**

@@ -123,13 +123,15 @@ $currentRound = null;
         <div class="col-md-2 col-xs-3">
             <?php echo $this->render('nav', ['model' => $model, 'active' => Tournament::ACTIVE_FINAL_STAGE]); ?>
         </div>
-        <div class="col-md-10 col-xs-9" >
+        <div class="col-md-10 col-xs-9">
+            <?php if ($model->status >= Tournament::STATUS_RUNNING): ?>
             <div class="well" id="clone-me">
                 <button class="btn zoom-in"><i class="material-icons zoom-in">zoom_in</i></button>
                 <button class="btn zoom-out"><i class="material-icons zoom-out">zoom_out</i></button>
                 <div class="pull-right">
-                <button class="btn show-seeds">Seeds</button>
-                <button class="btn clone-tournament" title="<?= Yii::t('app', 'Fullscreen')?>"><i class="material-icons">fullscreen</i></button>
+                    <button class="btn show-seeds"><?= Yii::t('app', 'Seeds') ?></button>
+                    <button class="btn clone-tournament" title="<?= Yii::t('app', 'Fullscreen') ?>"><i
+                            class="material-icons">fullscreen</i></button>
                 </div>
                 <div class="clearfix"></div>
 
@@ -182,21 +184,20 @@ $currentRound = null;
 
 
             </div>
-
         </div>
         <div class="row">
             <div class="col-xs-12">
-                <table class="centered">
+                <table class="centered" width="100%">
                     <tr>
                         <th><?= Yii::t('app', 'Match ID') ?></th>
+                        <th><?= Yii::t('app', 'Round') ?></th>
                         <th><?= Yii::t('app', 'Participant A') ?></th>
                         <th><?= Yii::t('app', 'Points A') ?></th>
                         <th><?= Yii::t('app', 'Points B') ?></th>
                         <th><?= Yii::t('app', 'Participant B') ?></th>
-                        <?php if($model->status != Tournament::STATUS_FINISHED): ?>
-                        <th><?= Yii::t('app', 'Round') ?></th>
+                        <?php if ($model->status != Tournament::STATUS_FINISHED): ?>
+                        <th></th>
                         <?php endif ?>
-                        <th> </th>
                     </tr>
                     <?= ListView::widget([
                         'summary' => false,
@@ -204,15 +205,27 @@ $currentRound = null;
                         'emptyText' => '<div class="row"><div class="col-lg-12"><div class="well">' . Yii::t('app', 'We haven\'t started the tournament yet.') . '</div></div></div>',
                         'itemOptions' => ['class' => 'item'],
                         'itemView' => function ($model, $key, $index, $widget) {
-                            return $this->render('_stage', ['model' => $model]);
+                            return $this->render('_stage', ['model' => $model, 'stage' => Tournament::STAGE_FS]);
                         },
                     ]) ?>
                 </table>
+
             </div>
+            <?php elseif (!($model->status >= Tournament::STATUS_RUNNING)): ?>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="well">
+                            <?= Yii::t('app', 'Tournament not yet ready.') ?>
+                        </div>
+                    </div>
+                </div>
+            <?php endif ?>
         </div>
     </div>
 </div>
 </div>
+
+
 
 
 

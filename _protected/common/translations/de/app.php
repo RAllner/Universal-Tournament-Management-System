@@ -176,4 +176,102 @@ return [
     'Are you sure you want to delete this user?' => 'Sind Sie sicher, dass sie diesen Nutzer löschen wollen?',
     'Are you sure you want to delete this article?' => 'Sind Sie sicher, dass sie diesen Artikel löschen wollen?',
 
+        //-- Tournament --//
+        
+        
+        
+    'Standings'     => 'Wertung',
+    'Participants'     => 'Teilnehmer',
+    'Settings'     => 'Einstellungen',
+    'Bracket'     => 'Turnierbaum',
+    'Seed'     => 'Platzierung',
+    'Seeds'     => 'Platzierungen',
+    'Achieved'     => 'Erreicht',
+    'Match wins'     => 'Gewonnene Sätz',
+    'Match losses'     => 'Verlorene Sätze',
+    'All'     => 'Alle',
+    'Comming'     => 'Kommende',
+    'Past'     => 'Vergangene',
+
+
+
+    'Enter a participant name.'     => 'Geben Sie einen Teilnehmernamen ein.',
+    'Enter several participant names separated by line breaks.'     => 'Geben Sie mehrere Teilnehmernamen ein, seperiert durch Zeilenumbrüche.',
+    'Round'     => 'Runde',
+    'Semifinal'     => 'Halbfinale',
+    'Final'     => 'Finale',
+    'Bulk'     => 'Mehrere',
+    'Add'     => 'Hinzufügen',
+    'End'     => 'Ende',
+    'Advanced Settings'     => 'Erweiterte Einstellungen',
+
+
+
+    'Game'     => 'Spiel',
+    'game'     => 'Spiel',
+    'games'     => 'Spiele',
+    'Hosted by'     => 'Veranstalter',
+    'Max participants'     => 'Max. Teilnehmerzahl',
+    'Has sets'     => 'Spiel hat mehrere Sätze',
+    'Running'     => 'Läuft',
+    'Participants count'     => 'Teilnehmerzahl',
+    'Team tournament'     => 'Team Turnier',
+    'Stage type'     => 'Phasen-Typ',
+    'Third place match'     => 'Spiel um Platz drei',
+    'Grand Finals'     => 'Grand Finals',
+    'Ranked By'     => 'Rang anhand von',
+    'P. p. match win'     => 'P. p. Satz Sieg',
+    'P. p. match tie'     => 'P. p. Satz Unentschieden',
+    'P. p. game win'     => 'P. p. Spiel Sieg',
+    'P. p. game tie'     => 'P. p. Spiel Unentschieden',
+    'P. p. bye'     => 'P. p. bye',
+    'Participants Compete'     => 'Teilnehmer treten an',
+    'Participants Advance'     => 'Teilnehmer rücken vor',
+    'Group Stage Format'     => 'Gruppenphasen Format',
+    'Quick Advance'     => 'Schnelles Vorrücken',
+    'Notifications'     => 'Benachrichtigungen',
+
+    'Informations' => 'Informationen',
+        
+    'Complete'     => 'Komplett',
+    'Finished'     => 'Beendet',
+    'Abort'     => 'Abgebrochen',
+    'Deleted'     => 'Gelöscht',
+
+    'Single Elimination'     => 'K.-o.-System',
+    'Double Elimination'     => 'Doppel-K.-o.-System',
+    'Round Robin'     => 'Rundenturnier',
+    'Schweizer System'     => 'Schweizer System',
+
+
+    'Game/Set wins'     => 'Spiel/Satz Siege',
+    'Game/Set %'     => 'Spiel/Satz %',
+    'Points scored'     => 'Punkte gemacht',
+    'Points difference'     => 'Punkte Differenz',
+    'Custom Points'     => 'Individualisierte Punkte',
+
+
+    'Begin in'     => 'Beginnt in',
+    'weeks'     => 'Wochen',
+    'week'     => 'Woche',
+    'days'     => 'Tagen',
+    'day'     => 'Tag',
+    'hours'     => 'Stunden',
+    'hour'     => 'Stunde',
+    'the next hour'     => 'der nächsten Stunde',
+
+
+    'Final Stage'     => 'Finale-Phase',
+    'Group Stage'     => 'Gruppen-Phase',
+    'players registered'     => 'Spieler registriert',
+    'teams registered'     => 'Teams registriert',
+    'In the past'     => ' - liegt in der Vergangenheit',
+
+    'Participant A'     => 'Teilnehmer A',
+    'Participant B'     => 'Teilnehmer B',
+    'Points A'     => 'Punkte A',
+    'Points B'     => 'Punkte B',
+    'Group'     => 'Gruppe',
+
+
 ];
