@@ -37,9 +37,12 @@ class EventsSearch extends Events
      *
      * @param array $params
      *
+     * @param int $pageSize
+     * @param bool $published
+     * @param int $filter
      * @return ActiveDataProvider
      */
-    public function search($params, $pageSize = 3, $published = false)
+    public function search($params, $pageSize = 3, $published = false, $filter = 0)
     {
         $query = Events::find();
 
@@ -55,15 +58,39 @@ class EventsSearch extends Events
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'sort'=> ['defaultOrder' => ['startdate' => SORT_ASC]],
+            'sort'=> ['defaultOrder' => ['startdate' => SORT_DESC]],
             'pagination' => [
                 'pageSize' => $pageSize,
             ]
         ]);
 
-        if (!($this->load($params) && $this->validate())) {
+        $this->load($params);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
             return $dataProvider;
         }
+
+
+        $time = new \DateTime('now');
+        $today = $time->format('Y-m-d H:i:s');
+
+        if ($filter == 0) {
+            //comming Events
+            $query->andFilterWhere(['>=', 'startdate', $today]);
+        } else if ($filter == 1) {
+            // running Events
+            $query->andFilterWhere(['<=', 'startdate', $today])
+                ->andFilterWhere(['>=', 'enddate', $today]);
+        } else if($filter == 2) {
+            // past Events
+            $query->andFilterWhere(['<=', 'startdate', $today])
+                ->andFilterWhere(['<=', 'enddate', $today]);
+        }else {
+            // all Events
+        }
+
 
         // grid filtering conditions
         $query->andFilterWhere([

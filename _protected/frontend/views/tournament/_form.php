@@ -166,7 +166,7 @@ $readOnlyBoolean = ($model->status >= Tournament::STATUS_RUNNING)? true : false;
 ?>
 
 <div class="tournament-form">
-
+    <a tabindex="0" class="btn btn-lg btn-default" role="button" data-toggle="popover" data-trigger="focus" title="Dismissible popover" data-content="And here's some amazing content. It's very engaging. Right?">?</a>
 
     <?php $form = ActiveForm::begin(); ?>
 

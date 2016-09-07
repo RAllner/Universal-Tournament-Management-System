@@ -41,15 +41,19 @@ class TournamentMatchSearch extends TournamentMatch
      * @param $tournament_id integer
      * @param $stage integer
      * @param $tree
+     * @param null $group
      * @return ActiveDataProvider
      */
-    public function search($params, $tournament_id, $stage, $tree)
+    public function search($params, $tournament_id, $stage, $tree, $group = null)
     {
         $query = TournamentMatch::find();
 
         // add conditions that should always apply here
         $query->andFilterWhere(['tournament_id' => $tournament_id]);
         $query->andFilterWhere(['stage' => $stage]);
+        if(!is_null($group)){
+            $query->andFilterWhere(['groupID' => $group]);
+        }
         if(!$tree){
             $query->andFilterWhere(['>', 'state', 0]);
         }

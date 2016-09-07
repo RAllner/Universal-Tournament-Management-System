@@ -1374,7 +1374,6 @@ ol#sortable-participants li.disabled > .control-group > i {
 .tournament-tree{
 
     width: 2000px;
-    min-height: 300px;
     transform: scale(1);
     transform-origin: 0 0;
     cursor: move;

@@ -10,6 +10,7 @@
 /* @var $dataProvider frontend\models\TournamentMatchSearch */
 /* @var $treeDataProvider frontend\models\TournamentMatchSearch */
 /* @var $model frontend\models\Tournament */
+/* @var $isFinalStage boolean */
 
 use frontend\models\Tournament;
 use yii\helpers\Html;
@@ -107,6 +108,7 @@ $this->registerJs($script, View::POS_END);
 
 
 $treeMatchModels = $treeDataProvider->getModels();
+
 $currentRound = null;
 
 
@@ -124,105 +126,104 @@ $currentRound = null;
             <?php echo $this->render('nav', ['model' => $model, 'active' => Tournament::ACTIVE_FINAL_STAGE]); ?>
         </div>
         <div class="col-md-10 col-xs-9">
-            <?php if ($model->status >= Tournament::STATUS_RUNNING): ?>
-            <div class="well" id="clone-me">
-                <button class="btn zoom-in"><i class="material-icons zoom-in">zoom_in</i></button>
-                <button class="btn zoom-out"><i class="material-icons zoom-out">zoom_out</i></button>
-                <div class="pull-right">
-                    <button class="btn show-seeds"><?= Yii::t('app', 'Seeds') ?></button>
-                    <button class="btn clone-tournament" title="<?= Yii::t('app', 'Fullscreen') ?>"><i
-                            class="material-icons">fullscreen</i></button>
-                </div>
-                <div class="clearfix"></div>
-
-                <div class="row" style="overflow: hidden;">
-                    <div id="round-title-wrapper" style="width: 2000px;">
-
-                        <?php
-                        echo '<div class="round-title">';
-                        foreach ($treeMatchModels as $key => $match) {
-                            /** @var $match \frontend\models\TournamentMatch */
-                            if ($match->round !== $currentRound) {
-                                echo '<div class="round-title2">' . $match->getRoundName($match->round, $model, 0) . '</div>';
-                                $currentRound = $match->round;
-                            }
-                        }
-                        echo "</div>";
-                        $currentRound = null;
-                        ?>
+            <?php if ((!$isFinalStage && $model->status >= Tournament::STATUS_RUNNING) || ($isFinalStage && $model->status >= Tournament::STATUS_FINAL_STAGE)): ?>
+                <div class="well" id="clone-me">
+                    <button class="btn zoom-in"><i class="material-icons zoom-in">zoom_in</i></button>
+                    <button class="btn zoom-out"><i class="material-icons zoom-out">zoom_out</i></button>
+                    <div class="pull-right">
+                        <button class="btn show-seeds"><?= Yii::t('app', 'Seeds') ?></button>
+                        <button class="btn clone-tournament" title="<?= Yii::t('app', 'Fullscreen') ?>"><i
+                                class="material-icons">fullscreen</i></button>
                     </div>
-                </div>
+                    <div class="clearfix"></div>
 
-                <div class="row tournament-tree-wrapper">
-                    <?php Draggable::begin(['id' => 'draggable-tournament-tree'
-                    ]);
-                    ?>
+                    <div class="row" style="overflow: hidden;">
+                        <div id="round-title-wrapper" style="width: 2000px;">
 
-
-                    <div class="col-xs-12 tournament-tree ">
-
-                        <?php
-                        foreach ($treeMatchModels as $key => $match) {
-                            /** @var $match \frontend\models\TournamentMatch */
-
-                            if ($match->round !== $currentRound) {
-                                if ($currentRound !== null) echo '</div>';
-
-
-                                echo '<div class="round">';
-
-                                $currentRound = $match->round;
+                            <?php
+                            echo '<div class="round-title">';
+                            foreach ($treeMatchModels as $key => $match) {
+                                /** @var $match \frontend\models\TournamentMatch */
+                                if ($match->round !== $currentRound) {
+                                    echo '<div class="round-title2">' . $match->getRoundName($match->round, $model, 0) . '</div>';
+                                    $currentRound = $match->round;
+                                }
                             }
+                            echo "</div>";
+                            $currentRound = null;
+                            ?>
+                        </div>
+                    </div>
 
-                            echo $model->createMatchElement($key, $match);
+                    <div class="row tournament-tree-wrapper">
+                        <?php Draggable::begin(['id' => 'draggable-tournament-tree'
+                        ]);
+                        ?>
 
-                        } ?>
 
+                        <div class="col-xs-12 tournament-tree ">
+
+                            <?php
+                            foreach ($treeMatchModels as $key => $match) {
+                                /** @var $match \frontend\models\TournamentMatch */
+
+                                if ($match->round !== $currentRound) {
+                                    if ($currentRound !== null) echo '</div>';
+
+
+                                    echo '<div class="round">';
+
+                                    $currentRound = $match->round;
+                                }
+
+                                echo $model->createMatchElement($key, $match);
+
+                            } ?>
+                        </div>
                     </div>
                     <?php Draggable::end() ?>
                 </div>
 
+                <div class="row">
+                    <div class="col-xs-12">
+                        <table class="centered" width="100%">
+                            <tr>
+                                <th><?= Yii::t('app', 'Match ID') ?></th>
+                                <th><?= Yii::t('app', 'Round') ?></th>
+                                <th><?= Yii::t('app', 'Participant A') ?></th>
+                                <th><?= Yii::t('app', 'Points A') ?></th>
+                                <th><?= Yii::t('app', 'Points B') ?></th>
+                                <th><?= Yii::t('app', 'Participant B') ?></th>
+                                <?php if ($model->status != Tournament::STATUS_FINISHED): ?>
+                                    <th></th>
+                                <?php endif ?>
+                            </tr>
+                            <?= ListView::widget([
+                                'summary' => false,
+                                'dataProvider' => $dataProvider,
+                                'emptyText' => '<div class="row"><div class="col-lg-12"><div class="well">' . Yii::t('app', 'We haven\'t started the tournament yet.') . '</div></div></div>',
+                                'itemOptions' => ['class' => 'item'],
+                                'itemView' => function ($model, $key, $index, $widget) {
+                                    return $this->render('_stage', ['model' => $model, 'stage' => Tournament::STAGE_FS]);
+                                },
+                            ]) ?>
+                        </table>
 
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-12">
-                <table class="centered" width="100%">
-                    <tr>
-                        <th><?= Yii::t('app', 'Match ID') ?></th>
-                        <th><?= Yii::t('app', 'Round') ?></th>
-                        <th><?= Yii::t('app', 'Participant A') ?></th>
-                        <th><?= Yii::t('app', 'Points A') ?></th>
-                        <th><?= Yii::t('app', 'Points B') ?></th>
-                        <th><?= Yii::t('app', 'Participant B') ?></th>
-                        <?php if ($model->status != Tournament::STATUS_FINISHED): ?>
-                        <th></th>
-                        <?php endif ?>
-                    </tr>
-                    <?= ListView::widget([
-                        'summary' => false,
-                        'dataProvider' => $dataProvider,
-                        'emptyText' => '<div class="row"><div class="col-lg-12"><div class="well">' . Yii::t('app', 'We haven\'t started the tournament yet.') . '</div></div></div>',
-                        'itemOptions' => ['class' => 'item'],
-                        'itemView' => function ($model, $key, $index, $widget) {
-                            return $this->render('_stage', ['model' => $model, 'stage' => Tournament::STAGE_FS]);
-                        },
-                    ]) ?>
-                </table>
+                    </div>
 
-            </div>
-            <?php elseif (!($model->status >= Tournament::STATUS_RUNNING)): ?>
+                </div>
+            <?php else: ?>
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="well">
-                            <?= Yii::t('app', 'Tournament not yet ready.') ?>
+                            <?= Yii::t('app', 'Stage not yet ready.') ?>
                         </div>
                     </div>
                 </div>
             <?php endif ?>
         </div>
+
     </div>
-</div>
 </div>
 
 

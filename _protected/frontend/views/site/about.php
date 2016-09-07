@@ -96,7 +96,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <h3>Zersch</h3>
                     <p>
                         <strong>Vorname:</strong> Tim</br>
-                        <strong>Alter:</strong> 29 </br>
+                        <strong>Alter:</strong> 30 </br>
                         <strong>Beruf:</strong> Student</br>
                         <strong>Rolle:</strong> Tresen, Aufbau Lokation</br>
                         <strong>Mail:</strong> <a href="mailto:zersch@barcraft-hl.de">zersch@barcraft-hl.de</a> </br>
@@ -121,7 +121,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <h3>NiWo</h3>
                     <p>
                         <strong>Vorname:</strong>Nicklas</br>
-                        <strong>Alter:</strong> 23 </br>
+                        <strong>Alter:</strong> 24 </br>
                         <strong>Beruf:</strong> Hörakustiker</br>
                         <strong>Rolle:</strong> Casting, Tresen, Aufbau Lokation</br>
                         <strong>Mail:</strong> <a href="mailto:niwo@barcraft-hl.de">niwo@barcraft-hl.de</a> </br>

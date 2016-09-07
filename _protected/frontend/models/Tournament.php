@@ -621,7 +621,6 @@ class Tournament extends ActiveRecord
     {
         $this->participants_count = count($this->participants);
         $this->save();
-        Yii::$app->session->setFlash('error', 'count($this->participants)');
     }
 
 
@@ -818,5 +817,11 @@ class Tournament extends ActiveRecord
         return $dataProvidernew->getModels();
     }
 
+    /**
+     * @return integer
+     */
+    public function getGroupCount(){
+        return ceil($this->participants_count / $this->participants_compete);
+    }
 
 }

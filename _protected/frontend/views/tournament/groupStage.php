@@ -9,17 +9,19 @@
 /* @var $model frontend\models\Tournament */
 /* @var $this yii\web\View */
 /* @var $dataProvider frontend\models\TournamentMatchSearch */
-/* @var $treeDataProvider frontend\models\TournamentMatchSearch */
+/* @var $treeDataProvider \yii\data\ActiveDataProvider */
+/* @var $treeDataProviderArray [] array */
 
 use frontend\models\Tournament;
 use yii\helpers\Html;
+use yii\jui\Draggable;
 use yii\web\View;
 use yii\widgets\ListView;
 
 
 $stage_name = Yii::t('app', 'Group Stage');
 
-$this->title = $model->name. " ".$stage_name;
+$this->title = $model->name . " " . $stage_name;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Tournaments'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = $stage_name;
@@ -32,22 +34,28 @@ $script =
     $(document).on("click",".zoom-in, .zoom-out",function (e) {
       var zoomIn = $(e.target).hasClass("zoom-in");
       console.log($(e.target).hasClass("zoom-in"));
-      var matrix = $(".tournament-tree").css("transform");
+      var groupTarget = $(this).data("target");
+      var matrix = $(".tournament-tree-"+groupTarget).css("transform");
       var values = matrix.match(/-?[\d\.]+/g);
       var scaleFactor = parseFloat(values[0]);
       scaleFactor = zoomIn ? scaleFactor+0.1 : scaleFactor-0.1;
+
       if(scaleFactor > 0.4 && scaleFactor < 2){
-      
-        $('.tournament-tree').addClass("zoom-animate");
-        $('.tournament-tree').css("transform","scale("+(scaleFactor)+")");
+
+        $(".tournament-tree-"+groupTarget).addClass("zoom-animate");
+        $(".tournament-tree-"+groupTarget).css("transform","scale("+(scaleFactor)+")");
+        var newheight = $(".tournament-tree-"+groupTarget).originalElement.height()*scaleFactor;
+        $(".tournament-tree-"+groupTarget).css({
+        "min-height": newheight+"px"
+        });
         
-        $('.round-title2').css({
+        $(".round-title2"+groupTarget).css({
             "width" : 198 * scaleFactor+"px",
             "min-width":198 * scaleFactor+"px",
             "text-indent":23 * scaleFactor+"px"
         })
         
-        setTimeout(function() { $('.tournament-tree').addClass("zoom-animate")},400);
+        setTimeout(function() { $(".tournament-tree-"+groupTarget).addClass("zoom-animate")},400);
       }
     })
     
@@ -104,7 +112,8 @@ $script =
 JS;
 $this->registerJs($script, View::POS_END);
 
-//$treeMatchModels = $treeDataProvider->getModels();
+$treeMatchModels = $treeDataProvider->getModels();
+
 $currentRound = null;
 $currentGroup = null;
 
@@ -123,34 +132,106 @@ $currentGroup = null;
             <?php echo $this->render('nav', ['model' => $model, 'active' => Tournament::ACTIVE_GROUP_STAGE]); ?>
         </div>
         <div class="col-md-10 col-xs-9">
-            <div class="row">
-                <div class="col-xs-12">
-                    <table class="centered" width="100%">
-                        <tr>
-                            <th><?= Yii::t('app', 'Match ID') ?></th>
-                            <th><?= Yii::t('app', 'Group') ?></th>
-                            <th><?= Yii::t('app', 'Round') ?></th>
-                            <th><?= Yii::t('app', 'Participant A') ?></th>
-                            <th><?= Yii::t('app', 'Points A') ?></th>
-                            <th><?= Yii::t('app', 'Points B') ?></th>
-                            <th><?= Yii::t('app', 'Participant B') ?></th>
-                            <?php if ($model->status == Tournament::STATUS_RUNNING): ?>
-                                <th></th>
-                            <?php endif ?>
-                        </tr>
-                        <?= ListView::widget([
-                            'summary' => false,
-                            'dataProvider' => $dataProvider,
-                            'emptyText' => '<div class="row"><div class="col-lg-12"><div class="well">' . Yii::t('app', 'We haven\'t started the tournament yet.') . '</div></div></div>',
-                            'itemOptions' => ['class' => 'item'],
-                            'itemView' => function ($model, $key, $index, $widget) {
-                                return $this->render('_stage', ['model' => $model, 'stage' => Tournament::STAGE_GS]);
-                            },
-                        ]) ?>
-                    </table>
+            <?php for ($group = 1;
+            $group <= $model->getGroupCount();
+            $group++) { ?>
+            <div class="well" id="clone-me<?= $group ?>">
+                <h4><?= Yii::t('app', 'Group') . ' ' . $group ?></h4>
+                <button class="btn zoom-in" data-target="<?= $group ?>"><i class="material-icons zoom-in" data-target="<?= $group ?>">zoom_in</i></button>
+                <button class="btn zoom-out" data-target="<?= $group ?>"><i class="material-icons zoom-out" data-target="<?= $group ?>">zoom_out</i></button>
+                <div class="pull-right">
+                    <button class="btn show-seeds" data-target="<?= $group ?>"><?= Yii::t('app', 'Seeds') ?></button>
+                    <button class="btn clone-tournament" data-target="<?= $group ?>" title="<?= Yii::t('app', 'Fullscreen') ?>"><i
+                            class="material-icons">fullscreen</i></button>
+                </div>
+                <div class="clearfix"></div>
+
+                <div class="row" style="overflow: hidden;">
+                    <div id="round-title-wrapper" style="width: 2000px;">
+                        <!--                    <pre>-->
+                        <?php // print_r($treeDataProviderArray[2]->getModels()) ?>
+                        <!--                    </pre>-->
+                        <?php
+                        echo '<div class="round-title">';
+                        foreach ($treeDataProviderArray[$group]->getModels() as $key => $match) {
+                            /** @var $match \frontend\models\TournamentMatch */
+                            if ($match->round !== $currentRound) {
+                                echo '<div class="round-title2 round-title2'.$group.'">' . $match->getRoundName($match->round, $model, 0) . '</div>';
+                                $currentRound = $match->round;
+                            }
+                        }
+                        echo "</div>";
+                        $currentRound = null;
+                        ?>
+                    </div>
+                </div>
+
+                <div class="row tournament-tree-wrapper">
+                    <?php Draggable::begin(['id' => 'draggable-tournament-tree' . $group
+                    ]);
+                    ?>
+
+
+                    <div class="col-xs-12 tournament-tree" id="tournament-tree-<?= $group ?>">
+
+                        <?php
+                        foreach ($treeDataProviderArray[$group]->getModels() as $key => $match) {
+                            /** @var $match \frontend\models\TournamentMatch */
+
+                            if ($match->round !== $currentRound) {
+                                if ($currentRound !== null) echo '</div>';
+
+
+                                echo '<div class="round">';
+
+                                $currentRound = $match->round;
+                            }
+
+                            echo $model->createMatchElement($key, $match);
+
+                        } ?>
+
+                    </div>
+                    </div>
+                    <?php Draggable::end() ?>
 
                 </div>
-                <?php if (!($model->status >= Tournament::STATUS_RUNNING)): ?>
+            </div>
+
+        <?php
+        $currentRound = null;
+        } ?>
+
+
+        <div class="row">
+            <div class="col-xs-12">
+
+                <table class="centered" width="100%">
+                    <tr>
+                        <th><?= Yii::t('app', 'Match ID') ?></th>
+                        <th><?= Yii::t('app', 'Group') ?></th>
+                        <th><?= Yii::t('app', 'Round') ?></th>
+                        <th><?= Yii::t('app', 'Participant A') ?></th>
+                        <th><?= Yii::t('app', 'Points A') ?></th>
+                        <th><?= Yii::t('app', 'Points B') ?></th>
+                        <th><?= Yii::t('app', 'Participant B') ?></th>
+                        <?php if ($model->status == Tournament::STATUS_RUNNING): ?>
+                            <th></th>
+                        <?php endif ?>
+                    </tr>
+                    <?= ListView::widget([
+                        'summary' => false,
+                        'dataProvider' => $dataProvider,
+                        'emptyText' => '<div class="row"><div class="col-lg-12"><div class="well">' . Yii::t('app', 'We haven\'t started the tournament yet.') . '</div></div></div>',
+                        'itemOptions' => ['class' => 'item'],
+                        'itemView' => function ($model, $key, $index, $widget) {
+                            return $this->render('_stage', ['model' => $model, 'stage' => Tournament::STAGE_GS]);
+                        },
+                    ]) ?>
+                </table>
+
+            </div>
+            <?php if (!($model->status >= Tournament::STATUS_RUNNING)): ?>
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="well">
@@ -158,8 +239,8 @@ $currentGroup = null;
                         </div>
                     </div>
                 </div>
-                <?php endif ?>
-            </div>
+            <?php endif ?>
         </div>
     </div>
+</div>
 </div>

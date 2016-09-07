@@ -34,13 +34,17 @@ class EventsController extends FrontendController
      * Lists all Events models.
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex($filter = 0)
     {
         /**
          * How many events we want to display per page.
          * @var integer
          */
-        $pageSize = 5;
+        $pageSize = 10;
+
+        if (!isset($_GET['filter'])) {
+            $_GET['filter'] = 0;
+        }
 
         /**
          * Events have to be published.
@@ -49,11 +53,29 @@ class EventsController extends FrontendController
         $published = true;
 
         $searchModel = new EventsSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $pageSize, $published);
+        $time = new \DateTime('now');
+        $today = $time->format('Y-m-d H:i:s');
+        $allCount = Events::find()->count();
+        $commingCount = Events::find()
+            ->where(['>=', 'startdate', $today])
+            ->count();
+        $runningCount = Events::find()
+            ->where(['>=', 'startdate', $today])
+            ->andWhere(['<=', 'enddate', $today])
+            ->count();
+        $pastCount = Events::find()
+            ->where(['<=', 'startdate', $today])
+            ->orWhere(['<=', 'enddate', $today])
+            ->count();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $pageSize, $published, $filter);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'allCount' => $allCount,
+            'commingCount' => $commingCount,
+            'runningCount' => $runningCount,
+            'pastCount' => $pastCount,
         ]);
     }
 

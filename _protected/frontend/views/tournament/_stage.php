@@ -164,7 +164,7 @@ $winnerB = ($model->winner_id == $model->participant_id_B && $model->state == To
         <?= $participant_B_Name ?>
     </td>
     <!-- Button trigger modal -->
-    <?php if($tournament->status != Tournament::STATUS_FINISHED): ?>
+    <?php if(($stage == Tournament::STAGE_FS && $tournament->status != Tournament::STATUS_FINISHED) || ($stage == Tournament::STAGE_GS && $tournament->status < Tournament::STATUS_GS_COMPLETE)): ?>
         <td>
             <?php if ($model->state == TournamentMatch::MATCH_STATE_READY): ?>
                 <a data-toggle="modal"

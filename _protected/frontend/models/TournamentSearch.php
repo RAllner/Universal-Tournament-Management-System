@@ -39,6 +39,7 @@ class TournamentSearch extends Tournament
      *
      * @param array $params
      *
+     * @param int $filter
      * @return ActiveDataProvider
      */
     public function search($params, $filter = 0)

@@ -19,7 +19,12 @@ $(document).ready(function(){
             $(this).parent().addClass('active');
         }
     });
-    
+     $(function () { 
+        $("[data-toggle='tooltip']").tooltip(); 
+    });;
+    $(function () { 
+        $("[data-toggle='popover']").popover(); 
+    });
         
 
 }); 

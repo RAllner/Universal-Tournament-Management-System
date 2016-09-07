@@ -17,21 +17,8 @@ $this->title = Yii::t('app', 'Tournaments');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="tournament-index">
-
-    <h1><?= Html::encode($this->title) ?>
-        <span class="pull-right">
-        <?php if (Yii::$app->user->can('premium')): ?>
-            <?= Html::a('<i class="material-icons">create</i> ' . Yii::t('app', 'Create Tournament'), ['create'], ['class' => 'btn btn-success']) ?>
-        <?php endif ?>
-        <?php if (Yii::$app->user->can('premium')): ?>
-            <?= Html::a(Yii::t('app', 'Admin'), ['admin'], ['class' => 'btn btn-warning']) ?>
-        <?php endif ?>
-            </span>
-    </h1>
-    <div class="clearfix"></div>
-    <div class="row">
-        <div class="col-md-2">
-            <ul class="nav nav-pills nav-stacked">
+<span class="pull-right">
+            <ul class="nav nav-pills">
                 <li role="tournament_nav"
                     <?php if ($_GET['filter'] == 0): ?>
                         class="active"
@@ -66,9 +53,20 @@ $this->params['breadcrumbs'][] = $this->title;
                 </li>
 
             </ul>
+    <?php if (Yii::$app->user->can('premium')): ?>
+        <?= Html::a('<i class="material-icons">create</i> ' . Yii::t('app', 'Create Tournament'), ['create'], ['class' => 'btn btn-success']) ?>
+    <?php endif ?>
+    <?php if (Yii::$app->user->can('premium')): ?>
+        <?= Html::a(Yii::t('app', 'Admin'), ['admin'], ['class' => 'btn btn-warning']) ?>
+    <?php endif ?>
+            </span>
+    <h1><?= Html::encode($this->title) ?></h1>
 
-        </div>
-        <div class="col-md-10">
+
+    <div class="clearfix"></div>
+
+    <div class="row">
+        <div class="col-lg-10 col-md-12">
             <div class="well">
                 <?php echo $this->render('_search', ['model' => $searchModel]); ?>
             </div>
