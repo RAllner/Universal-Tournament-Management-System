@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a1a65ea70890d4bb29b4631cea026160",
-    "content-hash": "7ffc5e298ac7e7c2ca49f806a392ebab",
+    "hash": "1688b994e7f346e038a111e172e5db66",
+    "content-hash": "1bee53b953172d973c0cab836eb7b483",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -55,6 +55,37 @@
                 "responsive",
                 "web"
             ]
+        },
+        {
+            "name": "bower-asset/flag-icon-css",
+            "version": "2.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/lipis/flag-icon-css.git",
+                "reference": "f34e695eed7df4a1fd8035a0a89d287c4355dcc5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/lipis/flag-icon-css/zipball/f34e695eed7df4a1fd8035a0a89d287c4355dcc5",
+                "reference": "f34e695eed7df4a1fd8035a0a89d287c4355dcc5",
+                "shasum": ""
+            },
+            "type": "bower-asset-library",
+            "extra": {
+                "bower-asset-main": [
+                    "css/flag-icon.min.css",
+                    "less/flag-icon.less",
+                    "sass/_flag-icon.sass"
+                ],
+                "bower-asset-ignore": [
+                    "**/.*",
+                    "assets",
+                    "Gruntfile.coffee",
+                    "index.html",
+                    "LICENSE",
+                    "package.json"
+                ]
+            }
         },
         {
             "name": "bower-asset/fotorama",
@@ -1706,6 +1737,52 @@
             "time": "2014-11-09 19:54:17"
         },
         {
+            "name": "lajax/yii2-language-picker",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/lajax/yii2-language-picker.git",
+                "reference": "71fdcdc59b42570d3857bf3e43fb0ea21b087cc0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/lajax/yii2-language-picker/zipball/71fdcdc59b42570d3857bf3e43fb0ea21b087cc0",
+                "reference": "71fdcdc59b42570d3857bf3e43fb0ea21b087cc0",
+                "shasum": ""
+            },
+            "require": {
+                "phpspec/php-diff": ">=1.0.2",
+                "yiisoft/yii2": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "lajax\\languagepicker\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Lajos Molnar",
+                    "email": "lajax.m@gmail.com"
+                }
+            ],
+            "description": "Yii2 Language Picker Widget",
+            "keywords": [
+                "extension",
+                "languagepicker",
+                "multilanguage",
+                "sample",
+                "translate",
+                "widget",
+                "yii2"
+            ],
+            "time": "2015-09-01 16:53:13"
+        },
+        {
             "name": "mervick/material-design-icons",
             "version": "1.1.0",
             "source": {
@@ -1897,6 +1974,48 @@
             "time": "2014-11-19 22:04:08"
         },
         {
+            "name": "modernkernel/yii2-flag-icon-css",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/modernkernel/yii2-flag-icon-css.git",
+                "reference": "9e97426a355f74fb7b3866486eb1a925f136bfed"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/modernkernel/yii2-flag-icon-css/zipball/9e97426a355f74fb7b3866486eb1a925f136bfed",
+                "reference": "9e97426a355f74fb7b3866486eb1a925f136bfed",
+                "shasum": ""
+            },
+            "require": {
+                "bower-asset/flag-icon-css": "*",
+                "yiisoft/yii2": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "modernkernel\\flagiconcss\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Harry Tang",
+                    "email": "harry@modernkernel.com"
+                }
+            ],
+            "description": "flag-icon-css extension for Yii2",
+            "keywords": [
+                " flag-icon-css",
+                "extension",
+                "yii2"
+            ],
+            "time": "2016-07-27 10:02:27"
+        },
+        {
             "name": "nenad/yii2-password-strength",
             "version": "2.3.0",
             "source": {
@@ -2041,6 +2160,44 @@
                 "yii2"
             ],
             "time": "2014-11-19 17:33:46"
+        },
+        {
+            "name": "phpspec/php-diff",
+            "version": "v1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpspec/php-diff.git",
+                "reference": "0464787bfa7cd13576c5a1e318709768798bec6a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpspec/php-diff/zipball/0464787bfa7cd13576c5a1e318709768798bec6a",
+                "reference": "0464787bfa7cd13576c5a1e318709768798bec6a",
+                "shasum": ""
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Diff": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Chris Boulton",
+                    "homepage": "http://github.com/chrisboulton"
+                }
+            ],
+            "description": "A comprehensive library for generating differences between two hashable objects (strings or arrays).",
+            "time": "2016-04-07 12:29:16"
         },
         {
             "name": "rmrevin/yii2-fontawesome",
@@ -2680,55 +2837,17 @@
             "time": "2015-11-20 12:04:31"
         },
         {
-            "name": "phpspec/php-diff",
-            "version": "v1.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/phpspec/php-diff.git",
-                "reference": "0464787bfa7cd13576c5a1e318709768798bec6a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/phpspec/php-diff/zipball/0464787bfa7cd13576c5a1e318709768798bec6a",
-                "reference": "0464787bfa7cd13576c5a1e318709768798bec6a",
-                "shasum": ""
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Diff": "lib/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Chris Boulton",
-                    "homepage": "http://github.com/chrisboulton"
-                }
-            ],
-            "description": "A comprehensive library for generating differences between two hashable objects (strings or arrays).",
-            "time": "2016-04-07 12:29:16"
-        },
-        {
             "name": "romdim/yii2-bootstrap-material",
             "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/romdim/yii2-bootstrap-material.git",
-                "reference": "ee071cc78e55cc3209d52831699bc2db7c2f71f8"
+                "reference": "1576f693c7a07b9bfbfce1636ae1854083037ac2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/romdim/yii2-bootstrap-material/zipball/ee071cc78e55cc3209d52831699bc2db7c2f71f8",
-                "reference": "ee071cc78e55cc3209d52831699bc2db7c2f71f8",
+                "url": "https://api.github.com/repos/romdim/yii2-bootstrap-material/zipball/1576f693c7a07b9bfbfce1636ae1854083037ac2",
+                "reference": "1576f693c7a07b9bfbfce1636ae1854083037ac2",
                 "shasum": ""
             },
             "require": {
@@ -2760,7 +2879,7 @@
                 "yii",
                 "yii2"
             ],
-            "time": "2016-03-17 10:28:16"
+            "time": "2016-07-03 00:31:44"
         },
         {
             "name": "yiisoft/yii2-codeception",

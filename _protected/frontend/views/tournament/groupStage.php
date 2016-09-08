@@ -124,6 +124,7 @@ $currentGroup = null;
         <div class="pull-right">
 
             <?= Html::a('<i class="material-icons">view_headline</i> ' . Yii::t('app', 'Overview'), ['index'], ['class' => 'btn btn-default']) ?>
+            <button class="btn show-seeds"><?= Yii::t('app', 'Seeds') ?></button>
         </div>
     </h1>
     <div class="clearfix"></div>
@@ -137,13 +138,6 @@ $currentGroup = null;
             $group++) { ?>
             <div class="well" id="clone-me<?= $group ?>">
                 <h4><?= Yii::t('app', 'Group') . ' ' . $group ?></h4>
-                <button class="btn zoom-in" data-target="<?= $group ?>"><i class="material-icons zoom-in" data-target="<?= $group ?>">zoom_in</i></button>
-                <button class="btn zoom-out" data-target="<?= $group ?>"><i class="material-icons zoom-out" data-target="<?= $group ?>">zoom_out</i></button>
-                <div class="pull-right">
-                    <button class="btn show-seeds" data-target="<?= $group ?>"><?= Yii::t('app', 'Seeds') ?></button>
-                    <button class="btn clone-tournament" data-target="<?= $group ?>" title="<?= Yii::t('app', 'Fullscreen') ?>"><i
-                            class="material-icons">fullscreen</i></button>
-                </div>
                 <div class="clearfix"></div>
 
                 <div class="row" style="overflow: hidden;">

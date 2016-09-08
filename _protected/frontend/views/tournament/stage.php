@@ -9,6 +9,7 @@
 /* @var $this yii\web\View */
 /* @var $dataProvider frontend\models\TournamentMatchSearch */
 /* @var $treeDataProvider frontend\models\TournamentMatchSearch */
+/* @var $losersTreeDataProvider frontend\models\TournamentMatchSearch */
 /* @var $model frontend\models\Tournament */
 /* @var $isFinalStage boolean */
 
@@ -108,7 +109,7 @@ $this->registerJs($script, View::POS_END);
 
 
 $treeMatchModels = $treeDataProvider->getModels();
-
+$losersTreeModels = $losersTreeDataProvider->getModels();
 $currentRound = null;
 
 
@@ -163,8 +164,53 @@ $currentRound = null;
 
                         <div class="col-xs-12 tournament-tree ">
 
+                                <?php
+                                foreach ($treeMatchModels as $key => $match) {
+                                    /** @var $match \frontend\models\TournamentMatch */
+
+                                    if ($match->round !== $currentRound) {
+                                        if ($currentRound !== null) echo '</div>';
+
+
+                                        echo '<div class="round">';
+
+                                        $currentRound = $match->round;
+                                    }
+
+                                    echo $model->createMatchElement($key, $match);
+
+                                } ?>
+                        </div>
+                        <?php Draggable::end() ?>
+                    </div>
+                </div>
+                <?php if($model->fs_format == Tournament::FORMAT_DOUBLE_ELIMINATION): ?>
+                    <div class="row" style="overflow: hidden;">
+                        <div id="round-title-wrapper" style="width: 2000px;">
+                            <div class="round-title">
                             <?php
-                            foreach ($treeMatchModels as $key => $match) {
+                            foreach ($losersTreeModels as $key => $match) {
+                                /** @var $match \frontend\models\TournamentMatch */
+                                if ($match->round !== $currentRound) {
+                                    echo '<div class="round-title2">' . $match->getRoundName($match->round, $model, 1) . '</div>';
+                                    $currentRound = $match->round;
+                                }
+                            }
+                            $currentRound = null;
+                            ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row tournament-tree-wrapper">
+                        <?php Draggable::begin(['id' => 'draggable-tournament-losers-tree'
+                        ]);
+                        ?>
+
+
+                        <div class="col-xs-12 tournament-losers-tree ">
+
+                            <?php
+                            foreach ($losersTreeModels as $key => $match) {
                                 /** @var $match \frontend\models\TournamentMatch */
 
                                 if ($match->round !== $currentRound) {
@@ -176,14 +222,14 @@ $currentRound = null;
                                     $currentRound = $match->round;
                                 }
 
-                                echo $model->createMatchElement($key, $match);
+                                echo $model->createDEMatchElement($key, $match);
 
                             } ?>
                         </div>
+                        <?php Draggable::end() ?>
                     </div>
-                    <?php Draggable::end() ?>
-                </div>
-
+                    </div>
+                <?php endif ?>
                 <div class="row">
                     <div class="col-xs-12">
                         <table class="centered" width="100%">
@@ -208,11 +254,9 @@ $currentRound = null;
                                 },
                             ]) ?>
                         </table>
-
                     </div>
-
                 </div>
-            <?php else: ?>
+                <?php else: ?>
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="well">
@@ -220,9 +264,9 @@ $currentRound = null;
                         </div>
                     </div>
                 </div>
-            <?php endif ?>
+                <?php endif ?>
+            </div>
         </div>
-
     </div>
 </div>
 

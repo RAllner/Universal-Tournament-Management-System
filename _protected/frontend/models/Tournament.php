@@ -150,13 +150,13 @@ class Tournament extends ActiveRecord
         ];
     }
 
-    public function validateParticipantAdvance ($attribute)
+    public function validateParticipantAdvance($attribute)
     {
         $x = $this->participants_advance;
-        if($this->participants_advance >= $this->participants_compete){
+        if ($this->participants_advance >= $this->participants_compete) {
             $this->addError($attribute, 'The amount of participants that advance have to lower than participants compete.');
         } else {
-            if(!( ($x != 0) && (($x & ($x - 1)) == 0))){
+            if (!(($x != 0) && (($x & ($x - 1)) == 0))) {
                 $this->addError($attribute, 'The amount of participants that advance have to be a power of 2.');
             }
         }
@@ -235,7 +235,8 @@ class Tournament extends ActiveRecord
         return $this->hasMany(Participant::className(), ['tournament_id' => 'id']);
     }
 
-    public function getTournamentLocation(){
+    public function getTournamentLocation()
+    {
         return $this->hasOne(Location::className(), ['id' => 'location']);
     }
 
@@ -461,7 +462,7 @@ class Tournament extends ActiveRecord
      */
     public function getHostedByList()
     {
-        /** @var $user User*/
+        /** @var $user User */
         $user = User::find()->where(['id' => Yii::$app->user->id])->one();
         $array[] = ["id" => -1, "name" => $user->username, "class" => Yii::t('app', 'User')];
 
@@ -506,17 +507,20 @@ class Tournament extends ActiveRecord
      * Check if the Owner is a user or a organisation
      * @return bool
      */
-    public function isUserOwner(){
+    public function isUserOwner()
+    {
         return $val = ($this->hosted_by == -1) ? true : false;
     }
 
-    public function getCreatedBy(){
-        if($this->isUserOwner()){
+    public function getCreatedBy()
+    {
+        if ($this->isUserOwner()) {
             return $this->getUser();
         } else {
             return $this->getOrganisation();
         }
     }
+
     /**
      * Returns the Owner Organisation if defined
      * @return array|null|ActiveRecord
@@ -559,7 +563,7 @@ class Tournament extends ActiveRecord
         if ($rest >= 604800) {
             $weeks = floor($rest / 604800);
             $rest -= $weeks * 604800;
-            if($weeks == 1){
+            if ($weeks == 1) {
                 $countDownString .= $weeks . ' ' . Yii::t('app', 'week');
             } else {
                 $countDownString .= $weeks . ' ' . Yii::t('app', 'weeks');
@@ -569,7 +573,7 @@ class Tournament extends ActiveRecord
         if ($rest >= 86400) {
             $days = floor($rest / 86400);
             $rest -= $days * 86400;
-            if($days == 1){
+            if ($days == 1) {
                 $countDownString .= ', ' . $days . ' ' . Yii::t('app', 'day');
             } else {
                 $countDownString .= ', ' . $days . ' ' . Yii::t('app', 'days');
@@ -577,7 +581,7 @@ class Tournament extends ActiveRecord
         }
         if ($rest >= 3600) {
             $hours = floor($rest / 3600);
-            if($hours == 1){
+            if ($hours == 1) {
                 $countDownString .= ', ' . $hours . ' ' . Yii::t('app', 'hour');
             } else {
                 $countDownString .= ', ' . $hours . ' ' . Yii::t('app', 'hours');
@@ -632,10 +636,9 @@ class Tournament extends ActiveRecord
     {
         $tournamentMatchesCount = $this->getTournamentMatchesCount($id);
         $tournamentFinishedMatchesCount = $this->getTournamentFinishedMatchesCount($id);
-        if($tournamentFinishedMatchesCount > 0){
-            return ($tournamentFinishedMatchesCount/$tournamentMatchesCount)*100;
-        }
-        else {
+        if ($tournamentFinishedMatchesCount > 0) {
+            return ($tournamentFinishedMatchesCount / $tournamentMatchesCount) * 100;
+        } else {
             return 0;
         }
     }
@@ -644,10 +647,11 @@ class Tournament extends ActiveRecord
      * @param $id
      * @return int|string
      */
-    public function getTournamentMatchesCount($id){
+    public function getTournamentMatchesCount($id)
+    {
         return TournamentMatch::find()
             ->where(['tournament_id' => $id])
-            ->andWhere(['>','state', TournamentMatch::MATCH_STATE_CREATED])
+            ->andWhere(['>', 'state', TournamentMatch::MATCH_STATE_CREATED])
             ->count();
     }
 
@@ -655,7 +659,8 @@ class Tournament extends ActiveRecord
      * @param $id
      * @return int|string
      */
-    public function getTournamentFinishedMatchesCount($id){
+    public function getTournamentFinishedMatchesCount($id)
+    {
         return TournamentMatch::find()
             ->where(['tournament_id' => $id])
             ->andWhere(['state' => TournamentMatch::MATCH_STATE_FINISHED])
@@ -684,11 +689,12 @@ class Tournament extends ActiveRecord
      * @param $stage integer
      * @return int|string
      */
-    public function getStageMatchesCount($id, $stage){
+    public function getStageMatchesCount($id, $stage)
+    {
         return TournamentMatch::find()
             ->where(['tournament_id' => $id])
             ->andWhere(['stage' => $stage])
-            ->andWhere(['>','state', TournamentMatch::MATCH_STATE_CREATED])
+            ->andWhere(['>', 'state', TournamentMatch::MATCH_STATE_CREATED])
             ->count();
     }
 
@@ -697,7 +703,8 @@ class Tournament extends ActiveRecord
      * @param $stage integer
      * @return int|string
      */
-    public function getStageFinishedMatchesCount($id, $stage){
+    public function getStageFinishedMatchesCount($id, $stage)
+    {
         return TournamentMatch::find()
             ->where(['tournament_id' => $id])
             ->andWhere(['stage' => $stage])
@@ -705,7 +712,8 @@ class Tournament extends ActiveRecord
             ->count();
     }
 
-    public function getRoundCount(){
+    public function getRoundCount()
+    {
         return ceil(log($this->participants_count, 2));
     }
 
@@ -715,12 +723,13 @@ class Tournament extends ActiveRecord
      * @param $model TournamentMatch
      * @return string Html String for a single match
      */
-    public function createMatchElement ($index, $model){
+    public function createMatchElement($index, $model)
+    {
         $names = $model->getParticipantNames();
         $nameA = $names["A"];
         $nameB = $names["B"];
 
-        if($model->state == TournamentMatch::MATCH_STATE_FINISHED){
+        if ($model->state == TournamentMatch::MATCH_STATE_FINISHED) {
             $winner_A = ($model->winner_id == $model->participant_id_A) ? " m-winner" : " m-loser";
             $winner_B = ($model->winner_id == $model->participant_id_B) ? " m-winner" : " m-loser";
         } else {
@@ -730,20 +739,20 @@ class Tournament extends ActiveRecord
 
 
         $classes = "match";
-        $classes = $index % 2 == 1 ? $classes. " m-bot" : $classes. " m-top";
-        $classes = ($model->round == 1 || $model->losers_round)  ? $classes : $classes . " prereq";
+        $classes = $index % 2 == 1 ? $classes . " m-bot" : $classes . " m-top";
+        $classes = ($model->round == 1 || $model->losers_round) ? $classes : $classes . " prereq";
         $openMatch = ($model->state == TournamentMatch::MATCH_STATE_OPEN) ? " open-match" : "";
         $runningMatch = ($model->state == TournamentMatch::MATCH_STATE_RUNNING) ? " running-match" : "";
 
 
-        if($model->state == TournamentMatch::MATCH_STATE_CREATED){
-            $followWinnerMatchID = explode(',',$model->follow_winner_and_loser_match_ids)[0];
+        if ($model->state == TournamentMatch::MATCH_STATE_CREATED) {
+            $followWinnerMatchID = explode(',', $model->follow_winner_and_loser_match_ids)[0];
             /** @var TournamentMatch $followMatch */
             $followMatch = TournamentMatch::find()
                 ->where(['tournament_id' => $model->tournament_id])
                 ->andWhere(['matchID' => $followWinnerMatchID])
                 ->one();
-            if($index % 2 == 0){
+            if ($index % 2 == 0) {
                 $participantID = $followMatch->participant_id_A;
             } else {
                 $participantID = $followMatch->participant_id_B;
@@ -766,23 +775,23 @@ class Tournament extends ActiveRecord
         /**
          * Detail View of Match. Shown when hover is active
          */
-        $rowA ="";
-        $rowB ="";
-        $scoreArray = explode(',',$model->scores);
-        foreach ($scoreArray as $score){
-            $rowA .= "<td class='".$winner_B."'>".explode('-',$score)[0]."</td>";
-            $rowB .= "<td class='".$winner_A."'>".explode('-',$score)[1]."</td>";
+        $rowA = "";
+        $rowB = "";
+        $scoreArray = explode(',', $model->scores);
+        foreach ($scoreArray as $score) {
+            $rowA .= "<td class='" . $winner_B . "'>" . explode('-', $score)[0] . "</td>";
+            $rowB .= "<td class='" . $winner_A . "'>" . explode('-', $score)[1] . "</td>";
         }
         $scoreAString = "<table><tr>$rowA</tr><tr>$rowB</tr></table>";
 
         $run = ($model->state == TournamentMatch::MATCH_STATE_READY) ? '<i class=\"material-icons\">play_arrow</i>' : '<i class=\"material-icons\">pause</i>';
-        if($model->state == TournamentMatch::MATCH_STATE_READY || $model->state == TournamentMatch::MATCH_STATE_RUNNING){
-            $button_play  =  Html::a(($model->state == TournamentMatch::MATCH_STATE_READY) ? '<i class="material-icons">play_arrow</i>' : '<i class="material-icons">pause</i>', Url::to(['/tournament/match-running', 'id' => $model->tournament_id, 'match_id' => $model->id]), ['class' => 'm-details-button']);
+        if ($model->state == TournamentMatch::MATCH_STATE_READY || $model->state == TournamentMatch::MATCH_STATE_RUNNING) {
+            $button_play = Html::a(($model->state == TournamentMatch::MATCH_STATE_READY) ? '<i class="material-icons">play_arrow</i>' : '<i class="material-icons">pause</i>', Url::to(['/tournament/match-running', 'id' => $model->tournament_id, 'match_id' => $model->id]), ['class' => 'm-details-button']);
             $button_edit = "<div class='m-details-button' title='EDIT' data-toggle='modal' data-target='#myModal$model->id'><i class='material-icons'>mode_edit</i></div>";
         } else {
             $button_play = "";
             $button_edit = "";
-            if($model->state == TournamentMatch::MATCH_STATE_FINISHED && $this->status != Tournament::STATUS_FINISHED){
+            if ($model->state == TournamentMatch::MATCH_STATE_FINISHED && $this->status != Tournament::STATUS_FINISHED) {
                 $button_play = Html::a('<i class="material-icons">undo</i>', Url::to(['@web/tournament/match-undo', 'id' => $model->tournament_id, 'match_id' => $model->id]), ['class' => 'm-details-button']);
             }
         }
@@ -791,25 +800,117 @@ class Tournament extends ActiveRecord
         $score = "<div class='m-details-score'>$scoreAString</div>";
         $details = "<div class='match-details'> $button_edit $button_play $score </div>";
 
-        $content = $matchId . $contentRow1 .$contentRow2 .$details;
+        $content = $matchId . $contentRow1 . $contentRow2 . $details;
 
         $style = $model->losers_round ? " margin-top: 200px" : "";
         return "<div class='$classes' style='$style'>$content</div>";
     }
 
     /**
+     * @param $index integer of the matchkey
+     * @param $model TournamentMatch
+     * @return string Html String for a single match
+     */
+    public function createDEMatchElement($index, $model)
+    {
+        $names = $model->getParticipantNames();
+        $nameA = $names["A"];
+        $nameB = $names["B"];
+
+        if ($model->state == TournamentMatch::MATCH_STATE_FINISHED) {
+            $winner_A = ($model->winner_id == $model->participant_id_A) ? " m-winner" : " m-loser";
+            $winner_B = ($model->winner_id == $model->participant_id_B) ? " m-winner" : " m-loser";
+        } else {
+            $winner_A = "";
+            $winner_B = "";
+        }
+
+
+        $classes = "match";
+        $classes = $index % 2 == 1 ? $classes . " m-bot" : $classes . " m-top";
+        $classes = ($model->round == 1 || $model->losers_round) ? $classes : $classes . " prereq";
+        $openMatch = ($model->state == TournamentMatch::MATCH_STATE_OPEN) ? " open-match" : "";
+        $runningMatch = ($model->state == TournamentMatch::MATCH_STATE_RUNNING) ? " running-match" : "";
+
+
+        if ($model->state == TournamentMatch::MATCH_STATE_CREATED) {
+            $followWinnerMatchID = explode(',', $model->follow_winner_and_loser_match_ids)[0];
+            /** @var TournamentMatch $followMatch */
+            $followMatch = TournamentMatch::find()
+                ->where(['tournament_id' => $model->tournament_id])
+                ->andWhere(['matchID' => $followWinnerMatchID])
+                ->one();
+            if ($index % 2 == 0) {
+                $participantID = $followMatch->participant_id_A;
+            } else {
+                $participantID = $followMatch->participant_id_B;
+            }
+            /**
+             * @var $participant Participant
+             */
+            $participant = Participant::find()
+                ->where(['id' => $participantID])
+                ->one();
+
+
+            return "<div class='$classes opa01'><div class='match-r-double'> </div></div>";
+        }
+        $matchId = "<div class='matchId'>$model->matchID</div>";
+
+        $contentRow1 = "<div class='match-r1 $winner_A $openMatch $runningMatch'><div class='m-id'></div><div class='m-participant'>$nameA</div><div class='m-points'>$model->participant_score_A</div></div>";
+        $contentRow2 = "<div class='match-r2 $winner_B $openMatch $runningMatch'><div class='m-id'></div><div class='m-participant'>$nameB</div><div class='m-points'>$model->participant_score_B</div></div>";
+
+        /**
+         * Detail View of Match. Shown when hover is active
+         */
+        $rowA = "";
+        $rowB = "";
+        $scoreArray = explode(',', $model->scores);
+        foreach ($scoreArray as $score) {
+            $rowA .= "<td class='" . $winner_B . "'>" . explode('-', $score)[0] . "</td>";
+            $rowB .= "<td class='" . $winner_A . "'>" . explode('-', $score)[1] . "</td>";
+        }
+        $scoreAString = "<table><tr>$rowA</tr><tr>$rowB</tr></table>";
+
+        $run = ($model->state == TournamentMatch::MATCH_STATE_READY) ? '<i class=\"material-icons\">play_arrow</i>' : '<i class=\"material-icons\">pause</i>';
+        if ($model->state == TournamentMatch::MATCH_STATE_READY || $model->state == TournamentMatch::MATCH_STATE_RUNNING) {
+            $button_play = Html::a(($model->state == TournamentMatch::MATCH_STATE_READY) ? '<i class="material-icons">play_arrow</i>' : '<i class="material-icons">pause</i>', Url::to(['/tournament/match-running', 'id' => $model->tournament_id, 'match_id' => $model->id]), ['class' => 'm-details-button']);
+            $button_edit = "<div class='m-details-button' title='EDIT' data-toggle='modal' data-target='#myModal$model->id'><i class='material-icons'>mode_edit</i></div>";
+        } else {
+            $button_play = "";
+            $button_edit = "";
+            if ($model->state == TournamentMatch::MATCH_STATE_FINISHED && $this->status != Tournament::STATUS_FINISHED) {
+                $button_play = Html::a('<i class="material-icons">undo</i>', Url::to(['@web/tournament/match-undo', 'id' => $model->tournament_id, 'match_id' => $model->id]), ['class' => 'm-details-button']);
+            }
+        }
+
+
+        $score = "<div class='m-details-score'>$scoreAString</div>";
+        $details = "<div class='match-details'> $button_edit $button_play $score </div>";
+
+        $content = $matchId . $contentRow1 . $contentRow2 . $details;
+
+        //$style = ($model->losers_round)? " margin-top: 200px" : "";
+        $style = "";
+        return "<div class='$classes' style='$style'>$content</div>";
+    }
+
+
+
+    /**
      * @param $stage integer
      * @return array TournamentMatch
      */
-    public function getTreeMatches($stage, $id){
+    public function getTreeMatches($stage, $id)
+    {
 
         $query = TournamentMatch::find();
-        $query->where(['tournament_id' => 6]);
+        $query->where(['tournament_id' => $id]);
         $query->where(['stage' => $stage]);
         /** @var ActiveDataProvider $dataProvidernew */
         $dataProvidernew = new ActiveDataProvider([
             'query' => $query,
-            'sort'=> ['defaultOrder' => ['round' => SORT_ASC, 'id' => SORT_ASC]],
+            'sort' => ['defaultOrder' => ['round' => SORT_ASC, 'id' => SORT_ASC]],
             'pagination' => [
                 'pageSize' => 100,
             ]
@@ -820,7 +921,8 @@ class Tournament extends ActiveRecord
     /**
      * @return integer
      */
-    public function getGroupCount(){
+    public function getGroupCount()
+    {
         return ceil($this->participants_count / $this->participants_compete);
     }
 

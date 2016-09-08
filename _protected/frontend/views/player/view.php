@@ -10,7 +10,7 @@ use yii\widgets\DetailView;
 /* @var $model frontend\models\Player */
 
 $this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Player'), 'url' => ['own-index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Player profiles'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 $photoInfo = $model->PhotoInfo;
 $photo = Html::img($photoInfo['url'], ['alt' => $photoInfo['alt'], 'style' => 'width:100%']);
@@ -18,7 +18,20 @@ $options = ['data-lightbox' => 'profile-image', 'data-title' => $photoInfo['alt'
 ?>
 <div class="player-view">
 
-    <h1><?= Html::encode($this->title). '#'.$model->running_nr ?>
+    <h1>
+        <?php if ($model->nation != 0): ?>
+            <?=
+
+            \modernkernel\flagiconcss\Flag::widget([
+                'tag' => 'span', // flag tag
+                'country' => $model->getNationShort($model->nation), // where xx is the ISO 3166-1-alpha-2 code of a country,
+                'squared' => false, // set to true if you want to have a squared version flag
+                'options' => [] // tag html options
+            ]);
+            ?>
+        <?php endif ?>
+        <?= Html::encode($this->title) . '#' . $model->running_nr ?>
+
         <div class="pull-right">
             <?php if (Yii::$app->user->can('updatePlayer', ['model' => $model])): ?>
 
@@ -26,43 +39,122 @@ $options = ['data-lightbox' => 'profile-image', 'data-title' => $photoInfo['alt'
 
             <?php endif ?>
 
-            <?php if (Yii::$app->user->can('deletePlayer', ['model' => $model])): ?>
-
-                <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
-                    'class' => 'btn btn-danger',
-                    'data' => [
-                        'confirm' => Yii::t('app', 'Are you sure you want to delete this article?'),
-                        'method' => 'post',
-                    ],
-                ]) ?>
-
-            <?php endif ?>
-            <?= Html::a('<i class="material-icons">view_headline</i> ' . Yii::t('app', 'Overview'), ['own-index'], ['class' => 'btn btn-default']) ?>
+            <?= Html::a('<i class="material-icons">view_headline</i> ' . Yii::t('app', 'Overview'), ['own-index'], ['class' => 'btn btn-warning']) ?>
         </div>
     </h1>
+    <div class="clearfix"></div>
+
     <div class="row">
-    <div class="col-lg-5 ">
-        <figure style="text-align: center">
-            <?= Html::a($photo, $photoInfo['url'], $options) ?>
-        </figure>
-    <div class="well bs-component">
+        <div class="col-md-2 ">
+            <figure style="text-align: center">
+                <?= Html::a($photo, $photoInfo['url'], $options) ?>
 
-        <p class="time">
-            <i class="material-icons">account_circle</i> <?= Yii::t('app', 'Owner ') . ' '. $model->user->username ?>
-            <i class="material-icons">schedule</i> <?= Yii::t('app', 'Entered ') . ' ' . date('d.m.Y', $model->created_at) ?>
-        </p>
-        <h3>Teams</h3>
-        <?php
-            foreach ($model->teams as $team){
-                $teamPhotoInfo = $team->PhotoInfo;
-                $teamphoto = Html::img($teamPhotoInfo['url'], ['alt' => $teamPhotoInfo['alt'], 'style' => 'width:30px; margin: 5px']);
-                $member = $model->getTeamMemberFrom($team->id);
-                echo $teamphoto;
-                echo Html::a($team->name, Url::to(['team/view', 'id' => $team->id])).' - '.Yii::t('app','Joined').' '. date('d.m.Y',$member->created_at).'</br>';
-        }
-        ?>
+            </figure>
 
-    </div>
-    </div>
+        </div>
+        <div class="col-md-10">
+            <div>
+
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="player-profile-nav" class="active"><a href="#profile" aria-controls="profile" role="tab"
+                                                                    data-toggle="tab"><?= Yii::t('app', 'Profile') ?></a>
+                    </li>
+                    <li role="player-profile-nav"><a href="#tournaments" aria-controls="messages" role="tab"
+                                                     data-toggle="tab"><?= Yii::t('app', 'Tournaments') ?></a></li>
+                    <?php if (!is_null($model->stream)): ?>
+                        <li role="player-profile-nav"><a href="#livestream" aria-controls="messages" role="tab"
+                                                         data-toggle="tab"><?= Yii::t('app', 'Twitch stream') ?></a>
+                        </li>
+                    <?php endif ?>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active fade in" id="profile">
+                        <div class="well bs-component">
+                            <div class="row">
+                                <div class="col-md-7">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading"><?= Yii::t('app', 'Personal information') ?></div>
+                                        <ul class="list-group">
+                                            <li class="list-group-item">
+                                                <i class="material-icons">schedule</i>
+                                                <?= Yii::t('app', 'Created at') . ': ' . date('d.m.Y', $model->created_at). ' '.Yii::t('app','Last update'). ': '. date('d.m.Y', $model->updated_at) ?>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <i class="material-icons">perm_identity</i>
+                                                <?= Yii::t('app', 'Gender') ?>:
+                                                <?= $model->genderName ?>
+                                                <?= Yii::t('app', 'Age') ?>:
+                                                <?= $model->age ?>
+
+                                            </li>
+
+                                            <li class="list-group-item">
+                                                <i class="material-icons">language</i>
+                                                <?= Yii::t('app', 'Languages'). ': '. $model->languages ?>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <i class="material-icons">link</i>
+                                                <?= Yii::t('app', 'Website')?>:
+                                                <a href="<?= $model->website ?>"><?=$model->website ?></a>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <i class="material-icons">videogame_asset</i>
+                                                <?= Yii::t('app', 'Games')?>:
+                                                <a href="<?= $model->website ?>"><?=$model->games ?></a>
+                                            </li>
+                                        </ul>
+                                        <div class="panel-body">
+
+                                                <b><?= Yii::t('app', 'Description')?>:</b>
+                                                <?= $model->description ?>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <h3>Teams</h3>
+                                    <?php
+                                    foreach ($model->teams as $team) {
+                                        $teamPhotoInfo = $team->PhotoInfo;
+                                        $teamphoto = Html::img($teamPhotoInfo['url'], ['alt' => $teamPhotoInfo['alt'], 'style' => 'width:30px; margin: 5px']);
+                                        $member = $model->getTeamMemberFrom($team->id);
+                                        echo $teamphoto;
+                                        echo Html::a($team->name, Url::to(['team/view', 'id' => $team->id])) . ' - ' . Yii::t('app', 'Joined') . ' ' . date('d.m.Y', $member->created_at) . '</br>';
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="tournaments">
+                        <div class="well bs-component">
+                            Comming
+
+                        </div>
+                    </div>
+                    <?php if (!is_null($model->stream)): ?>
+                        <div role="tabpanel" class="tab-pane fade" id="livestream">
+                            <div class="well bs-component">
+                                <iframe
+                                    src="http://player.twitch.tv/?channel={<?= $model->stream ?>}"
+                                    height="720"
+                                    width="100%"
+                                    frameborder="0"
+                                    scrolling="no"
+                                    allowfullscreen="true">
+                                </iframe>
+                            </div>
+                        </div>
+                    <?php endif ?>
+                </div>
+
+            </div>
+
+        </div>
     </div>
 </div>

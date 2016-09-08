@@ -15,7 +15,7 @@ use yii\widgets\ActiveForm;
 
         <?= $form->field($user, 'username') ?>
         
-        <?= $form->field($user, 'email') ?>
+        <?= $form->field($user, 'email')->hint('example@example.de') ?>
 
         <?php if ($user->scenario === 'create'): ?>
             <?= $form->field($user, 'password')->widget(PasswordInput::classname(), []) ?>
@@ -24,6 +24,19 @@ use yii\widgets\ActiveForm;
                      ->passwordInput(['placeholder' => Yii::t('app', 'New pwd ( if you want to change it )')]) 
             ?>       
         <?php endif ?>
+    <div class="form-group">
+        <label class="control-label" for="user-username"><?= Yii::t('app', 'Language') ?></label>
+        <div class="clearfix"></div>
+        <?= \lajax\languagepicker\widgets\LanguagePicker::widget([
+            'skin' => \lajax\languagepicker\widgets\LanguagePicker::SKIN_BUTTON,
+            'size' => \lajax\languagepicker\widgets\LanguagePicker::SIZE_LARGE
+        ]); ?>
+
+        <div class="hint-block"><?= Yii::t('app', 'Onchange the site will reload!')?></div>
+    </div>
+
+
+
 
     <div class="row">
     <div class="col-lg-6">

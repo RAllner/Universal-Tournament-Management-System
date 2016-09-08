@@ -20,7 +20,7 @@ $options = ['data-title' => $photoInfo['alt']];
         <div class="media tournament">
             <div class="media-left">
                 <a href="<?= Url::to(['tournament/view', 'id' => $model->id]) ?>">
-                    <img class="media-object img-circle" style="width:100px" src="<?= $photoInfo['url'] ?>"
+                    <img class="media-object img-circle" style="width:70px" src="<?= $photoInfo['url'] ?>"
                          alt="<?= $model->name ?>">
                 </a>
             </div>
@@ -37,7 +37,7 @@ $options = ['data-title' => $photoInfo['alt']];
                     </a>
 
                 </h3>
-                <p>
+                <p class="tournament-index-text">
                     <i class="material-icons">info</i>
                     <?= $model->game->name ?>:
                     <?php

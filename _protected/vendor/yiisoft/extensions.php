@@ -111,15 +111,6 @@ return array (
       '@yii/materialicons' => $vendorDir . '/mervick/yii2-material-design-icons',
     ),
   ),
-  'romdim/yii2-bootstrap-material' => 
-  array (
-    'name' => 'romdim/yii2-bootstrap-material',
-    'version' => '9999999-dev',
-    'alias' => 
-    array (
-      '@romdim/bootstrap/material' => $vendorDir . '/romdim/yii2-bootstrap-material',
-    ),
-  ),
   'rmrevin/yii2-fontawesome' => 
   array (
     'name' => 'rmrevin/yii2-fontawesome',
@@ -316,6 +307,33 @@ return array (
     'alias' => 
     array (
       '@yii/jui' => $vendorDir . '/yiisoft/yii2-jui',
+    ),
+  ),
+  'modernkernel/yii2-flag-icon-css' => 
+  array (
+    'name' => 'modernkernel/yii2-flag-icon-css',
+    'version' => '1.0.0.0',
+    'alias' => 
+    array (
+      '@modernkernel/flagiconcss' => $vendorDir . '/modernkernel/yii2-flag-icon-css',
+    ),
+  ),
+  'romdim/yii2-bootstrap-material' => 
+  array (
+    'name' => 'romdim/yii2-bootstrap-material',
+    'version' => '9999999-dev',
+    'alias' => 
+    array (
+      '@romdim/bootstrap/material' => $vendorDir . '/romdim/yii2-bootstrap-material',
+    ),
+  ),
+  'lajax/yii2-language-picker' => 
+  array (
+    'name' => 'lajax/yii2-language-picker',
+    'version' => '1.2.0.0',
+    'alias' => 
+    array (
+      '@lajax/languagepicker' => $vendorDir . '/lajax/yii2-language-picker',
     ),
   ),
 );

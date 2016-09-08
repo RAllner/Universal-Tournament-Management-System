@@ -2,8 +2,22 @@
 return [
     'name' => 'BarCraft HL',
     'language' => 'de',
+    'bootstrap' => ['languagepicker'],
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'components' => [
+        'languagepicker' => [
+            'class' => 'lajax\languagepicker\Component',
+            'languages' => ['de', 'en'],         // List of available languages (icons only)
+            'cookieName' => 'language',                         // Name of the cookie.
+            'expireDays' => 64,                                 // The expiration time of the cookie is 64 days.
+            'callback' => function() {
+                if (!\Yii::$app->user->isGuest) {
+                    $user = \Yii::$app->user->identity;
+                    $user->language = \Yii::$app->language;
+                    $user->save();
+                }
+            }
+        ],
         'assetManager' => [
             'bundles' => [
                 // we will use bootstrap css from our theme

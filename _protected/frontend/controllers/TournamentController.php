@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use DateTime;
 use frontend\models\Participant;
 use frontend\models\TournamentMatch;
 use frontend\models\TournamentMatchSearch;
@@ -86,8 +87,9 @@ class TournamentController extends FrontendController
     public function actionStage($id)
     {
         $searchModel = new TournamentMatchSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $id, Tournament::STAGE_FS, false);
-        $treeDataProvider = $searchModel->search(Yii::$app->request->queryParams, $id, Tournament::STAGE_FS, true);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $id, Tournament::STAGE_FS, false, null, false);
+        $treeDataProvider = $searchModel->search(Yii::$app->request->queryParams, $id, Tournament::STAGE_FS, true, null, false);
+        $losersTreeDataProvider = $searchModel->search(Yii::$app->request->queryParams, $id, Tournament::STAGE_FS, true, null, true);
         $model = $this->findModel($id);
         $isFinalStage = ($model->stage_type == Tournament::STAGE_TYPE_SINGLE_STAGE) ? false : true;
         return $this->render('stage', [
@@ -95,6 +97,7 @@ class TournamentController extends FrontendController
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'treeDataProvider' => $treeDataProvider,
+            'losersTreeDataProvider' => $losersTreeDataProvider,
             'isFinalStage' => $isFinalStage,
         ]);
     }
@@ -139,7 +142,9 @@ class TournamentController extends FrontendController
      */
     public function actionReportMatch($id)
     {
+        /** @var TournamentMatch $model */
         $model = TournamentMatch::find()->where(['id' => $id])->one();
+        $model->updated_at = time();
         /** @var $model TournamentMatch */
         if (Yii::$app->user->can('updateTournament', ['model' => $model])) {
             if ($model->load(Yii::$app->request->post())) {
@@ -147,8 +152,8 @@ class TournamentController extends FrontendController
                 /** Check if the match is finished, and the results can be updated to the participants */
                 if ((!is_null($model->winner_id) && !is_null($model->loser_id)) && ($model->winner_id != "") && ($model->loser_id != "")) {
                     $model->state = TournamentMatch::MATCH_STATE_FINISHED;
-
-
+                    $date = new DateTime();
+                    $model->finished_at = $date->format('Y-m-d H:i:s');
                     /** @var Participant $winnerParticipant */
                     $winnerParticipant = Participant::find()
                         ->where(['tournament_id' => $model->tournament_id])
@@ -195,6 +200,7 @@ class TournamentController extends FrontendController
                             } else {
                                 $loserMatch->participant_id_B = $model->loser_id;
                             }
+                            /** When both participants are set, set the match state to ready */
                             if (!is_null($loserMatch->participant_id_A) && !is_null($loserMatch->participant_id_B)) {
                                 $loserMatch->state = TournamentMatch::MATCH_STATE_READY;
                             } else if (!is_null($loserMatch->participant_id_A) || !is_null($loserMatch->participant_id_B))
@@ -272,6 +278,7 @@ class TournamentController extends FrontendController
      */
     public function actionMatchRunning($id, $match_id)
     {
+        $date = new DateTime();
         /** @var TournamentMatch $match */
         $match = TournamentMatch::find()
             ->where(['tournament_id' => $id])
@@ -279,8 +286,10 @@ class TournamentController extends FrontendController
             ->one();
         if ($match->state == TournamentMatch::MATCH_STATE_READY) {
             $match->state = TournamentMatch::MATCH_STATE_RUNNING;
-        } else {
+            $match->begin_at = $date->format('Y-m-d H:i:s');
+        } elseif ($match->state == TournamentMatch::MATCH_STATE_RUNNING) {
             $match->state = TournamentMatch::MATCH_STATE_READY;
+            $match->begin_at = null;
         }
         $match->save();
         return $this->redirect(Yii::$app->request->referrer);
@@ -295,10 +304,59 @@ class TournamentController extends FrontendController
      */
     public function actionMatchUndo($id, $match_id)
     {
-        /** Revert Changes TODO!*/
+        if($this->chainUndo($id, $match_id, null)){
+            Yii::$app->session->setFlash('success', 'Undo complete');
+        }
         return $this->redirect(Yii::$app->request->referrer);
     }
 
+    /**
+     * Recursive function to undo all follow matches of a match
+     * @param $id
+     * @param $match_id string
+     * @param $qualificationID string
+     * @return bool
+     */
+    public function chainUndo($id, $match_id, $qualificationID){
+        /** @var TournamentMatch $match */
+        $match = TournamentMatch::find()
+            ->where(['tournament_id' => $id])
+            ->andWhere(['id' => $match_id])
+            ->one();
+
+
+        if(!is_null($qualificationID)){
+            if (explode(',', $match->qualification_match_ids)[0] == $qualificationID) {
+                $match->participant_id_A = 0;
+            } else {
+                $match->participant_id_B = 0;
+            }
+        }
+
+        if ($match->state == TournamentMatch::MATCH_STATE_FINISHED) {
+            $followMatchIds = explode(',',$match->follow_winner_and_loser_match_ids);
+
+            if(count($followMatchIds) > 0){
+                // if the follow match is in the final Stage: nothing to do here because in this case the final stage did not start already, otherwise undo that game too.
+                if(strcmp($followMatchIds[0],"FS")!==0){
+                    if($this->chainUndo($id, $followMatchIds[0], $match_id)){
+
+                    }
+                }
+                if(count($followMatchIds) == 2){
+                    $this->chainUndo($id, $followMatchIds[1], $match_id);
+                }
+            }
+            $match->state = TournamentMatch::MATCH_STATE_OPEN;
+            $match->winner_id = NULL;
+            $match->loser_id = NULL;
+        }
+
+        $match->participant_score_A = 0;
+        $match->participant_score_B = 0;
+        $match->scores = "0-0";
+        return true;
+    }
 
     /**
      * Creates a new Tournament model.
@@ -617,7 +675,7 @@ class TournamentController extends FrontendController
         // Check if the stage is a group or final stage
         if ($stage == Tournament::STAGE_GS) {
             $groupCount = ceil($model->participants_count / $model->participants_compete);
-            $matchesPerGroup = $model->participants_compete - $model->participants_advance;
+            //$matchesPerGroup = $model->participants_compete - $model->participants_advance;
             $maxRounds = ceil(log($model->participants_compete, 2));
             $maxMatches = pow(2, $maxRounds) - 1;
             $notPlayedRounds = log($model->participants_advance, 2);
@@ -629,7 +687,7 @@ class TournamentController extends FrontendController
                     $groupParticipantCount = $model->participants_count - (($groupCount - 1)*$model->participants_compete);
                 }
                 $this->clearSEBracketSeeds($model, $stage, $groupParticipantCount, $group);
-                $this->fillParticipantIDs($model, $stage, $group);
+                $this->fillParticipantIDs($model, $stage, $group, Tournament::FORMAT_SINGLE_ELIMINATION);
             }
         }
         if ($stage == Tournament::STAGE_FS) {
@@ -639,7 +697,7 @@ class TournamentController extends FrontendController
 
                 $this->createSEBracket($rounds, $rounds, null, $maxMatches, $stage, $time, 1, $maxMatches, $tournament_id, 1, null, 0);
                 $this->clearSEBracketSeeds($model, $stage, $model->participants_count, null);
-                $this->fillParticipantIDs($model, $stage, null);
+                $this->fillParticipantIDs($model, $stage, null, Tournament::FORMAT_SINGLE_ELIMINATION);
                 if ($model->fs_third_place == 1 && $stage == Tournament::STAGE_FS) {
                     $this->createThirdPlaceMatch($rounds, $rounds, $maxMatches, $time, 1, $maxMatches, $tournament_id);
                 }
@@ -656,7 +714,7 @@ class TournamentController extends FrontendController
 
                 $this->createSEBracket($rounds, $rounds, null, $maxMatches, $stage, $time, 1, $maxMatches, $tournament_id, 1, null, 0);
                 $this->clearSEBracketSeeds($model, $stage, $advancedParticipantCount, null);
-                $this->fillParticipantIDs($model, $stage, null);
+                $this->fillParticipantIDs($model, $stage, null, Tournament::FORMAT_SINGLE_ELIMINATION);
                 if ($model->fs_third_place == 1 && $stage == Tournament::STAGE_FS) {
                     $this->createThirdPlaceMatch($rounds, $rounds, $maxMatches, $time, 1, $maxMatches, $tournament_id);
                 }
@@ -761,6 +819,8 @@ class TournamentController extends FrontendController
         $match->created_at = $time;
         $match->updated_at = $time;
         $match->tournament_id = $tournament_id;
+
+        // Calculating the seed of the opponent. With the diff, which is the players in the round - seed + 1.
         $difference = (2 * pow(2, $rounds - $currentRound)) + 1 - $seed;
         if ($seed % 2 == 0) {
             $match->seed_A = $difference;
@@ -821,8 +881,7 @@ class TournamentController extends FrontendController
         //$roundOneParticipants = $difference * 2;
 
         //First Round: delete all Seeds which are higher than ParticipantCount
-        //Delete also the opponent, he is already waiting in the next round
-        //TODO: SONDERFALL Nur ein Spieler in der Gruppe. Match erstellen und nicht beide seeds nullen State auf Ready
+        //Delete also the the seed of the opponent, he is already waiting in the next round
         if ($participant_count == 1) {
             $roundOneMatches = TournamentMatch::find()
                 ->where(['or', ['seed_A' => $participant_count], ['seed_B' => $participant_count]])
@@ -839,6 +898,7 @@ class TournamentController extends FrontendController
             }
         } else {
 
+            /** If match will not happen in round one of the group stage set it to finished and go on */
             if($stage == Tournament::STAGE_GS){
                 $roundOneMatchesA = TournamentMatch::find()
                     ->where(['>', 'seed_A', $participant_count])
@@ -846,6 +906,7 @@ class TournamentController extends FrontendController
                     ->andWhere(['tournament_id' => $model->id])
                     ->andWhere(['stage' => $stage])
                     ->andWhere(['groupID' => $group])
+                    ->andWhere(['losers_round' => 0])
                     ->all();
                 foreach ($roundOneMatchesA as $match) {
                     /** @var $match TournamentMatch */
@@ -860,6 +921,7 @@ class TournamentController extends FrontendController
                     ->andWhere(['tournament_id' => $model->id])
                     ->andWhere(['stage' => $stage])
                     ->andWhere(['groupID' => $group])
+                    ->andWhere(['losers_round' => 0])
                     ->all();
                 foreach ($roundOneMatchesB as $match) {
                     /** @var $match TournamentMatch */
@@ -868,12 +930,14 @@ class TournamentController extends FrontendController
                     $match->save();
                 }
             } else {
+
                 $roundOneMatches = TournamentMatch::find()
                     ->where(['or', ['>', 'seed_A', $participant_count], ['>', 'seed_B', $participant_count]])
                     ->andWhere(['round' => 1])
                     ->andWhere(['tournament_id' => $model->id])
                     ->andWhere(['stage' => $stage])
                     ->andWhere(['groupID' => $group])
+                    ->andWhere(['losers_round' => 0])
                     ->all();
                 foreach ($roundOneMatches as $match) {
                     /** @var $match TournamentMatch */
@@ -883,7 +947,6 @@ class TournamentController extends FrontendController
                     $match->save();
                 }
             }
-
         }
 
 
@@ -941,9 +1004,11 @@ class TournamentController extends FrontendController
      * Fill the bracket with Participants.
      * @param $model Tournament
      * @param $stage integer
+     * @param $group
+     * @param $stageFormat
      */
     public
-    function fillParticipantIDs($model, $stage, $group)
+    function fillParticipantIDs($model, $stage, $group, $stageFormat)
     {
 
         // Fill in Participant IDs for Final Stage
@@ -968,6 +1033,7 @@ class TournamentController extends FrontendController
                         $match->participant_id_A = $seedMap[$match->seed_A - 1];
                         $match->participant_id_B = $seedMap[$match->seed_B - 1];
                         $match->state = TournamentMatch::MATCH_STATE_READY;
+
                     }
                     if (!is_null($match->seed_A)) {
                         $match->participant_id_A = $seedMap[$match->seed_A - 1];
@@ -1069,6 +1135,75 @@ class TournamentController extends FrontendController
                 }
             }
         }
+
+        if($stageFormat == Tournament::FORMAT_DOUBLE_ELIMINATION){
+            $losersBracketMatchesRoundOne = TournamentMatch::find()
+                ->where(['tournament_id' => $model->id])
+                ->andWhere(['groupID' => $group])
+                ->andWhere(['stage' => $stage])
+                ->andWhere(['losers_round' => 1])
+                ->andWhere(['round' => 1])
+                ->all();
+
+            foreach ($losersBracketMatchesRoundOne as $match){
+                $qualifyingMatchIDs = explode(',', $match->qualification_match_ids);
+
+                $upperQualifyingMatchExists = TournamentMatch::find()
+                    ->where(['tournament_id' => $model->id])
+                    ->andWhere(['matchID'=> $qualifyingMatchIDs[0]])
+                    ->andWhere(['stage'=> $stage])
+                    ->andWhere(['groupID'=> $group])
+                    ->andWhere(['state' => TournamentMatch::MATCH_STATE_READY])
+                    ->exists();
+                $lowerQualifyingMatchExists = TournamentMatch::find()
+                    ->where(['tournament_id' => $model->id])
+                    ->andWhere(['matchID'=> $qualifyingMatchIDs[1]])
+                    ->andWhere(['stage'=> $stage])
+                    ->andWhere(['groupID'=> $group])
+                    ->andWhere(['state' => TournamentMatch::MATCH_STATE_READY])
+                    ->exists();
+                if($upperQualifyingMatchExists && $lowerQualifyingMatchExists){
+                    $match->state = TournamentMatch::MATCH_STATE_OPEN;
+                    $match->save();
+                } elseif ($upperQualifyingMatchExists && $lowerQualifyingMatchExists){
+                    $match->state = TournamentMatch::MATCH_STATE_DIRECT_ADVANCE;
+                }
+            }
+            $losersBracketMatchesRoundTwo = TournamentMatch::find()
+                ->where(['tournament_id' => $model->id])
+                ->andWhere(['groupID' => $group])
+                ->andWhere(['stage' => $stage])
+                ->andWhere(['losers_round' => 1])
+                ->andWhere(['round' => 2])
+                ->all();
+
+            foreach ($losersBracketMatchesRoundTwo as $match){
+                $qualifyingMatchIDs = explode(',', $match->qualification_match_ids);
+                $upperQualifyingMatchExists = TournamentMatch::find()
+                    ->where(['tournament_id' => $model->id])
+                    ->andWhere(['matchID'=> $qualifyingMatchIDs[0]])
+                    ->andWhere(['stage'=> $stage])
+                    ->andWhere(['groupID'=> $group])
+                    ->andWhere(['>','state', TournamentMatch::MATCH_STATE_CREATED])
+                    ->exists();
+                $lowerQualifyingMatchExists = TournamentMatch::find()
+                    ->where(['tournament_id' => $model->id])
+                    ->andWhere(['matchID'=> $qualifyingMatchIDs[1]])
+                    ->andWhere(['stage'=> $stage])
+                    ->andWhere(['groupID'=> $group])
+                    ->andWhere(['>','state', TournamentMatch::MATCH_STATE_CREATED])
+                    ->exists();
+                if($upperQualifyingMatchExists || $lowerQualifyingMatchExists){
+                    $match->state = TournamentMatch::MATCH_STATE_OPEN;
+                } else {
+                    $match->seed_A = $upperQualifyingMatchExists;
+                    $match->seed_B = $lowerQualifyingMatchExists;
+
+                }
+                $match->save();
+
+            }
+        }
     }
 
     /**
@@ -1150,8 +1285,266 @@ class TournamentController extends FrontendController
     public
     function createDoubleEliminationStage($model, $stage)
     {
+        // Get the current time for the match timestamp
+        $time = time();
+        $tournament_id = $model->id;
+        //$matchCount = $model->participants_count - 1;
+        // Check if the stage is a group or final stage
+        if ($stage == Tournament::STAGE_GS) {
+            $groupCount = ceil($model->participants_count / $model->participants_compete);
+            $maxRounds = ceil(log($model->participants_compete, 2));
+            $maxMatches = pow(2, $maxRounds) - 1;
+            $notPlayedRounds = log($model->participants_advance, 2);
 
+            // Counter used to track the next id of a match that drops a player to the losers bracket. Starting with the winners bracket final.
+            $winnersBracketIDCounter = $maxMatches;
+            for ($group = 1; $group <= $groupCount; $group++) {
+                $this->createDEWinnerBracket($maxRounds, $maxRounds, null, $maxMatches, $stage, $time, 1, $maxMatches, $tournament_id, 1, $group, $notPlayedRounds);
+                $this->createDELosersBracket($maxRounds, $maxRounds, null, $maxMatches, $stage, $time, 1, $maxMatches, $tournament_id, null, $group, $notPlayedRounds, $winnersBracketIDCounter);
+                $groupParticipantCount = $model->participants_compete;
+                if ($group == $groupCount) {
+                    $groupParticipantCount = $model->participants_count - (($groupCount - 1)*$model->participants_compete);
+                }
+                $this->clearSEBracketSeeds($model, $stage, $groupParticipantCount, $group);
+                $this->fillParticipantIDs($model, $stage, $group, Tournament::FORMAT_DOUBLE_ELIMINATION);
+            }
+        }
+        if ($stage == Tournament::STAGE_FS) {
+            if ($model->stage_type == Tournament::STAGE_TYPE_SINGLE_STAGE) {
+                // in the winners bracket
+                $rounds = ceil(log($model->participants_count, 2));
+                $maxMatches = pow(2, $rounds) - 1;
+
+
+                $this->createDEWinnerBracket($rounds, $rounds, null, $maxMatches, $stage, $time, 1, $maxMatches, $tournament_id, 1, null, 0);
+
+                // in the losers bracket
+                $rounds = ($rounds*2) - 2;
+                // Counter used to track the next id of a match that drops a player to the losers bracket. Starting with the winners bracket final.
+                $winnersBracketIDCounter = $maxMatches;
+                $this->createDELosersBracket($rounds, $rounds, null, $maxMatches-1, $stage, $time, 1, $tournament_id, null, null, 0, $winnersBracketIDCounter);
+                $this->clearSEBracketSeeds($model, $stage, $model->participants_count, null);
+                $this->fillParticipantIDs($model, $stage, null, Tournament::FORMAT_DOUBLE_ELIMINATION);
+
+                //TODO: Grandfinal Options!
+            } else {
+                $advancedParticipantCount = TournamentMatch::find()
+                    ->where(['tournament_id' => $model->id])
+                    ->andWhere(['stage' => Tournament::STAGE_GS])
+                    ->andWhere(['follow_winner_and_loser_match_ids' => 'FS'])
+                    ->andWhere(['state' => TournamentMatch::MATCH_STATE_FINISHED])
+                    ->count();
+
+                $rounds = ceil(log($advancedParticipantCount, 2));
+                $maxMatches = pow(2, $rounds) - 1;
+
+                $this->createSEBracket($rounds, $rounds, null, $maxMatches, $stage, $time, 1, $maxMatches, $tournament_id, 1, null, 0);
+                $this->clearSEBracketSeeds($model, $stage, $advancedParticipantCount, null);
+                $this->fillParticipantIDs($model, $stage, null, Tournament::FORMAT_DOUBLE_ELIMINATION);
+                if ($model->fs_third_place == 1 && $stage == Tournament::STAGE_FS) {
+                    $this->createThirdPlaceMatch($rounds, $rounds, $maxMatches, $time, 1, $maxMatches, $tournament_id);
+                }
+            }
+        }
     }
+
+
+    /**
+     * Creates an empty Single Elimination Tree recursive
+     *
+     * @param $rounds integer
+     * @param $currentRound integer
+     * @param $fatherID integer
+     * @param $id integer
+     * @param $stage integer
+     * @param $time integer
+     * @param $innerRoundID integer
+     * @param $maxMatches integer
+     * @param $tournament_id integer
+     * @param $seed integer
+     * @param $group integer
+     * @param $notPlayedRounds integer
+     * @return bool
+     */
+    public
+    function createDEWinnerBracket($rounds, $currentRound, $fatherID, $id, $stage, $time, $innerRoundID, $maxMatches, $tournament_id, $seed, $group, $notPlayedRounds)
+    {
+        /** @var TournamentMatch $match */
+        $match = new TournamentMatch();
+        $match->matchID = (string)$id;
+        $match->groupID = $group;
+        $match->stage = $stage;
+        $match->round = $currentRound;
+        $match->follow_winner_and_loser_match_ids = (string)$fatherID;
+        $match->created_at = $time;
+        $match->updated_at = $time;
+        $match->tournament_id = $tournament_id;
+
+        // Calculating the seed of the opponent. With the diff, which is the players in the round - seed + 1.
+        $difference = (2 * pow(2, $rounds - $currentRound)) + 1 - $seed;
+        if ($seed % 2 == 0) {
+            $match->seed_A = $difference;
+            $match->seed_B = $seed;
+        } else {
+            $match->seed_A = $seed;
+            $match->seed_B = $difference;
+        }
+
+        if ($currentRound == 1) {
+            if ($match->save()) {
+                return true;
+            } else {
+                Yii::error($match->getErrors());
+                return false;
+            }
+        }
+        $innerIdUpperChild = ($innerRoundID * 2) - 1;
+        $innerIdLowerChild = ($innerRoundID * 2);
+        $firstIndexOfRound = $maxMatches - (pow(2, $rounds - ($currentRound - 2)) - 1);
+        $idUpperChild = $firstIndexOfRound + $innerIdUpperChild;
+        $idLowerChild = $firstIndexOfRound + $innerIdLowerChild;
+        $match->qualification_match_ids = $idUpperChild . ',' . $idLowerChild;
+
+        if ($match->round <= $rounds - $notPlayedRounds) {
+            $this->createSEBracket($rounds, $currentRound - 1, $id, $idUpperChild, $stage, $time, $innerIdUpperChild, $maxMatches, $tournament_id, $match->seed_A, $group, $notPlayedRounds);
+            $this->createSEBracket($rounds, $currentRound - 1, $id, $idLowerChild, $stage, $time, $innerIdLowerChild, $maxMatches, $tournament_id, $match->seed_B, $group, $notPlayedRounds);
+            if ($match->save()) {
+                return true;
+            } else {
+                Yii::error($match->getErrors());
+                Yii::$app->session->setFlash('error', "Something went terrible wrong" . $match->getErrors());
+                return false;
+            }
+        } else {
+            $this->createSEBracket($rounds, $currentRound - 1, "FS", $idUpperChild, $stage, $time, $innerIdUpperChild, $maxMatches, $tournament_id, $match->seed_A, $group, $notPlayedRounds);
+            $this->createSEBracket($rounds, $currentRound - 1, "FS", $idLowerChild, $stage, $time, $innerIdLowerChild, $maxMatches, $tournament_id, $match->seed_B, $group, $notPlayedRounds);
+            return true;
+        }
+    }
+
+    /**
+     * Creates an empty Single Elimination Tree recursive
+     *
+     * @param $rounds integer
+     *  count of rounds played in losers bracket
+     * @param $currentRound integer
+     *  current round of the recursive called method
+     * @param $fatherID integer
+     *  id of the father match node
+     * @param $id integer
+     *  own id
+     * @param $stage integer
+     *  which stage are we ? GS or FS?
+     * @param $time integer
+     *  the time, the match was created
+     * @param $innerRoundID integer
+     *
+     * @param $tournament_id integer
+     * @param $seed integer
+     * @param $group integer
+     * @param $notPlayedRounds integer
+     * @param $winnersBracketIDCounter
+     * @return bool
+     * @internal param int $maxMatches
+     */
+    public
+    function createDELosersBracket($rounds, $currentRound, $fatherID, $id, $stage, $time, $innerRoundID, $tournament_id, $seed, $group, $notPlayedRounds, $winnersBracketIDCounter)
+    {
+        /** @var TournamentMatch $match */
+        $match = new TournamentMatch();
+        $match->matchID = "l".(string)$id;
+        $match->groupID = $group;
+        $match->stage = $stage;
+        $match->round = $currentRound;
+        if(!is_null($fatherID)){
+            $match->follow_winner_and_loser_match_ids = "l".(string)$fatherID;
+        } else {
+            $match->follow_winner_and_loser_match_ids = (string)$fatherID;
+        }
+        $match->created_at = $time;
+        $match->updated_at = $time;
+        $match->tournament_id = $tournament_id;
+        $match->losers_round = 1;
+
+
+        $roundMatchCount = pow(2,(floor(($rounds-$currentRound)/2)));
+
+
+        // Current round is a drop round
+        if($currentRound%2 == 0){
+            //Identify if this round is rotated to minimize possibility of similar pairing as in winners bracket.
+            $rotationIndicator = ((($currentRound)/2)%2)? true: false;
+            //If the rotationIndicator is true, rotate the mapping from winners bracket.
+            if($rotationIndicator){
+                $winnersBracketQualificationMatchID = $winnersBracketIDCounter-$innerRoundID+1;
+                /** @var TournamentMatch $qualificationMatch */
+                $qualificationMatch = TournamentMatch::find()
+                    ->where(['tournament_id' => $tournament_id])
+                    ->andWhere(['stage' => $stage])
+                    ->andWhere(['groupID' => $group])
+                    ->andWhere(['matchID' => $winnersBracketQualificationMatchID])
+                    ->one();
+                $qualificationMatch->follow_winner_and_loser_match_ids = $qualificationMatch->follow_winner_and_loser_match_ids. ',l'.(string)$id;
+                $qualificationMatch->save();
+            } else {
+                $winnersBracketQualificationMatchID = $winnersBracketIDCounter - $roundMatchCount + $innerRoundID;
+            }
+
+            $losersBracketQualificationMatchID = $id-$roundMatchCount;
+
+            $match->qualification_match_ids = $winnersBracketQualificationMatchID . ',' . 'l'. $losersBracketQualificationMatchID;
+
+            $this->createDELosersBracket($rounds, $currentRound - 1, $id, $losersBracketQualificationMatchID, $stage, $time, $innerRoundID, $tournament_id, null, $group, $notPlayedRounds, $winnersBracketIDCounter-$roundMatchCount);
+
+        } elseif($currentRound == 1) {
+
+            $winnersBracketQualificationMatchID_A = $innerRoundID*2-1;
+            /** @var TournamentMatch $qualificationMatch */
+            $qualificationMatch = TournamentMatch::find()
+                ->where(['tournament_id' => $tournament_id])
+                ->andWhere(['stage' => $stage])
+                ->andWhere(['groupID' => $group])
+                ->andWhere(['matchID' => $winnersBracketQualificationMatchID_A])
+                ->one();
+            $qualificationMatch->follow_winner_and_loser_match_ids = $qualificationMatch->follow_winner_and_loser_match_ids. ',l'.(string)$id;
+            $qualificationMatch->save();
+
+
+
+            $winnersBracketQualificationMatchID_B = $innerRoundID*2;
+            /** @var TournamentMatch $qualificationMatchB */
+            $qualificationMatchB = TournamentMatch::find()
+                ->where(['tournament_id' => $tournament_id])
+                ->andWhere(['stage' => $stage])
+                ->andWhere(['groupID' => $group])
+                ->andWhere(['matchID' => $winnersBracketQualificationMatchID_B])
+                ->one();
+            $qualificationMatchB->follow_winner_and_loser_match_ids = $qualificationMatchB->follow_winner_and_loser_match_ids. ',l'.(string)$id;
+            $qualificationMatchB->save();
+
+
+
+            $match->qualification_match_ids = $winnersBracketQualificationMatchID_A . ',' . $winnersBracketQualificationMatchID_B;
+            //Current round is a round between two drop rounds
+        } else {
+            $innerRoundID_A = ($innerRoundID * 2) - 1;
+            $innerRoundID_B = ($innerRoundID * 2);
+
+
+            $losersBracketQualificationMatchID_A = ($id-$innerRoundID)-(2*$roundMatchCount)+$innerRoundID_A;
+            $losersBracketQualificationMatchID_B = $losersBracketQualificationMatchID_A+1;
+
+
+            $match->qualification_match_ids = 'l'.$losersBracketQualificationMatchID_A . ',' .'l'.$losersBracketQualificationMatchID_B;
+
+            $this->createDELosersBracket($rounds, $currentRound - 1, $id, $losersBracketQualificationMatchID_A, $stage, $time, $innerRoundID_A, $tournament_id, null, $group, $notPlayedRounds, $winnersBracketIDCounter);
+            $this->createDELosersBracket($rounds, $currentRound - 1, $id, $losersBracketQualificationMatchID_B, $stage, $time, $innerRoundID_B, $tournament_id, null, $group, $notPlayedRounds, $winnersBracketIDCounter);
+        }
+
+        $match->save();
+        return true;
+    }
+
 
     /**
      * @param $model Tournament

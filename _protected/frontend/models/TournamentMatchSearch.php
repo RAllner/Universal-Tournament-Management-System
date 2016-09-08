@@ -40,11 +40,12 @@ class TournamentMatchSearch extends TournamentMatch
      *
      * @param $tournament_id integer
      * @param $stage integer
-     * @param $tree
+     * @param $tree boolean
      * @param null $group
+     * @param bool $isLosersBracket
      * @return ActiveDataProvider
      */
-    public function search($params, $tournament_id, $stage, $tree, $group = null)
+    public function search($params, $tournament_id, $stage, $tree = false, $group = null, $isLosersBracket)
     {
         $query = TournamentMatch::find();
 
@@ -57,7 +58,11 @@ class TournamentMatchSearch extends TournamentMatch
         if(!$tree){
             $query->andFilterWhere(['>', 'state', 0]);
         }
-
+        if($isLosersBracket){
+            $query->andFilterWhere(['losers_round' => 1]);
+        } else {
+            $query->andFilterWhere(['losers_round' => 0]);
+        }
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'sort'=> ['defaultOrder' => ['round' => SORT_ASC, 'id' => SORT_ASC]],

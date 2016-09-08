@@ -18,8 +18,8 @@ class ParticipantSearch extends Participant
     public function rules()
     {
         return [
-            [['id', 'tournament_id', 'signup', 'checked_in', 'seed', 'updated_at', 'created_at', 'rank', 'player_id', 'team_id', 'removed', 'on_waiting_list'], 'integer'],
-            [['name'], 'safe'],
+            [['id', 'tournament_id', 'signup', 'checked_in', 'seed', 'updated_at', 'created_at', 'rank', 'elo', 'player_id', 'team_id', 'removed', 'on_waiting_list'], 'integer'],
+            [['name', 'rank'], 'safe'],
         ];
     }
 
@@ -37,6 +37,8 @@ class ParticipantSearch extends Participant
      *
      * @param array $params
      *
+     * @param int $tournament_id
+     * @param int $standings
      * @return ActiveDataProvider
      */
     public function search($params, $tournament_id, $standings = 0)
@@ -71,6 +73,8 @@ class ParticipantSearch extends Participant
             'updated_at' => $this->updated_at,
             'created_at' => $this->created_at,
             'rank' => $this->rank,
+            'history' => $this->history,
+            'elo' => $this->elo,
             'player_id' => $this->player_id,
             'team_id' => $this->team_id,
             'removed' => $this->removed,

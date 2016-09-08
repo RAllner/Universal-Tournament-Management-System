@@ -46,6 +46,7 @@ class User extends UserIdentity
             [['username', 'email', 'status'], 'required'],
             ['email', 'email'],
             ['username', 'string', 'min' => 2, 'max' => 255],
+            ['language', 'string', 'max' => 255],
 
             // password field is required on 'create' scenario
             ['password', 'required', 'on' => 'create'],
@@ -106,6 +107,7 @@ class User extends UserIdentity
             'created_at' => Yii::t('app', 'Created At'),
             'updated_at' => Yii::t('app', 'Updated At'),
             'item_name' => Yii::t('app', 'Role'),
+            'language' => Yii::t('app', 'Language'),
         ];
     }
 

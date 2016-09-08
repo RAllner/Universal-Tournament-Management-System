@@ -18,8 +18,8 @@ class PlayerSearch extends Player
     public function rules()
     {
         return [
-            [['id', 'user_id', 'running_nr', 'created_at', 'updated_at'], 'integer'],
-            [['name'], 'safe'],
+            [['id', 'user_id', 'running_nr', 'created_at', 'updated_at', 'deleted_flag', 'gender'], 'integer'],
+            [['name', 'description', 'games', 'website', 'stream','languages', 'nation'], 'safe'],
         ];
     }
 
@@ -39,12 +39,16 @@ class PlayerSearch extends Player
      *
      * @return ActiveDataProvider
      */
-    public function search($params, $pageSize = 3, $owned)
+    public function search($params, $pageSize = 3, $owned, $admin = false)
     {
         $query = Player::find();
 
         if ($owned === true){
             $query->andWhere(['user_id' => Yii::$app->user->id]);
+        }
+        /** only admins can see deleted player profiles */
+        if(!$admin){
+            $query->andWhere(['not', ['deleted_flag' => 1]]);
         }
         // add conditions that should always apply here
 

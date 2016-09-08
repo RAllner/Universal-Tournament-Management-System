@@ -43,9 +43,10 @@ class TournamentMatch extends ActiveRecord
     const MATCH_STATE_READY = 2;
     const MATCH_STATE_RUNNING = 3;
     const MATCH_STATE_FINISHED = 4;
+    const MATCH_STATE_DIRECT_ADVANCE = 5;
 
-    const STAGE_WINNERS_STAGE = 0;
-    const STAGE_LOSERS_STAGE = 1;
+    const WINNERS_BRACKET = 0;
+    const LOSERS_BRACKET = 1;
 
 
 
@@ -113,14 +114,14 @@ class TournamentMatch extends ActiveRecord
      * @return string Nicely formatted stage.
      *
      */
-    public function getStageName($stage = null)
+    public function getBracketName($stage = null)
     {
         $stage = (empty($stage)) ? $this->stage : $stage;
 
-        if ($stage === self::STAGE_WINNERS_STAGE) {
-            return Yii::t('app', 'Winners Stage');
+        if ($stage === self::WINNERS_BRACKET) {
+            return Yii::t('app', 'Winners Bracket');
         } else {
-            return Yii::t('app', 'Losers Stage');
+            return Yii::t('app', 'Losers Bracket');
         }
     }
 
@@ -137,6 +138,7 @@ class TournamentMatch extends ActiveRecord
         $round = (empty($round)) ? $this->round : $round;
         $rounds = ceil(log($tournament->participants_count, 2));
         if($losers_round == 0){
+
             if ($round == $rounds) {
                 return Yii::t('app', 'Final');
             } else if($round == $rounds-1) {
@@ -145,6 +147,7 @@ class TournamentMatch extends ActiveRecord
                 return Yii::t('app', 'Round'). ' '. $round;
             }
         } else {
+            $rounds = ($rounds*2)-2;
             if ($round == $rounds) {
                 return Yii::t('app', 'Losers Final');
             } else if($round == $rounds-1) {

@@ -119,7 +119,7 @@ $this->registerJs($script, View::POS_END);
                 'items' => [
                     ['label' => '<i class="material-icons">settings</i> Backend', 'url' => ['/backend']],
                     '<li class="divider"></li>',
-                    ['label' => Yii::t('app', 'User Settings'), 'url' => ['/backend/user/update', 'id' => Yii::$app->user->id]],
+                    ['label' => Yii::t('app', 'Settings'), 'url' => ['/backend/user/update', 'id' => Yii::$app->user->id]],
                     ['label' => Yii::t('app', 'Players'), 'url' => ['/player/own-index']],
                     ['label' => Yii::t('app', 'Teams'), 'url' => ['/team/index']],
                     ['label' => Yii::t('app', 'Organisations'), 'url' => ['/organisation/index']],
@@ -132,7 +132,7 @@ $this->registerJs($script, View::POS_END);
             $menuItems[] = [
                 'label' => '<i class="material-icons">account_circle</i> ' . Yii::$app->user->identity->username,
                 'items' => [
-                    ['label' => Yii::t('app', 'User Settings'), 'url' => ['/backend/user/update', 'id' => Yii::$app->user->id]],
+                    ['label' => Yii::t('app', 'Settings'), 'url' => ['/backend/user/update', 'id' => Yii::$app->user->id]],
                     ['label' => Yii::t('app', 'Players'), 'url' => ['/player/own-index']],
                     ['label' => Yii::t('app', 'Teams'), 'url' => ['/team/index']],
                     ['label' => Yii::t('app', 'Organisations'), 'url' => ['/organisation/index']],
@@ -164,6 +164,7 @@ $this->registerJs($script, View::POS_END);
         'items' => $menuItems,
         'encodeLabels' => false,
     ]);
+
     NavBar::end();
     ?>
 
@@ -211,10 +212,20 @@ $this->registerJs($script, View::POS_END);
                 </a>
             </li>
         </ul>
+
         <div class="pull-right" style="padding: 1em">
+
+
             &copy;<a href="<?= Url::to("@web") ?>"> <?= Yii::t('app', Yii::$app->name) ?>      </a><?= date('Y') ?></br>
-            <?= Html::a(Yii::t('app', 'Imprint'),Url::to('@web/site/imprint'))?>
+            
+            <?= \lajax\languagepicker\widgets\LanguagePicker::widget([
+                'skin' => \lajax\languagepicker\widgets\LanguagePicker::SKIN_BUTTON,
+                'size' => \lajax\languagepicker\widgets\LanguagePicker::SIZE_LARGE
+            ]); ?><?= Html::a(Yii::t('app', 'Imprint'),Url::to('@web/site/imprint'))?>
+
         </div>
+
+
     </div>
 </footer>
 

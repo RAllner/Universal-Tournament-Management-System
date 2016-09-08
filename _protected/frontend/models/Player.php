@@ -18,6 +18,16 @@ use yii\helpers\Url;
  * @property integer $running_nr
  * @property integer $created_at
  * @property integer $updated_at
+ * @property integer $deleted_flag
+ * @property string $description
+ * @property string $games
+ * @property string $website
+ * @property string $stream
+ * @property integer $gender
+ * @property string $languages
+ * @property integer $birthday
+ * @property string $nation
+ *
  *
  * @property Halloffame[] $halloffames
  * @property User $user
@@ -29,6 +39,29 @@ class Player extends ActiveRecord
      * @var UploadedFile
      */
     public $imageFile;
+
+    const GENDER_MALE = 2;
+    const GENDER_FEMALE = 1;
+    const GENDER_OTHER = 0;
+
+    const DE = 1;
+    const GB = 2;
+    const RU = 3;
+    const FR = 4;
+    const DK = 5;
+    const AT = 6;
+    const CH = 7;
+    const ES = 8;
+    const PL = 9;
+    const EU = 10;
+    const UK = 11;
+    const SE = 12;
+    const SI = 13;
+    const BE = 14;
+    const NL = 15;
+    const US = 16;
+    const NONATION = 0;
+
 
     /**
      * @inheritdoc
@@ -44,10 +77,14 @@ class Player extends ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'name', 'running_nr'], 'required'],
-            [['user_id', 'running_nr'], 'integer'],
+            [['user_id', 'name', 'running_nr','nation'], 'required'],
+            [['user_id', 'running_nr', 'gender'], 'integer'],
             [['imageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg'],
             [['name'], 'string', 'max' => 255],
+            [['description', 'games', 'languages', 'stream', 'nation'], 'string'],
+            [['birthday'], 'safe'],
+            [['website'], 'url', 'validSchemes' => ['http', 'https']],
+            [['deleted_flag'], 'integer', 'max' => 1],
         ];
     }
 
@@ -77,6 +114,15 @@ class Player extends ActiveRecord
             'running_nr' => Yii::t('app', 'Running Nr'),
             'created_at' => Yii::t('app', 'Created At'),
             'updated_at' => Yii::t('app', 'Updated At'),
+            'deleted_flag' => Yii::t('app', 'Deleted'),
+            'description' => Yii::t('app', 'Description'),
+            'games' => Yii::t('app', 'Games'),
+            'website' => Yii::t('app', 'Website'),
+            'stream' => Yii::t('app', 'Twitch Channel Name'),
+            'gender' => Yii::t('app', 'Gender'),
+            'languages' => Yii::t('app', 'Languages'),
+            'birthday' => Yii::t('app', 'Age'),
+            'nation' => Yii::t('app', 'Nationality'),
         ];
     }
 
@@ -124,7 +170,7 @@ class Player extends ActiveRecord
 
         //final output
         header('Content-type: image/jpeg');
-        imagejpeg($image ,$path, 80);
+        imagejpeg($image, $path, 80);
     }
 
     /**
@@ -145,9 +191,165 @@ class Player extends ActiveRecord
         }
     }
 
+    /**
+     * Returns the nation of the player in nice format.
+     *
+     * @param  null|integer $nation Status integer value if sent to method.
+     * @return string               Nicely formatted status.
+     */
+    public function getNationName($nation = null)
+    {
+        $nation = (empty($nation)) ? $this->nation : $nation;
 
-    public function getNameWithRunningNr(){
-        return $this->name.'#'.$this->running_nr;
+        if ($nation === self::DE) {
+            return Yii::t('app', 'German');
+        } elseif ($nation === self::GB) {
+            return Yii::t('app', 'British');
+        } elseif ($nation === self::RU) {
+            return Yii::t('app', 'Russian');
+        } elseif ($nation === self::FR) {
+            return Yii::t('app', 'French');
+        } elseif ($nation === self::DK) {
+            return Yii::t('app', 'Danish');
+        } elseif ($nation === self::AT) {
+            return Yii::t('app', 'Austrian');
+        } elseif ($nation === self::CH) {
+            return Yii::t('app', 'Swiss');
+        } elseif ($nation === self::ES) {
+            return Yii::t('app', 'Spanish');
+        } elseif ($nation === self::PL) {
+            return Yii::t('app', 'Polish');
+        } elseif ($nation === self::EU) {
+            return Yii::t('app', 'European');
+        } elseif ($nation === self::SE) {
+            return Yii::t('app', 'Swedish');
+        } elseif ($nation === self::SI) {
+            return Yii::t('app', 'Sloven');
+        } elseif ($nation === self::BE) {
+            return Yii::t('app', 'Belgian');
+        } elseif ($nation === self::NL) {
+            return Yii::t('app', 'Dutch');
+        } elseif ($nation === self::US) {
+            return Yii::t('app', 'American');
+        } else {
+            return Yii::t('app', 'Undefined');
+        }
+    }
+
+    /**
+     * Returns the nation of the player in nice format.
+     *
+     * @param  null|integer $gender Status integer value if sent to method.
+     * @return string               Nicely formatted status.
+     */
+    public function getGenderName($gender = null)
+    {
+        $gender = (empty($gender)) ? $this->gender : $gender;
+
+        if ($gender === self::GENDER_FEMALE) {
+            return Yii::t('app', 'Female');
+        } else if ($gender === self::GENDER_OTHER) {
+            return Yii::t('app', 'Other');
+        } else {
+            return Yii::t('app', 'Male');
+        }
+    }
+
+
+    /**
+     * Returns the nation of the player in nice format.
+     *
+     * @param  null|integer $nation Status integer value if sent to method.
+     * @return string               Nicely formatted status.
+     */
+    public function getNationShort($nation = null)
+    {
+        $nation = (empty($nation)) ? $this->nation : $nation;
+
+        if ($nation === self::DE) {
+            return Yii::t('app', 'de');
+        } elseif ($nation === self::GB) {
+            return Yii::t('app', 'gb');
+        } elseif ($nation === self::RU) {
+            return Yii::t('app', 'ru');
+        } elseif ($nation === self::FR) {
+            return Yii::t('app', 'fr');
+        } elseif ($nation === self::DK) {
+            return Yii::t('app', 'dk');
+        } elseif ($nation === self::AT) {
+            return Yii::t('app', 'at');
+        } elseif ($nation === self::CH) {
+            return Yii::t('app', 'ch');
+        } elseif ($nation === self::ES) {
+            return Yii::t('app', 'es');
+        } elseif ($nation === self::PL) {
+            return Yii::t('app', 'pl');
+        } elseif ($nation === self::EU) {
+            return Yii::t('app', 'eu');
+        } elseif ($nation === self::SE) {
+            return Yii::t('app', 'se');
+        } elseif ($nation === self::SI) {
+            return Yii::t('app', 'si');
+        } elseif ($nation === self::BE) {
+            return Yii::t('app', 'be');
+        } elseif ($nation === self::NL) {
+            return Yii::t('app', 'nl');
+        } elseif ($nation === self::US) {
+            return Yii::t('app', 'us');
+        } else {
+            return Yii::t('app', 'WO');
+        }
+    }
+
+    /**
+     * Returns the array of possible article status values.
+     *
+     * @return array
+     */
+    public function getNationList()
+    {
+        $nationArray = [
+            self::DE => Yii::t('app', 'German'),
+            self::GB => Yii::t('app', 'British'),
+            self::RU => Yii::t('app', 'Russian'),
+            self::FR => Yii::t('app', 'French'),
+            self::DK => Yii::t('app', 'Danish'),
+            self::AT => Yii::t('app', 'Austrian'),
+            self::CH => Yii::t('app', 'Swiss'),
+            self::ES => Yii::t('app', 'Spanish'),
+            self::PL => Yii::t('app', 'Polish'),
+            self::EU => Yii::t('app', 'European'),
+            self::SE => Yii::t('app', 'Swedish'),
+            self::SI => Yii::t('app', 'Sloven'),
+            self::BE => Yii::t('app', 'Belgian'),
+            self::NL => Yii::t('app', 'Dutch'),
+            self::US => Yii::t('app', 'American'),
+            self::NONATION => Yii::t('app', 'No nationality'),
+        ];
+
+        return $nationArray;
+    }
+
+
+    public function getAge(){
+
+        if(!is_null($this->birthday)){
+            //date in mm/dd/yyyy format; or it can be in other formats as well
+            //explode the date to get month, day and year
+            $birthDate = explode("-", $this->birthday);
+            //get age from date or birthdate
+            return (date("md", date("U", mktime(0, 0, 0, $birthDate[2], $birthDate[0], $birthDate[1]))) > date("md")
+                ? ((date("Y") - $birthDate[0]) - 1)
+                : (date("Y") - $birthDate[0]));
+
+        } else return "";
+
+    }
+
+
+    public function getNameWithRunningNr()
+    {
+        return $this->name . '#' . $this->running_nr;
     }
 
     /**
@@ -215,7 +417,8 @@ class Player extends ActiveRecord
         return $this->hasMany(Team::className(), ['id' => 'team_id'])->viaTable('{{%team_member}}', ['player_id' => 'id']);
     }
 
-    public function getTeamAdmins(){
+    public function getTeamAdmins()
+    {
         return $this->hasMany(Team::className(), ['id' => 'team_id'])->viaTable('{{%team_member}}', ['player_id' => 'id', 'admin' => 1]);
     }
 

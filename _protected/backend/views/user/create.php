@@ -12,14 +12,15 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="user-create">
 
     <h1><?= Html::encode($this->title) ?></h1>
-
-    <div class="col-lg-5 well bs-component">
-
-        <?= $this->render('_form', [
-            'user' => $user,
-            'role' => $role,
-        ]) ?>
-
+    <div class="row">
+        <div class="col-lg-5">
+            <div class="well">
+                <?= $this->render('_form', [
+                    'user' => $user,
+                    'role' => $role,
+                ]) ?>
+            </div>
+        </div>
     </div>
 
 </div>

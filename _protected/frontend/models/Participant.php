@@ -17,7 +17,9 @@ use yii\db\ActiveRecord;
  * @property integer $seed
  * @property integer $updated_at
  * @property integer $created_at
- * @property string $rank
+ * @property integer $rank
+ * @property string $history
+ * @property integer $elo
  * @property integer $player_id
  * @property integer $team_id
  * @property integer $removed
@@ -44,9 +46,9 @@ class Participant extends ActiveRecord
     {
         return [
             [['tournament_id', 'name'], 'required'],
-            [['tournament_id', 'signup', 'checked_in', 'seed', 'updated_at', 'created_at', 'player_id', 'team_id', 'removed', 'on_waiting_list'], 'integer'],
+            [['tournament_id', 'signup', 'checked_in', 'seed', 'updated_at', 'created_at', 'rank', 'elo' ,'player_id', 'team_id', 'removed', 'on_waiting_list'], 'integer'],
             [['name'], 'string', 'max' => 255],
-            [['rank'], 'string', 'max' => 512],
+            [['history'], 'string', 'max' => 512],
             [['tournament_id'], 'exist', 'skipOnError' => true, 'targetClass' => Tournament::className(), 'targetAttribute' => ['tournament_id' => 'id']],
         ];
     }
@@ -66,6 +68,8 @@ class Participant extends ActiveRecord
             'updated_at' => Yii::t('app', 'Updated At'),
             'created_at' => Yii::t('app', 'Created At'),
             'rank' => Yii::t('app', 'Rank'),
+            'history' => Yii::t('app', 'Match History'),
+            'elo' => Yii::t('app', 'Elo Rating'),
             'player_id' => Yii::t('app', 'Player ID'),
             'team_id' => Yii::t('app', 'Team ID'),
             'removed' => Yii::t('app', 'Removed'),
@@ -163,6 +167,11 @@ class Participant extends ActiveRecord
         return $this->tournament->name;
     }
 
+
+    /**
+     * Calculates the match wins of a tournament participant
+     * @return int
+     */
     public function getMatchWins(){
         $winCounter = 0;
         $participantAWins = TournamentMatch::find()
@@ -194,6 +203,10 @@ class Participant extends ActiveRecord
         return $winCounter;
     }
 
+    /**
+     * Calculates the match losses of a tournament participant
+     * @return int
+     */
     public function getMatchLosses(){
         $lossCounter = 0;
         $participantAWins = TournamentMatch::find()

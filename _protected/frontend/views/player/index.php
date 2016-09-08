@@ -7,9 +7,16 @@ use yii\widgets\ListView;
 /* @var $searchModel frontend\models\PlayerSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 /* @var $showAll boolean */
+if($showAll == true){
+    $this->title = Yii::t('app', 'Player profiles');
+    $this->params['breadcrumbs'][] = $this->title;
+} else{
 
-$this->title = Yii::t('app', 'Players');
-$this->params['breadcrumbs'][] = $this->title;
+    $this->title = Yii::t('app', 'Own profiles');
+    $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Player profiles'), 'url' => ['index']];
+    $this->params['breadcrumbs'][] = $this->title;
+}
+
 ?>
 <div class="player-index">
 
@@ -29,9 +36,11 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php endif ?>
         </div>
     </h1>
+    <?php if($showAll == true):?>
     <div class="col-lg-12 well bs-component">
         <?php echo $this->render('_search', ['model' => $searchModel]); ?>
     </div>
+    <?php endif ?>
     <div class="clearfix"></div>
         <div class="row">
         <?= ListView::widget([

@@ -156,14 +156,15 @@ class PlayerController extends Controller
      */
     public function actionDelete($id)
     {
+
         $model = $this->findModel($id);
         if(!Yii::$app->user->can('deletePlayer', ['model' => $model])){
             Yii::$app->session->setFlash('error', Yii::t('app', 'You are not allowed to access this page.'));
             return $this->redirect(['index']);
         }
 
-        $model->delete();
-        $model->deleteImage();
+        $model->deleted_flag = 1;
+        $model->save();
         return $this->redirect(['admin']);
     }
 
@@ -189,7 +190,7 @@ class PlayerController extends Controller
 
 
         $searchModel = new PlayerSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $pageSize, false);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $pageSize, false, true);
         if(Yii::$app->user->can('adminPlayer')){
         return $this->render('admin', [
             'searchModel' => $searchModel,

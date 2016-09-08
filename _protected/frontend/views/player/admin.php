@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php if (Yii::$app->user->can('createPlayer')): ?>
         <?= Html::a('<i class="material-icons">create</i> '.Yii::t('app', 'Create Player'), ['create'], ['class' => 'btn btn-success']) ?>
         <?php endif ?>
-        <?= Html::a('<i class="material-icons">view_headline</i> ' . Yii::t('app', 'Overview'), ['index'], ['class' => 'btn btn-default']) ?>
+        <?= Html::a('<i class="material-icons">view_headline</i> ' . Yii::t('app', 'Overview'), ['index'], ['class' => 'btn btn-warning']) ?>
     </span>
     </h1>
     <div class="clearfix"></div>
@@ -39,6 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'name',
             'created_at:date',
+            'deleted_flag:boolean',
             ['class' => 'yii\grid\ActionColumn',
             'header' => Yii::t('app', 'Menu')],
        ],
