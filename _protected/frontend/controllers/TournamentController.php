@@ -1165,8 +1165,9 @@ class TournamentController extends FrontendController
                 if($upperQualifyingMatchExists && $lowerQualifyingMatchExists){
                     $match->state = TournamentMatch::MATCH_STATE_OPEN;
                     $match->save();
-                } elseif ($upperQualifyingMatchExists && $lowerQualifyingMatchExists){
+                } elseif ($upperQualifyingMatchExists || $lowerQualifyingMatchExists){
                     $match->state = TournamentMatch::MATCH_STATE_DIRECT_ADVANCE;
+                    $match->save();
                 }
             }
             $losersBracketMatchesRoundTwo = TournamentMatch::find()

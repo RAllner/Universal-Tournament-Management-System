@@ -49,7 +49,6 @@ class TournamentMatch extends ActiveRecord
     const LOSERS_BRACKET = 1;
 
 
-
     /**
      * @inheritdoc
      */
@@ -137,27 +136,27 @@ class TournamentMatch extends ActiveRecord
     {
         $round = (empty($round)) ? $this->round : $round;
         $rounds = ceil(log($tournament->participants_count, 2));
-        if($losers_round == 0){
+        if ($losers_round == 0) {
 
             if ($round == $rounds) {
                 return Yii::t('app', 'Final');
-            } else if($round == $rounds-1) {
+            } else if ($round == $rounds - 1) {
                 return Yii::t('app', 'Semifinal');
             } else {
-                return Yii::t('app', 'Round'). ' '. $round;
+                return Yii::t('app', 'Round') . ' ' . $round;
             }
         } else {
-            $rounds = ($rounds*2)-2;
+            $rounds = ($rounds * 2) - 2;
             if ($round == $rounds) {
                 return Yii::t('app', 'Losers Final');
-            } else if($round == $rounds-1) {
+            } else if ($round == $rounds - 1) {
                 return Yii::t('app', 'Losers Semifinal');
             } else {
-                return Yii::t('app', 'Losers Round'). ' '. $round;
+                return Yii::t('app', 'Losers Round') . ' ' . $round;
             }
         }
     }
-    
+
 
     /**
      * @return \yii\db\ActiveQuery
@@ -171,20 +170,51 @@ class TournamentMatch extends ActiveRecord
      * Returns the participant names depending on the participant id of the match
      * @return array Participant_A Name [0] Participant_B Name [1]
      */
-    public function getParticipantNames(){
+    public function getParticipantNames()
+    {
         $participant_A = Participant::find()->where(['id' => $this->participant_id_A])->one();
+
+        $winnerOf = Yii::t('app', 'Winner of');
+        $LoserOf = Yii::t('app', 'Loser of');
+
+
         /** @var Participant $participant_A */
         if (isset($participant_A)) {
             $participant_A_Name = $participant_A->name;
         } else {
             $tmpArray = explode(',', $this->qualification_match_ids);
-            if ($tmpArray[0] != "0"  && $this->losers_round == 0) {
-                $participant_A_Name = Yii::t('app', 'Winner of') . " " . $tmpArray[0];
-            }else if($tmpArray[0] != "0"  && $this->losers_round == 1){
-                $participant_A_Name = Yii::t('app', 'Loser of') . " " . $tmpArray[0];
+            /** @var TournamentMatch $qualifyingUpperMatch */
+            $qualifyingUpperMatch = TournamentMatch::find()
+                ->where(['matchID' => $tmpArray[0]])
+                ->andWhere(['tournament_id' => $this->tournament_id])
+                ->andWhere(['groupID' => $this->groupID])
+                ->one();
+            if (!is_null($qualifyingUpperMatch)) {
+                if ($qualifyingUpperMatch->losers_round == 0) {
+                    if ($tmpArray[0] != "0" && $this->losers_round == 0) {
+                        $participant_A_Name = Yii::t('app', 'Winner of') . " " . $tmpArray[0];
+                    } else if ($tmpArray[0] != "0" && $this->losers_round == 1) {
+                        $participant_A_Name = Yii::t('app', 'Loser of') . " " . $tmpArray[0];
+                    } else {
+                        $participant_A_Name = "";
+                    }
+                } else {
+                    if ($tmpArray[0] != "0" && $this->losers_round == 1) {
+                        $participant_A_Name = Yii::t('app', 'Winner of') . " " . $tmpArray[0];
+                    } else {
+                        $participant_A_Name = "";
+                    }
+                }
             } else {
-                $participant_A_Name = "";
+                if ($tmpArray[0] != "0" && $this->losers_round == 0) {
+                    $participant_A_Name = Yii::t('app', 'Winner of') . " " . $tmpArray[0];
+                } else if ($tmpArray[0] != "0" && $this->losers_round == 1) {
+                    $participant_A_Name = Yii::t('app', 'Loser of') . " " . $tmpArray[0];
+                } else {
+                    $participant_A_Name = "";
+                }
             }
+
         }
 
         $participant_B = Participant::find()->where(['id' => $this->participant_id_B])->one();
@@ -193,11 +223,40 @@ class TournamentMatch extends ActiveRecord
             $participant_B_Name = $participant_B->name;
         } else {
             $tmpArray = explode(',', $this->qualification_match_ids);
-            if (count($tmpArray) > 1 && $this->losers_round == 0) {
-                $participant_B_Name = Yii::t('app', 'Winner of') . " " . $tmpArray[1];
-            } else if(count($tmpArray) > 1 && $this->losers_round == 1) {
-                $participant_B_Name = Yii::t('app', 'Loser of') . " " . $tmpArray[1];
-            }else {
+
+            if (count($tmpArray) > 1) {
+                /** @var TournamentMatch $qualifyingLowerMatch */
+                $qualifyingLowerMatch = TournamentMatch::find()
+                    ->where(['matchID' => $tmpArray[1]])
+                    ->andWhere(['tournament_id' => $this->tournament_id])
+                    ->andWhere(['groupID' => $this->groupID])
+                    ->one();
+                if (!is_null($qualifyingLowerMatch)) {
+                    if ($qualifyingLowerMatch->losers_round == 0) {
+                        if ($tmpArray[0] != "0" && $this->losers_round == 0) {
+                            $participant_B_Name = Yii::t('app', 'Winner of') . " " . $tmpArray[1];
+                        } else if ($tmpArray[0] != "0" && $this->losers_round == 1) {
+                            $participant_B_Name = Yii::t('app', 'Loser of') . " " . $tmpArray[1];
+                        } else {
+                            $participant_B_Name = "";
+                        }
+                    } else {
+                        if ($tmpArray[0] != "0" && $this->losers_round == 1) {
+                            $participant_B_Name = Yii::t('app', 'Winner of') . " " . $tmpArray[1];
+                        } else {
+                            $participant_B_Name = "";
+                        }
+                    }
+                } else {
+                    if ($tmpArray[0] != "0" && $this->losers_round == 0) {
+                        $participant_B_Name = Yii::t('app', 'Winner of') . " " . $tmpArray[1];
+                    } else if ($tmpArray[0] != "0" && $this->losers_round == 1) {
+                        $participant_B_Name = Yii::t('app', 'Loser of') . " " . $tmpArray[1];
+                    } else {
+                        $participant_B_Name = "";
+                    }
+                }
+            } else {
                 $participant_B_Name = "";
             }
         }
