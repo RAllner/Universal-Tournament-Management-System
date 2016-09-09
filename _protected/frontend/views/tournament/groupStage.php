@@ -9,8 +9,13 @@
 /* @var $model frontend\models\Tournament */
 /* @var $this yii\web\View */
 /* @var $dataProvider frontend\models\TournamentMatchSearch */
-/* @var $treeDataProvider \yii\data\ActiveDataProvider */
+/* @var $losersDataProvider frontend\models\TournamentMatchSearch */
+/* @var $treeDataProvider frontend\models\TournamentMatchSearch */
+/* @var $losersTreeDataProvider frontend\models\TournamentMatchSearch */
 /* @var $treeDataProviderArray [] array */
+/* @var $losersTreeDataProviderArray [] array */
+/* @var $dataProviderArray [] array */
+/* @var $losersDataProviderArray [] array */
 
 use frontend\models\Tournament;
 use yii\helpers\Html;
@@ -109,6 +114,83 @@ $script =
                 'cursor': '-webkit-grab'
         })
     } );
+    
+    
+       $(':checkbox').on('change', function () {
+         var targetID = $(this).data('target');
+             
+         if($(this).parents('.selected').length){
+                $(':checkbox').closest('div').removeClass('selected');
+                 $('.field-tournamentmatch-winner_id-'+targetID+'> input').val("");
+                 $('.field-tournamentmatch-loser_id-'+targetID+'> input').val("");
+         } else {
+                $(':checkbox').not(this).closest('div').removeClass('selected');
+                $(':checkbox').not(this).closest('div').addClass('unselected'); 
+                $(this).closest('div').addClass('selected');
+                $(this).closest('div').removeClass('unselected');
+                $('.field-tournamentmatch-winner_id-'+targetID+'> input').val($(this).val());
+                $('.field-tournamentmatch-loser_id-'+targetID+'> input').val($(this).closest('div.match-winner').find('.fake-button.unselected input').val());
+                
+        }
+});
+
+
+$('.set-add').on('click', function() {
+    var targetID = $(this).data('target');
+    var setCount = $('input.setCount'+targetID).val();
+    if(setCount == 1){
+        $('.set-remove'+targetID).removeClass('hidden');
+        $('.set-remove'+targetID).show();
+    } 
+        setCount++;
+        $('div.setsA'+targetID).prepend('<label class="set-points form-control additionalSetA'+ targetID + setCount +'">'+'<input type="number" name="A" min="0" value="0"></label>');
+        $('div.setsB'+targetID).prepend('<label class="set-points form-control additionalSetB'+ targetID + setCount +'">'+'<input type="number" name="B" min="0" value="0"></label>');
+        
+
+    $('input.setCount'+targetID).val(""+setCount);
+})
+
+$('.set-remove').on('click', function() {
+    var targetID = $(this).data('target');
+    var setCount = $('input.setCount'+targetID).val();
+    alert(setCount);
+
+    $('label.set-points.form-control.additionalSetA'+ targetID + setCount).remove();
+    $('label.set-points.form-control.additionalSetB'+ targetID + setCount).remove();
+    setCount--
+    if(setCount == "1"){
+        $(this).hide();
+    }
+    $('input.setCount'+targetID).val(""+setCount);
+});
+
+$('.report-match').on('click', function() {
+   var targetID = $(this).data('target');
+   var setCount = $('input.setCount'+targetID).val();
+   var scoreCSV = "";
+   var scoreMatches_A = "0";
+   var scoreMatches_B = "0";
+   for(i=1;i<= setCount; i++){
+        var i_string = i.toString();
+        var scoreA = $('.additionalSetA'+ targetID + i_string +' > input').val();
+        var scoreB = $('.additionalSetB'+ targetID + i_string +' > input').val();
+        if(scoreA > scoreB){
+            scoreMatches_A++;
+        } else if(scoreB > scoreA){
+            scoreMatches_B++;
+        }
+        if(i == 1){
+        scoreCSV = scoreCSV+scoreA+'-'+scoreB;
+        } else {
+        scoreCSV = scoreCSV+','+scoreA+'-'+scoreB;
+        }
+   }
+   $('.field-tournamentmatch-participant_score_A-'+targetID+'> input').val(scoreMatches_A);
+   $('.field-tournamentmatch-participant_score_B-'+targetID+'> input').val(scoreMatches_B);
+   $('.field-tournamentmatch-scores-'+targetID+'> input').val(scoreCSV);
+   $('form#'+targetID).submit();
+});
+
 JS;
 $this->registerJs($script, View::POS_END);
 
@@ -129,112 +211,196 @@ $currentGroup = null;
     </h1>
     <div class="clearfix"></div>
     <div class="row">
-        <div class="col-md-2 col-xs-3">
+        <div class="col-xs-12">
             <?php echo $this->render('nav', ['model' => $model, 'active' => Tournament::ACTIVE_GROUP_STAGE]); ?>
         </div>
-        <div class="col-md-10 col-xs-9">
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
             <?php for ($group = 1;
-            $group <= $model->getGroupCount();
-            $group++) { ?>
-            <div class="well" id="clone-me<?= $group ?>">
+                       $group <= $model->getGroupCount();
+                       $group++) { ?>
                 <h4><?= Yii::t('app', 'Group') . ' ' . $group ?></h4>
-                <div class="clearfix"></div>
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#bracket<?= $group ?>"
+                                                              aria-controls="bracket<?= $group ?>" role="tab"
+                                                              data-toggle="tab">Bracket</a></li>
+                    <li role="presentation"><a href="#table<?= $group ?>" aria-controls="table<?= $group ?>" role="tab"
+                                               data-toggle="tab">Table</a></li>
 
-                <div class="row" style="overflow: hidden;">
-                    <div id="round-title-wrapper" style="width: 2000px;">
-                        <!--                    <pre>-->
-                        <?php // print_r($treeDataProviderArray[2]->getModels()) ?>
-                        <!--                    </pre>-->
-                        <?php
-                        echo '<div class="round-title">';
-                        foreach ($treeDataProviderArray[$group]->getModels() as $key => $match) {
-                            /** @var $match \frontend\models\TournamentMatch */
-                            if ($match->round !== $currentRound) {
-                                echo '<div class="round-title2 round-title2'.$group.'">' . $match->getRoundName($match->round, $model, 0) . '</div>';
-                                $currentRound = $match->round;
-                            }
-                        }
-                        echo "</div>";
-                        $currentRound = null;
-                        ?>
+                </ul>
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="bracket<?= $group ?>">
+                        <div class="well" id="clone-me<?= $group ?>">
+                            <div class="row" style="overflow: hidden;">
+                                <div id="round-title-wrapper" style="width: 2000px;">
+                                    <div class="round-title">
+                                        <?php
+                                        foreach ($treeDataProviderArray[$group]->getModels() as $key => $match) {
+                                            /** @var $match \frontend\models\TournamentMatch */
+                                            if ($match->round !== $currentRound) {
+                                                echo '<div class="round-title2 round-title2' . $group . '">' . $match->getRoundName($match->round, $model, 0) . '</div>';
+                                                $currentRound = $match->round;
+                                            }
+                                        }
+                                        $currentRound = null;
+                                        ?>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row tournament-tree-wrapper">
+                                <?php Draggable::begin(['id' => 'draggable-tournament-tree' . $group
+                                ]);
+                                ?>
+                                <div class="col-xs-12 tournament-tree" id="tournament-tree-<?= $group ?>">
+                                    <?php
+                                    foreach ($treeDataProviderArray[$group]->getModels() as $key => $match) {
+                                        /** @var $match \frontend\models\TournamentMatch */
+
+                                        if ($match->round !== $currentRound) {
+                                            if ($currentRound !== null) echo '</div>';
+                                            echo '<div class="round">';
+                                            $currentRound = $match->round;
+                                        }
+                                        echo $model->createMatchElement($key, $match);
+                                    } ?>
+                                </div>
+                            <?php Draggable::end() ?>
+                            </div>
+                        </div>
+                        </div>
                     </div>
-                </div>
-
-                <div class="row tournament-tree-wrapper">
-                    <?php Draggable::begin(['id' => 'draggable-tournament-tree' . $group
-                    ]);
-                    ?>
-
-
-                    <div class="col-xs-12 tournament-tree" id="tournament-tree-<?= $group ?>">
-
-                        <?php
-                        foreach ($treeDataProviderArray[$group]->getModels() as $key => $match) {
-                            /** @var $match \frontend\models\TournamentMatch */
-
-                            if ($match->round !== $currentRound) {
-                                if ($currentRound !== null) echo '</div>';
-
-
-                                echo '<div class="round">';
-
-                                $currentRound = $match->round;
-                            }
-
-                            echo $model->createMatchElement($key, $match);
-
-                        } ?>
-
-                    </div>
-                    </div>
-                    <?php Draggable::end() ?>
-
-                </div>
-            </div>
-
-        <?php
-        $currentRound = null;
-        } ?>
-
-
-        <div class="row">
-            <div class="col-xs-12">
-
-                <table class="centered" width="100%">
-                    <tr>
-                        <th><?= Yii::t('app', 'Match ID') ?></th>
-                        <th><?= Yii::t('app', 'Group') ?></th>
-                        <th><?= Yii::t('app', 'Round') ?></th>
-                        <th><?= Yii::t('app', 'Participant A') ?></th>
-                        <th><?= Yii::t('app', 'Points A') ?></th>
-                        <th><?= Yii::t('app', 'Points B') ?></th>
-                        <th><?= Yii::t('app', 'Participant B') ?></th>
-                        <?php if ($model->status == Tournament::STATUS_RUNNING): ?>
-                            <th></th>
-                        <?php endif ?>
-                    </tr>
-                    <?= ListView::widget([
-                        'summary' => false,
-                        'dataProvider' => $dataProvider,
-                        'emptyText' => '<div class="row"><div class="col-lg-12"><div class="well">' . Yii::t('app', 'We haven\'t started the tournament yet.') . '</div></div></div>',
-                        'itemOptions' => ['class' => 'item'],
-                        'itemView' => function ($model, $key, $index, $widget) {
-                            return $this->render('_stage', ['model' => $model, 'stage' => Tournament::STAGE_GS]);
-                        },
-                    ]) ?>
-                </table>
-
-            </div>
-            <?php if (!($model->status >= Tournament::STATUS_RUNNING)): ?>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="well">
-                            <?= Yii::t('app', 'Tournament not yet ready.') ?>
+                    <div role="tabpanel" class="tab-pane" id="table<?= $group ?>">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <table class="centered" width="100%">
+                                    <tr>
+                                        <th><?= Yii::t('app', 'Match ID') ?></th>
+                                        <th><?= Yii::t('app', 'Round') ?></th>
+                                        <th><?= Yii::t('app', 'Participant A') ?></th>
+                                        <th><?= Yii::t('app', 'Score') ?></th>
+                                        <th><?= Yii::t('app', 'Participant B') ?></th>
+                                        <th><?= Yii::t('app', 'State') ?></th>
+                                        <?php if ($model->status != Tournament::STATUS_FINISHED): ?>
+                                            <th></th>
+                                        <?php endif ?>
+                                    </tr>
+                                    <?= ListView::widget([
+                                        'summary' => false,
+                                        'dataProvider' => $dataProviderArray[$group],
+                                        'emptyText' => '<div class="row"><div class="col-lg-12"><div class="well">' . Yii::t('app', 'We haven\'t started the tournament yet.') . '</div></div></div>',
+                                        'itemOptions' => ['class' => 'item'],
+                                        'itemView' => function ($model, $key, $index, $widget) {
+                                            return $this->render('_stage', ['model' => $model, 'stage' => Tournament::STAGE_FS]);
+                                        },
+                                    ]) ?>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
-            <?php endif ?>
+                <?php if($model->gs_format == Tournament::FORMAT_DOUBLE_ELIMINATION): ?>
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#losersBracket<?= $group ?>"
+                                                              aria-controls="bracket<?= $group ?>" role="tab"
+                                                              data-toggle="tab">Losers Bracket</a></li>
+                    <li role="presentation"><a href="#losersTable<?= $group ?>" aria-controls="losersTable<?= $group ?>" role="tab"
+                                               data-toggle="tab">Table</a></li>
+
+                </ul>
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="losersBracket<?= $group ?>">
+                        <div class="well" id="clone-me<?= $group ?>">
+                            <div class="row" style="overflow: hidden;">
+                                <div id="losers-round-title-wrapper" style="width: 2000px;">
+                                    <div class="round-title">
+                                        <?php
+                                        foreach ($treeDataProviderArray[$group]->getModels() as $key => $match) {
+                                            /** @var $match \frontend\models\TournamentMatch */
+                                            if ($match->round !== $currentRound) {
+                                                echo '<div class="round-title2 round-title2' . $group . '">' . $match->getRoundName($match->round, $model, 0) . '</div>';
+                                                $currentRound = $match->round;
+                                            }
+                                        }
+                                        $currentRound = null;
+                                        ?>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row tournament-tree-wrapper">
+                                <?php Draggable::begin(['id' => 'draggable-tournament-tree' . $group
+                                ]);
+                                ?>
+                                <div class="col-xs-12 tournament-losers-tree" id="tournament-tree-<?= $group ?>">
+                                    <?php
+                                    foreach ($losersTreeDataProviderArray[$group]->getModels() as $key => $match) {
+                                        /** @var $match \frontend\models\TournamentMatch */
+
+                                        if ($match->round !== $currentRound) {
+                                            if ($currentRound !== null) echo '</div>';
+                                            echo '<div class="round">';
+                                            $currentRound = $match->round;
+                                        }
+                                        echo $model->createDEMatchElement($key, $match);
+                                    } ?>
+                                </div>
+                                <?php Draggable::end() ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="losersTable<?= $group ?>">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <table class="centered" width="100%">
+                                <tr>
+                                    <th><?= Yii::t('app', 'Match ID') ?></th>
+                                    <th><?= Yii::t('app', 'Round') ?></th>
+                                    <th><?= Yii::t('app', 'Participant A') ?></th>
+                                    <th><?= Yii::t('app', 'Score') ?></th>
+                                    <th><?= Yii::t('app', 'Participant B') ?></th>
+                                    <th><?= Yii::t('app', 'State') ?></th>
+                                    <?php if ($model->status != Tournament::STATUS_FINISHED): ?>
+                                        <th></th>
+                                    <?php endif ?>
+                                </tr>
+                                <?= ListView::widget([
+                                    'summary' => false,
+                                    'dataProvider' => $losersDataProviderArray[$group],
+                                    'emptyText' => '<div class="row"><div class="col-lg-12"><div class="well">' . Yii::t('app', 'We haven\'t started the tournament yet.') . '</div></div></div>',
+                                    'itemOptions' => ['class' => 'item'],
+                                    'itemView' => function ($model, $key, $index, $widget) {
+                                        return $this->render('_stage', ['model' => $model, 'stage' => Tournament::STAGE_FS]);
+                                    },
+                                ]) ?>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <?php endif ?>
+                <?php
+                $currentRound = null;
+            } ?>
+
+                <?= ListView::widget([
+                    'summary' => false,
+                    'dataProvider' => $dataProvider,
+                    'emptyText' => '<div class="row"><div class="col-lg-12"><div class="well">' . Yii::t('app', 'We haven\'t started the tournament yet.') . '</div></div></div>',
+                    'itemOptions' => ['class' => 'item'],
+                    'itemView' => function ($model, $key, $index, $widget) {
+                        return $this->render('_modal', ['model' => $model, 'stage' => Tournament::STAGE_GS]);
+                    },
+                ]) ?>
+                <?php if (!($model->status >= Tournament::STATUS_RUNNING)): ?>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="well">
+                                <?= Yii::t('app', 'Tournament not yet ready.') ?>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif ?>
+            </div>
         </div>
     </div>
-</div>
-</div>
+</div></div>

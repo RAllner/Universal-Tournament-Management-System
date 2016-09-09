@@ -14,7 +14,7 @@ use yii\helpers\Url;
 
 
 ?>
-    <ul class="nav nav-pills nav-stacked">
+    <ul class="nav nav-pills nav-justified">
         <li role="tournament_nav" class="<?= $class = ($active === Tournament::ACTIVE_VIEW)? 'active' : '' ?>">
             <?= Html::a(Yii::t('app', 'Information'), $url = ($active !== Tournament::ACTIVE_VIEW)? Url::to(['/tournament/view', 'id' => $model->id]) : "#")?>
         </li>
@@ -45,10 +45,10 @@ use yii\helpers\Url;
 <?php if(Yii::$app->user->can('updateTournament', ['model' => $model])): ?>
     <?= $link = ($model->status == Tournament::STATUS_COMPLETE) ? Html::a('<i class="material-icons">done</i> ' . Yii::t('app', 'Finish'), ['finish', 'id' => $model->id], ['class' => 'btn btn-block btn-success']) : "" ?>
     <?php if ($model->status === 1): ?>
-        <?= Html::a('<i class="material-icons">publish</i> ' . Yii::t('app', 'Publish'), ['/tournament/publish', 'id' => $model->id], ['class' => 'btn btn-block btn-success']) ?>
+        <?= Html::a('<i class="material-icons">publish</i> ' . Yii::t('app', 'Publish'), ['/tournament/publish', 'id' => $model->id], ['class' => 'btn btn-block btn-primary']) ?>
     <?php endif ?>
     <?php if ($model->status == 2): ?>
-        <?= Html::a('<i class="material-icons">play_arrow</i> ' . Yii::t('app', 'Start'), ['/tournament/start', 'id' => $model->id], ['class' => 'btn btn-block btn-warning']) ?>
+        <?= Html::a('<i class="material-icons">play_arrow</i> ' . Yii::t('app', 'Start'), ['/tournament/start', 'id' => $model->id], ['class' => 'btn btn-block btn-success']) ?>
     <?php endif ?>
     <?php if ($model->status == 4): ?>
         <?= Html::a('<i class="material-icons">play_arrow</i> ' . Yii::t('app', 'Start Final'), ['/tournament/start-final-stage', 'id' => $model->id], ['class' => 'btn btn-block btn-warning']) ?>

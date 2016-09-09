@@ -618,7 +618,11 @@ div.required label:after {
 }
 
 .form-group.has-success .control-label, .form-group.has-success input.form-control:not(.empty)~.floating-label {
+    color: #12B595;
+}
 
+.alert-success {
+    background-color: #12B595;
 }
 
 /*-- Colors used for various data presentation purposes --*/
@@ -1123,6 +1127,12 @@ optgroup{
     margin-bottom: 0.1em;
     border-bottom: solid 1px #FF8F00;
 }
+.item:last-child .well.tournament {
+    padding-top: 1em;
+    padding-bottom: 1em;
+    margin-bottom: 0.1em;
+    border-bottom: none;
+}
 .media.tournament {
     margin: 0;
 }
@@ -1166,11 +1176,9 @@ blockquote {
     width:100%;
     height:100%;
     bottom: 20px;
-    background-color: #0f9d58;
+    background-color: #12B595;
     color: rgba(255,255,255,.84);
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
-    padding-top: 2em;
+    padding-top: 1.2em;
     vertical-align: middle;
 }
 
@@ -1327,6 +1335,7 @@ ol#sortable-participants li {
     border-bottom-left-radius: 10px;
     border-top-left-radius: 10px;
     cursor: move;
+    margin-left: -1em;
 }
 
 ol#sortable-participants li.ui-sortable-helper {
@@ -1355,7 +1364,7 @@ ol#sortable-participants li.disabled > .control-group > i {
 }
 
 .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
-    background-color: #FF8F00;
+    background-color: #888888;
     color: #000;
     opacity: 1;
 }

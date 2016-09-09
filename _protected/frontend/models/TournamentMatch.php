@@ -124,6 +124,34 @@ class TournamentMatch extends ActiveRecord
         }
     }
 
+
+    /**
+     * Returns the tournaments status in nice format.
+     *
+     * @param  null|integer $state Status integer value if sent to method.
+     * @return string               Nicely formatted status.
+     */
+    public function getStateName($state= null)
+    {
+        $state = (empty($state)) ? $this->$state : $state;
+
+        if ($state === self::MATCH_STATE_CREATED) {
+            return Yii::t('app', 'Created');
+        } else if ($state === self::MATCH_STATE_OPEN) {
+            return Yii::t('app', 'Open');
+        } else if ($state === self::MATCH_STATE_READY) {
+            return Yii::t('app', 'Ready');
+        } else if ($state === self::MATCH_STATE_RUNNING) {
+            return Yii::t('app', 'Running');
+        } else if ($state === self::MATCH_STATE_FINISHED) {
+            return Yii::t('app', 'Finished');
+        } else  {
+            return Yii::t('app', 'Direct advance');
+        }
+    }
+
+
+
     /**
      * Returns the match stage in nice format.
      *

@@ -21,18 +21,16 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Settings');
     </h1>
     <div class="clearfix"></div>
     <div class="row">
-        <div class="col-md-2 col-xs-3">
+        <div class="col-xs-12">
             <?php echo $this->render('nav', ['model' => $model, 'active' => Tournament::ACTIVE_SETTINGS]); ?>
         </div>
+    </div>
+    <div class="row" style="padding-top: 1em">
+        <div class="col-xs-12">
 
-
-        <div class="col-md-10 col-xs-9">
-            <div class="well">
                 <?= $this->render('_form', [
                     'model' => $model,
                 ]) ?>
-
-            </div>
         </div>
     </div>
 </div>

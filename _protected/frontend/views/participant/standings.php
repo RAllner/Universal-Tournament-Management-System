@@ -24,9 +24,11 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Standings');
     </h1>
     <div class="clearfix"></div>
     <div class="row">
-        <div class="col-md-2 col-xs-3">
+        <div class="col-xs-12">
             <?php echo $this->render('../tournament/nav', ['model' => $tournament, 'active' => Tournament::ACTIVE_STANDINGS]); ?>
         </div>
+    </div>
+    <div class="row">
         <div class="col-md-7 col-xs-9">
             <table class="centered" width="100%">
                 <tr>
@@ -55,7 +57,6 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Standings');
                         return $this->render('_standings', ['model' => $model]);
                     },
                 ]) ?>
-
             </table>
         </div>
     </div>

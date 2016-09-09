@@ -263,7 +263,7 @@ class Tournament extends ActiveRecord
         } else if ($status === self::STATUS_FINISHED) {
             return Yii::t('app', 'Finished');
         } else if ($status === self::STATUS_ABORT) {
-            return Yii::t('app', 'Abort');
+            return Yii::t('app', 'Aborted');
         } else {
             return Yii::t('app', 'Deleted');
         }
@@ -834,27 +834,28 @@ class Tournament extends ActiveRecord
 
 
         if ($model->state == TournamentMatch::MATCH_STATE_CREATED) {
-            $followWinnerMatchID = explode(',', $model->follow_winner_and_loser_match_ids)[0];
-            /** @var TournamentMatch $followMatch */
-            $followMatch = TournamentMatch::find()
-                ->where(['tournament_id' => $model->tournament_id])
-                ->andWhere(['matchID' => $followWinnerMatchID])
-                ->one();
-            if ($index % 2 == 0) {
-                $participantID = $followMatch->participant_id_A;
-            } else {
-                $participantID = $followMatch->participant_id_B;
-            }
-            /**
-             * @var $participant Participant
-             */
-            $participant = Participant::find()
-                ->where(['id' => $participantID])
-                ->one();
-
-
             return "<div class='$classes opa01'><div class='match-r-double'> </div></div>";
         }
+
+        if ($model->state == TournamentMatch::MATCH_STATE_DIRECT_ADVANCE) {
+            $qualifyingMatchIDs = explode(',', $model->qualification_match_ids);
+            /** @var TournamentMatch $qualiMatch */
+            $qualiMatch = TournamentMatch::find()
+                ->where(['tournament_id' => $model->tournament_id])
+                ->andWhere(['groupID' => $model->groupID])
+                ->andWhere(['stage' => $model->stage])
+                ->andWhere(['matchID' => $qualifyingMatchIDs[0]])
+                ->one();
+            if ($qualiMatch->state == TournamentMatch::MATCH_STATE_OPEN || $qualiMatch->state == TournamentMatch::MATCH_STATE_READY) {
+                $participantID = $nameA;
+            } else {
+                $participantID = $nameB;
+            }
+
+            return "<div class='$classes opa01'><div class='matchId'>$model->matchID</div><div class='match-r-double'>$participantID</div></div>";
+        }
+
+
         $matchId = "<div class='matchId'>$model->matchID</div>";
 
         $contentRow1 = "<div class='match-r1 $winner_A $openMatch $runningMatch'><div class='m-id'></div><div class='m-participant'>$nameA</div><div class='m-points'>$model->participant_score_A</div></div>";

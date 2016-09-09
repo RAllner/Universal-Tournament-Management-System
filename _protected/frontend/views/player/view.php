@@ -60,10 +60,10 @@ $options = ['data-lightbox' => 'profile-image', 'data-title' => $photoInfo['alt'
                     <li role="player-profile-nav" class="active"><a href="#profile" aria-controls="profile" role="tab"
                                                                     data-toggle="tab"><?= Yii::t('app', 'Profile') ?></a>
                     </li>
-                    <li role="player-profile-nav"><a href="#tournaments" aria-controls="messages" role="tab"
+                    <li role="player-profile-nav"><a href="#tournaments" aria-controls="tournaments" role="tab"
                                                      data-toggle="tab"><?= Yii::t('app', 'Tournaments') ?></a></li>
                     <?php if (!is_null($model->stream)): ?>
-                        <li role="player-profile-nav"><a href="#livestream" aria-controls="messages" role="tab"
+                        <li role="player-profile-nav"><a href="#livestream" aria-controls="livestream" role="tab"
                                                          data-toggle="tab"><?= Yii::t('app', 'Twitch stream') ?></a>
                         </li>
                     <?php endif ?>

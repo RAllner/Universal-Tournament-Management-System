@@ -25,25 +25,27 @@ $options = ['data-title' => $photoInfo['alt']];
     </h1>
     <div class="clearfix"></div>
     <div class="row">
-        <div class="col-md-2 col-xs-3">
-            <?php echo $this->render('nav', ['model' => $model, 'active' => Tournament::ACTIVE_VIEW]); ?>
-        </div>
-
-
-        <div class="col-md-10 col-xs-9">
-            <div class="row tournament-header">
-                <div class="col-xs-10 no-padding-right">
+    <div class="col-md-12 col-xs-12">
+        <?php echo $this->render('nav', ['model' => $model, 'active' => Tournament::ACTIVE_VIEW]); ?>
+    </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row tournament-header" style="margin-top:1em">
+                <div class="col-xs-10 col-md-10 no-padding-right">
                     <div class="well">
                         <div class="media tournament">
-                            <div class="media-left">
+
+                            <div class="media-left hidden-xs">
                                 <a href="<?= Url::to(['tournament/view', 'id' => $model->id]) ?>">
-                                    <img class="media-object img-circle" style="width:100px"
+                                    <img class="media-object img-circle" style="width:70px"
                                          src="<?= $photoInfo['url'] ?>"
                                          alt="<?= $model->getHostedBy() ?>">
                                 </a>
                             </div>
                             <div class="media-body media-middle">
-                                <h3 class="media-heading ">
+                                <h3 class="media-heading">
                                     <div class="pull-right">
                                         <?= $model->game->name ?>
                                         </br>
@@ -59,8 +61,6 @@ $options = ['data-title' => $photoInfo['alt']];
                                     <?php if ($model->hosted_by == -1): ?>
                                         <?= $model->getHostedBy() ?>
                                     <?php endif ?>
-
-
                                 </h3>
 
 
@@ -92,8 +92,15 @@ $options = ['data-title' => $photoInfo['alt']];
                         </a>
 
                 </div>
-            </div>
 
+            </div>
+            <div class="hidden-md hidden-lg">
+            <a href="<?= $class=($model->status >= Tournament::STATUS_RUNNING)? "#": Url::to(['participant/signup', 'tournament_id' => $model->id]) ?>" class="btn">
+
+                <?= '<i class="material-icons">plus_one</i></br> ' . Yii::t('app', 'Signup') ?>
+
+            </a>
+            </div>
             <div class="panel panel-default">
                 <div class="panel-heading"><?= Yii::t('app','Informations')?></div>
                 <ul class="list-group">
@@ -132,9 +139,11 @@ $options = ['data-title' => $photoInfo['alt']];
                         </blockquote>
                     </div>
                 <?php endif ?>
+
             </div>
 
 
         </div>
+
     </div>
 </div>

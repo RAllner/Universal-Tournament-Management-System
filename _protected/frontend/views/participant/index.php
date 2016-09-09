@@ -68,56 +68,58 @@ $this->registerJs($script, View::POS_END);
     </h1>
     <div class="clearfix"></div>
     <div class="row">
-        <div class="col-md-2 col-sm-3 col-xs-12">
+        <div class="col-xs-12">
             <?php echo $this->render(Url::to('/tournament/nav'), ['model' => $tournament, 'active' => Tournament::ACTIVE_PARTICIPANTS]); ?>
         </div>
-        <div class="col-md-6 col-sm-9 col-xs-12">
-            <div class="pull-right">
-                <?php if($tournament->status < Tournament::STATUS_RUNNING): ?>
-                <a href="<?= Url::to(['reorder', 'id' => $tournament->id, 'order' => $idsOrderedBySeed,]) ?>"
-                   class="sendOrder"><span class="hidden btn btn-success"><?= Yii::t('app', 'Save order') ?></span></a>
-                <?= Html::a('<i class="material-icons">shuffle</i> ' . Yii::t('app', 'Shuffle Seeds'), ['shuffle-seeds', 'tournament_id' => $tournament->id], ['class' => 'btn btn-info']) ?>
-                <?php endif ?>
-            </div>
-            <div class="clearfix"></div>
-            <?php
+    </div>
+    <div class="row">
+        <div class="col-md-8 col-sm-12 col-xs-12">
+            <div class="well">
+                <?php
 
-            /** @var Participant $participant */
-            foreach ($participants as $participant) {
-                $items[$participant->seed] = [
-                    'content' =>
+                /** @var Participant $participant */
+                foreach ($participants as $participant) {
+                    $items[$participant->seed] = [
+                        'content' =>
 
-                        '<div style="float: left">'.$participant->name.'</div>'
+                            '<div style="float: left">' . $participant->name . '</div>'
 
-                        . '<div class="control-group">'
-                        .'<i class="material-icons">drag_handle</i>'
+                            . '<div class="control-group">'
+                            . '<i class="material-icons">drag_handle</i>'
                             . $control = (Yii::$app->user->can('updateTournament', ['model' => $model])) ? Html::a('<i class="material-icons">delete</i>', Url::to(['delete', 'id' => $participant->id]), ['data-method' => 'post']) : ""
-                        . "</div>",
-                    'options' => ['id' => $participant->id],
-                ];
-            }
-            if(isset($items)){
-            echo Sortable::widget([
-                'id' => 'sortable-participants',
-                'items' => $items,
-                'options' => ['tag' => 'ol'],
-                'itemOptions' => ['tag' => 'li'],
-                'clientOptions' => ['cursor' => 'move'],
-            ]);
-            } else {
-                echo Yii::t('app', 'No participants registered');
-            }
+                                . "</div>",
+                        'options' => ['id' => $participant->id],
+                    ];
+                }
+                if (isset($items)) {
+                    echo Sortable::widget([
+                        'id' => 'sortable-participants',
+                        'items' => $items,
+                        'options' => ['tag' => 'ol'],
+                        'itemOptions' => ['tag' => 'li'],
+                        'clientOptions' => ['cursor' => 'move'],
+                    ]);
+                } else {
+                    echo Yii::t('app', 'No participants registered');
+                }
 
-            ?>
+                ?>
 
-            <input class="sortable" type="hidden" name="order"
-                   value="<?= $value = ($tournament->status >= Tournament::STATUS_RUNNING)? 'true':'false' ?>">
-            <input class="defaultUrl" type="hidden" name="url"
-                   value="<?= Url::to(['reorder', 'id' => $tournament->id]) ?>">
-
+                <input class="sortable" type="hidden" name="order"
+                       value="<?= $value = ($tournament->status >= Tournament::STATUS_RUNNING) ? 'true' : 'false' ?>">
+                <input class="defaultUrl" type="hidden" name="url"
+                       value="<?= Url::to(['reorder', 'id' => $tournament->id]) ?>">
+            </div>
             <?php if (Yii::$app->user->can('updateTournament', ['model' => $tournament])): ?>
                 <div class="row hidden-md hidden-lg">
-                    <div class="col-md-6">
+
+                    <div class="col-md-12">
+                        <?php if ($tournament->status < Tournament::STATUS_RUNNING): ?>
+                            <a href="<?= Url::to(['reorder', 'id' => $tournament->id, 'order' => $idsOrderedBySeed,]) ?>"
+                               class="sendOrder"><span class="hidden btn btn-warning btn-block"><i class="material-icons">save</i> <?= Yii::t('app', 'Save order') ?></span></a>
+                            <?= Html::a('<i class="material-icons">shuffle</i> ' . Yii::t('app', 'Shuffle Seeds'), ['shuffle-seeds', 'tournament_id' => $tournament->id], ['class' => 'btn btn-warning btn-block']) ?>
+                        <?php endif ?>
+                        <h3><?= Yii::t('app', 'Add participants') ?></h3>
 
                         <div class="well">
                             <?= $this->render('_adminForm', [
@@ -125,18 +127,27 @@ $this->registerJs($script, View::POS_END);
                                 'source' => $source,
                             ]) ?>
                         </div>
-                    </div>
-                    <div class="col-md-6">
+
+
                         <div class="well">
                             <?= $this->render('_bulkForm', [
                                 'bulk' => $bulk,
                             ]) ?>
                         </div>
+
                     </div>
+
                 </div>
             <?php endif ?>
         </div>
         <div class="col-md-4 hidden-xs hidden-sm">
+            <?php if ($tournament->status < Tournament::STATUS_RUNNING): ?>
+                <a href="<?= Url::to(['reorder', 'id' => $tournament->id, 'order' => $idsOrderedBySeed,]) ?>"
+                   class="sendOrder"><span class="hidden btn btn-warning btn-block"><i
+                            class="material-icons">save</i> <?= Yii::t('app', 'Save order') ?></span></a>
+                <?= Html::a('<i class="material-icons">shuffle</i> ' . Yii::t('app', 'Shuffle Seeds'), ['shuffle-seeds', 'tournament_id' => $tournament->id], ['class' => 'btn btn-warning btn-block']) ?>
+            <?php endif ?>
+            <h3><?= Yii::t('app', 'Add participants') ?></h3>
             <div class="well">
                 <?= $this->render('_adminForm', [
                     'model' => $model,
@@ -150,5 +161,4 @@ $this->registerJs($script, View::POS_END);
             </div>
         </div>
     </div>
-
 </div>

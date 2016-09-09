@@ -160,123 +160,116 @@ $(document).ready(function(){
 JS;
 $this->registerJs($script, View::POS_END);
 
-$readOnly = ($model->status >= Tournament::STATUS_RUNNING)? ['readonly' => true, 'disabled' => true] : ['readonly' => false];
-$readOnlyBoolean = ($model->status >= Tournament::STATUS_RUNNING)? true : false;
+$readOnly = ($model->status >= Tournament::STATUS_RUNNING) ? ['readonly' => true, 'disabled' => true] : ['readonly' => false];
+$readOnlyBoolean = ($model->status >= Tournament::STATUS_RUNNING) ? true : false;
 
 ?>
 
 <div class="tournament-form">
-    <a tabindex="0" class="btn btn-lg btn-default" role="button" data-toggle="popover" data-trigger="focus" title="Dismissible popover" data-content="And here's some amazing content. It's very engaging. Right?">?</a>
 
+
+    <h2><?= Yii::t('app', 'General') ?></h2>
     <?php $form = ActiveForm::begin(); ?>
 
-    <h3><?php Yii::t('app', 'General') ?></h3>
-    <div class="row">
-        <div class="col-lg-6">
-            <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
-        </div>
-
-    </div>
-    <div class="row">
-        <div class="col-lg-6">
-            <?=  $form->field($model, 'hosted_by')->dropDownList(ArrayHelper::map($model->hostedByList, "id", "name", "class"), $readOnly) ?>
-        </div>
-        <div class="col-lg-6">
-
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-6">
-
-            <?= $form->field($model, 'begin')->widget(DateTimePicker::classname(), [
-                'options' => ['placeholder' => Yii::t('app', 'Enter event start time ... ')],
-                'pluginOptions' => [
-                    'autoclose' => true,
-                    'format' => 'yyyy-mm-dd hh:ii'
-
-                ]
-            ]); ?>
-        </div>
-        <div class="col-md-6">
-            <?= $form->field($model, 'end')->widget(DateTimePicker::classname(), [
-                'options' => ['placeholder' => Yii::t('app', 'Enter event end time ... (if you want)')],
-                'pluginOptions' => [
-                    'autoclose' => true,
-                    'format' => 'yyyy-mm-dd hh:ii'
-                ]
-            ]); ?>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <div class="input-group">
-                <?= $form->field($model, 'location')->dropDownList(ArrayHelper::map(Location::find()->all(), 'id', 'name'), ['prompt' => Yii::t('app', 'Please choose ...')]) ?>
-                <?= Html::a('<i class="material-icons">add</i>', ['location/create'], ['class' => 'input-group-btn btn']) ?>
-            </div>
-        </div>
-        <div class="col-md-6">
-
-            <div class="input-group">
-                <?= $form->field($model, 'game_id')->dropDownList(ArrayHelper::map(Game::find()->all(), 'id', 'name'), ['prompt' => Yii::t('app', 'Please choose ...')]) ?>
-                <?= Html::a('<i class="material-icons">add</i>', ['game/create'], ['class' => 'input-group-btn btn']) ?>
+    <div class="well">
+        <div class="row">
+            <div class="col-lg-6">
+                <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
             </div>
 
         </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <?= $form->field($model, 'description')->widget(CKEditor::className(),
+                    ['editorOptions' => ['preset' => 'standard', 'inline' => false]]); ?>
+
+
+            </div>
+            <div class="col-lg-6">
+                <?= $form->field($model, 'hosted_by')->dropDownList(ArrayHelper::map($model->hostedByList, "id", "name", "class"), $readOnly) ?>
+
+                <?= $form->field($model, 'begin')->widget(DateTimePicker::classname(), [
+                    'options' => ['placeholder' => Yii::t('app', 'Enter event start time ... ')],
+                    'pluginOptions' => [
+                        'autoclose' => true,
+                        'format' => 'yyyy-mm-dd hh:ii'
+
+                    ]
+                ]); ?>
+
+                <?= $form->field($model, 'end')->widget(DateTimePicker::classname(), [
+                    'options' => ['placeholder' => Yii::t('app', 'Enter event end time ... (if you want)')],
+                    'pluginOptions' => [
+                        'autoclose' => true,
+                        'format' => 'yyyy-mm-dd hh:ii'
+                    ]
+                ]); ?>
+
+                <div class="input-group">
+                    <?= $form->field($model, 'location')->dropDownList(ArrayHelper::map(Location::find()->all(), 'id', 'name'), ['prompt' => Yii::t('app', 'Please choose ...')]) ?>
+                    <?= Html::a('<i class="material-icons">add</i>', ['location/create'], ['class' => 'input-group-btn btn']) ?>
+                </div>
+
+                <div class="input-group">
+                    <?= $form->field($model, 'game_id')->dropDownList(ArrayHelper::map(Game::find()->all(), 'id', 'name'), ['prompt' => Yii::t('app', 'Please choose ...')]) ?>
+                    <?= Html::a('<i class="material-icons">add</i>', ['game/create'], ['class' => 'input-group-btn btn']) ?>
+                </div>
+
+
+            </div>
+        </div>
     </div>
-    </br>
 
-    <?= $form->field($model, 'description')->widget(CKEditor::className(),
-        ['editorOptions' => ['preset' => 'standard', 'inline' => false]]); ?>
+    <h2><?= Yii::t('app', 'Tournament format') ?></h2>
 
-
+    <div class="well">
         <?= $form->field($model, 'is_team_tournament')->checkbox($readOnly) ?>
 
         <?= $form->field($model, 'stage_type')->radioList([0 => Yii::t('app', 'Single Stage Tournament'), 1 => Yii::t('app', 'Two Stage Tournament')], $readOnly) ?>
 
 
-    <div class="group-stage">
-        <div class="well">
-            <h3><?= Yii::t('app', 'Group Stage') ?></h3>
-            <div class="row">
-                <div class="col-md-6">
+        <div class="group-stage">
+            <div class="well">
+                <h3><?= Yii::t('app', 'Group Stage') ?></h3>
+                <div class="row">
+                    <div class="col-md-6">
 
-                    <?= $form->field($model, 'gs_format')->dropDownList($model->groupStageFormatList, $readOnly) ?>
+                        <?= $form->field($model, 'gs_format')->dropDownList($model->groupStageFormatList, $readOnly) ?>
 
-                    <?= $form->field($model, 'participants_compete')->textInput(['type' => 'number', 'min' => 1, 'readonly' => $readOnlyBoolean, 'disabled' => $readOnlyBoolean]) ?>
+                        <?= $form->field($model, 'participants_compete')->textInput(['type' => 'number', 'min' => 1, 'readonly' => $readOnlyBoolean, 'disabled' => $readOnlyBoolean]) ?>
 
-                    <?= $form->field($model, 'participants_advance')->textInput(['type' => 'number', 'min' => 1, 'readonly' => $readOnlyBoolean, 'disabled' => $readOnlyBoolean]) ?>
+                        <?= $form->field($model, 'participants_advance')->textInput(['type' => 'number', 'min' => 1, 'readonly' => $readOnlyBoolean, 'disabled' => $readOnlyBoolean]) ?>
 
-                    <?= $form->field($model, 'gs_rr_ranked_by')->dropDownList($model->rankedByList, $readOnly) ?>
+                        <?= $form->field($model, 'gs_rr_ranked_by')->dropDownList($model->rankedByList, $readOnly) ?>
+                    </div>
+
+                    <div class="col-md-6 gs-custom-points">
+
+                        <?= $form->field($model, 'gs_rr_ppmw')->textInput(['value' => '1.0', 'readonly' => $readOnlyBoolean, 'disabled' => $readOnlyBoolean]) ?>
+
+                        <?= $form->field($model, 'gs_rr_ppmt')->textInput(['value' => '0.5', 'readonly' => $readOnlyBoolean, 'disabled' => $readOnlyBoolean]) ?>
+
+                        <?= $form->field($model, 'gs_rr_ppgw')->textInput(['value' => '0.0', 'readonly' => $readOnlyBoolean, 'disabled' => $readOnlyBoolean]) ?>
+
+                        <?= $form->field($model, 'gs_rr_ppgt')->textInput(['value' => '0.0', 'readonly' => $readOnlyBoolean, 'disabled' => $readOnlyBoolean]) ?>
+
+                    </div>
                 </div>
 
-                <div class="col-md-6 gs-custom-points">
-
-                    <?= $form->field($model, 'gs_rr_ppmw')->textInput(['value' => '1.0', 'readonly' => $readOnlyBoolean, 'disabled' => $readOnlyBoolean]) ?>
-
-                    <?= $form->field($model, 'gs_rr_ppmt')->textInput(['value' => '0.5', 'readonly' => $readOnlyBoolean, 'disabled' => $readOnlyBoolean]) ?>
-
-                    <?= $form->field($model, 'gs_rr_ppgw')->textInput(['value' => '0.0', 'readonly' => $readOnlyBoolean, 'disabled' => $readOnlyBoolean]) ?>
-
-                    <?= $form->field($model, 'gs_rr_ppgt')->textInput(['value' => '0.0', 'readonly' => $readOnlyBoolean, 'disabled' => $readOnlyBoolean]) ?>
-
-                </div>
             </div>
-
         </div>
 
-    </div>
     <div class="final-stage">
         <div class="well">
             <h3 id="final-stage-header"><?= Yii::t('app', 'Final Stage') ?></h3>
             <div class="row">
                 <div class="col-md-6">
 
-                        <?= $form->field($model, 'fs_format')->dropDownList($model->formatList, $readOnly) ?>
+                    <?= $form->field($model, 'fs_format')->dropDownList($model->formatList, $readOnly) ?>
 
-                        <?= $form->field($model, 'fs_third_place')->checkbox($readOnly) ?>
+                    <?= $form->field($model, 'fs_third_place')->checkbox($readOnly) ?>
 
-                        <?= $form->field($model, 'fs_de_grand_finals')->radioList(['0' => Yii::t('app', '1-2 matches'), '1' => Yii::t('app', '1 match'), '2' => Yii::t('app', 'None')] ,$readOnly) ?>
+                    <?= $form->field($model, 'fs_de_grand_finals')->radioList(['0' => Yii::t('app', '1-2 matches'), '1' => Yii::t('app', '1 match'), '2' => Yii::t('app', 'None')], $readOnly) ?>
 
                     <?= $form->field($model, 'fs_rr_ranked_by')->dropDownList($model->rankedByList, $readOnly) ?>
                 </div>
@@ -294,72 +287,50 @@ $readOnlyBoolean = ($model->status >= Tournament::STATUS_RUNNING)? true : false;
             </div>
         </div>
     </div>
-
+    </div>
     <h3><?= Yii::t('app', 'Advanced Settings') ?></h3>
-
-
+    <div class="well">
         <?= $form->field($model, 'quick_advance')->checkbox($readOnly) ?>
 
         <?= $form->field($model, 'has_sets')->checkbox($readOnly) ?>
 
 
 
-    <?= $form->field($model, 'notifications')->checkbox() ?>
+        <?= $form->field($model, 'notifications')->checkbox() ?>
 
-    <?= $form->field($model, 'url')->hiddenInput()->label(false) ?>
+        <?= $form->field($model, 'url')->hiddenInput()->label(false) ?>
 
-    <?php if($model->isNewRecord): ?>
-        <?= $form->field($model, 'status')->dropDownList($model->statusList) ?>
-    <?php endif ?>
+        <?php if ($model->isNewRecord): ?>
+            <?= $form->field($model, 'status')->dropDownList($model->statusList) ?>
+        <?php endif ?>
 
-    <?= $form->field($model, 'max_participants')->textInput(['type' => 'number', 'min' => 2, 'value' => 50]) ?>
-
-
-    <?= $form->field($model, 'organisation_id')->hiddenInput()->label(false) ?>
-
-    <?= $form->field($model, 'participants_count')->hiddenInput()->label(false) ?>
+        <?= $form->field($model, 'max_participants')->textInput(['type' => 'number', 'min' => 2, 'value' => 50]) ?>
 
 
+        <?= $form->field($model, 'organisation_id')->hiddenInput()->label(false) ?>
 
-    <?= $form->field($model, 'gs_tie_break1')->dropDownList($model->matchTiesByList, ['value' => 6])->hiddenInput()->label(false) ?>
-
-    <?= $form->field($model, 'gs_tie_break2')->dropDownList($model->matchTiesByList, ['value' => 2])->hiddenInput()->label(false) ?>
-
-    <?= $form->field($model, 'gs_tie_break3')->dropDownList($model->matchTiesByList, ['value' => 4])->hiddenInput()->label(false) ?>
-
-    <?= $form->field($model, 'gs_tie_break1_copy1')->dropDownList($model->matchTiesByList, ['value' => 6])->hiddenInput()->label(false) ?>
-
-    <?= $form->field($model, 'gs_tie_break2_copy1')->dropDownList($model->matchTiesByList, ['value' => 2])->hiddenInput()->label(false) ?>
-
-    <?= $form->field($model, 'gs_tie_break3_copy1')->dropDownList($model->matchTiesByList, ['value' => 4])->hiddenInput()->label(false) ?>
+        <?= $form->field($model, 'participants_count')->hiddenInput()->label(false) ?>
 
 
-    <!--    <div>
 
+        <?= $form->field($model, 'gs_tie_break1')->dropDownList($model->matchTiesByList, ['value' => 6])->hiddenInput()->label(false) ?>
 
-            <ul class="nav nav-tabs" role="tablist">
-                <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Home</a></li>
-                <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Profile</a></li>
-                <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Messages</a></li>
-                <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a></li>
-            </ul>
+        <?= $form->field($model, 'gs_tie_break2')->dropDownList($model->matchTiesByList, ['value' => 2])->hiddenInput()->label(false) ?>
 
+        <?= $form->field($model, 'gs_tie_break3')->dropDownList($model->matchTiesByList, ['value' => 4])->hiddenInput()->label(false) ?>
 
-            <div class="tab-content">
-                <div role="tabpanel" class="tab-pane fade in active" id="home">
+        <?= $form->field($model, 'gs_tie_break1_copy1')->dropDownList($model->matchTiesByList, ['value' => 6])->hiddenInput()->label(false) ?>
 
-                </div>
-                <div role="tabpanel" class="tab-pane fade" id="profile">...</div>
-                <div role="tabpanel" class="tab-pane fade" id="messages">...</div>
-                <div role="tabpanel" class="tab-pane fade" id="settings">...</div>
-            </div>
+        <?= $form->field($model, 'gs_tie_break2_copy1')->dropDownList($model->matchTiesByList, ['value' => 2])->hiddenInput()->label(false) ?>
 
-        </div>-->
+        <?= $form->field($model, 'gs_tie_break3_copy1')->dropDownList($model->matchTiesByList, ['value' => 4])->hiddenInput()->label(false) ?>
+    </div>
+
 
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-        <?php if (Yii::$app->user->can('updateTournament', ['model' => $model]) && $model->status >=3 && $model->status <=Tournament::STATUS_FINISHED && !$model->isNewRecord): ?>
+        <?php if (Yii::$app->user->can('updateTournament', ['model' => $model]) && $model->status >= 3 && $model->status <= Tournament::STATUS_FINISHED && !$model->isNewRecord): ?>
             <?= Html::a(Yii::t('app', 'Reset'), ['reset', 'id' => $model->id], [
                 'class' => 'btn btn-default',
                 'data' => [
