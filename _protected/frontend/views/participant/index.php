@@ -63,7 +63,7 @@ $this->registerJs($script, View::POS_END);
     <h1><?= Html::encode($this->title);
         ?>
         <div class="pull-right">
-            <?= Html::a('<i class="material-icons">view_headline</i> ' . Yii::t('app', 'Overview'), ['tournament/index'], ['class' => 'btn btn-default']) ?>
+            <?= Html::a('<i class="material-icons">view_headline</i> ' . Yii::t('app', 'Tournaments'), ['tournament/index'], ['class' => 'btn btn-warning']) ?>
         </div>
     </h1>
     <div class="clearfix"></div>
@@ -72,7 +72,7 @@ $this->registerJs($script, View::POS_END);
             <?php echo $this->render(Url::to('/tournament/nav'), ['model' => $tournament, 'active' => Tournament::ACTIVE_PARTICIPANTS]); ?>
         </div>
     </div>
-    <div class="row">
+    <div class="row"  style="margin-top: 1em">
         <div class="col-md-8 col-sm-12 col-xs-12">
             <div class="well">
                 <?php
@@ -86,7 +86,7 @@ $this->registerJs($script, View::POS_END);
 
                             . '<div class="control-group">'
                             . '<i class="material-icons">drag_handle</i>'
-                            . $control = (Yii::$app->user->can('updateTournament', ['model' => $model])) ? Html::a('<i class="material-icons">delete</i>', Url::to(['delete', 'id' => $participant->id]), ['data-method' => 'post']) : ""
+                            . $control = (Yii::$app->user->can('updateTournament')) ? Html::a('<i class="material-icons">delete</i>', Url::to(['delete', 'id' => $participant->id]), ['data-method' => 'post']) : ""
                                 . "</div>",
                         'options' => ['id' => $participant->id],
                     ];
@@ -110,7 +110,7 @@ $this->registerJs($script, View::POS_END);
                 <input class="defaultUrl" type="hidden" name="url"
                        value="<?= Url::to(['reorder', 'id' => $tournament->id]) ?>">
             </div>
-            <?php if (Yii::$app->user->can('updateTournament', ['model' => $tournament])): ?>
+            <?php if(Yii::$app->user->can('updateTournament')){ ?>
                 <div class="row hidden-md hidden-lg">
 
                     <div class="col-md-12">
@@ -138,9 +138,11 @@ $this->registerJs($script, View::POS_END);
                     </div>
 
                 </div>
-            <?php endif ?>
+            <?php } ?>
         </div>
+        <?php if(Yii::$app->user->can('updateTournament')){ ?>
         <div class="col-md-4 hidden-xs hidden-sm">
+
             <?php if ($tournament->status < Tournament::STATUS_RUNNING): ?>
                 <a href="<?= Url::to(['reorder', 'id' => $tournament->id, 'order' => $idsOrderedBySeed,]) ?>"
                    class="sendOrder"><span class="hidden btn btn-warning btn-block"><i
@@ -160,5 +162,6 @@ $this->registerJs($script, View::POS_END);
                 ]) ?>
             </div>
         </div>
+        <?php } ?>
     </div>
 </div>

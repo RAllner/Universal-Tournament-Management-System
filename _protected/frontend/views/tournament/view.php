@@ -20,7 +20,7 @@ $options = ['data-title' => $photoInfo['alt']];
     <h1><?= Html::encode($this->title);
         ?>
         <div class="pull-right">
-            <?= Html::a('<i class="material-icons">view_headline</i> ' . Yii::t('app', 'Overview'), ['index'], ['class' => 'btn btn-default']) ?>
+            <?= Html::a('<i class="material-icons">view_headline</i> ' . Yii::t('app', 'Tournaments'), ['index'], ['class' => 'btn btn-warning']) ?>
         </div>
     </h1>
     <div class="clearfix"></div>
@@ -69,9 +69,9 @@ $options = ['data-title' => $photoInfo['alt']];
                             </br>
                             <?php if($model->status >= Tournament::STATUS_RUNNING): ?>
                             <div class="progress">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                     aria-valuemax="100" style="width: <?= $model->getTournamentProgress($model)?>%;">
-                                    <span class="sr-only"><?= $model->getTournamentProgress($model)?>% <?= Yii::t('app','Complete') ?></span>
+                                <div class="progress-bar" role="progressbar" aria-valuenow="<?= $model->getTournamentProgress($model)?>%" aria-valuemin="0"
+                                     aria-valuemax="100" style="width: <?= $model->getTournamentProgress($model->id)?>%;">
+                                    <span class="sr-only"><?= $model->getTournamentProgress($model->id)?>% <?= Yii::t('app','Complete') ?></span>
                                 </div>
                             </div>
                             <div class="pull-right">

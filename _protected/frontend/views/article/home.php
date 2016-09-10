@@ -20,6 +20,8 @@ if (isset($nextEvent)) {
     $photoEvent = Html::img($photoEventInfo['url'], ['alt' => $photoEventInfo['alt'], 'width' => '100%']);
 }
 
+
+
 ?>
 
 <ol class="breadcrumb">
@@ -41,9 +43,23 @@ if (isset($nextEvent)) {
                     if (Yii::$app->user->isGuest) {
 
                         ?>
-                        <a class="btn btn-default"
+                        <a class="btn btn-success"
                            href="<?= Url::to('@web/site/login') ?>"><?php echo Yii::t('app', 'Login'); ?></a>
-                    <?php } ?>
+                        <a class="btn btn-warning"
+                           href="<?= Url::to('@web/site/signup') ?>"><?php echo Yii::t('app', 'Signup'); ?></a>
+                    <?php } else {
+                        ?>
+                        <b>Die ersten Schritte:</b>
+                        <small>
+                            Erstelle dein Spielerprofil und registriere dich bei einem Turnier!
+                            <a class="btn btn-success"
+                               href="<?= Url::to('@web/player/create') ?>"><?php echo Yii::t('app', 'Create player profile'); ?></a>
+                            <a class="btn btn-warning"
+                               href="<?= Url::to('@web/tournaments/index') ?>"><?php echo Yii::t('app', 'Tournaments'); ?></a>
+                        </small>
+                    <?php
+                    } ?>
+
                 </div>
             </div>
         </div>

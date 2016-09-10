@@ -114,11 +114,13 @@ class ParticipantController extends FrontendController
         /** @var Tournament $tournament */
         $tournament = Tournament::find()->where(['id' => $tournament_id])->one();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $tournament_id, 1);
+        $nulldataProvider = $searchModel->search(Yii::$app->request->queryParams, $tournament_id, 1, false);
 
         return $this->render('standings', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'tournament' => $tournament,
+            'nulldataProvider' => $nulldataProvider,
         ]);
     }
 

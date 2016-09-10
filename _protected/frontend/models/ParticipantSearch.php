@@ -41,7 +41,7 @@ class ParticipantSearch extends Participant
      * @param int $standings
      * @return ActiveDataProvider
      */
-    public function search($params, $tournament_id, $standings = 0)
+    public function search($params, $tournament_id, $standings = 0, $notnullValues = true)
     {
         $query = Participant::find();
 
@@ -49,13 +49,20 @@ class ParticipantSearch extends Participant
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'sort'=> ['defaultOrder' => ['rank' => SORT_DESC]],
+            'sort'=> ['defaultOrder' => ['rank' => SORT_ASC]],
             'pagination' => [
                 'pageSize' => 100,
             ]
         ]);
         $query->where(['tournament_id' => $tournament_id]);
         $this->load($params);
+
+        if($notnullValues){
+            $query->andWhere(['not', ['rank' => null]]);
+        } else{
+            $query->andWhere(['rank' => null]);
+        }
+
 
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails

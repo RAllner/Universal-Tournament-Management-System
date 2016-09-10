@@ -9,7 +9,7 @@
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Participant */
 
-$rankArray = explode(',' ,$model->rank);
+$rankArray = explode(',' ,$model->history);
 $rankString = "";
 foreach($rankArray as $rank){
     if($rank == "l"){
@@ -22,18 +22,13 @@ foreach($rankArray as $rank){
 
 <tr>
     <td>
-        <?= $model->name ?>
+        <?= $model->rank ?>
     </td>
     <td>
-        <?= $model->seed ?>
+        <?= $model->name ?>
     </td>
     <td>
         <?= $rankString ?> 
     </td>
-    <td>
-        <?= $model->getMatchWins(); ?>
-    </td>
-    <td>
-        <?= $model->getMatchLosses(); ?>
-    </td>
+
 </tr>

@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Standings');
         ?>
         <div class="pull-right">
 
-            <?= Html::a('<i class="material-icons">view_headline</i> ' . Yii::t('app', 'Overview'), ['tournament/index'], ['class' => 'btn btn-default']) ?>
+            <?= Html::a('<i class="material-icons">view_headline</i> ' . Yii::t('app', 'Tournaments'), ['tournament/index'], ['class' => 'btn btn-warning']) ?>
         </div>
     </h1>
     <div class="clearfix"></div>
@@ -28,29 +28,32 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Standings');
             <?php echo $this->render('../tournament/nav', ['model' => $tournament, 'active' => Tournament::ACTIVE_STANDINGS]); ?>
         </div>
     </div>
-    <div class="row">
+    <div class="row" style="margin-top: 1em">
         <div class="col-md-7 col-xs-9">
             <table class="centered" width="100%">
                 <tr>
                     <th>
+                        <?= Yii::t('app', 'Rank') ?>
+                    </th>
+                    <th>
                         <?= Yii::t('app', 'Name') ?>
                     </th>
                     <th>
-                        <?= Yii::t('app', 'Seed') ?>
-                    </th>
-                    <th>
-                        <?= Yii::t('app', 'Achieved') ?>
-                    </th>
-                    <th>
-                        <?= Yii::t('app', 'Match wins') ?>
-                    </th>
-                    <th>
-                        <?= Yii::t('app', 'Match losses') ?>
+                        <?= Yii::t('app', 'Game history') ?>
                     </th>
                 </tr>
                 <?= ListView::widget([
                     'summary' => false,
                     'dataProvider' => $dataProvider,
+                    'emptyText' => '<div class="row"><div class="col-lg-12"><div class="well">' . Yii::t('app', 'Standings are not finished.') . '</div></div></div>',
+                    'itemOptions' => ['class' => 'item'],
+                    'itemView' => function ($model, $key, $index, $widget) {
+                        return $this->render('_standings', ['model' => $model]);
+                    },
+                ]) ?>
+                <?= ListView::widget([
+                    'summary' => false,
+                    'dataProvider' => $nulldataProvider,
                     'emptyText' => '<div class="row"><div class="col-lg-12"><div class="well">' . Yii::t('app', 'Standings are not finished.') . '</div></div></div>',
                     'itemOptions' => ['class' => 'item'],
                     'itemView' => function ($model, $key, $index, $widget) {

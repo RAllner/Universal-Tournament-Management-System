@@ -637,7 +637,7 @@ class Tournament extends ActiveRecord
         $tournamentMatchesCount = $this->getTournamentMatchesCount($id);
         $tournamentFinishedMatchesCount = $this->getTournamentFinishedMatchesCount($id);
         if ($tournamentFinishedMatchesCount > 0) {
-            return ($tournamentFinishedMatchesCount / $tournamentMatchesCount) * 100;
+            return  (100 / $tournamentMatchesCount) * $tournamentFinishedMatchesCount;
         } else {
             return 0;
         }
@@ -652,6 +652,7 @@ class Tournament extends ActiveRecord
         return TournamentMatch::find()
             ->where(['tournament_id' => $id])
             ->andWhere(['>', 'state', TournamentMatch::MATCH_STATE_CREATED])
+            ->andWhere(['<', 'state', TournamentMatch::MATCH_STATE_DIRECT_ADVANCE])
             ->count();
     }
 
@@ -745,12 +746,14 @@ class Tournament extends ActiveRecord
         $runningMatch = ($model->state == TournamentMatch::MATCH_STATE_RUNNING) ? " running-match" : "";
 
 
-        if ($model->state == TournamentMatch::MATCH_STATE_CREATED) {
+        if ($model->state == TournamentMatch::MATCH_STATE_CREATED || $model->state == TournamentMatch::MATCH_STATE_DIRECT_ADVANCE) {
             $followWinnerMatchID = explode(',', $model->follow_winner_and_loser_match_ids)[0];
             /** @var TournamentMatch $followMatch */
             $followMatch = TournamentMatch::find()
                 ->where(['tournament_id' => $model->tournament_id])
                 ->andWhere(['matchID' => $followWinnerMatchID])
+                ->andWhere(['groupID' => $model->groupID])
+                ->andWhere(['stage' => $model->stage])
                 ->one();
             if ($index % 2 == 0) {
                 $participantID = $followMatch->participant_id_A;
@@ -786,13 +789,18 @@ class Tournament extends ActiveRecord
 
         $run = ($model->state == TournamentMatch::MATCH_STATE_READY) ? '<i class=\"material-icons\">play_arrow</i>' : '<i class=\"material-icons\">pause</i>';
         if ($model->state == TournamentMatch::MATCH_STATE_READY || $model->state == TournamentMatch::MATCH_STATE_RUNNING) {
-            $button_play = Html::a(($model->state == TournamentMatch::MATCH_STATE_READY) ? '<i class="material-icons">play_arrow</i>' : '<i class="material-icons">pause</i>', Url::to(['/tournament/match-running', 'id' => $model->tournament_id, 'match_id' => $model->id]), ['class' => 'm-details-button']);
-            $button_edit = "<div class='m-details-button' title='EDIT' data-toggle='modal' data-target='#myModal$model->id'><i class='material-icons'>mode_edit</i></div>";
+            if(Yii::$app->user->can('updateTournament')){
+                $button_play = Html::a(($model->state == TournamentMatch::MATCH_STATE_READY) ? '<i class="material-icons">play_arrow</i>' : '<i class="material-icons">pause</i>', Url::to(['/tournament/match-running', 'id' => $model->tournament_id, 'match_id' => $model->id]), ['class' => 'm-details-button']);
+                $button_edit = "<div class='m-details-button' title='EDIT' data-toggle='modal' data-target='#myModal$model->id'><i class='material-icons'>mode_edit</i></div>";
+            } else{
+                $button_play = "";
+                $button_edit = "";
+            }
         } else {
             $button_play = "";
             $button_edit = "";
             if ($model->state == TournamentMatch::MATCH_STATE_FINISHED && $this->status != Tournament::STATUS_FINISHED) {
-                $button_play = Html::a('<i class="material-icons">undo</i>', Url::to(['@web/tournament/match-undo', 'id' => $model->tournament_id, 'match_id' => $model->id]), ['class' => 'm-details-button']);
+                //$button_play = Html::a('<i class="material-icons">undo</i>', Url::to(['@web/tournament/match-undo', 'id' => $model->tournament_id, 'match_id' => $model->id]), ['class' => 'm-details-button']);
             }
         }
 

@@ -205,7 +205,7 @@ $currentRound = null;
     <h1><?= Html::encode($this->title);
         ?>
         <div class="pull-right">
-            <?= Html::a('<i class="material-icons">view_headline</i> ' . Yii::t('app', 'Overview'), ['index'], ['class' => 'btn btn-default']) ?>
+            <?= Html::a('<i class="material-icons">view_headline</i> ' . Yii::t('app', 'Tournaments'), ['index'], ['class' => 'btn btn-warning']) ?>
         </div>
     </h1>
     <div class="clearfix"></div>
