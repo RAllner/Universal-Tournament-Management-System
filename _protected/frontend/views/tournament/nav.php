@@ -18,7 +18,7 @@ use yii\helpers\Url;
         <li role="tournament_nav" class="<?= $class = ($active === Tournament::ACTIVE_VIEW)? 'active' : '' ?>">
             <?= Html::a(Yii::t('app', 'Information'), $url = ($active !== Tournament::ACTIVE_VIEW)? Url::to(['/tournament/view', 'id' => $model->id]) : "#")?>
         </li>
-        <?php if ($model->stage_type === 1 && $model->status > 2): ?>
+        <?php if ($model->stage_type === 1 && $model->status > Tournament::STATUS_PUBLISHED): ?>
             <li role="tournament_nav" class="<?= $class = ($active === Tournament::ACTIVE_GROUP_STAGE)? 'active' : '' ?>">
                 <?= Html::a(Yii::t('app', 'Group Stage'), $url = ($active !== Tournament::ACTIVE_GROUP_STAGE)? Url::to(['/tournament/group-stage', 'id' => $model->id]) : "#")?>
             </li>
@@ -26,13 +26,15 @@ use yii\helpers\Url;
                 <?= Html::a(Yii::t('app', 'Final Stage'), $url = ($active !== Tournament::ACTIVE_FINAL_STAGE)? Url::to(['/tournament/stage', 'id' => $model->id]) : "#")?>
             </li>
         <?php endif ?>
-        <?php if ($model->stage_type === 0): ?>
+        <?php if ($model->stage_type === 0 && $model->status > Tournament::STATUS_PUBLISHED): ?>
             <li role="tournament_nav" class="<?= $class = ($active === Tournament::ACTIVE_FINAL_STAGE)? 'active' : '' ?>">
                 <?= Html::a(Yii::t('app', 'Bracket'), $url = ($active !== Tournament::ACTIVE_FINAL_STAGE)? Url::to(['/tournament/stage', 'id' => $model->id]) : "#")?>
         <?php endif ?>
+                <?php if ($model->status > Tournament::STATUS_PUBLISHED): ?>
         <li role="tournament_nav" class="<?= $class = ($active === Tournament::ACTIVE_STANDINGS)? 'active' : '' ?>">
             <?= Html::a(Yii::t('app', 'Standings'), $url = ($active !== Tournament::ACTIVE_STANDINGS)? Url::to(['/participant/standings', 'tournament_id' => $model->id]) : "#")?>
         </li>
+        <?php endif ?>
         <li role="tournament_nav" class="<?= $class = ($active === Tournament::ACTIVE_PARTICIPANTS)? 'active' : '' ?>">
             <?= Html::a(Yii::t('app', 'Participants'), $url = ($active !== Tournament::ACTIVE_PARTICIPANTS)? Url::to(['/participant/index', 'tournament_id' => $model->id]) : "#")?>
         </li>

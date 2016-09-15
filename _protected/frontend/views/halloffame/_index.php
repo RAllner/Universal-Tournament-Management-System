@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use common\helpers\CssHelper;
 
 /* @var $this yii\web\View */
+/* @var $model \frontend\models\Halloffame */
 $this->title = 'Hall Of Fame';
 $photoInfo = $model->PhotoInfo;
 $photo = Html::img($photoInfo['url'], ['alt' => $photoInfo['alt'], 'style:' => 'height: 150px', 'class' => 'media-object']);
@@ -21,7 +22,7 @@ $options = ['data-lightbox' => 'news-image', 'data-title' => $photoInfo['alt']];
                 <h1 class="articleTitle" itemprop="headline"><?= $model->playername ?></h1>
             </a>
             <p class="introText" itemprop="description">
-                <i class="material-icons">flag</i> <?= $model->achievements ?>
+                <small><i class="material-icons">flag</i> <?= $model->achievements ?></small>
             </p>
         </div>
     </div>

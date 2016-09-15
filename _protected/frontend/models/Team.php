@@ -92,7 +92,15 @@ class Team extends \yii\db\ActiveRecord
         if ($this->imageFile) {
             $path = Url::to('@webroot/images/teams/');
             $escapedTitle = $this->sanitize($this->name);
-            $filename = $this->created_at.$escapedTitle.'.jpg';
+            $filename = $this->created_at.$escapedTitle.'.'.$this->imageFile->extension;
+            if (file_exists($path . $this->created_at.$escapedTitle.'.jpg')) {
+                unlink($path . $this->created_at.$escapedTitle.'.jpg');
+                Yii::$app->session->setFlash('success', "png");
+            }
+            if(file_exists($path . $this->created_at.$escapedTitle.'.png')) {
+                unlink($path . $this->created_at.$escapedTitle.'.png');
+                Yii::$app->session->setFlash('success', "png");
+            }
             $this->imageFile->saveAs($path . $filename);
             $this->makeRect($path . $filename);
             return true;
@@ -108,9 +116,15 @@ class Team extends \yii\db\ActiveRecord
     {
         //getting the image dimensions
         list($width, $height) = getimagesize($path);
-
+        $ext = pathinfo($path, PATHINFO_EXTENSION);
         //saving the image into memory (for manipulation with GD Library)
-        $myImage = imagecreatefromjpeg($path);
+
+
+        if($ext == "png"){
+            $myImage = imagecreatefrompng($path);
+        } else {
+            $myImage = imagecreatefromjpeg($path);
+        }
 
         // calculating the part of the image to use for thumbnail
         if ($width > $height) {
@@ -127,9 +141,15 @@ class Team extends \yii\db\ActiveRecord
         $image = imagecreatetruecolor($imageSize, $imageSize);
         imagecopyresampled($image, $myImage, 0, 0, $x, $y, $imageSize, $imageSize, $smallestSide, $smallestSide);
 
-        //final output
-        header('Content-type: image/jpeg');
-        imagejpeg($image ,$path, 80);
+        if($ext == "png") {
+            //final output
+            header('Content-type: image/jpeg');
+            imagejpeg($image, $path, 80);
+        } else {
+            //final output
+            header('Content-type: image/png');
+            imagepng($image, $path, 5);
+        }
     }
 
 
@@ -230,12 +250,15 @@ class Team extends \yii\db\ActiveRecord
         $url = Url::to('@web/images/teams/');
         $escapedTitle = $this->sanitize($this->name);
         $filename = $this->created_at.$escapedTitle.'.jpg';
+        $filenamePng = $this->created_at.$escapedTitle.'.png';
         $alt = $this->name;
 
         $imageInfo = ['alt'=> $alt];
 
         if (file_exists($path . $filename)) {
             $imageInfo['url'] = $url.$filename;
+        } else if(file_exists($path . $filenamePng)) {
+            $imageInfo['url'] = $url.$filenamePng;
         } else {
             $imageInfo['url'] = $url.'default.png';
         }

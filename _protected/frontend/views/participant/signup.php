@@ -29,14 +29,15 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Signup');
             <?php echo $this->render('../tournament/nav', ['model' => $tournament, 'active' => -1]); ?>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-10">
+    <div class="row" style="padding-top: 1em">
+        <div class="col-md-6">
 
-            <div class="well">
+
             <?= $this->render('_form', [
                 'model' => $model,
+                'tournament' => $tournament,
             ]) ?>
-            </div>
+
         </div>
     </div>
 </div>

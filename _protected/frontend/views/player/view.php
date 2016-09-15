@@ -15,6 +15,10 @@ $this->params['breadcrumbs'][] = $this->title;
 $photoInfo = $model->PhotoInfo;
 $photo = Html::img($photoInfo['url'], ['alt' => $photoInfo['alt'], 'style' => 'width:100%']);
 $options = ['data-lightbox' => 'profile-image', 'data-title' => $photoInfo['alt']];
+$participants = \frontend\models\Participant::find()
+    ->where(['player_id' => $model->id])
+    ->all();
+
 ?>
 <div class="player-view">
 
@@ -30,7 +34,7 @@ $options = ['data-lightbox' => 'profile-image', 'data-title' => $photoInfo['alt'
             ]);
             ?>
         <?php endif ?>
-        <?= Html::encode($this->title) . '#' . $model->running_nr ?>
+        <?= Html::encode($this->title)  ?>
 
         <div class="pull-right">
             <?php if (Yii::$app->user->can('updatePlayer', ['model' => $model])): ?>
@@ -45,12 +49,10 @@ $options = ['data-lightbox' => 'profile-image', 'data-title' => $photoInfo['alt'
     <div class="clearfix"></div>
 
     <div class="row">
-        <div class="col-md-2 ">
+        <div class="col-md-2">
             <figure style="text-align: center">
                 <?= Html::a($photo, $photoInfo['url'], $options) ?>
-
             </figure>
-
         </div>
         <div class="col-md-10">
             <div>
@@ -122,7 +124,7 @@ $options = ['data-lightbox' => 'profile-image', 'data-title' => $photoInfo['alt'
                                         $teamphoto = Html::img($teamPhotoInfo['url'], ['alt' => $teamPhotoInfo['alt'], 'style' => 'width:30px; margin: 5px']);
                                         $member = $model->getTeamMemberFrom($team->id);
                                         echo $teamphoto;
-                                        echo Html::a($team->name, Url::to(['team/view', 'id' => $team->id])) . ' - ' . Yii::t('app', 'Joined') . ' ' . date('d.m.Y', $member->created_at) . '</br>';
+                                        echo Html::a($team->name, Url::to(['team/view', 'id' => $team->id])) . ' - ' . Yii::t('app', 'Joined') . ': ' . date('d.m.Y', $member->created_at) . '</br>';
                                     }
                                     ?>
                                 </div>
@@ -132,10 +134,41 @@ $options = ['data-lightbox' => 'profile-image', 'data-title' => $photoInfo['alt'
                         </div>
                     </div>
                     <div role="tabpanel" class="tab-pane fade" id="tournaments">
-                        <div class="well bs-component">
-                            Comming
+                        <table class="centered col-xs-12">
+                            <tr>
+                                <th> <?= Yii::t('app', 'Tournament') ?> </th>
+                                <th> <?= Yii::t('app', 'Date') ?> </th>
+                                <th> <?= Yii::t('app', 'Rank') ?> </th>
+                                <th> <?= Yii::t('app', 'Game History') ?> </th>
+                            </tr>
 
-                        </div>
+                            <?php
+                            /** @var \frontend\models\Participant $participant */
+                            foreach ($participants as $participant) {
+                                /**  @var \frontend\models\Tournament $tournament */
+
+                                $rankArray = explode(',' ,$participant->history);
+                                $rankString = "";
+                                foreach($rankArray as $rank){
+                                    if($rank == "l"){
+                                        $rankString = $rankString. "<div class='achieved-match-loss'>l</div>";
+                                    } else if($rank == "w"){
+                                        $rankString = $rankString. "<div class='achieved-match-win'>w</div>";
+                                    }
+                                }
+                                $tournament = \frontend\models\Tournament::find()->where(['id'=> $participant->tournament_id])->one()
+                                ?>
+                            <tr>
+                                <td> <?= $tournament->name ?></td>
+                                <td> <?= $tournament->begin ?></td>
+                                <td> <?= $participant->rank ?></td>
+                                <td> <?= $rankString ?></td>
+                            </tr>
+                            <?php }?>
+
+                        </table>
+
+
                     </div>
                     <?php if (!is_null($model->stream)): ?>
                         <div role="tabpanel" class="tab-pane fade" id="livestream">

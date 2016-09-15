@@ -3,6 +3,7 @@
 namespace frontend\controllers;
 
 use frontend\models\Bulk;
+use frontend\models\ParticipantExternalSignupForm;
 use frontend\models\Player;
 use frontend\models\Team;
 use frontend\models\Tournament;
@@ -42,7 +43,7 @@ class ParticipantController extends FrontendController
         $searchModel = new ParticipantSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $tournament_id);
         $tournament = Tournament::find()->where(['id' => $tournament_id])->one();
-
+        $externalSignupModel = new ParticipantExternalSignupForm();
         $source[] = null;
         foreach (Player::find()->all() as $player){
             $object  = (object)[ 'label' => $player['nameWithRunningNr'], 'value' => $player['id']];
@@ -65,11 +66,22 @@ class ParticipantController extends FrontendController
             }
 
         } else if($bulk->load(Yii::$app->request->post())) {
-            if(!empty($bulk->bulk)){
+            if (!empty($bulk->bulk)) {
                 $this->createParticipantsFromBulk($bulk);
             }
-            if($bulk->save()) {
+            if ($bulk->save()) {
                 $model->tournament->setParticipantCount();
+                Yii::$app->session->setFlash('success', 'Bulk with '.$bulk->bulk. ' are successfully registered!');
+                return $this->redirect(['index', 'tournament_id' => $model->tournament_id]);
+            } else {
+                return $this->redirect(['index', 'tournament_id' => $model->tournament_id]);
+            }
+        } elseif ($externalSignupModel->load(Yii::$app->request->post()) && $externalSignupModel->validate()) {
+
+            $model = $externalSignupModel->signup($model);
+            if ($model->save()){
+                $model->tournament->setParticipantCount();
+                Yii::$app->session->setFlash('success', 'Hey '.$model->name. ', you are successfully registered!');
                 return $this->redirect(['index', 'tournament_id' => $model->tournament_id]);
             } else {
 
@@ -83,6 +95,7 @@ class ParticipantController extends FrontendController
                 'source' => $source,
                 'model' => $model,
                 'bulk' => $bulk,
+                'externalSignupModel' => $externalSignupModel,
             ]);
         }
     }
@@ -144,23 +157,33 @@ class ParticipantController extends FrontendController
      */
     public function actionSignup($tournament_id)
     {
+        /** @var Participant $model */
         $model = new Participant();
         $model->tournament_id = $tournament_id;
         $model = $this->loadDefault($model);
         if ($model->load(Yii::$app->request->post())){
-            if(is_null($model->team_id)){
+            if(!is_null($model->player_id)){
                 $player = Player::find()->where(['id' => $model->player_id])->one();
                 $model->name = $player->name . $player->running_nr;
-            } else {
+            } else if(!is_null($model->team_id)){
                 $team = Team::find()->where(['id' => $model->team_id])->one();
                 $model->name = $team->name;
+            } else if(is_null($model->team_id) && is_null($model->player_id)){
+                Yii::$app->session->setFlash('error', 'Hey '.$model->name. ', you are successfully registered!');
             }
             if($model->save()) {
+                Yii::$app->session->setFlash('success', 'Hey '.$model->name. ', you are successfully registered!');
                 $model->tournament->setParticipantCount();
                 return $this->redirect(['tournament/view', 'id' => $model->tournament_id]);
+            } else {
+                Yii::$app->session->setFlash('error', 'Something went wrong!');
+                return $this->render('signup', [
+                    'model' => $model,
+                ]);
             }
 
         } else {
+
             return $this->render('signup', [
                 'model' => $model,
             ]);
@@ -224,10 +247,32 @@ class ParticipantController extends FrontendController
     {
         $model = $this->findModel($id);
         $tournament_id = $model->tournament_id;
-        $this->findModel($id)->delete();
+        $model->delete();
         /** @var Tournament $tournament */
         $tournament = Tournament::find()->where(['id' => $tournament_id])->one();
         $tournament->setParticipantCount();
+        return $this->redirect(['index', 'tournament_id' => $tournament_id]);
+    }
+
+    /**
+     * Deletes an existing Participant model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionCheckIn($id)
+    {
+        $model = $this->findModel($id);
+        $tournament_id = $model->tournament_id;
+        if($model->checked_in == Participant::CHECKED_IN_NO){
+            $model->checked_in = Participant::CHECKED_IN_YES;
+            Yii::$app->session->setFlash('success', 'Participant checked in.');
+        } else {
+            $model->checked_in = Participant::CHECKED_IN_NO;
+            Yii::$app->session->setFlash('warning', 'Participant checked out.');
+        }
+        $model->save();
+        /** @var Tournament $tournament */
         return $this->redirect(['index', 'tournament_id' => $tournament_id]);
     }
 

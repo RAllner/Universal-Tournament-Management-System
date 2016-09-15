@@ -37,7 +37,7 @@ if($showAll == true){
         </div>
     </h1>
     <?php if($showAll == true):?>
-    <div class="col-lg-12 well bs-component">
+    <div class="col-md-4 well bs-component">
         <?php echo $this->render('_search', ['model' => $searchModel]); ?>
     </div>
     <?php endif ?>

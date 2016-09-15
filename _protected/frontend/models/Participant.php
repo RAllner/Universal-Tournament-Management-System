@@ -14,6 +14,7 @@ use yii\db\ActiveRecord;
  * @property integer $signup
  * @property integer $checked_in
  * @property string $name
+ * @property string $mail
  * @property integer $seed
  * @property integer $updated_at
  * @property integer $created_at
@@ -31,6 +32,17 @@ use yii\db\ActiveRecord;
  */
 class Participant extends ActiveRecord
 {
+    const CHECKED_IN_YES = 1;
+    const CHECKED_IN_NO = 0;
+
+    const SIGNUP_STATUS_INTERNAL_ADMIN = 0;
+    const SIGNUP_STATUS_INTERNAL_TEAM = 1;
+    const SIGNUP_STATUS_INTERNAL_PLAYER = 2;
+    const SIGNUP_STATUS_EXTERNAL = 3;
+
+
+    public $verifyCode;
+
     /**
      * @inheritdoc
      */
@@ -46,8 +58,10 @@ class Participant extends ActiveRecord
     {
         return [
             [['tournament_id', 'name'], 'required'],
+            [['name', 'email'],  'filter', 'filter' => 'trim'],
             [['tournament_id', 'signup', 'checked_in', 'seed', 'updated_at', 'created_at', 'rank', 'elo' ,'player_id', 'team_id', 'removed', 'on_waiting_list'], 'integer'],
             [['name'], 'string', 'max' => 255],
+            ['email', 'email'],
             [['history'], 'string', 'max' => 512],
             [['tournament_id'], 'exist', 'skipOnError' => true, 'targetClass' => Tournament::className(), 'targetAttribute' => ['tournament_id' => 'id']],
         ];
@@ -64,6 +78,7 @@ class Participant extends ActiveRecord
             'signup' => Yii::t('app', 'Signup'),
             'checked_in' => Yii::t('app', 'Checked In'),
             'name' => Yii::t('app', 'Name'),
+            'email' => Yii::t('app', 'Email'),
             'seed' => Yii::t('app', 'Seed'),
             'updated_at' => Yii::t('app', 'Updated At'),
             'created_at' => Yii::t('app', 'Created At'),
@@ -115,7 +130,28 @@ class Participant extends ActiveRecord
 
     public function getPlayers()
     {
-        return Player::find()->where(['user_id' => Yii::$app->user->id])->all();
+        $TournamentParticipants = Participant::find()
+            ->where(['tournament_id' => $this->tournament_id])
+            ->andWhere(['not', ['player_id' => null]])
+            ->all();
+        $player_idString = Array();
+        $tmp = "";
+        /** @var Participant $participant */
+        foreach ($TournamentParticipants as $participant) {
+            array_push($player_idString, $participant->player_id);
+            $tmp .= $participant->player_id;
+        }
+        //Yii::$app->session->setFlash('error', $player_idString[0]);
+        if(empty($tmp)){
+            return Player::find()
+                ->andWhere(['user_id' => Yii::$app->user->id])
+                ->all();
+        } else {
+            return Player::find()
+                ->andWhere(['user_id' => Yii::$app->user->id])
+                ->andWhere(['not in', 'id', $player_idString])
+                ->all();
+        }
     }
 
     public function getTeams()

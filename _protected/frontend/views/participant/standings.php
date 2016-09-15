@@ -7,6 +7,7 @@ use yii\widgets\ListView;
 /* @var $this yii\web\View */
 /* @var $searchModel frontend\models\ParticipantSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $nulldataProvider yii\data\ActiveDataProvider */
 $tournament = Tournament::find()->where(['id' => $_GET['tournament_id']])->one();
 $this->title = $tournament->name . " " . Yii::t('app', 'Standings');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Tournaments'), 'url' => ['tournament/index']];
@@ -45,7 +46,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Standings');
                 <?= ListView::widget([
                     'summary' => false,
                     'dataProvider' => $dataProvider,
-                    'emptyText' => '<div class="row"><div class="col-lg-12"><div class="well">' . Yii::t('app', 'Standings are not finished.') . '</div></div></div>',
+                    'emptyText' => '',
                     'itemOptions' => ['class' => 'item'],
                     'itemView' => function ($model, $key, $index, $widget) {
                         return $this->render('_standings', ['model' => $model]);
@@ -54,7 +55,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Standings');
                 <?= ListView::widget([
                     'summary' => false,
                     'dataProvider' => $nulldataProvider,
-                    'emptyText' => '<div class="row"><div class="col-lg-12"><div class="well">' . Yii::t('app', 'Standings are not finished.') . '</div></div></div>',
+                    'emptyText' => '',
                     'itemOptions' => ['class' => 'item'],
                     'itemView' => function ($model, $key, $index, $widget) {
                         return $this->render('_standings', ['model' => $model]);

@@ -12,6 +12,8 @@ $this->title = 'Tournaments';
 $photoInfo = $model->PhotoInfo;
 $photo = Html::img($photoInfo['url'], ['alt' => $photoInfo['alt'], 'width' => '100%']);
 $options = ['data-title' => $photoInfo['alt']];
+
+$participant_count = (!is_null($model->participants_count))? $model->participants_count: "0";
 ?>
 
 <div class="col-lg-12 well tournament">
@@ -47,7 +49,7 @@ $options = ['data-title' => $photoInfo['alt']];
                     }
                     echo $model->getFormatShortName($model->fs_format); ?>
                     </br>
-                    <i class="material-icons">people</i> <?= $model->participants_count. '/'.$model->max_participants. ' '. Yii::t('app', 'participants registered') ?>
+                    <i class="material-icons">people</i> <?= $participant_count. '/'.$model->max_participants. ' '. Yii::t('app', 'participants registered') ?>
                 </p>
 
             </div>

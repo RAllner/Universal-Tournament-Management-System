@@ -25,9 +25,9 @@ $options = ['data-title' => $photoInfo['alt']];
     </h1>
     <div class="clearfix"></div>
     <div class="row">
-    <div class="col-md-12 col-xs-12">
-        <?php echo $this->render('nav', ['model' => $model, 'active' => Tournament::ACTIVE_VIEW]); ?>
-    </div>
+        <div class="col-md-12 col-xs-12">
+            <?php echo $this->render('nav', ['model' => $model, 'active' => Tournament::ACTIVE_VIEW]); ?>
+        </div>
     </div>
     <div class="clearfix"></div>
     <div class="row">
@@ -51,7 +51,7 @@ $options = ['data-title' => $photoInfo['alt']];
                                         </br>
                                         <?= '<div class=' . CssHelper::tournamentStatusCss($model->statusName) . ">" . $model->getStatusName($model->status) . '</div>'; ?>
                                     </div>
-                                    <?= Yii::t('app','Hosted by') ?>
+                                    <?= Yii::t('app', 'Hosted by') ?>
                                     <br/>
                                     <?php if ($model->hosted_by != -1): ?>
                                         <a href="<?= Url::to(['organisation/view', 'id' => $model->organisation_id]) ?>">
@@ -67,42 +67,46 @@ $options = ['data-title' => $photoInfo['alt']];
                             </div>
                             <div class="clearfix"></div>
                             </br>
-                            <?php if($model->status >= Tournament::STATUS_RUNNING): ?>
-                            <div class="progress">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="<?= $model->getTournamentProgress($model)?>%" aria-valuemin="0"
-                                     aria-valuemax="100" style="width: <?= $model->getTournamentProgress($model->id)?>%;">
-                                    <span class="sr-only"><?= $model->getTournamentProgress($model->id)?>% <?= Yii::t('app','Complete') ?></span>
+                            <?php if ($model->status >= Tournament::STATUS_RUNNING): ?>
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar"
+                                         aria-valuenow="<?= $model->getTournamentProgress($model) ?>%" aria-valuemin="0"
+                                         aria-valuemax="100"
+                                         style="width: <?= $model->getTournamentProgress($model->id) ?>%;">
+                                        <span class="sr-only"><?= $model->getTournamentProgress($model->id) ?>
+                                            % <?= Yii::t('app', 'Complete') ?></span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="pull-right">
-                                <?= $model->getTournamentFinishedMatchesCount($model->id).'/'.$model->getTournamentMatchesCount($model->id).' '.Yii::t('app','games') ?>
-                            </div>
+                                <div class="pull-right">
+                                    <?= $model->getTournamentFinishedMatchesCount($model->id) . '/' . $model->getTournamentMatchesCount($model->id) . ' ' . Yii::t('app', 'games') ?>
+                                </div>
                             <?php endif ?>
                         </div>
 
 
                     </div>
                 </div>
-                <div class="col-xs-2 no-padding-left register <?= $class=($model->status >= Tournament::STATUS_RUNNING)? "locked": "" ?>">
+                <div
+                    class="col-xs-2 no-padding-left register <?= $class = ($model->status >= Tournament::STATUS_RUNNING) ? "locked" : "" ?>">
 
-                        <a href="<?= $class=($model->status >= Tournament::STATUS_RUNNING)? "#": Url::to(['participant/signup', 'tournament_id' => $model->id]) ?>">
+                    <a href="<?= $class = ($model->status >= Tournament::STATUS_RUNNING) ? "#" : Url::to(['participant/index', 'tournament_id' => $model->id]) ?>">
 
-                            <?= '<i class="material-icons">plus_one</i></br> ' . Yii::t('app', 'Signup') ?>
-
-                        </a>
+                        <?= '<i class="material-icons" style="padding-bottom: 0.4em; padding-top:0.4em">create</i></br> ' . Yii::t('app', 'Signup') ?>
+                    </a>
 
                 </div>
 
             </div>
             <div class="hidden-md hidden-lg">
-            <a href="<?= $class=($model->status >= Tournament::STATUS_RUNNING)? "#": Url::to(['participant/signup', 'tournament_id' => $model->id]) ?>" class="btn">
+                <a href="<?= $class = ($model->status >= Tournament::STATUS_RUNNING) ? "#" : Url::to(['participant/signup', 'tournament_id' => $model->id]) ?>"
+                   class="btn">
 
-                <?= '<i class="material-icons">plus_one</i></br> ' . Yii::t('app', 'Signup') ?>
+                    <?= '<i class="material-icons">plus_one</i></br> ' . Yii::t('app', 'Signup') ?>
 
-            </a>
+                </a>
             </div>
             <div class="panel panel-default">
-                <div class="panel-heading"><?= Yii::t('app','Informations')?></div>
+                <div class="panel-heading"><?= Yii::t('app', 'Informations') ?></div>
                 <ul class="list-group">
                     <li class="list-group-item">
                         <i class="material-icons">info</i>
@@ -123,7 +127,7 @@ $options = ['data-title' => $photoInfo['alt']];
                     <li class="list-group-item">
                         <i class="material-icons">people</i> <?php
                         echo ($model->participants_count == null) ? 0 : $model->participants_count;
-                            echo '/' . $model->max_participants . ' ';
+                        echo '/' . $model->max_participants . ' ';
                         if ($model->is_team_tournament === 0) {
                             echo Yii::t('app', 'players registered');
                         } else {

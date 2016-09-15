@@ -14,22 +14,28 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?>
         <span class="pull-right">
-        <?php if (Yii::$app->user->can('createPlayer')): ?>
-            <?= Html::a('<i class="material-icons">create</i> ' . Yii::t('app', 'Create Team'), ['create'], ['class' => 'btn btn-success']) ?>
-        <?php endif ?>
-        <?php if (Yii::$app->user->can('adminPlayer')): ?>
-            <?= Html::a(Yii::t('app', 'Admin'), ['admin'], ['class' => 'btn btn-warning']) ?>
-        <?php endif ?>
+                                <?php if (Yii::$app->user->can('adminPlayer')): ?>
+                                    <?= Html::a(Yii::t('app', 'Admin'), ['admin'], ['class' => 'btn btn-warning']) ?>
+                                <?php endif ?>
+
             </span>
     </h1>
     <div class="clearfix"></div>
     <div class="row">
-        <div class="col-lg-12 ">
+
+        <div class="col-lg-4 ">
+
             <div class="well">
                 <?php echo $this->render('_search', ['model' => $searchModel]); ?>
             </div>
         </div>
     </div>
+    <div class="row">
+        <?php if (Yii::$app->user->can('createPlayer')): ?>
+        <div class="col-md-4">
+            <?= Html::a('+', ['create'], ['class' => 'btn btn-success btn-block', 'style'=> 'font-size: 90px; line-height: 100px; margin: 0']) ?>
+        </div>
+        <?php endif ?>
     <?= ListView::widget([
         'summary' => false,
         'dataProvider' => $dataProvider,
@@ -39,5 +45,5 @@ $this->params['breadcrumbs'][] = $this->title;
             return $this->render('_index', ['model' => $model]);
         },
     ]) ?>
-
+    </div>
 </div>
