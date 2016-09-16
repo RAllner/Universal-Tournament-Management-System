@@ -787,6 +787,10 @@ hr.article-devider {
 
 /* ---------- Pagination ------*/
 
+
+.pagination {
+    box-shadow: 0 3px 6px rgba(0,0,0,.16),0 3px 6px rgba(0,0,0,.23);
+}
 .pagination > li > a, .pagination > li > span {
     position: relative;
     float: left;
@@ -795,30 +799,40 @@ hr.article-devider {
     line-height: 1.42857143;
     color: #FF8F00;
     text-decoration: none;
-    background-color: #292929;
-    border: 1px solid #ddd;
+    background-color: #181818;
+    border: 1px solid #2d2d2d;
+
 }
 
 .pagination > .disabled > a, .pagination > .disabled > a:focus, .pagination > .disabled > a:hover, .pagination > .disabled > span, .pagination > .disabled > span:focus, .pagination > .disabled > span:hover {
-    color: #ffce86;
+    color: #2d2d2d;
     cursor: not-allowed;
-    background-color: #292929;
-    border-color: #ddd;
+    background-color: #181818;
+    border-color: #2d2d2d;
 }
 
-.pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover, .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
+.pagination > .active > a {
     z-index: 3;
     color: #000;
     cursor: default;
     background-color: #FF8F00;
-    border-color: #ffffff;
+    border-color: #2d2d2d;
 }
+
+.pagination > .active > a:focus, .pagination > .active > a:hover, .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
+    z-index: 3;
+    color: #000;
+    cursor: default;
+    background-color: #ffbc1e;
+    border-color: #2d2d2d;
+}
+
 
 .pagination > li > a:focus, .pagination > li > a:hover, .pagination > li > span:focus, .pagination > li > span:hover {
     z-index: 2;
     color: #FF8F00;
-    background-color: #4e4e4e;
-    border-color: #ddd;
+    background-color: #2d2d2d;
+    border-color: #2d2d2d;
 }
 
 /* ---- Events ----*/
