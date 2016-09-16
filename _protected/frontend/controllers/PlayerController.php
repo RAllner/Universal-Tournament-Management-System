@@ -78,7 +78,7 @@ class PlayerController extends Controller
         }
 
         $model = new Player();
-
+        $model->gender = Player::GENDER_OTHER;
         $model->user_id = Yii::$app->user->id;
         $model->running_nr = 1;
 

@@ -105,7 +105,7 @@ $participants = \frontend\models\Participant::find()
                                             <li class="list-group-item">
                                                 <i class="material-icons">videogame_asset</i>
                                                 <?= Yii::t('app', 'Games')?>:
-                                                <a href="<?= $model->website ?>"><?=$model->games ?></a>
+                                                <?=$model->games ?>
                                             </li>
                                         </ul>
                                         <div class="panel-body">
@@ -174,7 +174,7 @@ $participants = \frontend\models\Participant::find()
                         <div role="tabpanel" class="tab-pane fade" id="livestream">
                             <div class="well bs-component">
                                 <iframe
-                                    src="http://player.twitch.tv/?channel={<?= $model->stream ?>}"
+                                    src="https://player.twitch.tv/?channel={<?= $model->stream ?>}"
                                     height="720"
                                     width="100%"
                                     frameborder="0"

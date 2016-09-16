@@ -987,6 +987,23 @@ hr.article-devider {
     width: 100%;
 }
 
+.intro-Text-wrap-team {
+    background-color: rgba(0, 0, 0, 0.7);
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    padding: 5px 5px 5px 5px;
+    width: 100%;
+}
+
+.teammembertitle {
+    font-size: 18pt;
+    text-wrap: normal;
+    text-align: center;
+    margin: 0;
+}
+
+
 .event-image-wrap .event-Category {
     float: right;
     margin: -32px -40px 0 0;
