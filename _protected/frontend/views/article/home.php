@@ -37,7 +37,7 @@ if (isset($nextEvent)) {
                 <div class="media-body media-middle">
                     <h2 class="media-heading">BarCraft HL</h2>
                     <p class="lead">
-                        <?= Yii::t('app', 'Wellcome') . ' ' . Yii::t('app', 'on our new platform for tournaments!') ?>
+                        <?= Yii::t('app', 'Welcome') . ' ' . Yii::t('app', 'to our new platform for tournaments!') ?>
                     </p>
                     <?php
                     if (Yii::$app->user->isGuest) {

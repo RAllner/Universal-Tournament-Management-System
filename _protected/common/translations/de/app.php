@@ -56,9 +56,8 @@ return [
     'Username' => 'Nutzername',
 
     //-- Index page --//
-    'Wellcome' => 'Willkommen ',
-    'on the new platform for your ournament!' => ' auf der neuen Plattform für dein Turnier!',
-    'on our new platform for tournaments!' => ' auf unserer neuen Plattform für Turniere!',
+    'Welcome' => 'Willkommen ',
+    'to our new platform for tournaments!' => ' auf unserer neuen Plattform für Turniere!',
 
     // contact
     'Name'    => 'Name',
