@@ -1409,7 +1409,7 @@ div.scores > .row.score-row:first-child {
 }
 
 .running-match {
-    background-color: #14CCA8 !important;
+    background-color: #14936e !important;
 }
 
 .achieved-match-win{
@@ -2185,8 +2185,9 @@ ol#sortable-participants li.disabled > .control-group > i {
 }
 .match .match-r1.running-match,
 .match .match-r2.running-match{
-    background: #14CCA8;
-    color: #ccc;
+    color: white;
+    font-weight: 500;
+
 }
 
 

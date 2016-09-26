@@ -771,10 +771,16 @@ class Tournament extends ActiveRecord
             return "<div class='$classes opa01'><div class='match-r-double'>$participant->name</div></div>";
         }
         $matchId = "<div class='matchId'>$model->matchID</div>";
-
-        $contentRow1 = "<div class='match-r1 $winner_A $openMatch $runningMatch'><div class='m-id'>$model->seed_A</div><div class='m-participant'>$nameA</div><div class='m-points'>$model->participant_score_A</div></div>";
-        $contentRow2 = "<div class='match-r2 $winner_B $openMatch $runningMatch'><div class='m-id'>$model->seed_B</div><div class='m-participant'>$nameB</div><div class='m-points'>$model->participant_score_B</div></div>";
-
+        if($this->has_sets == 1){
+            $contentRow1 = "<div class='match-r1 $winner_A $openMatch $runningMatch'><div class='m-id'></div><div class='m-participant'>$nameA</div><div class='m-points'>$model->participant_score_A</div></div>";
+            $contentRow2 = "<div class='match-r2 $winner_B $openMatch $runningMatch'><div class='m-id'></div><div class='m-participant'>$nameB</div><div class='m-points'>$model->participant_score_B</div></div>";
+        } else {
+            $score = explode(',', $model->scores)[0];
+            $scoreA = explode('-', $score)[0];
+            $scoreB = explode('-', $score)[1];
+            $contentRow1 = "<div class='match-r1 $winner_A $openMatch $runningMatch'><div class='m-id'></div><div class='m-participant'>$nameA</div><div class='m-points'>$scoreA</div></div>";
+            $contentRow2 = "<div class='match-r2 $winner_B $openMatch $runningMatch'><div class='m-id'></div><div class='m-participant'>$nameB</div><div class='m-points'>$scoreB</div></div>";
+        }
         /**
          * Detail View of Match. Shown when hover is active
          */
@@ -800,7 +806,7 @@ class Tournament extends ActiveRecord
             $button_play = "";
             $button_edit = "";
             if ($model->state == TournamentMatch::MATCH_STATE_FINISHED && $this->status != Tournament::STATUS_FINISHED) {
-                //$button_play = Html::a('<i class="material-icons">undo</i>', Url::to(['@web/tournament/match-undo', 'id' => $model->tournament_id, 'match_id' => $model->id]), ['class' => 'm-details-button']);
+                $button_play = Html::a('<i class="material-icons">undo</i>', Url::to(['/tournament/match-undo', 'id' => $model->tournament_id, 'match_id' => $model->matchID, 'groupID' => $model->groupID]), ['class' => 'm-details-button']);
             }
         }
 
@@ -865,10 +871,16 @@ class Tournament extends ActiveRecord
 
 
         $matchId = "<div class='matchId'>$model->matchID</div>";
-
-        $contentRow1 = "<div class='match-r1 $winner_A $openMatch $runningMatch'><div class='m-id'></div><div class='m-participant'>$nameA</div><div class='m-points'>$model->participant_score_A</div></div>";
-        $contentRow2 = "<div class='match-r2 $winner_B $openMatch $runningMatch'><div class='m-id'></div><div class='m-participant'>$nameB</div><div class='m-points'>$model->participant_score_B</div></div>";
-
+        if($this->has_sets == 1){
+            $contentRow1 = "<div class='match-r1 $winner_A $openMatch $runningMatch'><div class='m-id'></div><div class='m-participant'>$nameA</div><div class='m-points'>$model->participant_score_A</div></div>";
+            $contentRow2 = "<div class='match-r2 $winner_B $openMatch $runningMatch'><div class='m-id'></div><div class='m-participant'>$nameB</div><div class='m-points'>$model->participant_score_B</div></div>";
+        } else {
+            $score = explode(',', $model->scores)[0];
+            $scoreA = explode('-', $score)[0];
+            $scoreB = explode('-', $score)[1];
+            $contentRow1 = "<div class='match-r1 $winner_A $openMatch $runningMatch'><div class='m-id'></div><div class='m-participant'>$nameA</div><div class='m-points'>$scoreA</div></div>";
+            $contentRow2 = "<div class='match-r2 $winner_B $openMatch $runningMatch'><div class='m-id'></div><div class='m-participant'>$nameB</div><div class='m-points'>$scoreB</div></div>";
+        }
         /**
          * Detail View of Match. Shown when hover is active
          */
@@ -889,7 +901,7 @@ class Tournament extends ActiveRecord
             $button_play = "";
             $button_edit = "";
             if ($model->state == TournamentMatch::MATCH_STATE_FINISHED && $this->status != Tournament::STATUS_FINISHED) {
-                $button_play = Html::a('<i class="material-icons">undo</i>', Url::to(['@web/tournament/match-undo', 'id' => $model->tournament_id, 'match_id' => $model->id]), ['class' => 'm-details-button']);
+                $button_play = Html::a('<i class="material-icons">undo</i>', Url::to(['/tournament/match-undo', 'id' => $model->tournament_id, 'match_id' => $model->matchID, 'groupID' => $model->groupID]), ['class' => 'm-details-button']);
             }
         }
 

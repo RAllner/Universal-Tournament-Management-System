@@ -159,7 +159,7 @@ class TournamentController extends FrontendController
         /** @var TournamentMatch $model */
         $model = TournamentMatch::find()->where(['id' => $id])->one();
         $model->updated_at = time();
-        if(is_null($model->begin_at)){
+        if (is_null($model->begin_at)) {
             $model->begin_at = time();
         }
         /** @var $model TournamentMatch */
@@ -215,7 +215,7 @@ class TournamentController extends FrontendController
                                 ->one();
                             /** If the match is not necessary we skip it and go on with the winner match */
                             if ($loserMatch->state == TournamentMatch::MATCH_STATE_DIRECT_ADVANCE) {
-                                $nextFollowWinnerAndLoser = explode(',',$loserMatch->follow_winner_and_loser_match_ids);
+                                $nextFollowWinnerAndLoser = explode(',', $loserMatch->follow_winner_and_loser_match_ids);
                                 if (count($nextFollowWinnerAndLoser) > 0) {
                                     /** @var TournamentMatch $nextLoserMatch */
                                     $nextLoserMatch = TournamentMatch::find()
@@ -296,7 +296,7 @@ class TournamentController extends FrontendController
                         }
                         /** Check if the group Stage is finished */
                         if ($model->stage == Tournament::STAGE_GS && count($followWinnerAndLoser) > 0) {
-                            if($followWinnerAndLoser[0] == "FS"){
+                            if ($followWinnerAndLoser[0] == "FS") {
                                 $unfinishedMatchesCount = TournamentMatch::find()
                                     ->where(['tournament_id' => $model->tournament_id])
                                     ->andWhere(['<', 'state', TournamentMatch::MATCH_STATE_FINISHED])
@@ -353,11 +353,12 @@ class TournamentController extends FrontendController
      *
      * @param $id integer
      * @param $match_id integer
+     * @param null $groupID string
      * @return yii\web\Response
      */
-    public function actionMatchUndo($id, $match_id)
+    public function actionMatchUndo($id, $match_id, $groupID = null)
     {
-        if ($this->chainUndo($id, $match_id, null)) {
+        if ($this->chainUndo($id, $match_id, null, $groupID)) {
             Yii::$app->session->setFlash('success', 'Undo complete');
         }
         return $this->redirect(Yii::$app->request->referrer);
@@ -368,22 +369,27 @@ class TournamentController extends FrontendController
      * @param $id
      * @param $match_id string
      * @param $qualificationID string
+     * @param null $groupID
      * @return bool
      */
-    public function chainUndo($id, $match_id, $qualificationID)
+    public function chainUndo($id, $match_id, $qualificationID, $groupID = null)
     {
         /** @var TournamentMatch $match */
         $match = TournamentMatch::find()
             ->where(['tournament_id' => $id])
-            ->andWhere(['id' => $match_id])
+            ->andWhere(['matchID' => (string)$match_id])
+            ->andWhere(['groupID' => $groupID])
             ->one();
 
 
         if (!is_null($qualificationID)) {
-            if (explode(',', $match->qualification_match_ids)[0] == $qualificationID) {
-                $match->participant_id_A = 0;
-            } else {
-                $match->participant_id_B = 0;
+            $match_ids = explode(',', $match->qualification_match_ids);
+            if (count($match_ids) > 0) {
+                if (explode(',', $match->qualification_match_ids)[0] == $qualificationID) {
+                    $match->participant_id_A = 0;
+                } else {
+                    $match->participant_id_B = 0;
+                }
             }
         }
 
@@ -391,24 +397,31 @@ class TournamentController extends FrontendController
             $followMatchIds = explode(',', $match->follow_winner_and_loser_match_ids);
 
             if (count($followMatchIds) > 0) {
+                //Yii::$app->session->setFlash('error', $followMatchIds[0]);
                 // if the follow match is in the final Stage: nothing to do here because in this case the final stage did not start already, otherwise undo that game too.
-                if (strcmp($followMatchIds[0], "FS") !== 0) {
-                    if ($this->chainUndo($id, $followMatchIds[0], $match_id)) {
-
-                    }
+                if (strcmp($followMatchIds[0], "FS") != 0) {
+                    $this->chainUndo($id, $followMatchIds[0], $match_id, $groupID);
                 }
                 if (count($followMatchIds) == 2) {
-                    $this->chainUndo($id, $followMatchIds[1], $match_id);
+                    $this->chainUndo($id, $followMatchIds[1], $match_id, $groupID);
                 }
             }
-            $match->state = TournamentMatch::MATCH_STATE_OPEN;
+            if(!is_null($qualificationID)){
+                $match->state = TournamentMatch::MATCH_STATE_OPEN;
+            } else {
+                $match->state = TournamentMatch::MATCH_STATE_READY;
+            }
+
             $match->winner_id = NULL;
             $match->loser_id = NULL;
+        } else if($match->state == TournamentMatch::MATCH_STATE_READY) {
+            $match->state = TournamentMatch::MATCH_STATE_OPEN;
         }
 
         $match->participant_score_A = 0;
         $match->participant_score_B = 0;
         $match->scores = "0-0";
+        $match->save();
         return true;
     }
 
@@ -1311,13 +1324,12 @@ class TournamentController extends FrontendController
             ->all();
 
 
-
         $winnerIDs = null;
         /** @var TournamentMatch $match */
         foreach ($matches as $match) {
             $followWinnerAndLoser = explode(',', $match->follow_winner_and_loser_match_ids);
-            if(count($followWinnerAndLoser) > 0){
-                if($followWinnerAndLoser[0] == "FS"){
+            if (count($followWinnerAndLoser) > 0) {
+                if ($followWinnerAndLoser[0] == "FS") {
                     $winnerIDs[] = $match->winner_id;
                 }
             }
@@ -1667,7 +1679,8 @@ class TournamentController extends FrontendController
     /**
      * @param $model Tournament
      */
-    public function setRanking($model){
+    public function setRanking($model)
+    {
         /** @var TournamentMatch $finalMatch */
         $finalMatchID = TournamentMatch::find()
             ->where(['tournament_id' => $model->id])
@@ -1699,7 +1712,7 @@ class TournamentController extends FrontendController
 
 
         $qualifyingMatches = explode(',', $finalMatch->qualification_match_ids);
-        if(count($qualifyingMatches)==2){
+        if (count($qualifyingMatches) == 2) {
             $this->recursiveRanking($qualifyingMatches[0], 1, $model);
             $this->recursiveRanking($qualifyingMatches[1], 1, $model);
         }
@@ -1710,7 +1723,8 @@ class TournamentController extends FrontendController
      * @param $rankingStep
      * @param $model Tournament
      */
-    public function recursiveRanking($matchID, $ranking = 3, $model){
+    public function recursiveRanking($matchID, $ranking = 3, $model)
+    {
         /** @var TournamentMatch $match */
         $match = TournamentMatch::find()
             ->where(['tournament_id' => $model->id])
@@ -1720,21 +1734,21 @@ class TournamentController extends FrontendController
             ->one();
 
 
-        $ranking = $ranking +1;
+        $ranking = $ranking + 1;
 
         /** @var Participant $loserParticipant */
         $loserParticipant = Participant::find()
             ->where(['tournament_id' => $model->id])
             ->andWhere(['id' => $match->loser_id])
             ->one();
-        if(!is_null($loserParticipant)){
+        if (!is_null($loserParticipant)) {
             $loserParticipant->rank = $ranking;
             $loserParticipant->save();
         }
 
 
         $qualifyingMatches = explode(',', $match->qualification_match_ids);
-        if(count($qualifyingMatches)==2){
+        if (count($qualifyingMatches) == 2) {
             $this->recursiveRanking($qualifyingMatches[0], $ranking, $model);
             $this->recursiveRanking($qualifyingMatches[1], $ranking, $model);
         }
