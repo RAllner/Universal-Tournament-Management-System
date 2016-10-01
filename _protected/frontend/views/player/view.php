@@ -34,7 +34,7 @@ $participants = \frontend\models\Participant::find()
             ]);
             ?>
         <?php endif ?>
-        <?= Html::encode($this->title)  ?>
+        <?= Html::encode($this->title) ?>
 
         <div class="pull-right">
             <?php if (Yii::$app->user->can('updatePlayer', ['model' => $model])): ?>
@@ -42,8 +42,6 @@ $participants = \frontend\models\Participant::find()
                 <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
 
             <?php endif ?>
-
-            <?= Html::a('<i class="material-icons">view_headline</i> ' . Yii::t('app', 'Overview'), ['own-index'], ['class' => 'btn btn-warning']) ?>
         </div>
     </h1>
     <div class="clearfix"></div>
@@ -82,7 +80,12 @@ $participants = \frontend\models\Participant::find()
                                         <ul class="list-group">
                                             <li class="list-group-item">
                                                 <i class="material-icons">schedule</i>
-                                                <?= Yii::t('app', 'Created at') . ': ' . date('d.m.Y', $model->created_at). ' '.Yii::t('app','Last update'). ': '. date('d.m.Y', $model->updated_at) ?>
+                                                <?php
+                                                $string = Yii::t('app', 'Created At') . ': ' . date('d.m.Y', $model->created_at);
+                                                if ($model->created_at != $model->updated_at) {
+                                                    $string .= ' ' . Yii::t('app', 'Updated At') . ': ' . date('d.m.Y', $model->updated_at);
+                                                }
+                                                echo $string ?>
                                             </li>
                                             <li class="list-group-item">
                                                 <i class="material-icons">perm_identity</i>
@@ -95,23 +98,23 @@ $participants = \frontend\models\Participant::find()
 
                                             <li class="list-group-item">
                                                 <i class="material-icons">language</i>
-                                                <?= Yii::t('app', 'Languages'). ': '. $model->languages ?>
+                                                <?= Yii::t('app', 'Languages') . ': ' . $model->languages ?>
                                             </li>
                                             <li class="list-group-item">
                                                 <i class="material-icons">link</i>
-                                                <?= Yii::t('app', 'Website')?>:
-                                                <a href="<?= $model->website ?>"><?=$model->website ?></a>
+                                                <?= Yii::t('app', 'Website') ?>:
+                                                <a href="<?= $model->website ?>"><?= $model->website ?></a>
                                             </li>
                                             <li class="list-group-item">
                                                 <i class="material-icons">videogame_asset</i>
-                                                <?= Yii::t('app', 'Games')?>:
-                                                <?=$model->games ?>
+                                                <?= Yii::t('app', 'Games') ?>:
+                                                <?= $model->games ?>
                                             </li>
                                         </ul>
                                         <div class="panel-body">
 
-                                                <b><?= Yii::t('app', 'Description')?>:</b>
-                                                <?= $model->description ?>
+                                            <b><?= Yii::t('app', 'Description') ?>:</b>
+                                            <?= $model->description ?>
 
                                         </div>
                                     </div>
@@ -119,12 +122,19 @@ $participants = \frontend\models\Participant::find()
                                 <div class="col-md-5">
                                     <h3>Teams</h3>
                                     <?php
-                                    foreach ($model->teams as $team) {
-                                        $teamPhotoInfo = $team->PhotoInfo;
-                                        $teamphoto = Html::img($teamPhotoInfo['url'], ['alt' => $teamPhotoInfo['alt'], 'style' => 'width:30px; margin: 5px']);
-                                        $member = $model->getTeamMemberFrom($team->id);
-                                        echo $teamphoto;
-                                        echo Html::a($team->name, Url::to(['team/view', 'id' => $team->id])) . ' - ' . Yii::t('app', 'Joined') . ': ' . date('d.m.Y', $member->created_at) . '</br>';
+                                    if (count($model->teams) > 0) {
+                                        foreach ($model->teams as $team) {
+                                            $teamPhotoInfo = $team->PhotoInfo;
+                                            $teamphoto = Html::img($teamPhotoInfo['url'], ['alt' => $teamPhotoInfo['alt'], 'style' => 'width:30px; margin: 5px']);
+                                            $member = $model->getTeamMemberFrom($team->id);
+                                            echo $teamphoto;
+                                            echo Html::a($team->name, Url::to(['team/view', 'id' => $team->id])) . ' - ' . Yii::t('app', 'Joined') . ': ' . date('d.m.Y', $member->created_at) . '</br>';
+                                        }
+                                    } else {
+                                        echo '<p>'.Yii::t('app','This individual is still not a member of a team yet.').'</p>';
+                                        if(Yii::$app->user->can('updatePlayer', ['model' => $model])){
+                                           echo Html::a(Yii::t('app', 'Create'), ['/team/create'], ['class' => 'btn btn-success']);
+                                        }
                                     }
                                     ?>
                                 </div>
@@ -147,24 +157,24 @@ $participants = \frontend\models\Participant::find()
                             foreach ($participants as $participant) {
                                 /**  @var \frontend\models\Tournament $tournament */
 
-                                $rankArray = explode(',' ,$participant->history);
+                                $rankArray = explode(',', $participant->history);
                                 $rankString = "";
-                                foreach($rankArray as $rank){
-                                    if($rank == "l"){
-                                        $rankString = $rankString. "<div class='achieved-match-loss'>l</div>";
-                                    } else if($rank == "w"){
-                                        $rankString = $rankString. "<div class='achieved-match-win'>w</div>";
+                                foreach ($rankArray as $rank) {
+                                    if ($rank == "l") {
+                                        $rankString = $rankString . "<div class='achieved-match-loss'>l</div>";
+                                    } else if ($rank == "w") {
+                                        $rankString = $rankString . "<div class='achieved-match-win'>w</div>";
                                     }
                                 }
-                                $tournament = \frontend\models\Tournament::find()->where(['id'=> $participant->tournament_id])->one()
+                                $tournament = \frontend\models\Tournament::find()->where(['id' => $participant->tournament_id])->one()
                                 ?>
-                            <tr>
-                                <td> <?= $tournament->name ?></td>
-                                <td> <?= $tournament->begin ?></td>
-                                <td> <?= $participant->rank ?></td>
-                                <td> <?= $rankString ?></td>
-                            </tr>
-                            <?php }?>
+                                <tr>
+                                    <td> <?= $tournament->name ?></td>
+                                    <td> <?= $tournament->begin ?></td>
+                                    <td> <?= $participant->rank ?></td>
+                                    <td> <?= $rankString ?></td>
+                                </tr>
+                            <?php } ?>
 
                         </table>
 

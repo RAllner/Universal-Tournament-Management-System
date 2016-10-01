@@ -11,12 +11,10 @@ if($showAll == true){
     $this->title = Yii::t('app', 'Player profiles');
     $this->params['breadcrumbs'][] = $this->title;
 } else{
-
     $this->title = Yii::t('app', 'Own profiles');
     $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Player profiles'), 'url' => ['index']];
     $this->params['breadcrumbs'][] = $this->title;
 }
-
 ?>
 <div class="player-index">
 

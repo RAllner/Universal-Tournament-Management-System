@@ -4,7 +4,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Player */
 
-$this->title = Yii::t('app', 'Update {modelClass}: ', [
+$this->title = Yii::t('app', 'Update: ', [
         'modelClass' => 'Player',
     ]) . $model->name;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Player'), 'url' => ['own-index']];

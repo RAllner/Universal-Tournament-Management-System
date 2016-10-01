@@ -123,6 +123,7 @@ class Player extends ActiveRecord
             'languages' => Yii::t('app', 'Languages'),
             'birthday' => Yii::t('app', 'Age'),
             'nation' => Yii::t('app', 'Nationality'),
+            'imageFile' => Yii::t('app', 'Profile Picture')
         ];
     }
 

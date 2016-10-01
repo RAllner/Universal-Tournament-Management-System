@@ -27,11 +27,11 @@ use yii\widgets\ActiveForm;
                 ['editorOptions' => [ 'preset' => 'standard', 'inline' => false]]); ?>
         </div>
         <div class="col-md-6">
-            <label class="radio-head">Gender</label>
+            <label class="radio-head"><?=Yii::t('app','Gender') ?></label>
             <?=
             $form->field($model, 'gender')
                 ->radioList(
-                    [2 => ' Male', 1 => ' Female', 0 => ' Other'],
+                    [2 => ' '.Yii::t('app','Male'), 1 => ' '.Yii::t('app','Female'), 0 => ' '.Yii::t('app','Other')],
                     [
                         'item' => function($index, $label, $name, $checked, $value) {
 
@@ -49,21 +49,21 @@ use yii\widgets\ActiveForm;
             ?>
             <div class="input-group">
                 <span class="input-group-addon"><i class="material-icons">http</i></span>
-                <?= $form->field($model, 'website')->textInput(['maxlength' => true])->hint('http://example.de/example')?>
+                <?= $form->field($model, 'website')->textInput(['maxlength' => true])->hint(Yii::t('app','http://example.de/example'))?>
             </div>
 
-            <?= $form->field($model, 'stream')->textInput(['maxlength' => true])->hint('Your channel name: http://twitch.tv/CHANNELNAME') ?>
+            <?= $form->field($model, 'stream')->textInput(['maxlength' => true])->hint(Yii::t('app','ONLY your channel name: http://twitch.tv/[CHANNELNAME].')) ?>
             <?= $form->field($model, 'imageFile')->fileInput() ?>
-            <?= $form->field($model, 'games')->textInput(['maxlength' => true])->hint('Hearthstone, Starcraft 2, CS:GO, ...') ?>
-            <?= $form->field($model, 'languages')->textInput(['maxlength' => true])->hint('E.g. english, german, french') ?>
+            <?= $form->field($model, 'games')->textInput(['maxlength' => true])->hint(Yii::t('app','Hearthstone, Starcraft 2, CS:GO, ...'))?>
+            <?= $form->field($model, 'languages')->textInput(['maxlength' => true])->hint(Yii::t('app','E.g. english, german, french.')) ?>
             <?= $form->field($model, 'birthday')->widget(DatePicker::classname(), [
-                'options' => ['placeholder' => Yii::t('app', 'Enter your birthday ')],
+                'options' => ['placeholder' => Yii::t('app', 'Format: YYYY-MM-DD')],
                 'pluginOptions' => [
                     'autoclose' => true,
                     'format' => 'yyyy-mm-dd'
 
                 ]
-            ])->hint(Yii::t('app', 'You can ignore the exact time. Only your age will be displayed.')); ?>
+            ])->hint(Yii::t('app', 'Only your age will be displayed.')); ?>
             <?= $form->field($model, 'nation')->dropDownList($model->nationList) ?>
         </div>
     </div>

@@ -76,7 +76,6 @@ $winnerB = ($model->winner_id == $model->participant_id_B && $model->state == To
                     </div>
                 </div>
                 <div class="clearfix"></div>
-                <hr>
                 <div class="col-xs-12">
                     <?php if ($model->tournament->has_sets): ?>
                         <div class="pull-right">
@@ -124,9 +123,11 @@ $winnerB = ($model->winner_id == $model->participant_id_B && $model->state == To
 
 
                 <div class="clearfix"></div>
+                <div class="row">
+                    <div class="col-xs-12 center">
                 <button type="button" class="btn btn-primary report-match"
                         data-target="<?= $model->id ?>"><?= Yii::t('app', 'Report') ?></button>
-
+                    </div>
                 <?php ActiveForm::end(); ?>
             </div>
         </div>
