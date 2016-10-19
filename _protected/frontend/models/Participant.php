@@ -5,6 +5,7 @@ namespace frontend\models;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\helpers\Url;
 
 /**
  * This is the model class for table "{{%participant}}".
@@ -274,6 +275,28 @@ class Participant extends ActiveRecord
         return $lossCounter;
     }
 
+    public function getParticipantImage()
+    {
+        if(!is_null($this->player_id)){
+            /** @var Player $player */
+            $player = Player::find()
+                ->where(['id' => $this->player_id])
+                ->one();
+            return $player->getPhotoInfo();
+        } elseif (!is_null($this->team_id)){
+            /** @var Team $team */
+            $team = Team::find()
+                ->where(['id' => $this->team_id])
+                ->one();
+            return $team->getPhotoInfo();
+        } else {
+            $url = Url::to('@web/images/players/');
+            $alt = $this->name;
+            $imageInfo = ['alt' => $alt];
+            $imageInfo['url'] = $url . 'default.jpg';
+            return $imageInfo;
+        }
+    }
 }
 
 ?>

@@ -21,11 +21,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="clearfix"></div>
     <div class="row">
         <div class="col-lg-12">
-            <div class="well bs-component">
+
                 <?= $this->render('_form', [
                     'model' => $model,
                 ]) ?>
-            </div>
+
         </div>
     </div>
 </div>

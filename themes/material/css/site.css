@@ -1328,7 +1328,11 @@ label.match-winner {
     padding:1em;
     cursor:pointer;
     border-radius: 5px;
+    width: 50%;
 
+}
+div.fake-button {
+    width: 50%;
 }
 input[name=match-winner]{
     display:none
@@ -1340,6 +1344,7 @@ div.fake-button.selected{
 div.match-winner{
     text-align: center;
     display: inline-flex;
+    width: 100%;
 }
 div.match-winner div.fake-button:last-child {
     border-top-right-radius: 5px;
@@ -2266,10 +2271,15 @@ ol#sortable-participants li.disabled > .control-group > i {
 
 
 .popover-title {
-    background-color: #ff8f00;
+    background-color: #181818;
+    border-radius: 0;
+    border-bottom: solid 1px #ff8f00;
 }
 
+.popover.fade {
+    background-color: #181818;
 
+}
 .nav-tabs {
     background: #181818;
     border-bottom: solid 1px #ff8f00;
@@ -2288,4 +2298,17 @@ ol#sortable-participants li.disabled > .control-group > i {
     right: 20px;
     top: 100px;
     z-index: 200;
+}
+
+
+.vs {
+    text-align: center;
+    font-weight: 500;
+    font-size: xx-large;
+    /* top: 50px; */
+    /* position: absolute; */
+    margin-bottom: auto;
+    margin-top: auto;
+    font-stretch: condensed;
+    line-height: 94px;
 }

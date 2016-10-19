@@ -36,6 +36,51 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
     <div class="row">
+    <div class="col-xs-12 hidden-lg" style="margin-bottom: 1em">
+        <ul class="nav nav-pills nav-justified">
+            <li class="tournament-nav-pills <?php if ($_GET['filter'] == 0): ?>
+                        active
+                    <?php endif ?>"
+
+            ><a
+                    href="<?= Url::to(['index', 'filter' => 0]) ?>"><span
+                        class="pull-right badge"><?= $allCount ?></span> <?= Yii::t('app', 'Open') ?></a>
+            </li>
+            <li class="tournament-nav-pills <?php if ($_GET['filter'] == 1): ?>
+                        active
+                    <?php endif ?>"
+            ><a
+                    href="<?= Url::to(['index', 'filter' => 1]) ?>"><?= Yii::t('app', 'Running') ?><span
+                        class="pull-right badge"><?= $runningCount ?></span></a>
+            </li>
+            <li class="tournament-nav-pills <?php if ($_GET['filter'] == 2): ?>
+                        active
+                    <?php endif ?>"
+            ><a
+                    href="<?= Url::to(['index', 'filter' => 2]) ?>"><span
+                        class="pull-right badge"><?= $commingCount ?></span> <?= Yii::t('app', 'Comming') ?> </a>
+            </li>
+            <li class="tournament-nav-pills <?php if ($_GET['filter'] == 3): ?>
+                        active
+                    <?php endif ?>"
+            ><a
+                    href="<?= Url::to(['index', 'filter' => 3]) ?>"><?= Yii::t('app', 'Finished') ?><span
+                        class="pull-right badge"><?= $pastCount ?></span></a>
+            </li>
+            <li class="tournament-nav-pills <?php if ($_GET['filter'] == 4): ?>
+                        active
+                    <?php endif ?>"
+
+            ><a
+                    href="<?= Url::to(['index', 'filter' => 4]) ?>"><span
+                        class="pull-right badge"><?= $allCount ?></span> <?= Yii::t('app', 'All') ?></a>
+            </li>
+        </ul>
+    </div>
+
+    </div>
+
+    <div class="row">
         <div class="col-lg-10 col-md-12">
 
             <?= ListView::widget([
@@ -48,7 +93,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
             ]) ?>
         </div>
-        <div class="col-lg-2">
+        <div class="col-lg-2 hidden-md">
             <ul class="nav nav-pills">
                 <li class="tournament-nav-pills <?php if ($_GET['filter'] == 0): ?>
                         active
@@ -56,30 +101,37 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 ><a
                         href="<?= Url::to(['index', 'filter' => 0]) ?>"><span
-                            class="pull-right badge"><?= $allCount ?></span> <?= Yii::t('app', 'All') ?></a>
+                            class="pull-right badge"><?= $allCount ?></span> <?= Yii::t('app', 'Open') ?></a>
                 </li>
                 <li class="tournament-nav-pills <?php if ($_GET['filter'] == 1): ?>
                         active
                     <?php endif ?>"
                 ><a
-                        href="<?= Url::to(['index', 'filter' => 1]) ?>"><span
-                            class="pull-right badge"><?= $commingCount ?></span> <?= Yii::t('app', 'Comming') ?> </a>
+                        href="<?= Url::to(['index', 'filter' => 1]) ?>"><?= Yii::t('app', 'Running') ?><span
+                            class="pull-right badge"><?= $runningCount ?></span></a>
                 </li>
                 <li class="tournament-nav-pills <?php if ($_GET['filter'] == 2): ?>
                         active
                     <?php endif ?>"
                 ><a
-                        href="<?= Url::to(['index', 'filter' => 2]) ?>"><?= Yii::t('app', 'Running') ?><span
-                            class="pull-right badge"><?= $runningCount ?></span></a>
+                        href="<?= Url::to(['index', 'filter' => 2]) ?>"><span
+                            class="pull-right badge"><?= $commingCount ?></span> <?= Yii::t('app', 'Comming') ?> </a>
                 </li>
                 <li class="tournament-nav-pills <?php if ($_GET['filter'] == 3): ?>
                         active
                     <?php endif ?>"
                 ><a
-                        href="<?= Url::to(['index', 'filter' => 3]) ?>"><?= Yii::t('app', 'Past') ?><span
+                        href="<?= Url::to(['index', 'filter' => 3]) ?>"><?= Yii::t('app', 'Finished') ?><span
                             class="pull-right badge"><?= $pastCount ?></span></a>
                 </li>
+                <li class="tournament-nav-pills <?php if ($_GET['filter'] == 4): ?>
+                        active
+                    <?php endif ?>"
 
+                ><a
+                        href="<?= Url::to(['index', 'filter' => 4]) ?>"><span
+                            class="pull-right badge"><?= $allCount ?></span> <?= Yii::t('app', 'All') ?></a>
+                </li>
             </ul>
         </div>
     </div>

@@ -62,17 +62,25 @@ class TournamentSearch extends Tournament
         $time = new \DateTime('now');
         $today = $time->format('Y-m-d H:i:s');
 
-        if ($filter == 0) {
-            //all Tournaments
-        } else if ($filter == 1) {
-            $query->andFilterWhere(['>=', 'begin', $today])
-                ->andFilterWhere(['not', ['status' => 3]]);
+        if(!Yii::$app->user->can('editor')){
+            $query->andFilterWhere(['>=', 'status', Tournament::STATUS_PUBLISHED]);
+        }
 
+        //Open
+        if ($filter == 0) {
+            $query->andFilterWhere(['in', 'status', [2,3,4,5]]);
+        //Running
+        } else if ($filter == 1) {
+            $query->andFilterWhere(['in', 'status', [3,4,5]]);
+        //Comming
         } else if($filter == 2) {
-            $query->andFilterWhere(['status' => 3]);
-        }else {
-            $query->andFilterWhere(['<=', 'begin', $today])
-                ->andFilterWhere(['not', ['status' => 3]]);
+            $query->andFilterWhere(['in', 'status', [2]]);
+        //Past
+        }else if($filter == 3){
+            $query->andFilterWhere(['status' => Tournament::STATUS_FINISHED]);
+        //All
+        } else {
+
         }
 
         // grid filtering conditions

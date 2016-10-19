@@ -3,6 +3,7 @@
 namespace frontend\controllers;
 
 use DateTime;
+use frontend\models\Bulk;
 use frontend\models\Participant;
 use frontend\models\TournamentMatch;
 use frontend\models\TournamentMatchSearch;
@@ -519,6 +520,25 @@ class TournamentController extends FrontendController
     {
         /** @var TournamentController $this */
         $model = $this->findModel($id);
+        $bulks = Bulk::find()
+            ->where(['tournament_id' => $id])
+            ->all();
+        foreach ($bulks as $bulk){
+            $bulk->delete();
+        }
+        $tournament_match = TournamentMatch::find()
+            ->where(['tournament_id' => $id])
+            ->all();
+        foreach ($tournament_match as $match){
+            $match->delete();
+        }
+        $participants = Participant::find()
+            ->where(['tournament_id' => $id])
+            ->all();
+        foreach ($participants as $participant){
+            $participant->delete();
+        }
+
         if (Yii::$app->user->can('deleteTournament', ['model' => $model])) {
             $model->delete();
         }
@@ -962,19 +982,31 @@ class TournamentController extends FrontendController
         //First Round: delete all Seeds which are higher than ParticipantCount
         //Delete also the the seed of the opponent, he is already waiting in the next round
         if ($participant_count == 1) {
-            $roundOneMatches = TournamentMatch::find()
-                ->where(['or', ['seed_A' => $participant_count], ['seed_B' => $participant_count]])
+            /** @var TournamentMatch $roundOneMatche */
+            $roundOneMatche = TournamentMatch::find()
+                ->where(['seed_A' => $participant_count])
                 ->andWhere(['round' => 1])
                 ->andWhere(['tournament_id' => $model->id])
                 ->andWhere(['stage' => $stage])
                 ->andWhere(['groupID' => $group])
+                ->one();
+
+            $roundOneMatche->seed_B = null;
+            $roundOneMatche->qualification_match_ids = "FS";
+            $roundOneMatche->state = TournamentMatch::MATCH_STATE_FINISHED;
+            $roundOneMatche->save();
+
+            $otherMatches = TournamentMatch::find()
+                ->andWhere(['not', ['seed_A' => $participant_count]])
+                ->andWhere(['tournament_id' => $model->id])
+                ->andWhere(['stage' => $stage])
+                ->andWhere(['groupID' => $group])
                 ->all();
-            foreach ($roundOneMatches as $match) {
-                /** @var $match TournamentMatch */
-                $match->seed_B = null;
-                $match->state = TournamentMatch::MATCH_STATE_FINISHED;
-                $match->save();
+            /** @var TournamentMatch $match */
+            foreach ($otherMatches as $match){
+                $match->delete();
             }
+
         } else {
 
             /** If match will not happen in round one of the group stage set it to finished and go on */
@@ -1167,6 +1199,7 @@ class TournamentController extends FrontendController
         } else {
             $openMatches = $this->getOpenMatches($model, $stage, $group);
             $seedGroupOffset = ($group - 1) * $model->participants_compete;
+
             foreach ($openMatches as $match) {
                 /** @var $match TournamentMatch */
 
@@ -1395,8 +1428,10 @@ class TournamentController extends FrontendController
                 $roundParticipantsCompete = $model->participants_compete;
                 if ($group == $groupCount) {
                     $roundParticipantsCompete = $model->participants_count - (($groupCount - 1) * $model->participants_compete);
-                }
 
+                }
+                Yii::trace('Last round participants'.$roundParticipantsCompete);
+                Yii::$app->session->setFlash('alert', $roundParticipantsCompete);
                 $this->clearSEBracketSeeds($model, $stage, $roundParticipantsCompete, $group);
                 $this->fillParticipantIDs($model, $stage, $group, Tournament::FORMAT_DOUBLE_ELIMINATION);
 

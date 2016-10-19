@@ -4,6 +4,7 @@ namespace frontend\models;
 
 use Yii;
 use yii\db\ActiveRecord;
+use yii\helpers\Url;
 
 /**
  * This is the model class for table "{{%tournament_match}}".
@@ -290,5 +291,40 @@ class TournamentMatch extends ActiveRecord
         }
         return ['A' => $participant_A_Name, 'B' => $participant_B_Name];
     }
+
+    public function getParticipantAImage(){
+
+        if($this->participant_id_A !== 0){
+            /** @var Participant $participant_A */
+            $participant_A = Participant::find()
+                ->where(['id' => $this->participant_id_A])
+                ->one();
+            return $participant_A->getParticipantImage();
+        } else {
+            $url = Url::to('@web/images/players/');
+            $alt = $this->id;
+            $imageInfo = ['alt' => $alt];
+            $imageInfo['url'] = $url . 'default.jpg';
+            return $imageInfo;
+        }
+    }
+
+    public function getParticipantBImage(){
+
+        if($this->participant_id_A !== 0){
+            /** @var Participant $participant_B */
+            $participant_B = Participant::find()
+                ->where(['id' => $this->participant_id_A])
+                ->one();
+            return $participant_B->getParticipantImage();
+        } else {
+            $url = Url::to('@web/images/players/');
+            $alt = $this->id;
+            $imageInfo = ['alt' => $alt];
+            $imageInfo['url'] = $url . 'default.jpg';
+            return $imageInfo;
+        }
+    }
+
 
 }

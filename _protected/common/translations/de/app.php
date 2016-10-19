@@ -228,18 +228,30 @@ return [
     'P. p. game win'     => 'P. p. Spiel Sieg',
     'P. p. game tie'     => 'P. p. Spiel Unentschieden',
     'P. p. bye'     => 'P. p. bye',
-    'Participants Compete'     => 'Teilnehmer treten an',
+    'Participants Compete'     => 'Teilnehmer pro Gruppe',
     'Participants Advance'     => 'Teilnehmer rücken vor',
     'Group Stage Format'     => 'Gruppenphasen Format',
     'Quick Advance'     => 'Schnelles Vorrücken',
     'Notifications'     => 'Benachrichtigungen',
+    'Create Tournament'     => 'Turnier erstellen',
 
     'Informations' => 'Informationen',
-        
+    'Stage not yet ready.' => 'Diese Phase ist noch nicht bereit.',
+    'We haven\'t started the tournament yet.' => 'Das Turnier wurde noch nicht gestartet.',
+
     'Complete'     => 'Komplett',
     'Finished'     => 'Beendet',
     'Abort'     => 'Abgebrochen',
     'Deleted'     => 'Gelöscht',
+
+   'A Swiss-system tournament is a non-eliminating tournament format which features a predetermined number of rounds of competition, but considerably fewer than in a round-robin tournament. In a Swiss tournament, each competitor (team or individual) does not play every other. Competitors meet one-to-one in each round and are paired using a predetermined set of rules designed to ensure that each competitor plays opponents with a similar running score, but not the same opponent more than once. The winner is the competitor with the highest aggregate points earned in all rounds. All competitors play in each round unless there is an odd number of them.' => 'Das Schweizer System ist eine Turnierform, die vor allem beim Schachspiel verbreitet ist, prinzipiell aber bei allen Turnieren mit Spielen zwischen zwei Personen oder Mannschaften möglich ist. Dieses System ist besonders dann sinnvoll, wenn es aufgrund der großen Teilnehmeranzahl schon allein aus Zeitgründen nicht möglich ist, dass jeder gegen jeden (wie es bei einem Rundenturnier der Fall wäre) spielt.',
+   'A round-robin tournament (or all-play-all tournament) is a competition in which each contestant meets all other contestants in turn.' => 'Als Rundenturnier (auch Jeder gegen jeden oder Liga-System, englisch Round Robin) wird eine Turnierform oder ein Ligamodus bezeichnet, bei der jeder Turnierteilnehmer gleich oft gegen alle anderen Turnierteilnehmer antritt.',
+   'A double-elimination tournament is a type of elimination tournament competition in which a participant ceases to be eligible to win the tournament\'s championship upon having lost two games or matches. It stands in contrast to a single-elimination tournament, in which only one defeat results in elimination.' => 'Das Double-knock-out-Format unterscheidet sich im Wesentlichen dadurch vom einfachen K.-o.-System (single knock-out oder single elimination), dass eine einmalige Niederlage nicht das Ausscheiden aus dem Turnier bedingt. Ein Teilnehmer scheidet erst nach der zweiten Niederlage aus dem Turnier aus.',
+   'A single-elimination tournament—also called an Olympic system tournament, a knockout (or, knock-out), single penetration, or sudden death tournament—is a type of elimination tournament where the loser of each bracket is immediately eliminated from winning the championship or first prize in the event.' => 'Das K.-o.-System (von englisch knockout, etwa „herausschlagen“ oder „außer Gefecht setzen“), seltener auch Einzelausscheidung (englisch Single elimination im Unterschied zu Double elimination, siehe Double knock out) oder Pokalsystem (englisch Cup System), ist eine Turnierform, die in Sportarten wie z. B. Tennis angewendet wird, wobei der Verlierer einer Begegnung aus dem Turnier ausscheidet.',
+
+        'Do you need a group stage to reduce the participants early?' => 'Möchten Sie eine Gruppenphase einsetzen um die Teilnehmeranzahl schnell zu reduzieren?',
+        'Do teams compete in your tournament?' => 'Treten in Ihrem Turnier Teams gegeneinander an?',
+
 
     'Single Elimination'     => 'K.-o.-System',
     'Double Elimination'     => 'Doppel-K.-o.-System',
@@ -293,6 +305,20 @@ return [
     'Points A'     => 'Punkte A',
     'Points B'     => 'Punkte B',
     'Group'     => 'Gruppe',
+    'Misc'     => 'Verschiedenes',
+    'Tournament Status'     => 'Turnier-Status',
+    'Tiebreaker'     => 'Feinwertung',
+    'Resume'     => 'Wiederaufnehmen',
+    'Aborted'     => 'Abgebrochen',
+
+        //LOCATION
+    'Adress'     => 'Anschrift',
+    'Citystate'     => 'Ort',
+    'Postalcode'     => 'Postleitzahl',
+    'Image File'     => 'Bilddatei',
+    'Google Maps URL'     => 'Google Maps URL',
+
+
 
         //MAIL
     'Follow this link to activate your account:' => 'Folgen sie diesem Link um ihr Konto zu aktivieren:',

@@ -72,8 +72,10 @@ class ParticipantController extends FrontendController
             if ($bulk->save()) {
                 $model->tournament->setParticipantCount();
                 Yii::$app->session->setFlash('success', 'Bulk with '.$bulk->bulk. ' are successfully registered!');
+                $bulk->delete();
                 return $this->redirect(['index', 'tournament_id' => $model->tournament_id]);
             } else {
+                $bulk->delete();
                 return $this->redirect(['index', 'tournament_id' => $model->tournament_id]);
             }
         } elseif ($externalSignupModel->load(Yii::$app->request->post()) && $externalSignupModel->validate()) {
