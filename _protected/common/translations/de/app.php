@@ -38,6 +38,7 @@ return [
     'Logout'   => 'Abmelden',
     'Users'    => 'Nutzer',
     'Articles' => 'Artikel',
+    'Article' => 'Artikel',
     'Register' => 'Registrieren',
     'Media' => 'Medien',
     'Galleries' => 'Galerie',
@@ -178,7 +179,10 @@ return [
         //-- Tournament --//
         
         
-        
+    'General' =>        'Allgemein',
+    'Tournament format' => 'Turnierformat',
+    'Single Stage Tournament' => 'Eine Turnierphase',
+    'Two Stage Tournament' => 'Zwei Turnierphasen',
     'Standings'     => 'Wertung',
     'Participants'     => 'Teilnehmer',
     'Settings'     => 'Einstellungen',
@@ -192,8 +196,8 @@ return [
     'Comming'     => 'Kommende',
     'Past'     => 'Vergangene',
 
-
-
+        'registered' => 'registriert',
+        'Add participants' => 'Teilnehmer hinzufügen',
     'Enter a participant name.'     => 'Geben Sie einen Teilnehmernamen ein.',
     'Enter several participant names separated by line breaks.'     => 'Geben Sie mehrere Teilnehmernamen ein, seperiert durch Zeilenumbrüche.',
     'Round'     => 'Runde',
@@ -257,8 +261,26 @@ return [
     'day'     => 'Tag',
     'hours'     => 'Stunden',
     'hour'     => 'Stunde',
+    'Begin'     => 'Beginn',
     'the next hour'     => 'der nächsten Stunde',
+    'Enter event start time ... '     => 'Geben Sie den Zeitpunkt des Beginns an ...',
+    'Enter event end time ... (if you want)'     => 'Geben Sie den Zeitpunkt des Endes an ...(wenn sie mögen)',
 
+
+    'Winner of'     => 'Sieger von',
+    'Loser of'     => 'Verlierer von',
+    'Table'     => 'Tabelle',
+    'Losers Bracket'     => 'Verlierer Turnierbaum',
+    'Match'     => 'Spiel',
+    'Winner'     => 'Sieger',
+    'Scores'     => 'Punkte',
+    'Report'     => 'Einreichen',
+    'Zoom in'     => 'Hinein zoomen',
+    'Zoom out'     => 'Heraus zoomen',
+    'Ready'     => 'Bereit',
+    'Open'     => 'Offen',
+    'State'     => 'Zustand',
+    'Score'     => 'Punktestand',
 
     'Final Stage'     => 'Finale-Phase',
     'Group Stage'     => 'Gruppen-Phase',
@@ -304,4 +326,7 @@ return [
         'Player profiles' => 'Spielerprofile',
     'Update: ' => 'Aktualisieren: ',
     'Own profiles' => 'Eigene Profile',
+'Create player profile' => 'Erstelle ein Spielerprofil',
+
+
 ];

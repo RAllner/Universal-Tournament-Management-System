@@ -570,11 +570,11 @@ class TournamentController extends FrontendController
     }
 
     /**
-     * Action to start the tournament
-     * @param $id integer
-     * @return yii\web\Response
-     * @throws NotFoundHttpException
-     */
+ * Action to start the tournament
+ * @param $id integer
+ * @return yii\web\Response
+ * @throws NotFoundHttpException
+ */
     public function actionStart($id)
     {
         if ($this->getParticipantCount($id) >= 2) {
@@ -725,7 +725,6 @@ class TournamentController extends FrontendController
         if ($stage == Tournament::STAGE_GS) {
             $stageFormat = $model->gs_format;
         }
-
         if ($stageFormat === Tournament::FORMAT_SINGLE_ELIMINATION) {
             $this->createSingleEliminationStage($model, $stage);
         } else if ($stageFormat === Tournament::FORMAT_DOUBLE_ELIMINATION) {

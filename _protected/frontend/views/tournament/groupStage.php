@@ -364,10 +364,10 @@ $currentGroup = null;
             <ul class="nav nav-tabs" role="tablist">
                 <li role="presentation" class="active"><a href="#losersBracket<?= $group ?>"
                                                           aria-controls="bracket<?= $group ?>" role="tab"
-                                                          data-toggle="tab">Losers Bracket</a></li>
+                                                          data-toggle="tab"><?= Yii::t('app','Losers Bracket')?></a></li>
                 <li role="presentation"><a href="#losersTable<?= $group ?>" aria-controls="losersTable<?= $group ?>"
                                            role="tab"
-                                           data-toggle="tab">Table</a></li>
+                                           data-toggle="tab"><?= Yii::t('app','Table')?></a></li>
 
             </ul>
             <div class="tab-content">

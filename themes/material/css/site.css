@@ -2278,3 +2278,14 @@ ol#sortable-participants li.disabled > .control-group > i {
 .nav-tabs>li.active {
     background-color: rgba(158, 158, 158, 0.2);
 }
+
+.unchecked{
+    color: grey;
+}
+
+.bracket-toolbar{
+    position: absolute;
+    right: 20px;
+    top: 100px;
+    z-index: 200;
+}

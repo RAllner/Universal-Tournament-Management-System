@@ -744,6 +744,16 @@ class Tournament extends ActiveRecord
         $classes = ($model->round == 1 || $model->losers_round) ? $classes : $classes . " prereq";
         $openMatch = ($model->state == TournamentMatch::MATCH_STATE_OPEN) ? " open-match" : "";
         $runningMatch = ($model->state == TournamentMatch::MATCH_STATE_RUNNING) ? " running-match" : "";
+        $seedA = "";
+        $seedB = "";
+
+        if(!is_null($model->seed_A)){
+            $seedA = $model->seed_A;
+        }
+        if(!is_null($model->seed_B)){
+            $seedA = $model->seed_B;
+        }
+
 
 
         if ($model->state == TournamentMatch::MATCH_STATE_CREATED || $model->state == TournamentMatch::MATCH_STATE_DIRECT_ADVANCE) {
@@ -772,14 +782,14 @@ class Tournament extends ActiveRecord
         }
         $matchId = "<div class='matchId'>$model->matchID</div>";
         if($this->has_sets == 1){
-            $contentRow1 = "<div class='match-r1 $winner_A $openMatch $runningMatch'><div class='m-id'></div><div class='m-participant'>$nameA</div><div class='m-points'>$model->participant_score_A</div></div>";
-            $contentRow2 = "<div class='match-r2 $winner_B $openMatch $runningMatch'><div class='m-id'></div><div class='m-participant'>$nameB</div><div class='m-points'>$model->participant_score_B</div></div>";
+            $contentRow1 = "<div class='match-r1 $winner_A $openMatch $runningMatch'><div class='m-id'>$seedA</div><div class='m-participant'>$nameA</div><div class='m-points'>$model->participant_score_A</div></div>";
+            $contentRow2 = "<div class='match-r2 $winner_B $openMatch $runningMatch'><div class='m-id'>$seedB</div><div class='m-participant'>$nameB</div><div class='m-points'>$model->participant_score_B</div></div>";
         } else {
             $score = explode(',', $model->scores)[0];
             $scoreA = explode('-', $score)[0];
             $scoreB = explode('-', $score)[1];
-            $contentRow1 = "<div class='match-r1 $winner_A $openMatch $runningMatch'><div class='m-id'></div><div class='m-participant'>$nameA</div><div class='m-points'>$scoreA</div></div>";
-            $contentRow2 = "<div class='match-r2 $winner_B $openMatch $runningMatch'><div class='m-id'></div><div class='m-participant'>$nameB</div><div class='m-points'>$scoreB</div></div>";
+            $contentRow1 = "<div class='match-r1 $winner_A $openMatch $runningMatch'><div class='m-id'>$seedA</div><div class='m-participant'>$nameA</div><div class='m-points'>$scoreA</div></div>";
+            $contentRow2 = "<div class='match-r2 $winner_B $openMatch $runningMatch'><div class='m-id'>$seedB</div><div class='m-participant'>$nameB</div><div class='m-points'>$scoreB</div></div>";
         }
         /**
          * Detail View of Match. Shown when hover is active

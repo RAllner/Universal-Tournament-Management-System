@@ -93,7 +93,7 @@ $script =
     
     
     $( "#draggable-tournament-tree" ).on( "drag", function( event, ui ) {
-        $('#round-title-wrapper').css("transform","translateX("+ui.position.left+"px)")
+        $('#winners-round-title-wrapper').css("transform","translateX("+ui.position.left+"px)")
     } );
     $( "#draggable-tournament-losers-tree" ).on( "drag", function( event, ui ) {
         $('#losers-round-title-wrapper').css("transform","translateX("+ui.position.left+"px)")
@@ -220,9 +220,9 @@ $currentRound = null;
             <div>
                 <ul class="nav nav-tabs" role="tablist">
                     <li role="presentation" class="active"><a href="#bracket" aria-controls="bracket" role="tab"
-                                                              data-toggle="tab">Bracket</a></li>
+                                                              data-toggle="tab"><?= Yii::t('app','Bracket')?></a></li>
                     <li role="presentation"><a href="#table" aria-controls="table" role="tab"
-                                               data-toggle="tab">Table</a></li>
+                                               data-toggle="tab"><?= Yii::t('app','Table')?></a></li>
 
                 </ul>
 
@@ -230,7 +230,7 @@ $currentRound = null;
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="bracket">
                         <div class="well" id="clone-me-winners">
-                            <div class="pull-right">
+                            <div class="bracket-toolbar">
                                 <div class="btn-toolbar" role="toolbar" aria-label="toolbar">
                                     <div class="btn-group" role="group" aria-label="zoom">
                                         <button class="btn zoom-in" title="<?= Yii::t('app', 'Zoom in') ?>" data-target="winners"><i

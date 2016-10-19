@@ -14,6 +14,7 @@ use frontend\models\Tournament;
 use frontend\models\TournamentMatch;
 use yii\web\View;
 use yii\widgets\ActiveForm;
+
 $names = $model->getParticipantNames();
 $participant_A_Name = $names["A"];
 $participant_B_Name = $names["B"];
@@ -125,10 +126,11 @@ $winnerB = ($model->winner_id == $model->participant_id_B && $model->state == To
                 <div class="clearfix"></div>
                 <div class="row">
                     <div class="col-xs-12 center">
-                <button type="button" class="btn btn-primary report-match"
-                        data-target="<?= $model->id ?>"><?= Yii::t('app', 'Report') ?></button>
+                        <button type="button" class="btn btn-primary report-match"
+                                data-target="<?= $model->id ?>"><?= Yii::t('app', 'Report') ?></button>
                     </div>
-                <?php ActiveForm::end(); ?>
+                    <?php ActiveForm::end(); ?>
+                </div>
             </div>
         </div>
     </div>

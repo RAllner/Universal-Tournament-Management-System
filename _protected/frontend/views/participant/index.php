@@ -56,7 +56,11 @@ $('#sortable-participants').sortable({
 }); 
 JS;
 $this->registerJs($script, View::POS_END);
-
+if($tournament->participants_count == ""){
+    $participantCount = 0;
+} else {
+    $participantCount = $tournament->participants_count;
+}
 
 ?>
 <div class="participant-index">
@@ -87,13 +91,18 @@ $this->registerJs($script, View::POS_END);
                         </div>
                     <?php endif ?>
                 </div>
-                <h3><i class="material-icons" style="font-size: 30px; vertical-align: sub; ">people</i> <?= $tournament->participants_count . ' / '.  $tournament->max_participants . Yii::t('app',' registered')?></h3>
+                <h3><i class="material-icons" style="font-size: 30px; vertical-align: sub; ">people</i> <?= $participantCount . ' / '.  $tournament->max_participants . ' '.Yii::t('app','registered')?></h3>
                 <div class="clearfix"></div>
 
                 <?php
 
                 /** @var Participant $participant */
                 foreach ($participants as $participant) {
+                    if($participant->checked_in == 0){
+                        $control = (Yii::$app->user->can('updateTournament', ['model' => $tournament]) && $tournament->status < Tournament::STATUS_RUNNING) ? Html::a('<i class="material-icons unchecked">check_circle</i>', Url::to(['check-in', 'id' => $participant->id]), ['data-method' => 'post']). ' '.Html::a('<i class="material-icons">delete</i>', Url::to(['delete', 'id' => $participant->id]), ['data-method' => 'post']) : "";
+                    } else {
+                        $control = (Yii::$app->user->can('updateTournament', ['model' => $tournament]) && $tournament->status < Tournament::STATUS_RUNNING) ? Html::a('<i class="material-icons">check_circle</i>', Url::to(['check-in', 'id' => $participant->id]), ['data-method' => 'post']). ' '.Html::a('<i class="material-icons">delete</i>', Url::to(['delete', 'id' => $participant->id]), ['data-method' => 'post']) : "";
+                    }
                     $items[$participant->seed] = [
                         'content' =>
 
@@ -101,7 +110,7 @@ $this->registerJs($script, View::POS_END);
 
                             . '<div class="control-group">'
                             . '<i class="material-icons">drag_handle</i>'
-                            . $control = (Yii::$app->user->can('updateTournament')) ? Html::a('<i class="material-icons">check_circle</i>', Url::to(['check-in', 'id' => $participant->id]), ['data-method' => 'post']). ' '.Html::a('<i class="material-icons">delete</i>', Url::to(['delete', 'id' => $participant->id]), ['data-method' => 'post']) : ""
+                            . $control
 
                                 . '</div>',
                         'options' => ['id' => $participant->id],
@@ -122,11 +131,11 @@ $this->registerJs($script, View::POS_END);
                 ?>
 
                 <input class="sortable" type="hidden" name="order"
-                       value="<?= $value = ($tournament->status < Tournament::STATUS_RUNNING && Yii::$app->user->can('updateTournament')) ? 'false' : 'true' ?>">
+                       value="<?= $value = ($tournament->status < Tournament::STATUS_RUNNING && Yii::$app->user->can('updateTournament', ['model' => $tournament])) ? 'false' : 'true' ?>">
                 <input class="defaultUrl" type="hidden" name="url"
                        value="<?= Url::to(['reorder', 'id' => $tournament->id]) ?>">
             </div>
-            <?php if (Yii::$app->user->can('updateTournament')) { ?>
+            <?php if (Yii::$app->user->can('updateTournament', ['model' => $tournament])) { ?>
                 <div class="row hidden-md hidden-lg">
 
                     <div class="col-md-12">
@@ -175,7 +184,7 @@ $this->registerJs($script, View::POS_END);
                 </div>
             <?php } ?>
         </div>
-        <?php if (Yii::$app->user->can('updateTournament')) { ?>
+        <?php if (Yii::$app->user->can('updateTournament', ['model' => $tournament])) { ?>
             <div class="col-md-4 hidden-xs hidden-sm">
                 <h3><?= Yii::t('app', 'Add participants') ?></h3>
                 <div class="well">
