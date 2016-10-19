@@ -98,7 +98,7 @@ abstract class AbstractAssetsRepository extends ComposerRepository
     /**
      * {@inheritdoc}
      */
-    public function search($query, $mode = 0)
+    public function search($query, $mode = 0, $type = null)
     {
         if (!$this->searchable) {
             return array();
@@ -135,6 +135,7 @@ abstract class AbstractAssetsRepository extends ComposerRepository
             $data = $this->fetchFile($packageUrl, $cacheName);
             $repo = $this->createVcsRepositoryConfig($data, Util::cleanPackageName($name));
             $repo['vcs-package-filter'] = $this->packageFilter;
+            $repo['vcs-driver-options'] = Util::getArrayValue($this->repoConfig, 'vcs-driver-options', array());
 
             Util::addRepository($this->io, $this->rm, $this->repos, $name, $repo, $pool);
 

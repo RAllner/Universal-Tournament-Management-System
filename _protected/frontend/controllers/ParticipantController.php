@@ -165,8 +165,14 @@ class ParticipantController extends FrontendController
         $model = $this->loadDefault($model);
         if ($model->load(Yii::$app->request->post())){
             if(!is_null($model->player_id)){
+                /** @var Player $player */
                 $player = Player::find()->where(['id' => $model->player_id])->one();
-                $model->name = $player->name . $player->running_nr;
+                if($player->running_nr == 1){
+                    $model->name = $player->name;
+                } else {
+                    $model->name = $player->name . "#". $player->running_nr;
+                }
+
             } else if(!is_null($model->team_id)){
                 $team = Team::find()->where(['id' => $model->team_id])->one();
                 $model->name = $team->name;

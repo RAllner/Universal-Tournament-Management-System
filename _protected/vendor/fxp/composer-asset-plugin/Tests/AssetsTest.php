@@ -28,12 +28,12 @@ class AssetsTest extends \PHPUnit_Framework_TestCase
         ), Assets::getTypes());
     }
 
-    public function testGetRegistries()
+    public function testDefaultGetRegistries()
     {
         $this->assertEquals(array(
             'npm',
             'bower',
-        ), array_keys(Assets::getRegistries()));
+        ), array_keys(Assets::getDefaultRegistries()));
     }
 
     public function testGetVcsRepositoryDrivers()
@@ -79,6 +79,13 @@ class AssetsTest extends \PHPUnit_Framework_TestCase
     }
 
     public function testCreationOfBowerAsset()
+    {
+        $type = Assets::createType('bower');
+
+        $this->assertInstanceOf('Fxp\Composer\AssetPlugin\Type\AssetTypeInterface', $type);
+    }
+
+    public function testCreationOfPrivateBowerAsset()
     {
         $type = Assets::createType('bower');
 

@@ -38,8 +38,13 @@ class ComposerStaticInit206f64a4c4314da2a1203528395d6eef
         ),
         'm' => 
         array (
+            'modernkernel\\flagiconcss\\' => 25,
             'mihaildev\\ckeditor\\' => 19,
             'metalguardian\\fotorama\\' => 23,
+        ),
+        'l' => 
+        array (
+            'lajax\\languagepicker\\' => 21,
         ),
         'k' => 
         array (
@@ -143,6 +148,10 @@ class ComposerStaticInit206f64a4c4314da2a1203528395d6eef
             0 => __DIR__ . '/..' . '/nenad/yii2-widgets-base',
             1 => __DIR__ . '/..' . '/nenad/yii2-strength-meter',
         ),
+        'modernkernel\\flagiconcss\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/modernkernel/yii2-flag-icon-css',
+        ),
         'mihaildev\\ckeditor\\' => 
         array (
             0 => __DIR__ . '/..' . '/mihaildev/yii2-ckeditor',
@@ -150,6 +159,10 @@ class ComposerStaticInit206f64a4c4314da2a1203528395d6eef
         'metalguardian\\fotorama\\' => 
         array (
             0 => __DIR__ . '/..' . '/metalguardian/yii2-fotorama-widget/src',
+        ),
+        'lajax\\languagepicker\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/lajax/yii2-language-picker',
         ),
         'kartik\\widgets\\' => 
         array (

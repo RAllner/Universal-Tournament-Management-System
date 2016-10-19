@@ -68,19 +68,35 @@ abstract class NpmPackageUtil
             $value = array();
 
             foreach ($data as $type => $url) {
-                $httpPrefix = 'http://';
-                if (0 === strpos($url, $httpPrefix)) {
-                    $url = 'https://'.substr($url, strlen($httpPrefix));
-                }
-                if ('shasum' === $type) {
-                    $value[$type] = $url;
-                } else {
-                    $value['type'] = 'tarball' === $type ? 'tar' : $type;
-                    $value['url'] = $url;
+                if (is_string($url)) {
+                    self::convertDistEntry($value, $type, $url);
                 }
             }
         }
 
         return $value;
+    }
+
+    /**
+     * Convert the each entry of dist section.
+     *
+     * @param array  $value The result
+     * @param string $type  The dist type
+     * @param string $url   The dist url
+     */
+    private static function convertDistEntry(array &$value, $type, $url)
+    {
+        $httpPrefix = 'http://';
+
+        if (0 === strpos($url, $httpPrefix)) {
+            $url = 'https://'.substr($url, strlen($httpPrefix));
+        }
+
+        if ('shasum' === $type) {
+            $value[$type] = $url;
+        } else {
+            $value['type'] = 'tarball' === $type ? 'tar' : $type;
+            $value['url'] = $url;
+        }
     }
 }

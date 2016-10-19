@@ -149,108 +149,64 @@ $participants = \frontend\models\Participant::find()
                         <div class="row">
                             <?php
                             foreach ($model->teamMembers as $member) {
-                            /** @var Player $player */
-                            $player = Player::find()->where(['id' => $member->player_id])->one();
-                            $photoInfo = $player->PhotoInfo;
-                            $photo = Html::img($photoInfo['url'], ['alt' => $photoInfo['alt'], 'style:' => 'width: 150px; height: 150px', 'class' => 'media-object']);
-                            $options = ['data-lightbox' => 'news-image', 'data-title' => $photoInfo['alt']];
-                            ?>
-                            <div class="col-lg-3">
-                                <a href="<?= Url::to(['player/view', 'id' => $player->id]) ?>">
-                                    <div class="team-image-wrap"
-                                         style="background-image: url('<?= $photoInfo['url'] ?>')">
-                                        <div class="intro-Text-wrap-team">
-                                            <p class="teammembertitle" itemprop="headline"><?= $player->name ?></p>
+                                /** @var Player $player */
+                                $player = Player::find()->where(['id' => $member->player_id])->one();
+                                $photoInfo = $player->PhotoInfo;
+                                $photo = Html::img($photoInfo['url'], ['alt' => $photoInfo['alt'], 'style:' => 'width: 150px; height: 150px', 'class' => 'media-object']);
+                                $options = ['data-lightbox' => 'news-image', 'data-title' => $photoInfo['alt']];
+                                ?>
+                                <div class="col-lg-3">
+                                    <a href="<?= Url::to(['player/view', 'id' => $player->id]) ?>">
+                                        <div class="team-image-wrap"
+                                             style="background-image: url('<?= $photoInfo['url'] ?>')">
+                                            <div class="intro-Text-wrap-team">
+                                                <p class="teammembertitle" itemprop="headline"><?= $player->name ?></p>
+                                            </div>
                                         </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-lg-3">
-                                <a href="<?= Url::to(['player/view', 'id' => $player->id]) ?>">
-                                    <div class="team-image-wrap"
-                                         style="background-image: url('<?= $photoInfo['url'] ?>')">
-                                        <div class="intro-Text-wrap-team">
-                                            <p class="teammembertitle" itemprop="headline"><?= $player->name ?></p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-lg-3">
-                                <a href="<?= Url::to(['player/view', 'id' => $player->id]) ?>">
-                                    <div class="team-image-wrap"
-                                         style="background-image: url('<?= $photoInfo['url'] ?>')">
-                                        <div class="intro-Text-wrap-team">
-                                            <p class="teammembertitle" itemprop="headline"><?= $player->name ?></p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-lg-3">
-                                <a href="<?= Url::to(['player/view', 'id' => $player->id]) ?>">
-                                    <div class="team-image-wrap"
-                                         style="background-image: url('<?= $photoInfo['url'] ?>')">
-                                        <div class="intro-Text-wrap-team">
-                                            <p class="teammembertitle" itemprop="headline"><?= $player->name ?></p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-lg-3">
-                                <a href="<?= Url::to(['player/view', 'id' => $player->id]) ?>">
-                                    <div class="team-image-wrap"
-                                         style="background-image: url('<?= $photoInfo['url'] ?>')">
-                                        <div class="intro-Text-wrap-team">
-                                            <p class="teammembertitle" itemprop="headline"><?= $player->name ?></p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
+                                    </a>
+                                </div>
+                            <?php } ?>
                         </div>
-                        <?php } ?>
+                    </div>
+
+                    <div role="tabpanel" class="tab-pane fade" id="tournaments">
+                        <table class="centered col-xs-12">
+                            <tr>
+                                <th> <?= Yii::t('app', 'Tournament') ?> </th>
+                                <th> <?= Yii::t('app', 'Date') ?> </th>
+                                <th> <?= Yii::t('app', 'Rank') ?> </th>
+                                <th> <?= Yii::t('app', 'Game History') ?> </th>
+                            </tr>
+
+                            <?php
+                            /** @var \frontend\models\Participant $participant */
+                            foreach ($participants as $participant) {
+                                /**  @var \frontend\models\Tournament $tournament */
+
+                                $rankArray = explode(',', $participant->history);
+                                $rankString = "";
+                                foreach ($rankArray as $rank) {
+                                    if ($rank == "l") {
+                                        $rankString = $rankString . "<div class='achieved-match-loss'>l</div>";
+                                    } else if ($rank == "w") {
+                                        $rankString = $rankString . "<div class='achieved-match-win'>w</div>";
+                                    }
+                                }
+                                $tournament = \frontend\models\Tournament::find()->where(['id' => $participant->tournament_id])->one()
+                                ?>
+                                <tr>
+                                    <td> <?= $tournament->name ?></td>
+                                    <td> <?= $tournament->begin ?></td>
+                                    <td> <?= $participant->rank ?></td>
+                                    <td> <?= $rankString ?></td>
+                                </tr>
+                            <?php } ?>
+
+                        </table>
                     </div>
                 </div>
-                <div role="tabpanel" class="tab-pane fade" id="tournaments">
-                    <table class="centered col-xs-12">
-                        <tr>
-                            <th> <?= Yii::t('app', 'Tournament') ?> </th>
-                            <th> <?= Yii::t('app', 'Date') ?> </th>
-                            <th> <?= Yii::t('app', 'Rank') ?> </th>
-                            <th> <?= Yii::t('app', 'Game History') ?> </th>
-                        </tr>
-
-                        <?php
-                        /** @var \frontend\models\Participant $participant */
-                        foreach ($participants as $participant) {
-                            /**  @var \frontend\models\Tournament $tournament */
-
-                            $rankArray = explode(',', $participant->history);
-                            $rankString = "";
-                            foreach ($rankArray as $rank) {
-                                if ($rank == "l") {
-                                    $rankString = $rankString . "<div class='achieved-match-loss'>l</div>";
-                                } else if ($rank == "w") {
-                                    $rankString = $rankString . "<div class='achieved-match-win'>w</div>";
-                                }
-                            }
-                            $tournament = \frontend\models\Tournament::find()->where(['id' => $participant->tournament_id])->one()
-                            ?>
-                            <tr>
-                                <td> <?= $tournament->name ?></td>
-                                <td> <?= $tournament->begin ?></td>
-                                <td> <?= $participant->rank ?></td>
-                                <td> <?= $rankString ?></td>
-                            </tr>
-                        <?php } ?>
-
-                    </table>
-
-
-                </div>
             </div>
-        </div>
 
+        </div>
     </div>
-</div>
-</div>
-</div>
 </div>

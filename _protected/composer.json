@@ -1,0 +1,5 @@
+{
+    "require": {
+        "lajax/yii2-language-picker": "1.*"
+    }
+}

@@ -52,19 +52,22 @@ class FxpAssetPluginTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $io = $this->getMock('Composer\IO\IOInterface');
-        $config = $this->getMock('Composer\Config');
+        $io = $this->getMockBuilder('Composer\IO\IOInterface')->getMock();
+        $config = $this->getMockBuilder('Composer\Config')->getMock();
         $config->expects($this->any())
             ->method('get')
             ->will($this->returnCallback(function ($key) {
+                $value = null;
+
                 switch ($key) {
                     case 'cache-repo-dir':
-                        return sys_get_temp_dir().'/composer-test-repo-cache';
+                        $value = sys_get_temp_dir().'/composer-test-repo-cache';
+                        break;
                 }
 
-                return;
+                return $value;
             }));
-        $this->package = $this->getMock('Composer\Package\RootPackageInterface');
+        $this->package = $this->getMockBuilder('Composer\Package\RootPackageInterface')->getMock();
         $this->package->expects($this->any())
             ->method('getRequires')
             ->will($this->returnValue(array()));
@@ -77,7 +80,7 @@ class FxpAssetPluginTest extends \PHPUnit_Framework_TestCase
         $rm = new RepositoryManager($io, $config);
         $im = new InstallationManager();
 
-        $composer = $this->getMock('Composer\Composer');
+        $composer = $this->getMockBuilder('Composer\Composer')->getMock();
         $composer->expects($this->any())
             ->method('getRepositoryManager')
             ->will($this->returnValue($rm));
@@ -110,12 +113,16 @@ class FxpAssetPluginTest extends \PHPUnit_Framework_TestCase
     {
         $this->package->expects($this->any())
             ->method('getExtra')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue(array(
+                'asset-private-bower-registries' => array(
+                    'my-private-bower-server' => 'https://my-private-bower-server.tld/packages',
+                ),
+            )));
 
         $this->plugin->activate($this->composer, $this->io);
         $repos = $this->composer->getRepositoryManager()->getRepositories();
 
-        $this->assertCount(2, $repos);
+        $this->assertCount(3, $repos);
         foreach ($repos as $repo) {
             $this->assertInstanceOf('Composer\Repository\ComposerRepository', $repo);
         }
@@ -123,6 +130,8 @@ class FxpAssetPluginTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getDataForAssetVcsRepositories
+     *
+     * @param string $type
      */
     public function testAssetVcsRepositories($type)
     {
@@ -135,6 +144,7 @@ class FxpAssetPluginTest extends \PHPUnit_Framework_TestCase
         $repo = $rm->createRepository($type, array(
             'type' => $type,
             'url' => 'http://foo.tld',
+            'name' => 'foo',
         ));
 
         $this->assertInstanceOf('Composer\Repository\VcsRepository', $repo);
@@ -214,7 +224,7 @@ class FxpAssetPluginTest extends \PHPUnit_Framework_TestCase
         $this->package->expects($this->any())
             ->method('getExtra')
             ->will($this->returnValue(array('asset-repositories' => array(
-                array('type' => 'npm-vcs', 'url' => 'http://foo.tld'),
+                array('type' => 'npm-vcs', 'url' => 'http://foo.tld', 'name' => 'foo'),
             ))));
 
         $this->plugin->activate($this->composer, $this->io);
@@ -229,8 +239,8 @@ class FxpAssetPluginTest extends \PHPUnit_Framework_TestCase
         $this->package->expects($this->any())
             ->method('getExtra')
             ->will($this->returnValue(array('asset-repositories' => array(
-                array('type' => 'npm-vcs', 'url' => 'http://foo.tld'),
-                array('type' => 'npm-vcs', 'url' => 'http://foo.tld'),
+                array('type' => 'npm-vcs', 'url' => 'http://foo.tld', 'name' => 'foo'),
+                array('type' => 'npm-vcs', 'url' => 'http://foo.tld', 'name' => 'foo'),
             ))));
 
         $this->plugin->activate($this->composer, $this->io);
@@ -318,7 +328,7 @@ class FxpAssetPluginTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(0, $this->composer->getRepositoryManager()->getRepositories());
 
         $event = new VcsRepositoryEvent(AssetEvents::ADD_VCS_REPOSITORIES, array(
-            array('type' => 'npm-vcs', 'url' => 'http://foo.tld'),
+            array('type' => 'npm-vcs', 'url' => 'http://foo.tld', 'name' => 'foo'),
         ));
         /* @var InstallerEvent $eventInstaller */
         $eventInstaller = $this->getMockBuilder('Composer\Installer\InstallerEvent')

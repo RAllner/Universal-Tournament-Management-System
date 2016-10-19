@@ -2312,3 +2312,11 @@ ol#sortable-participants li.disabled > .control-group > i {
     font-stretch: condensed;
     line-height: 94px;
 }
+
+.alpha {
+    background-color: #2D2d2d;
+    padding: 0.4em;
+    margin-bottom: 1em;
+    border-radius: 5px;
+    font-size: 22px;
+}

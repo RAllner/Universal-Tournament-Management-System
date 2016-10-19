@@ -9,6 +9,7 @@ use yii\widgets\ListView;
 /* @var $searchModel frontend\models\TournamentSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 /* @var $allCount integer */
+/* @var $openCount integer */
 /* @var $commingCount integer */
 /* @var $runningCount integer */
 /* @var $pastCount integer */
@@ -44,7 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             ><a
                     href="<?= Url::to(['index', 'filter' => 0]) ?>"><span
-                        class="pull-right badge"><?= $allCount ?></span> <?= Yii::t('app', 'Open') ?></a>
+                        class="pull-right badge"><?= $openCount ?></span> <?= Yii::t('app', 'Open') ?></a>
             </li>
             <li class="tournament-nav-pills <?php if ($_GET['filter'] == 1): ?>
                         active
@@ -101,7 +102,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 ><a
                         href="<?= Url::to(['index', 'filter' => 0]) ?>"><span
-                            class="pull-right badge"><?= $allCount ?></span> <?= Yii::t('app', 'Open') ?></a>
+                            class="pull-right badge"><?= $openCount ?></span> <?= Yii::t('app', 'Open') ?></a>
                 </li>
                 <li class="tournament-nav-pills <?php if ($_GET['filter'] == 1): ?>
                         active

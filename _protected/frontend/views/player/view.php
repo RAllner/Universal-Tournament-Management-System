@@ -61,10 +61,10 @@ $participants = \frontend\models\Participant::find()
                                                                     data-toggle="tab"><?= Yii::t('app', 'Profile') ?></a>
                     </li>
                     <li role="player-profile-nav"><a href="#tournaments" aria-controls="tournaments" role="tab"
-                                                     data-toggle="tab"><?= Yii::t('app', 'Tournaments') ?></a></li>
+                                                     data-toggle="tab"><?= Yii::t('app', 'Tournament History') ?></a></li>
                     <?php if (!is_null($model->stream)): ?>
                         <li role="player-profile-nav"><a href="#livestream" aria-controls="livestream" role="tab"
-                                                         data-toggle="tab"><?= Yii::t('app', 'Twitch stream') ?></a>
+                                                         data-toggle="tab"><?= Yii::t('app', 'Live stream') ?></a>
                         </li>
                     <?php endif ?>
                 </ul>

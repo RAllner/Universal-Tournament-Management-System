@@ -38,6 +38,9 @@ class SemverConverterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getTestVersions
+     *
+     * @param string $semver
+     * @param string $composer
      */
     public function testConverter($semver, $composer)
     {
@@ -82,6 +85,7 @@ class SemverConverterTest extends \PHPUnit_Framework_TestCase
             array('1.2.3-build2012', '1.2.3-patch2012'),
             array('1.2.3+build.2012', '1.2.3-patch.2012'),
             array('1.2.3-build.2012', '1.2.3-patch.2012'),
+            array('1.3.0–rc30.79', '1.3.0-RC30.79'),
             array('latest', 'default || *'),
             array(null, '*'),
             array('', '*'),
@@ -90,6 +94,9 @@ class SemverConverterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getTestRanges
+     *
+     * @param string $semver
+     * @param string $composer
      */
     public function testRangeConverter($semver, $composer)
     {
@@ -105,6 +112,7 @@ class SemverConverterTest extends \PHPUnit_Framework_TestCase
             array('<=1.2.3', '<=1.2.3'),
             array('~1.2.3', '~1.2.3'),
             array('~1', '~1'),
+            array('1', '~1'),
             array('^1.2.3', '>=1.2.3,<2.0.0'),
             array('^1.2', '>=1.2.0,<2.0.0'),
             array('^1.x', '>=1.0.0,<2.0.0'),
@@ -126,6 +134,9 @@ class SemverConverterTest extends \PHPUnit_Framework_TestCase
             array('~ 1', '~1'),
             array('^ 1.2.3', '>=1.2.3,<2.0.0'),
             array('1.2.3 - 2.3.4', '>=1.2.3,<=2.3.4'),
+            array('1.0.0 - 1.3.x', '>=1.0.0,<1.4.0'),
+            array('1.0 - 1.x', '>=1.0,<2.0'),
+            array('1.2.3 - 2', '>=1.2.3,<3.0'),
             array('>=0.10.x', '>=0.10.0'),
             array('>=0.10.*', '>=0.10.0'),
             array('<=0.10.x', '<=0.10.9999999'),

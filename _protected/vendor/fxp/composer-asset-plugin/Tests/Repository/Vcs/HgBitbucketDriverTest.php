@@ -58,6 +58,9 @@ class HgBitbucketDriverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getAssetTypes
+     *
+     * @param string $type
+     * @param string $filename
      */
     public function testPublicRepositoryWithComposer($type, $filename)
     {
@@ -65,7 +68,7 @@ class HgBitbucketDriverTest extends \PHPUnit_Framework_TestCase
         $identifier = 'v0.0.0';
         $sha = 'SOMESHA';
 
-        $io = $this->getMock('Composer\IO\IOInterface');
+        $io = $this->getMockBuilder('Composer\IO\IOInterface')->getMock();
         $io->expects($this->any())
             ->method('isInteractive')
             ->will($this->returnValue(true));
@@ -114,12 +117,15 @@ class HgBitbucketDriverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getAssetTypes
+     *
+     * @param string $type
+     * @param string $filename
      */
     public function testPublicRepositoryWithEmptyComposer($type, $filename)
     {
         $repoUrl = 'https://bitbucket.org/composer-test/repo-name';
         $identifier = 'v0.0.0';
-        $io = $this->getMock('Composer\IO\IOInterface');
+        $io = $this->getMockBuilder('Composer\IO\IOInterface')->getMock();
 
         $remoteFilesystem = $this->getMockBuilder('Composer\Util\RemoteFilesystem')
             ->setConstructorArgs(array($io))

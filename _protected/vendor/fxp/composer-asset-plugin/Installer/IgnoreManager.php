@@ -131,7 +131,20 @@ class IgnoreManager
     public function doAddPattern($pattern)
     {
         if (0 === strpos($pattern, '!')) {
-            $this->finder->notPath(Glob::toRegex(substr($pattern, 1), true, true));
+            $searchPattern = substr($pattern, 1);
+            $this->finder->notPath(Glob::toRegex($searchPattern, true, true));
+
+            $pathComponents = explode('/', $searchPattern);
+
+            if (1 < count($pathComponents)) {
+                $parentDirectories = array_slice($pathComponents, 0, -1);
+                $basePath = '';
+
+                foreach ($parentDirectories as $dir) {
+                    $this->finder->notPath('/\b('.preg_quote($basePath.$dir, '/').')(?!\/)\b/');
+                    $basePath .= $dir.'/';
+                }
+            }
         } else {
             $this->finder->path(Glob::toRegex($pattern, true, true));
         }
@@ -155,12 +168,29 @@ class IgnoreManager
         } elseif (0 === strpos($searchPattern, '**/')) {
             $this->doAddPattern($prefix.'**/'.$searchPattern);
             $this->doAddPattern($prefix.substr($searchPattern, 3));
-        } elseif ('.*' === $searchPattern) {
-            $this->doAddPattern($prefix.'**/.*');
-        } elseif (preg_match('/\/\*$|\/\*\*$/', $pattern, $matches)) {
-            $this->doAddPattern(substr($pattern, 0, strlen($pattern) - strlen($matches[0])));
+        } else {
+            $this->convertPatternStep2($prefix, $searchPattern, $pattern);
         }
 
         return $pattern;
+    }
+
+    /**
+     * Step2: Converter pattern to glob.
+     *
+     * @param string $prefix        The prefix
+     * @param string $searchPattern The search pattern
+     * @param string $pattern       The pattern
+     */
+    protected function convertPatternStep2($prefix, $searchPattern, $pattern)
+    {
+        if ('.*' === $searchPattern) {
+            $this->doAddPattern($prefix.'**/.*');
+        } elseif ('**' === $searchPattern) {
+            $this->finder->path('/.*/');
+            $this->finder->notPath('/^\..*(?!\/)/');
+        } elseif (preg_match('/\/\*$|\/\*\*$/', $pattern, $matches)) {
+            $this->doAddPattern(substr($pattern, 0, strlen($pattern) - strlen($matches[0])));
+        }
     }
 }

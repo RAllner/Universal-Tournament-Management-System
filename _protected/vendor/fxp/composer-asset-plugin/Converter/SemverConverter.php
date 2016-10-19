@@ -27,6 +27,7 @@ class SemverConverter implements VersionConverterInterface
             return ('latest' === $version ? 'default || ' : '').'*';
         }
 
+        $version = str_replace('–', '-', $version);
         $prefix = preg_match('/^[a-z]/', $version) ? substr($version, 0, 1) : '';
         $version = substr($version, strlen($prefix));
         $version = SemverUtil::convertVersionMetadata($version);
@@ -100,43 +101,19 @@ class SemverConverter implements VersionConverterInterface
      */
     protected function matchRangeToken($i, $match, array &$matches, &$special, &$replace)
     {
-        $matched = $this->matchRangeTokenStep1($i, $match, $matches, $special, $replace);
-
-        if (!$matched) {
-            $this->matchRangeTokenStep2($i, $match, $matches, $special, $replace);
-        }
-    }
-
-    /**
-     * Step1: Converts the token of the matched range.
-     *
-     * @param int         $i
-     * @param string      $match
-     * @param array       $matches
-     * @param string|null $special
-     * @param string|null $replace
-     *
-     * @return bool
-     */
-    protected function matchRangeTokenStep1($i, $match, array &$matches, &$special, &$replace)
-    {
-        $matched = true;
-
         if (' - ' === $match) {
             $matches[$i - 1] = '>='.$matches[$i - 1];
-            $matches[$i] = ',<=';
-        } elseif (in_array($match, array('', '<', '>', '=', ','))) {
-            $replace = in_array($match, array('<', '>')) ? $match : $replace;
-        } elseif ('~' === $match) {
-            $special = $match;
-        } elseif (in_array($match, array('EQUAL', '^'))) {
-            $special = $match;
-            $matches[$i] = '';
-        } else {
-            $matched = false;
-        }
 
-        return $matched;
+            if (false !== strpos($matches[$i + 1], '.') && strpos($matches[$i + 1], '*') === false
+                    && strpos($matches[$i + 1], 'x') === false && strpos($matches[$i + 1], 'X') === false) {
+                $matches[$i] = ',<=';
+            } else {
+                $matches[$i] = ',<';
+                $special = ',<~';
+            }
+        } else {
+            $this->matchRangeTokenStep2($i, $match, $matches, $special, $replace);
+        }
     }
 
     /**
@@ -150,6 +127,29 @@ class SemverConverter implements VersionConverterInterface
      */
     protected function matchRangeTokenStep2($i, $match, array &$matches, &$special, &$replace)
     {
+        if (in_array($match, array('', '<', '>', '=', ','))) {
+            $replace = in_array($match, array('<', '>')) ? $match : $replace;
+        } elseif ('~' === $match) {
+            $special = $match;
+        } elseif (in_array($match, array('EQUAL', '^'))) {
+            $special = $match;
+            $matches[$i] = '';
+        } else {
+            $this->matchRangeTokenStep3($i, $match, $matches, $special, $replace);
+        }
+    }
+
+    /**
+     * Step3: Converts the token of the matched range.
+     *
+     * @param int         $i
+     * @param string      $match
+     * @param array       $matches
+     * @param string|null $special
+     * @param string|null $replace
+     */
+    protected function matchRangeTokenStep3($i, $match, array &$matches, &$special, &$replace)
+    {
         if (' ' === $match) {
             $matches[$i] = ',';
         } elseif ('||' === $match) {
@@ -158,13 +158,53 @@ class SemverConverter implements VersionConverterInterface
             $matches[$i] = SemverRangeUtil::replaceSpecialRange($this, $match);
             $special = null;
         } else {
-            $match = '~' === $special ? str_replace(array('*', 'x', 'X'), '0', $match) : $match;
-            $matches[$i] = $this->convertVersion($match);
-            $matches[$i] = $replace
-                ? SemverUtil::replaceAlias($matches[$i], $replace)
-                : $matches[$i];
-            $special = null;
-            $replace = null;
+            $this->matchRangeTokenStep4($i, $match, $matches, $special, $replace);
         }
+    }
+
+    /**
+     * Step4: Converts the token of the matched range.
+     *
+     * @param int         $i
+     * @param string      $match
+     * @param array       $matches
+     * @param string|null $special
+     * @param string|null $replace
+     */
+    protected function matchRangeTokenStep4($i, $match, array &$matches, &$special, &$replace)
+    {
+        if ($special === ',<~') {
+            // Version range contains x in last place.
+            $match .= (false === strpos($match, '.') ? '.x' : '');
+            $version = explode('.', $match);
+            $change = count($version) - 2;
+            $version[$change] = intval($version[$change]) + 1;
+            $match = str_replace(array('*', 'x', 'X'), '0', implode('.', $version));
+        } elseif (null === $special && $i === 0 && false === strpos($match, '.') && is_numeric($match)) {
+            $match = '~'.$match;
+        } else {
+            $match = '~' === $special ? str_replace(array('*', 'x', 'X'), '0', $match) : $match;
+        }
+
+        $this->matchRangeTokenStep5($i, $match, $matches, $special, $replace);
+    }
+
+    /**
+     * Step5: Converts the token of the matched range.
+     *
+     * @param int         $i
+     * @param string      $match
+     * @param array       $matches
+     * @param string|null $special
+     * @param string|null $replace
+     */
+    protected function matchRangeTokenStep5($i, $match, array &$matches, &$special, &$replace)
+    {
+        $matches[$i] = $this->convertVersion($match);
+        $matches[$i] = $replace
+            ? SemverUtil::replaceAlias($matches[$i], $replace)
+            : $matches[$i];
+        $special = null;
+        $replace = null;
     }
 }

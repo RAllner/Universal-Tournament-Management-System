@@ -311,10 +311,10 @@ class TournamentMatch extends ActiveRecord
 
     public function getParticipantBImage(){
 
-        if($this->participant_id_A !== 0){
+        if($this->participant_id_B !== 0){
             /** @var Participant $participant_B */
             $participant_B = Participant::find()
-                ->where(['id' => $this->participant_id_A])
+                ->where(['id' => $this->participant_id_B])
                 ->one();
             return $participant_B->getParticipantImage();
         } else {

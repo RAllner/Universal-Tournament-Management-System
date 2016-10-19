@@ -18,7 +18,7 @@ foreach (Player::find()->all() as $player){
 
 ?>
 <div class="team-add">
-    <h1>Add Member</h1>
+    <h1><?= Yii::t('app','Add Member') ?></h1>
     <div class="container">
     <div class="row">
         <div class="well col-lg-8">

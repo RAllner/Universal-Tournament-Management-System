@@ -61,16 +61,20 @@ class GitHubDriverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getAssetTypes
+     *
+     * @param string $type
+     * @param string $filename
      */
     public function testPrivateRepository($type, $filename)
     {
         $repoUrl = 'http://github.com/composer-test/repo-name';
         $repoApiUrl = 'https://api.github.com/repos/composer-test/repo-name';
         $repoSshUrl = 'git@github.com:composer-test/repo-name.git';
+        $packageName = $type.'-asset/repo-name';
         $identifier = 'v0.0.0';
         $sha = 'SOMESHA';
 
-        $io = $this->getMock('Composer\IO\IOInterface');
+        $io = $this->getMockBuilder('Composer\IO\IOInterface')->getMock();
         $io->expects($this->any())
             ->method('isInteractive')
             ->will($this->returnValue(true));
@@ -79,7 +83,7 @@ class GitHubDriverTest extends \PHPUnit_Framework_TestCase
             ->setConstructorArgs(array($io))
             ->getMock();
 
-        $process = $this->getMock('Composer\Util\ProcessExecutor');
+        $process = $this->getMockBuilder('Composer\Util\ProcessExecutor')->getMock();
         $process->expects($this->any())
             ->method('execute')
             ->will($this->returnValue(1));
@@ -122,8 +126,8 @@ class GitHubDriverTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo('github.com'), $this->equalTo($repoApiUrl), $this->equalTo(false))
             ->will($this->returnValue($this->createJsonComposer(array('master_branch' => 'test_master', 'private' => true))));
 
-        $configSource = $this->getMock('Composer\Config\ConfigSourceInterface');
-        $authConfigSource = $this->getMock('Composer\Config\ConfigSourceInterface');
+        $configSource = $this->getMockBuilder('Composer\Config\ConfigSourceInterface')->getMock();
+        $authConfigSource = $this->getMockBuilder('Composer\Config\ConfigSourceInterface')->getMock();
 
         /* @var ConfigSourceInterface $configSource */
         /* @var ConfigSourceInterface $authConfigSource */
@@ -138,6 +142,7 @@ class GitHubDriverTest extends \PHPUnit_Framework_TestCase
             'url' => $repoUrl,
             'asset-type' => $type,
             'filename' => $filename,
+            'package-name' => $packageName,
         );
 
         $gitHubDriver = new GitHubDriver($repoConfig, $io, $this->config, $process, $remoteFilesystem);
@@ -159,15 +164,19 @@ class GitHubDriverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getAssetTypes
+     *
+     * @param string $type
+     * @param string $filename
      */
     public function testPublicRepository($type, $filename)
     {
         $repoUrl = 'http://github.com/composer-test/repo-name';
         $repoApiUrl = 'https://api.github.com/repos/composer-test/repo-name';
+        $packageName = $type.'-asset/repo-name';
         $identifier = 'v0.0.0';
         $sha = 'SOMESHA';
 
-        $io = $this->getMock('Composer\IO\IOInterface');
+        $io = $this->getMockBuilder('Composer\IO\IOInterface')->getMock();
         $io->expects($this->any())
             ->method('isInteractive')
             ->will($this->returnValue(true));
@@ -185,6 +194,7 @@ class GitHubDriverTest extends \PHPUnit_Framework_TestCase
             'url' => $repoUrl,
             'asset-type' => $type,
             'filename' => $filename,
+            'package-name' => $packageName,
         );
         $repoUrl = 'https://github.com/composer-test/repo-name.git';
 
@@ -210,15 +220,19 @@ class GitHubDriverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getAssetTypes
+     *
+     * @param string $type
+     * @param string $filename
      */
     public function testPublicRepository2($type, $filename)
     {
         $repoUrl = 'http://github.com/composer-test/repo-name';
         $repoApiUrl = 'https://api.github.com/repos/composer-test/repo-name';
+        $packageName = $type.'-asset/repo-name';
         $identifier = 'feature/3.2-foo';
         $sha = 'SOMESHA';
 
-        $io = $this->getMock('Composer\IO\IOInterface');
+        $io = $this->getMockBuilder('Composer\IO\IOInterface')->getMock();
         $io->expects($this->any())
             ->method('isInteractive')
             ->will($this->returnValue(true));
@@ -246,6 +260,7 @@ class GitHubDriverTest extends \PHPUnit_Framework_TestCase
             'url' => $repoUrl,
             'asset-type' => $type,
             'filename' => $filename,
+            'package-name' => $packageName,
         );
         $repoUrl = 'https://github.com/composer-test/repo-name.git';
 
@@ -273,12 +288,16 @@ class GitHubDriverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getAssetTypes
+     *
+     * @param string $type
+     * @param string $filename
      */
     public function testPrivateRepositoryNoInteraction($type, $filename)
     {
         $repoUrl = 'http://github.com/composer-test/repo-name';
         $repoApiUrl = 'https://api.github.com/repos/composer-test/repo-name';
         $repoSshUrl = 'git@github.com:composer-test/repo-name.git';
+        $packageName = $type.'-asset/repo-name';
         $identifier = 'v0.0.0';
         $sha = 'SOMESHA';
 
@@ -286,7 +305,7 @@ class GitHubDriverTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $io = $this->getMock('Composer\IO\IOInterface');
+        $io = $this->getMockBuilder('Composer\IO\IOInterface')->getMock();
         $io->expects($this->any())
             ->method('isInteractive')
             ->will($this->returnValue(false));
@@ -356,6 +375,7 @@ class GitHubDriverTest extends \PHPUnit_Framework_TestCase
             'url' => $repoUrl,
             'asset-type' => $type,
             'filename' => $filename,
+            'package-name' => $packageName,
         );
 
         /* @var IOInterface $io */
@@ -385,13 +405,16 @@ class GitHubDriverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getAssetTypes
+     *
+     * @param string $type
+     * @param string $filename
      */
     public function testGetComposerInformationWithGitDriver($type, $filename)
     {
         $repoUrl = 'https://github.com/composer-test/repo-name';
         $identifier = 'v0.0.0';
 
-        $io = $this->getMock('Composer\IO\IOInterface');
+        $io = $this->getMockBuilder('Composer\IO\IOInterface')->getMock();
         $io->expects($this->any())
             ->method('isInteractive')
             ->will($this->returnValue(true));
@@ -403,7 +426,7 @@ class GitHubDriverTest extends \PHPUnit_Framework_TestCase
             'no-api' => true,
         );
 
-        $process = $this->getMock('Composer\Util\ProcessExecutor');
+        $process = $this->getMockBuilder('Composer\Util\ProcessExecutor')->getMock();
         $process->expects($this->any())
             ->method('splitLines')
             ->will($this->returnValue(array()));
@@ -428,15 +451,19 @@ class GitHubDriverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getAssetTypes
+     *
+     * @param string $type
+     * @param string $filename
      */
     public function testGetComposerInformationWithCodeCache($type, $filename)
     {
         $repoUrl = 'http://github.com/composer-test/repo-name';
         $repoApiUrl = 'https://api.github.com/repos/composer-test/repo-name';
+        $packageName = $type.'-asset/repo-name';
         $identifier = 'dev-master';
         $sha = '92bebbfdcde75ef2368317830e54b605bc938123';
 
-        $io = $this->getMock('Composer\IO\IOInterface');
+        $io = $this->getMockBuilder('Composer\IO\IOInterface')->getMock();
         $io->expects($this->any())
             ->method('isInteractive')
             ->will($this->returnValue(true));
@@ -448,6 +475,7 @@ class GitHubDriverTest extends \PHPUnit_Framework_TestCase
             'url' => $repoUrl,
             'asset-type' => $type,
             'filename' => $filename,
+            'package-name' => $packageName,
         );
 
         $gitHubDriver = new GitHubDriver($repoConfig, $io, $this->config, null, $remoteFilesystem);
@@ -463,15 +491,19 @@ class GitHubDriverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getAssetTypes
+     *
+     * @param string $type
+     * @param string $filename
      */
     public function testGetComposerInformationWithFilesystemCache($type, $filename)
     {
         $repoUrl = 'http://github.com/composer-test/repo-name';
         $repoApiUrl = 'https://api.github.com/repos/composer-test/repo-name';
+        $packageName = $type.'-asset/repo-name';
         $identifier = 'dev-master';
         $sha = '92bebbfdcde75ef2368317830e54b605bc938123';
 
-        $io = $this->getMock('Composer\IO\IOInterface');
+        $io = $this->getMockBuilder('Composer\IO\IOInterface')->getMock();
         $io->expects($this->any())
             ->method('isInteractive')
             ->will($this->returnValue(true));
@@ -485,6 +517,7 @@ class GitHubDriverTest extends \PHPUnit_Framework_TestCase
             'url' => $repoUrl,
             'asset-type' => $type,
             'filename' => $filename,
+            'package-name' => $packageName,
         );
 
         $gitHubDriver1 = new GitHubDriver($repoConfig, $io, $this->config, null, $remoteFilesystem1);
@@ -504,14 +537,18 @@ class GitHubDriverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getAssetTypes
+     *
+     * @param string $type
+     * @param string $filename
      */
     public function testGetComposerInformationWithEmptyContent($type, $filename)
     {
         $repoUrl = 'http://github.com/composer-test/repo-name';
         $repoApiUrl = 'https://api.github.com/repos/composer-test/repo-name';
+        $packageName = $type.'-asset/repo-name';
         $identifier = 'v0.0.0';
 
-        $io = $this->getMock('Composer\IO\IOInterface');
+        $io = $this->getMockBuilder('Composer\IO\IOInterface')->getMock();
 
         $remoteFilesystem = $this->getMockBuilder('Composer\Util\RemoteFilesystem')
             ->setConstructorArgs(array($io))
@@ -535,6 +572,7 @@ class GitHubDriverTest extends \PHPUnit_Framework_TestCase
             'url' => $repoUrl,
             'asset-type' => $type,
             'filename' => $filename,
+            'package-name' => $packageName,
         );
 
         /* @var IOInterface $io */
@@ -553,15 +591,19 @@ class GitHubDriverTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider getAssetTypes
      *
+     * @param string $type
+     * @param string $filename
+     *
      * @expectedException \RuntimeException
      */
     public function testGetComposerInformationWithRuntimeException($type, $filename)
     {
         $repoUrl = 'http://github.com/composer-test/repo-name';
         $repoApiUrl = 'https://api.github.com/repos/composer-test/repo-name';
+        $packageName = $type.'-asset/repo-name';
         $identifier = 'v0.0.0';
 
-        $io = $this->getMock('Composer\IO\IOInterface');
+        $io = $this->getMockBuilder('Composer\IO\IOInterface')->getMock();
 
         $remoteFilesystem = $this->getMockBuilder('Composer\Util\RemoteFilesystem')
             ->setConstructorArgs(array($io))
@@ -581,6 +623,7 @@ class GitHubDriverTest extends \PHPUnit_Framework_TestCase
             'url' => $repoUrl,
             'asset-type' => $type,
             'filename' => $filename,
+            'package-name' => $packageName,
         );
 
         /* @var IOInterface $io */
@@ -595,15 +638,19 @@ class GitHubDriverTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider getAssetTypes
      *
+     * @param string $type
+     * @param string $filename
+     *
      * @expectedException \RuntimeException
      */
     public function testGetComposerInformationWithTransportException($type, $filename)
     {
         $repoUrl = 'http://github.com/composer-test/repo-name';
         $repoApiUrl = 'https://api.github.com/repos/composer-test/repo-name';
+        $packageName = $type.'-asset/repo-name';
         $identifier = 'v0.0.0';
 
-        $io = $this->getMock('Composer\IO\IOInterface');
+        $io = $this->getMockBuilder('Composer\IO\IOInterface')->getMock();
 
         $remoteFilesystem = $this->getMockBuilder('Composer\Util\RemoteFilesystem')
             ->setConstructorArgs(array($io))
@@ -628,6 +675,7 @@ class GitHubDriverTest extends \PHPUnit_Framework_TestCase
             'url' => $repoUrl,
             'asset-type' => $type,
             'filename' => $filename,
+            'package-name' => $packageName,
         );
 
         /* @var IOInterface $io */
@@ -641,15 +689,19 @@ class GitHubDriverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getAssetTypes
+     *
+     * @param string $type
+     * @param string $filename
      */
     public function testRedirectUrlRepository($type, $filename)
     {
         $repoUrl = 'http://github.com/composer-test/repo-name';
         $repoApiUrl = 'https://api.github.com/repos/composer-test/repo-name';
+        $packageName = $type.'-asset/repo-name';
         $identifier = 'v0.0.0';
         $sha = 'SOMESHA';
 
-        $io = $this->getMock('Composer\IO\IOInterface');
+        $io = $this->getMockBuilder('Composer\IO\IOInterface')->getMock();
         $io->expects($this->any())
             ->method('isInteractive')
             ->will($this->returnValue(true));
@@ -685,6 +737,7 @@ class GitHubDriverTest extends \PHPUnit_Framework_TestCase
             'url' => $repoUrl,
             'asset-type' => $type,
             'filename' => $filename,
+            'package-name' => $packageName,
         );
         $repoUrl = 'https://github.com/composer-test/repo-name.git';
 
@@ -711,15 +764,19 @@ class GitHubDriverTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider getAssetTypes
      *
+     * @param string $type
+     * @param string $filename
+     *
      * @expectedException \RuntimeException
      */
     public function testRedirectUrlWithNonexistentRepository($type, $filename)
     {
         $repoUrl = 'http://github.com/composer-test/repo-name';
         $repoApiUrl = 'https://api.github.com/repos/composer-test/repo-name';
+        $packageName = $type.'-asset/repo-name';
         $identifier = 'v0.0.0';
 
-        $io = $this->getMock('Composer\IO\IOInterface');
+        $io = $this->getMockBuilder('Composer\IO\IOInterface')->getMock();
         $io->expects($this->any())
             ->method('isInteractive')
             ->will($this->returnValue(true));
@@ -767,8 +824,8 @@ class GitHubDriverTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo('github.com'), $this->equalTo($repoApiUrl.'/contents/'.$filename.'?ref='.$identifier), $this->equalTo(false))
             ->will($this->throwException(new TransportException('HTTP/1.1 404 Not Found', 404)));
 
-        $configSource = $this->getMock('Composer\Config\ConfigSourceInterface');
-        $authConfigSource = $this->getMock('Composer\Config\ConfigSourceInterface');
+        $configSource = $this->getMockBuilder('Composer\Config\ConfigSourceInterface')->getMock();
+        $authConfigSource = $this->getMockBuilder('Composer\Config\ConfigSourceInterface')->getMock();
 
         /* @var ConfigSourceInterface $configSource */
         /* @var ConfigSourceInterface $authConfigSource */
@@ -780,6 +837,7 @@ class GitHubDriverTest extends \PHPUnit_Framework_TestCase
             'url' => $repoUrl,
             'asset-type' => $type,
             'filename' => $filename,
+            'package-name' => $packageName,
         );
 
         /* @var IOInterface $io */
@@ -801,6 +859,9 @@ class GitHubDriverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getAssetTypes
+     *
+     * @param string $type
+     * @param string $filename
      */
     public function testRedirectUrlRepositoryWithCache($type, $filename)
     {
@@ -810,10 +871,11 @@ class GitHubDriverTest extends \PHPUnit_Framework_TestCase
         $repoUrl = 'http://'.$originUrl.'/'.$owner.'/'.$repository;
         $repoApiUrl = 'https://api.github.com/repos/composer-test/repo-name';
         $repoApiUrlNew = $repoApiUrl.'-new';
+        $packageName = $type.'-asset/repo-name';
         $identifier = 'v0.0.0';
         $sha = 'SOMESHA';
 
-        $io = $this->getMock('Composer\IO\IOInterface');
+        $io = $this->getMockBuilder('Composer\IO\IOInterface')->getMock();
         $io->expects($this->any())
             ->method('isInteractive')
             ->will($this->returnValue(true));
@@ -831,6 +893,7 @@ class GitHubDriverTest extends \PHPUnit_Framework_TestCase
             'url' => $repoUrl,
             'asset-type' => $type,
             'filename' => $filename,
+            'package-name' => $packageName,
         );
         $repoUrl = 'https://github.com/composer-test/repo-name.git';
 
@@ -896,12 +959,17 @@ class GitHubDriverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getDataBranches
+     *
+     * @param string $type
+     * @param string $filename
+     * @param array  $branches
+     * @param array  $gitBranches
      */
     public function testGetBranchesWithGitDriver($type, $filename, array $branches, array $gitBranches)
     {
         $repoUrl = 'https://github.com/composer-test/repo-name';
 
-        $io = $this->getMock('Composer\IO\IOInterface');
+        $io = $this->getMockBuilder('Composer\IO\IOInterface')->getMock();
         $io->expects($this->any())
             ->method('isInteractive')
             ->will($this->returnValue(true));
@@ -913,7 +981,7 @@ class GitHubDriverTest extends \PHPUnit_Framework_TestCase
             'no-api' => true,
         );
 
-        $process = $this->getMock('Composer\Util\ProcessExecutor');
+        $process = $this->getMockBuilder('Composer\Util\ProcessExecutor')->getMock();
         $process->expects($this->any())
             ->method('splitLines')
             ->will($this->returnValue($gitBranches));
@@ -934,15 +1002,20 @@ class GitHubDriverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getDataBranches
+     *
+     * @param string $type
+     * @param string $filename
+     * @param array  $branches
      */
     public function testGetBranches($type, $filename, array $branches)
     {
         $repoUrl = 'http://github.com/composer-test/repo-name';
         $repoApiUrl = 'https://api.github.com/repos/composer-test/repo-name';
+        $packageName = $type.'-asset/repo-name';
         $identifier = 'v0.0.0';
         $sha = 'SOMESHA';
 
-        $io = $this->getMock('Composer\IO\IOInterface');
+        $io = $this->getMockBuilder('Composer\IO\IOInterface')->getMock();
         $io->expects($this->any())
             ->method('isInteractive')
             ->will($this->returnValue(true));
@@ -978,6 +1051,7 @@ class GitHubDriverTest extends \PHPUnit_Framework_TestCase
             'url' => $repoUrl,
             'asset-type' => $type,
             'filename' => $filename,
+            'package-name' => $packageName,
         );
 
         /* @var IOInterface $io */
@@ -988,6 +1062,53 @@ class GitHubDriverTest extends \PHPUnit_Framework_TestCase
         $this->setAttribute($gitHubDriver, 'tags', array($identifier => $sha));
 
         $this->assertEquals('gh-pages', $gitHubDriver->getRootIdentifier());
+        $this->assertSame($branches, $gitHubDriver->getBranches());
+    }
+
+    /**
+     * @dataProvider getDataBranches
+     *
+     * @param string $type
+     * @param string $filename
+     * @param array  $branches
+     * @param array  $gitBranches
+     */
+    public function testNoApi($type, $filename, array $branches, array $gitBranches)
+    {
+        $repoUrl = 'https://github.com/composer-test/repo-name';
+        $packageName = $type.'-asset/repo-name';
+
+        $io = $this->getMockBuilder('Composer\IO\IOInterface')->getMock();
+        $io->expects($this->any())
+            ->method('isInteractive')
+            ->will($this->returnValue(true));
+
+        $repoConfig = array(
+            'url' => $repoUrl,
+            'asset-type' => $type,
+            'filename' => $filename,
+            'package-name' => $packageName,
+            'vcs-driver-options' => array(
+                'github-no-api' => true,
+            ),
+        );
+
+        $process = $this->getMockBuilder('Composer\Util\ProcessExecutor')->getMock();
+        $process->expects($this->any())
+            ->method('splitLines')
+            ->will($this->returnValue($gitBranches));
+        $process->expects($this->any())
+            ->method('execute')
+            ->will($this->returnCallback(function () {
+                return 0;
+            }));
+
+        /* @var IOInterface $io */
+        /* @var ProcessExecutor $process */
+
+        $gitHubDriver = new GitHubDriver($repoConfig, $io, $this->config, $process, null);
+        $gitHubDriver->initialize();
+
         $this->assertSame($branches, $gitHubDriver->getBranches());
     }
 

@@ -1,16 +1,24 @@
 .alert {
-    border: 0px;
+    border: 0;
     border-radius: 0;
-    a, .alert-link {
-        color: #FFFFFF;
-    }
-    .variations(~"", background-color, #FFFFFF);
+
+    // SASS conversion note: please mirror any content change in _mixins-shared.scss alert-variations-content
+    .generic-variations(~".alert", ~"", @mdb-text-color-light, {
+        background-color: @variation-color;
+        color: @variation-color-text;
+
+        a, .alert-link {
+            color: @variation-color-text;
+        }
+    });
+
     &-info, &-danger, &-warning, &-success {
-        color: #FFFFFF;
+        color: @mdb-text-color-light;
     }
+
     &-default {
         a, .alert-link {
-            color: #000000;
+            color: @mdb-text-color-primary;
         }
     }
 }

@@ -29,7 +29,8 @@ class TournamentController extends FrontendController
                 'actions' => [
                     'delete' => ['POST'],
                     'abort' => ['POST'],
-                    'reset' => ['POST']
+                    'reset' => ['POST'],
+                    'reopen' => ['POST']
                 ],
             ],
         ];
@@ -49,12 +50,11 @@ class TournamentController extends FrontendController
         $time = new \DateTime('now');
         $today = $time->format('Y-m-d H:i:s');
         $allCount = Tournament::find()->count();
-        $commingCount = Tournament::find()->where(['>=', 'begin', $today])
-            ->andWhere(['not', ['status' => Tournament::STATUS_RUNNING]])
+        $openCount = Tournament::find()->where(['in', 'status', [1,2,3,4,5,6]])->count();
+        $commingCount = Tournament::find()->where(['status' => Tournament::STATUS_PUBLISHED])
             ->count();
-        $runningCount = Tournament::find()->where(['status' => 3])->count();
-        $pastCount = Tournament::find()->where(['<=', 'begin', $today])
-            ->andWhere(['not', ['status' => Tournament::STATUS_RUNNING]])
+        $runningCount = Tournament::find()->where(['in', 'status', [3,4,5,6]])->count();
+        $pastCount = Tournament::find()->where(['status' => Tournament::STATUS_FINISHED])
             ->count();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $filter);
 
@@ -62,6 +62,7 @@ class TournamentController extends FrontendController
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'allCount' => $allCount,
+            'openCount' => $openCount,
             'commingCount' => $commingCount,
             'runningCount' => $runningCount,
             'pastCount' => $pastCount,
@@ -1231,6 +1232,7 @@ class TournamentController extends FrontendController
                         ->where(['tournament_id' => $model->id])
                         ->andWhere(['seed' => $match->seed_A + $seedGroupOffset])
                         ->one();
+
                     if ($match->state == TournamentMatch::MATCH_STATE_FINISHED) {
                         $match->winner_id = $participant->id;
                     }

@@ -60,11 +60,15 @@ class SvnDriverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getAssetTypes
+     *
+     * @param string $type
+     * @param string $filename
+     * @param string $identifier
      */
     public function testPublicRepositoryWithEmptyComposer($type, $filename, $identifier)
     {
         $repoUrl = 'svn://example.tld/composer-test/repo-name/trunk';
-        $io = $this->getMock('Composer\IO\IOInterface');
+        $io = $this->getMockBuilder('Composer\IO\IOInterface')->getMock();
 
         $repoConfig = array(
             'url' => $repoUrl,
@@ -72,7 +76,7 @@ class SvnDriverTest extends \PHPUnit_Framework_TestCase
             'filename' => $filename,
         );
 
-        $process = $this->getMock('Composer\Util\ProcessExecutor');
+        $process = $this->getMockBuilder('Composer\Util\ProcessExecutor')->getMock();
         $process->expects($this->any())
             ->method('splitLines')
             ->will($this->returnValue(array()));
@@ -97,6 +101,63 @@ class SvnDriverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getAssetTypes
+     *
+     * @param string $type
+     * @param string $filename
+     * @param string $identifier
+     */
+    public function testPrivateRepositoryWithEmptyComposer($type, $filename, $identifier)
+    {
+        $this->config->merge(array(
+            'config' => array(
+                'http-basic' => array(
+                    'example.tld' => array(
+                        'username' => 'peter',
+                        'password' => 'quill',
+                    ),
+                ),
+            ),
+        ));
+
+        $repoBaseUrl = 'svn://example.tld/composer-test/repo-name';
+        $repoUrl = $repoBaseUrl.'/trunk';
+        $io = $this->getMockBuilder('Composer\IO\IOInterface')->getMock();
+
+        $repoConfig = array(
+            'url' => $repoUrl,
+            'asset-type' => $type,
+            'filename' => $filename,
+        );
+
+        $process = $this->getMockBuilder('Composer\Util\ProcessExecutor')->getMock();
+        $process->expects($this->any())
+            ->method('splitLines')
+            ->will($this->returnValue(array()));
+        $process->expects($this->any())
+            ->method('execute')
+            ->will($this->returnCallback(function () {
+                return 0;
+            }));
+
+        /* @var IOInterface $io */
+        /* @var ProcessExecutor $process */
+
+        $driver = new SvnDriver($repoConfig, $io, $this->config, $process, null);
+        $driver->initialize();
+
+        $validEmpty = array(
+            '_nonexistent_package' => true,
+        );
+
+        $this->assertSame($validEmpty, $driver->getComposerInformation($identifier));
+    }
+
+    /**
+     * @dataProvider getAssetTypes
+     *
+     * @param string $type
+     * @param string $filename
+     * @param string $identifier
      */
     public function testPublicRepositoryWithCodeCache($type, $filename, $identifier)
     {
@@ -107,8 +168,8 @@ class SvnDriverTest extends \PHPUnit_Framework_TestCase
             'asset-type' => $type,
             'filename' => $filename,
         );
-        $io = $this->getMock('Composer\IO\IOInterface');
-        $process = $this->getMock('Composer\Util\ProcessExecutor');
+        $io = $this->getMockBuilder('Composer\IO\IOInterface')->getMock();
+        $process = $this->getMockBuilder('Composer\Util\ProcessExecutor')->getMock();
         $process->expects($this->any())
             ->method('splitLines')
             ->will($this->returnCallback(function ($value) {
@@ -150,6 +211,10 @@ class SvnDriverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getAssetTypes
+     *
+     * @param string $type
+     * @param string $filename
+     * @param string $identifier
      */
     public function testPublicRepositoryWithFilesystemCache($type, $filename, $identifier)
     {
@@ -160,8 +225,8 @@ class SvnDriverTest extends \PHPUnit_Framework_TestCase
             'asset-type' => $type,
             'filename' => $filename,
         );
-        $io = $this->getMock('Composer\IO\IOInterface');
-        $process = $this->getMock('Composer\Util\ProcessExecutor');
+        $io = $this->getMockBuilder('Composer\IO\IOInterface')->getMock();
+        $process = $this->getMockBuilder('Composer\Util\ProcessExecutor')->getMock();
         $process->expects($this->any())
             ->method('splitLines')
             ->will($this->returnCallback(function ($value) {
@@ -206,12 +271,16 @@ class SvnDriverTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider getAssetTypes
      *
+     * @param string $type
+     * @param string $filename
+     * @param string $identifier
+     *
      * @expectedException \Composer\Downloader\TransportException
      */
     public function testPublicRepositoryWithInvalidUrl($type, $filename, $identifier)
     {
         $repoUrl = 'svn://example.tld/composer-test/repo-name/trunk';
-        $io = $this->getMock('Composer\IO\IOInterface');
+        $io = $this->getMockBuilder('Composer\IO\IOInterface')->getMock();
 
         $repoConfig = array(
             'url' => $repoUrl,
@@ -219,7 +288,7 @@ class SvnDriverTest extends \PHPUnit_Framework_TestCase
             'filename' => $filename,
         );
 
-        $process = $this->getMock('Composer\Util\ProcessExecutor');
+        $process = $this->getMockBuilder('Composer\Util\ProcessExecutor')->getMock();
         $process->expects($this->any())
             ->method('splitLines')
             ->will($this->returnValue(array()));
@@ -243,25 +312,56 @@ class SvnDriverTest extends \PHPUnit_Framework_TestCase
     public function getSupportsUrls()
     {
         return array(
-            array('svn://example.tld/trunk',         true),
-            array('svn+ssh://example.tld/trunk',     true),
-            array('svn://svn.example.tld/trunk',     true),
-            array('svn+ssh://svn.example.tld/trunk', true),
-            array('http://example.tld/svn/trunk',    true),
-            array('https://example.tld/svn/trunk',   true),
-            array('http://example.tld/sub',          false),
-            array('https://example.tld/sub',         false),
+            array('svn://example.tld/trunk',           true,  'svn://example.tld/trunk'),
+            array('svn+ssh://example.tld/trunk',       true,  'svn+ssh://example.tld/trunk'),
+            array('svn://svn.example.tld/trunk',       true,  'svn://svn.example.tld/trunk'),
+            array('svn+ssh://svn.example.tld/trunk',   true,  'svn+ssh://svn.example.tld/trunk'),
+            array('svn+http://svn.example.tld/trunk',  true,  'http://svn.example.tld/trunk'),
+            array('svn+https://svn.example.tld/trunk', true,  'https://svn.example.tld/trunk'),
+            array('http://example.tld/svn/trunk',      true,  'http://example.tld/svn/trunk'),
+            array('https://example.tld/svn/trunk',     true,  'https://example.tld/svn/trunk'),
+            array('http://example.tld/sub',            false, null),
+            array('https://example.tld/sub',           false, null),
         );
     }
 
     /**
      * @dataProvider getSupportsUrls
+     *
+     * @param string $url
+     * @param string $supperted
+     * @param string $urlUsed
      */
-    public function testSupports($url, $supperted)
+    public function testSupports($url, $supperted, $urlUsed)
     {
         /* @var IOInterface $io */
-        $io = $this->getMock('Composer\IO\IOInterface');
+        $io = $this->getMockBuilder('Composer\IO\IOInterface')->getMock();
 
         $this->assertSame($supperted, SvnDriver::supports($io, $this->config, $url, false));
+
+        if (!$supperted) {
+            return;
+        }
+
+        $process = $this->getMockBuilder('Composer\Util\ProcessExecutor')->getMock();
+        $process->expects($this->any())
+            ->method('execute')
+            ->will($this->returnCallback(function () {
+                return 0;
+            }));
+
+        $repoConfig = array(
+            'url' => $url,
+            'asset-type' => 'bower',
+            'filename' => 'bower.json',
+        );
+
+        /* @var IOInterface $io */
+        /* @var ProcessExecutor $process */
+
+        $driver = new SvnDriver($repoConfig, $io, $this->config, $process, null);
+        $driver->initialize();
+
+        $this->assertEquals($urlUsed, $driver->getUrl());
     }
 }

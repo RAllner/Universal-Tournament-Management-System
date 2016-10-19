@@ -1,6 +1,34 @@
 Change Log: `bootstrap-fileinput`
 =================================
 
+## version 4.3.4
+
+**Date:** 07-Aug-2016
+
+1. (bug #710): Fix bug for `ifSet` validation.
+2. Add contribution templates.
+3. (enh #715): Reset caption correctly on clear.
+4. (enh #718): Update Japanese Translations.
+5. (enh #719): Pass right `previewId` to `fileuploaded` event.
+6. (enh #721): Update Turkish Translations.
+7. (bug #722): Correctly concat ajax output in initial preview.
+8. (enh #728): Change sortable plugin name to avoid conflict with JUI Sortable.
+9. (enh #729): Implement `progressUploadThreshold` to show processing when waiting for server response.
+10. (enh #730): Correct Romanian Translations.
+11. (enh #731): New method `getFilesCount` for returning upl + non-upl files count.
+
+## version 4.3.3
+
+**Date:** 09-Jul-2016
+
+1. (enh #680): Populate filestack for files greater than maxFilePreviewSize.
+2. (enh #695): Update Spanish Translations.
+3. (enh #698): Re-enable drag and drop support for IE Edge.
+4. (bug #700): Fix custom preview icons to be displayed and validated correctly.
+5. (enh #702): Add files to stack correctly for max & min preview size validation.
+6. (enh #704): Add grammatically correct "No files selected" message.
+7. (enh #706): Remove invalid files from filestack correctly for validation errors.
+
 ## version 4.3.2
 
 **Date:** 11-Jun-2016

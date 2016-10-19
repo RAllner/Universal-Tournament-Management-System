@@ -285,9 +285,9 @@ $currentGroup = null;
             <ul class="nav nav-tabs" role="tablist">
                 <li role="presentation" class="active"><a href="#bracket<?= $group ?>"
                                                           aria-controls="bracket<?= $group ?>" role="tab"
-                                                          data-toggle="tab">Bracket</a></li>
+                                                          data-toggle="tab"><?= Yii::t('app', 'Winners Bracket') ?></a></li>
                 <li role="presentation"><a href="#table<?= $group ?>" aria-controls="table<?= $group ?>" role="tab"
-                                           data-toggle="tab">Table</a></li>
+                                           data-toggle="tab"><?= Yii::t('app', 'Table') ?></a></li>
 
             </ul>
             <div class="tab-content">

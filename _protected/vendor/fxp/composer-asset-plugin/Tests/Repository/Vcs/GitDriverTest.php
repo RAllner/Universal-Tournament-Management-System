@@ -57,12 +57,15 @@ class GitDriverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getAssetTypes
+     *
+     * @param string $type
+     * @param string $filename
      */
     public function testPublicRepositoryWithEmptyComposer($type, $filename)
     {
-        $repoUrl = 'https://github.com/francoispluchino/composer-asset-plugin';
+        $repoUrl = 'https://github.com/fxpio/composer-asset-plugin';
         $identifier = 'v0.0.0';
-        $io = $this->getMock('Composer\IO\IOInterface');
+        $io = $this->getMockBuilder('Composer\IO\IOInterface')->getMock();
 
         $repoConfig = array(
             'url' => $repoUrl,
@@ -70,7 +73,7 @@ class GitDriverTest extends \PHPUnit_Framework_TestCase
             'filename' => $filename,
         );
 
-        $process = $this->getMock('Composer\Util\ProcessExecutor');
+        $process = $this->getMockBuilder('Composer\Util\ProcessExecutor')->getMock();
         $process->expects($this->any())
             ->method('splitLines')
             ->will($this->returnValue(array()));
@@ -95,18 +98,21 @@ class GitDriverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getAssetTypes
+     *
+     * @param string $type
+     * @param string $filename
      */
     public function testPublicRepositoryWithCodeCache($type, $filename)
     {
-        $repoUrl = 'https://github.com/francoispluchino/composer-asset-plugin.git';
+        $repoUrl = 'https://github.com/fxpio/composer-asset-plugin.git';
         $identifier = '92bebbfdcde75ef2368317830e54b605bc938123';
         $repoConfig = array(
             'url' => $repoUrl,
             'asset-type' => $type,
             'filename' => $filename,
         );
-        $io = $this->getMock('Composer\IO\IOInterface');
-        $process = $this->getMock('Composer\Util\ProcessExecutor');
+        $io = $this->getMockBuilder('Composer\IO\IOInterface')->getMock();
+        $process = $this->getMockBuilder('Composer\Util\ProcessExecutor')->getMock();
         $process->expects($this->any())
             ->method('splitLines')
             ->will($this->returnValue(array()));
@@ -138,18 +144,21 @@ class GitDriverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getAssetTypes
+     *
+     * @param string $type
+     * @param string $filename
      */
     public function testPublicRepositoryWithFilesystemCache($type, $filename)
     {
-        $repoUrl = 'https://github.com/francoispluchino/composer-asset-plugin.git';
+        $repoUrl = 'https://github.com/fxpio/composer-asset-plugin.git';
         $identifier = '92bebbfdcde75ef2368317830e54b605bc938123';
         $repoConfig = array(
             'url' => $repoUrl,
             'asset-type' => $type,
             'filename' => $filename,
         );
-        $io = $this->getMock('Composer\IO\IOInterface');
-        $process = $this->getMock('Composer\Util\ProcessExecutor');
+        $io = $this->getMockBuilder('Composer\IO\IOInterface')->getMock();
+        $process = $this->getMockBuilder('Composer\Util\ProcessExecutor')->getMock();
         $process->expects($this->any())
             ->method('splitLines')
             ->will($this->returnValue(array()));

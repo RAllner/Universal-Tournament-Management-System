@@ -111,24 +111,6 @@ return array (
       '@yii/materialicons' => $vendorDir . '/mervick/yii2-material-design-icons',
     ),
   ),
-  'rmrevin/yii2-fontawesome' => 
-  array (
-    'name' => 'rmrevin/yii2-fontawesome',
-    'version' => '2.15.1.0',
-    'alias' => 
-    array (
-      '@rmrevin/yii/fontawesome' => $vendorDir . '/rmrevin/yii2-fontawesome',
-    ),
-  ),
-  'kartik-v/yii2-krajee-base' => 
-  array (
-    'name' => 'kartik-v/yii2-krajee-base',
-    'version' => '1.8.5.0',
-    'alias' => 
-    array (
-      '@kartik/base' => $vendorDir . '/kartik-v/yii2-krajee-base',
-    ),
-  ),
   'kartik-v/yii2-widget-datetimepicker' => 
   array (
     'name' => 'kartik-v/yii2-widget-datetimepicker',
@@ -246,15 +228,6 @@ return array (
       '@kartik/depdrop' => $vendorDir . '/kartik-v/yii2-widget-depdrop',
     ),
   ),
-  'kartik-v/yii2-widget-datepicker' => 
-  array (
-    'name' => 'kartik-v/yii2-widget-datepicker',
-    'version' => '1.4.0.0',
-    'alias' => 
-    array (
-      '@kartik/date' => $vendorDir . '/kartik-v/yii2-widget-datepicker',
-    ),
-  ),
   'kartik-v/yii2-widget-colorinput' => 
   array (
     'name' => 'kartik-v/yii2-widget-colorinput',
@@ -282,15 +255,6 @@ return array (
       '@kartik/affix' => $vendorDir . '/kartik-v/yii2-widget-affix',
     ),
   ),
-  'kartik-v/yii2-widget-activeform' => 
-  array (
-    'name' => 'kartik-v/yii2-widget-activeform',
-    'version' => '1.4.7.0',
-    'alias' => 
-    array (
-      '@kartik/form' => $vendorDir . '/kartik-v/yii2-widget-activeform',
-    ),
-  ),
   'kartik-v/yii2-widgets' => 
   array (
     'name' => 'kartik-v/yii2-widgets',
@@ -298,15 +262,6 @@ return array (
     'alias' => 
     array (
       '@kartik/widgets' => $vendorDir . '/kartik-v/yii2-widgets',
-    ),
-  ),
-  'yiisoft/yii2-jui' => 
-  array (
-    'name' => 'yiisoft/yii2-jui',
-    'version' => '2.0.5.0',
-    'alias' => 
-    array (
-      '@yii/jui' => $vendorDir . '/yiisoft/yii2-jui',
     ),
   ),
   'modernkernel/yii2-flag-icon-css' => 
@@ -318,15 +273,6 @@ return array (
       '@modernkernel/flagiconcss' => $vendorDir . '/modernkernel/yii2-flag-icon-css',
     ),
   ),
-  'romdim/yii2-bootstrap-material' => 
-  array (
-    'name' => 'romdim/yii2-bootstrap-material',
-    'version' => '9999999-dev',
-    'alias' => 
-    array (
-      '@romdim/bootstrap/material' => $vendorDir . '/romdim/yii2-bootstrap-material',
-    ),
-  ),
   'lajax/yii2-language-picker' => 
   array (
     'name' => 'lajax/yii2-language-picker',
@@ -334,6 +280,60 @@ return array (
     'alias' => 
     array (
       '@lajax/languagepicker' => $vendorDir . '/lajax/yii2-language-picker',
+    ),
+  ),
+  'rmrevin/yii2-fontawesome' => 
+  array (
+    'name' => 'rmrevin/yii2-fontawesome',
+    'version' => '2.16.1.0',
+    'alias' => 
+    array (
+      '@rmrevin/yii/fontawesome' => $vendorDir . '/rmrevin/yii2-fontawesome',
+    ),
+  ),
+  'yiisoft/yii2-jui' => 
+  array (
+    'name' => 'yiisoft/yii2-jui',
+    'version' => '2.0.6.0',
+    'alias' => 
+    array (
+      '@yii/jui' => $vendorDir . '/yiisoft/yii2-jui',
+    ),
+  ),
+  'kartik-v/yii2-krajee-base' => 
+  array (
+    'name' => 'kartik-v/yii2-krajee-base',
+    'version' => '1.8.7.0',
+    'alias' => 
+    array (
+      '@kartik/base' => $vendorDir . '/kartik-v/yii2-krajee-base',
+    ),
+  ),
+  'kartik-v/yii2-widget-activeform' => 
+  array (
+    'name' => 'kartik-v/yii2-widget-activeform',
+    'version' => '1.4.8.0',
+    'alias' => 
+    array (
+      '@kartik/form' => $vendorDir . '/kartik-v/yii2-widget-activeform',
+    ),
+  ),
+  'kartik-v/yii2-widget-datepicker' => 
+  array (
+    'name' => 'kartik-v/yii2-widget-datepicker',
+    'version' => '1.4.2.0',
+    'alias' => 
+    array (
+      '@kartik/date' => $vendorDir . '/kartik-v/yii2-widget-datepicker',
+    ),
+  ),
+  'romdim/yii2-bootstrap-material' => 
+  array (
+    'name' => 'romdim/yii2-bootstrap-material',
+    'version' => '9999999-dev',
+    'alias' => 
+    array (
+      '@romdim/bootstrap/material' => $vendorDir . '/romdim/yii2-bootstrap-material',
     ),
   ),
 );

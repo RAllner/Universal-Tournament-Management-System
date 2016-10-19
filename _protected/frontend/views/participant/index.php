@@ -1,6 +1,7 @@
 <?php
 
 use frontend\models\Participant;
+use frontend\models\Player;
 use frontend\models\Tournament;
 use yii\helpers\Html;
 use yii\grid\GridView;
@@ -103,10 +104,25 @@ if($tournament->participants_count == ""){
                     } else {
                         $control = (Yii::$app->user->can('updateTournament', ['model' => $tournament]) && $tournament->status < Tournament::STATUS_RUNNING) ? Html::a('<i class="material-icons">check_circle</i>', Url::to(['check-in', 'id' => $participant->id]), ['data-method' => 'post']). ' '.Html::a('<i class="material-icons">delete</i>', Url::to(['delete', 'id' => $participant->id]), ['data-method' => 'post']) : "";
                     }
+                    if(!is_null($participant->player_id)){
+                        /** @var Player $player */
+                        $player = Player::find()
+                            ->where(['id' => $participant->player_id])
+                            ->one();
+                        $name = Html::a($player->name, ['@web/../player/view', 'id' => $participant->player_id]);
+                    } else if(!is_null($participant->team_id)){
+                        /** @var Player $player */
+                        $player = Team::find()
+                            ->where(['id' => $participant->team_id])
+                            ->one();
+                        $name = Html::a($player->name, ['@web/../team/view', 'id' => $participant->team_id]);
+                    } else{
+                        $name = $participant->name;
+                    }
                     $items[$participant->seed] = [
                         'content' =>
 
-                            '<div style="float: left">' . $participant->name . '</div>'
+                            '<div style="float: left">' . $name . '</div>'
 
                             . '<div class="control-group">'
                             . '<i class="material-icons">drag_handle</i>'
@@ -134,6 +150,9 @@ if($tournament->participants_count == ""){
                        value="<?= $value = ($tournament->status < Tournament::STATUS_RUNNING && Yii::$app->user->can('updateTournament', ['model' => $tournament])) ? 'false' : 'true' ?>">
                 <input class="defaultUrl" type="hidden" name="url"
                        value="<?= Url::to(['reorder', 'id' => $tournament->id]) ?>">
+                <p style="text-align: right"><i class="material-icons">drag_handle</i> <?= Yii::t('app', 'Drag and drop to sort')?> </p>
+                <p style="text-align: right"><i class="material-icons unchecked">check_circle</i> <?= Yii::t('app', 'CheckIn the participant')?> </p>
+                <p style="text-align: right"><i class="material-icons">delete</i> <?= Yii::t('app', 'Remove the participant')?> </p>
             </div>
             <?php if (Yii::$app->user->can('updateTournament', ['model' => $tournament])) { ?>
                 <div class="row hidden-md hidden-lg">

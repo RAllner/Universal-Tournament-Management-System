@@ -15,7 +15,7 @@ use yii\helpers\Url;
  * @property integer $signup
  * @property integer $checked_in
  * @property string $name
- * @property string $mail
+ * @property string $email
  * @property integer $seed
  * @property integer $updated_at
  * @property integer $created_at

@@ -7,7 +7,7 @@ Basic Usage
 
 ## Installation
 
-See the [Release Notes](https://github.com/francoispluchino/composer-asset-plugin/releases)
+See the [Release Notes](https://github.com/fxpio/composer-asset-plugin/releases)
 to know the Composer version required.
 
 ### Global scope (per user) installation
@@ -18,9 +18,8 @@ $ composer global require "fxp/composer-asset-plugin:~1.1"
 
 ### Project scope installation
 
-```shell
-$ composer require "fxp/composer-asset-plugin:~1.1"
-```
+The installation in the project scope is not supported (see the
+[issue #7](https://github.com/fxpio/composer-asset-plugin/issues/7)).
 
 ## Usage
 
@@ -47,6 +46,27 @@ It must be prefixed with `{asset-type}-asset/`.
 {
     "require": {
         "bower-asset/bootstrap": "dev-master"
+    }
+}
+```
+
+### Usage with Private Bower Registry
+
+You can work with your private Bower server build with
+[Hacklone Private Bower](https://github.com/Hacklone/private-bower):
+
+Adding the URL to your Private Bower Server in the `composer.json` in the section `extra`. This
+Asset Plugin automaticly look if there is a private Bower URL defined and search for your Private
+Bower Package.
+
+**Example:**
+
+```json
+{
+    "extra": {
+        "asset-private-bower-registries": {
+            "<YourPrivateBowerRegistryServerName>": "https://<YourPrivateBowerRegistryServerURL>/packages"
+        }
     }
 }
 ```
@@ -405,3 +425,41 @@ option `extra.asset-registry-options.{type}-searchable` in the root project
     }
 }
 ```
+
+### Use no-api option of VCS Githhub driver
+
+If you want to use the [no-api](https://getcomposer.org/doc/05-repositories.md#git-alternatives) option
+for your Github assets, you can add an extra option `extra.asset-vcs-driver-options.github-no-api` in
+the root project `composer.json` file. By default, this option is to `false`. The option `asset-pattern-skip-version`
+can be used to exclude tags via a regular expression.
+
+```json
+{
+    "extra": {
+        "asset-vcs-driver-options": {
+            "github-no-api": true
+        },
+        "asset-pattern-skip-version": "(-build|-patch)"
+    }
+}
+```
+
+You can further define this option for each package:
+
+```json
+{
+    "extra": {
+        "asset-vcs-driver-options": {
+            "github-no-api": {
+                "default": true,
+                "packages": {
+                    "bower-asset/example-asset1": false
+                }
+            }
+        }
+    }
+}
+```
+
+With this configuration, all your github packages will use the native Git, except for
+the `bower-asset/example-asset1` package.

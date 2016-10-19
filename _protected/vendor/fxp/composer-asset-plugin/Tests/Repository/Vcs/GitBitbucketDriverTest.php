@@ -58,6 +58,9 @@ class GitBitbucketDriverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getAssetTypes
+     *
+     * @param string $type
+     * @param string $filename
      */
     public function testPublicRepositoryWithComposer($type, $filename)
     {
@@ -67,7 +70,7 @@ class GitBitbucketDriverTest extends \PHPUnit_Framework_TestCase
         $identifier = 'v0.0.0';
         $sha = 'SOMESHA';
 
-        $io = $this->getMock('Composer\IO\IOInterface');
+        $io = $this->getMockBuilder('Composer\IO\IOInterface')->getMock();
         $io->expects($this->any())
             ->method('isInteractive')
             ->will($this->returnValue(true));
@@ -83,8 +86,12 @@ class GitBitbucketDriverTest extends \PHPUnit_Framework_TestCase
 
         $remoteFilesystem->expects($this->at(1))
             ->method('getContents')
-            ->with($this->equalTo('bitbucket.org'), $this->equalTo($this->getScheme($repoBaseUrl).'/raw/'.$identifier.'/'.$filename), $this->equalTo(false))
-            ->will($this->returnValue($this->createJsonComposer(array())));
+            ->with(
+                $this->equalTo('bitbucket.org'),
+                $this->equalTo($repoApiUrl.'/src/'.$identifier.'/'.$filename),
+                $this->equalTo(false)
+            )
+            ->will($this->returnValue($this->createApiJsonWithRepoData(array())));
 
         $repoConfig = array(
             'url' => $repoUrl,
@@ -116,13 +123,17 @@ class GitBitbucketDriverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getAssetTypes
+     *
+     * @param string $type
+     * @param string $filename
      */
     public function testPublicRepositoryWithEmptyComposer($type, $filename)
     {
         $repoBaseUrl = 'https://bitbucket.org/composer-test/repo-name';
         $repoUrl = $repoBaseUrl.'.git';
+        $repoApiUrl = 'https://api.bitbucket.org/1.0/repositories/composer-test/repo-name';
         $identifier = 'v0.0.0';
-        $io = $this->getMock('Composer\IO\IOInterface');
+        $io = $this->getMockBuilder('Composer\IO\IOInterface')->getMock();
 
         $remoteFilesystem = $this->getMockBuilder('Composer\Util\RemoteFilesystem')
             ->setConstructorArgs(array($io))
@@ -130,7 +141,11 @@ class GitBitbucketDriverTest extends \PHPUnit_Framework_TestCase
 
         $remoteFilesystem->expects($this->at(0))
             ->method('getContents')
-            ->with($this->equalTo('bitbucket.org'), $this->equalTo($this->getScheme($repoBaseUrl).'/raw/'.$identifier.'/'.$filename), $this->equalTo(false))
+            ->with(
+                $this->equalTo('bitbucket.org'),
+                $this->equalTo($repoApiUrl.'/src/'.$identifier.'/'.$filename),
+                $this->equalTo(false)
+            )
             ->will($this->throwException(new TransportException('Not Found', 404)));
 
         $repoConfig = array(
@@ -177,6 +192,26 @@ class GitBitbucketDriverTest extends \PHPUnit_Framework_TestCase
         return json_encode(array_merge_recursive($content, array(
             'name' => $name,
         )));
+    }
+
+    /**
+     * @param array  $content The composer content
+     * @param string $name    The name of repository
+     *
+     * @return string The API return value with the json content
+     */
+    protected function createApiJsonWithRepoData(array $content, $name = 'repo-name')
+    {
+        $composerContent = $this->createJsonComposer($content, $name);
+
+        return json_encode(
+            array(
+                'node' => 'nodename',
+                'path' => '/path/to/file',
+                'data' => $composerContent,
+                'size' => strlen($composerContent),
+            )
+        );
     }
 
     /**

@@ -2,6 +2,10 @@
 namespace backend\controllers;
 
 use common\models\LoginForm;
+use common\models\User;
+use frontend\models\Participant;
+use frontend\models\Tournament;
+use frontend\models\TournamentMatch;
 use yii\web\Controller;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -66,6 +70,11 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        $user = User::find()->count();
+        $tournamentCount = Tournament::find()->count();
+        $tournamentMatchesCount = TournamentMatch::find()->count();
+        $particpantCount = Participant::find()->count();
+
         return $this->render('index');
     }
 

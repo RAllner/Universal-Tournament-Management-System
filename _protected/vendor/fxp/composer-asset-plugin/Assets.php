@@ -31,7 +31,15 @@ class Assets
     /**
      * @var array
      */
-    protected static $registryClasses = array(
+    protected static $registryFactoryClasses = array(
+        'default' => 'Fxp\Composer\AssetPlugin\Repository\DefaultRegistryFactory',
+        'bower-private' => 'Fxp\Composer\AssetPlugin\Repository\BowerPrivateRegistryFactory',
+    );
+
+    /**
+     * @var array
+     */
+    protected static $defaultRegistryClasses = array(
         'npm' => 'Fxp\Composer\AssetPlugin\Repository\NpmRepository',
         'bower' => 'Fxp\Composer\AssetPlugin\Repository\BowerRepository',
     );
@@ -95,13 +103,23 @@ class Assets
     }
 
     /**
+     * Gets the asset registry repository factories.
+     *
+     * @return array
+     */
+    public static function getRegistryFactories()
+    {
+        return static::$registryFactoryClasses;
+    }
+
+    /**
      * Gets the asset registry repositories.
      *
      * @return array
      */
-    public static function getRegistries()
+    public static function getDefaultRegistries()
     {
-        return static::$registryClasses;
+        return static::$defaultRegistryClasses;
     }
 
     /**

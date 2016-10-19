@@ -1,3 +1,17 @@
+2016-08-31 - 2.16.1
+-------------------
+* Fix options in li item.
+* Update readme.
+
+2016-08-31 - 2.16.0
+-------------------
+* Enh #22: Added FA:ul() method.
+* Refactoring.
+
+2016-08-19 - 2.15.2
+-------------------
+* Update icon name constants to version 4.6.3.
+
 2016-05-29 - 2.15.1
 -------------------
 * Added option to skip the icon.
